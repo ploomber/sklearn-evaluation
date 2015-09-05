@@ -11,6 +11,8 @@ from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
 
+import helpers as h
+
 #Confusion matrix
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 def plot_confusion_matrix(y_test, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
@@ -115,4 +117,21 @@ def plot_precision_recall_curve(y_true, y_score, n_classes, title="Precision-Rec
     else:
         ax.set_title(title)
     ax.legend(loc="lower right")
+    return fig
+
+
+def feature_importance_plot(model, feature_list, n):
+    f_imp = h.feature_importances_table(model, feature_list)
+    importances = map(lambda x:x['importance'], f_imp)[:n]
+    stds = map(lambda x:x['std'], f_imp)[:n]
+    names = map(lambda x:x['name'], f_imp)[:n]
+
+    fig = Figure()
+    canvas = FigureCanvas(fig)
+    ax = fig.add_subplot(111)
+    ax.set_title("Feature importances")
+    ax.bar(range(len(importances)), importances, color="r", yerr=stds, align="center")
+    ax.set_xticks(range(len(names)))
+    ax.set_xticklabels(names, rotation=90)
+    ax.set_xlim([-1, 10])
     return fig
