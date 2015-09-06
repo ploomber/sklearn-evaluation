@@ -15,7 +15,7 @@ import helpers as h
 
 #Confusion matrix
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-def plot_confusion_matrix(y_test, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+def confusion_matrix_plot(y_test, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
     cm = confusion_matrix(y_test, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -38,7 +38,7 @@ def plot_confusion_matrix(y_test, y_pred, target_names, normalize=False, title='
 
 #Receiver operating characteristic (ROC)
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
-def plot_roc_curve(y_true, y_score, n_classes, title="ROC curve"):
+def roc_plot(y_true, y_score, n_classes, title="ROC curve"):
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
@@ -80,7 +80,7 @@ def plot_roc_curve(y_true, y_score, n_classes, title="ROC curve"):
 
 #Precision-recall
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
-def plot_precision_recall_curve(y_true, y_score, n_classes, title="Precision-Recall curve"):
+def precision_recall_plot(y_true, y_score, n_classes, title="Precision-Recall curve"):
     precision = dict()
     recall = dict()
     average_precision = dict()
@@ -119,7 +119,7 @@ def plot_precision_recall_curve(y_true, y_score, n_classes, title="Precision-Rec
     ax.legend(loc="lower right")
     return fig
 
-
+#http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
 def feature_importance_plot(model, feature_list, n):
     f_imp = h.feature_importances_table(model, feature_list)
     importances = map(lambda x:x['importance'], f_imp)[:n]

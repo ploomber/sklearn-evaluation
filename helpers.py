@@ -1,5 +1,6 @@
 import numpy as np
 
+#http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
 def feature_importances_table(model, feature_list):
     #Get feature importances
     importances = model.feature_importances_
