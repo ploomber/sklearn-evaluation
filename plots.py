@@ -13,6 +13,8 @@ import matplotlib.pyplot as plt
 
 import helpers as h
 
+from sklearn.preprocessing import label_binarize
+
 #Confusion matrix
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 def confusion_matrix_plot(y_test, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
@@ -38,7 +40,11 @@ def confusion_matrix_plot(y_test, y_pred, target_names, normalize=False, title='
 
 #Receiver operating characteristic (ROC)
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
-def roc_plot(y_true, y_score, n_classes, title="ROC curve"):
+def roc_plot(y_true, y_score, title="ROC curve"):
+    #Binarize input
+    y_true = label_binarize(y_true, classes=list(set(y_true)))
+    n_classes = y_true.shape[1]
+
     fpr = dict()
     tpr = dict()
     roc_auc = dict()
@@ -80,7 +86,11 @@ def roc_plot(y_true, y_score, n_classes, title="ROC curve"):
 
 #Precision-recall
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
-def precision_recall_plot(y_true, y_score, n_classes, title="Precision-Recall curve"):
+def precision_recall_plot(y_true, y_score, title="Precision-Recall curve"):
+    #Binarize input
+    y_true = label_binarize(y_true, classes=list(set(y_true)))
+    n_classes = y_true.shape[1]
+
     precision = dict()
     recall = dict()
     average_precision = dict()
@@ -135,3 +145,5 @@ def feature_importance_plot(model, feature_list, n):
     ax.set_xticklabels(names, rotation=90)
     ax.set_xlim([-1, 10])
     return fig
+
+

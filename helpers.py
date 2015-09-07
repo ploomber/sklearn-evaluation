@@ -11,3 +11,7 @@ def feature_importances_table(model, feature_list):
     #Generate lists
     f = [{'num':i, 'name':feature_list[i], 'importance':importances[i], 'std': std[i]} for i in indices]
     return f
+
+
+#Check if and array has binary format
+#def is_binary(y):

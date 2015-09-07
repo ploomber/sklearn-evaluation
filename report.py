@@ -2,24 +2,31 @@ from string import Template
 import plots as p
 from cStringIO import StringIO
 import base64
+import re
+from datetime import datetime
 
-
-def generate_report(model, y_true, y_pred, path=None, name=None):
+def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, path=None, name=None):
     #Read html template
     file = open('report_template.html', 'r')
     t = Template(file.read())
-    #Compute values
-    cm = p.confusion_matrix_plot(y_true, y_pred, [1,0])
+    #Confusion matrix
+    cm = p.confusion_matrix_plot(y_true, y_pred, target_names)
     cm_base64 = figure2base64(cm)
+    #ROC
+    roc = p.roc_plot(y_true, y_score)
+    roc_base64 = figure2base64(roc)
+    #Precision-Recall
+    pr = p.precision_recall_plot(y_true, y_score)
+    pr_base64 = figure2base64(pr)
 
-    d = {'model_name': 'RandomForest',
-         'date': 'Today',
-         'model_properties': 'Properties',
-         'feature_list': '1.2.3.4',
-         'feature_importance': '1.2.3',
+    d = {'model_name': get_model_name(model),
+         'date': datetime.now().strftime('%B %d %Y %H:%M'),
+         'model_properties': prettify_dict(model.get_params()),
+         'feature_list':  prettify_list(feature_list),
+         'feature_importance_plot': '1.2.3',
          'confusion_matrix': cm_base64,
-         'roc': 'roc',
-         'precision_recall': 'pr',
+         'roc': roc_base64,
+         'precision_recall': pr_base64,
          }
     #Replace values in template
     t = t.substitute(d)
@@ -38,3 +45,15 @@ def figure2base64(fig):
     fig.savefig(io, format='png')
     fig_base64 = base64.encodestring(io.getvalue())
     return fig_base64
+
+def prettify_list(l):
+    l = [str(idx+1)+'. '+el for idx,el in enumerate(l)]
+    return reduce(lambda x,y:x+'<br>'+y, l)
+
+def prettify_dict(d):
+    return prettify_list([key+': '+str(d[key]) for key in d.keys()])
+
+def get_model_name(model):
+    s = str(type(model))
+    model_name = re.search(".*'(.+?)'.*", s).group(1).split(".")[-1]
+    return model_name

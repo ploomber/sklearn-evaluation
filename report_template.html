@@ -302,11 +302,13 @@ sup {
 	}
 }
 </style>
-<title>$model_name - $date</title>
+<title>$model_name</title>
 
 </head>
 <body>
-<h1>$model_name - $date</h1>
+<h1>$model_name</h1>
+
+<p>$date</p>
 
 <h2>Model properties</h2>
 
@@ -318,18 +320,18 @@ sup {
 
 <h2>Feature importance</h2>
 
-<p>$feature_importance</p>
+<p><img src="data:image/png;base64,$feature_importance_plot"></img></p>
 
-<h2>Classifier - Confusion Matrix</h2>
+<h2>Confusion Matrix</h2>
 
 <p><img src="data:image/png;base64,$confusion_matrix"></img></p>
 
-<h2>Classifier - Receiver operating characteristic</h2>
+<h2>Receiver operating characteristic</h2>
 
-<p>$roc</p>
+<p><img src="data:image/png;base64,$roc"></img></p>
 
-<h2>Classifier - Precission Recall</h2>
+<h2>Precission Recall</h2>
 
-<p>$precision_recall</p>
+<p><img src="data:image/png;base64,$precision_recall"></img></p>
 </body>
 </html>

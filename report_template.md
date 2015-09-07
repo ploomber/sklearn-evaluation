@@ -1,4 +1,6 @@
-#$model_name - $date
+#$model_name
+
+$date
 
 ##Model properties
 
@@ -10,17 +12,17 @@ $feature_list
 
 ##Feature importance
 
-$feature_importance
+<img src="data:image/png;base64,$feature_importance_plot"></img>
 
-##Classifier - Confusion Matrix
+##Confusion Matrix
 
 <img src="data:image/png;base64,$confusion_matrix"></img>
 
-##Classifier - Receiver operating characteristic
+##Receiver operating characteristic
 
-$roc
+<img src="data:image/png;base64,$roc"></img>
 
-##Classifier - Precission Recall
+##Precission Recall
 
-$precision_recall
+<img src="data:image/png;base64,$precision_recall"></img>
 
