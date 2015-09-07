@@ -9,6 +9,17 @@ def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, 
     #Read html template
     file = open('report_template.html', 'r')
     t = Template(file.read())
+
+    #Feature importance
+    try:
+        fi,table = p.feature_importance_plot(model, feature_list)
+        fi_base64 = figure2base64(fi)
+        fi_warning = ''
+    except:
+        fi = ''
+        fi_base64 = ''
+        fi_warning = 'This model does not have feature importances.'
+
     #Confusion matrix
     cm = p.confusion_matrix_plot(y_true, y_pred, target_names)
     cm_base64 = figure2base64(cm)
@@ -23,11 +34,13 @@ def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, 
          'date': datetime.now().strftime('%B %d %Y %H:%M'),
          'model_properties': prettify_dict(model.get_params()),
          'feature_list':  prettify_list(feature_list),
-         'feature_importance_plot': '1.2.3',
+         'feature_importance_plot':  fi_base64,
+         'feature_importance_warning': fi_warning,
          'confusion_matrix': cm_base64,
          'roc': roc_base64,
          'precision_recall': pr_base64,
          }
+
     #Replace values in template
     t = t.substitute(d)
     #If path is provided, save report to disk

@@ -12,6 +12,8 @@ $feature_list
 
 ##Feature importance
 
+$feature_importance_warning
+
 <img src="data:image/png;base64,$feature_importance_plot"></img>
 
 ##Confusion Matrix

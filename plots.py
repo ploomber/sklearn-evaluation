@@ -130,7 +130,8 @@ def precision_recall_plot(y_true, y_score, title="Precision-Recall curve"):
     return fig
 
 #http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def feature_importance_plot(model, feature_list, n):
+def feature_importance_plot(model, feature_list, n=None):
+    n = len(feature_list) if n is None else n
     f_imp = h.feature_importances_table(model, feature_list)
     importances = map(lambda x:x['importance'], f_imp)[:n]
     stds = map(lambda x:x['std'], f_imp)[:n]
@@ -144,6 +145,6 @@ def feature_importance_plot(model, feature_list, n):
     ax.set_xticks(range(len(names)))
     ax.set_xticklabels(names, rotation=90)
     ax.set_xlim([-1, 10])
-    return fig
+    return fig, f_imp
 
 
