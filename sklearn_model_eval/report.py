@@ -7,7 +7,7 @@ from datetime import datetime
 
 def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, path=None, name=None):
     #Read html template
-    file = open('report_template.html', 'r')
+    file = open('templates/report_template.html', 'r')
     t = Template(file.read())
 
     #Feature importance
