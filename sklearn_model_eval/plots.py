@@ -145,6 +145,6 @@ def feature_importance(model, feature_list, n=None):
     ax.set_xticks(range(len(names)))
     ax.set_xticklabels(names, rotation=90)
     ax.set_xlim([-1, 10])
-    return fig, f_imp
+    return fig
 
 
