@@ -40,7 +40,7 @@ def confusion_matrix_(y_test, y_pred, target_names, normalize=False, title='Conf
 
 #Receiver operating characteristic (ROC)
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
-def roc_plot(y_true, y_score, title="ROC curve"):
+def roc(y_true, y_score, title="ROC curve"):
     #Binarize input
     y_true = label_binarize(y_true, classes=list(set(y_true)))
     n_classes = y_true.shape[1]
@@ -86,7 +86,7 @@ def roc_plot(y_true, y_score, title="ROC curve"):
 
 #Precision-recall
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
-def precision_recall_plot(y_true, y_score, title="Precision-Recall curve"):
+def precision_recall(y_true, y_score, title="Precision-Recall curve"):
     #Binarize input
     y_true = label_binarize(y_true, classes=list(set(y_true)))
     n_classes = y_true.shape[1]
@@ -130,7 +130,7 @@ def precision_recall_plot(y_true, y_score, title="Precision-Recall curve"):
     return fig
 
 #http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def feature_importance_plot(model, feature_list, n=None):
+def feature_importance(model, feature_list, n=None):
     n = len(feature_list) if n is None else n
     f_imp = h.feature_importances_table(model, feature_list)
     importances = map(lambda x:x['importance'], f_imp)[:n]
