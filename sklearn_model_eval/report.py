@@ -11,10 +11,17 @@ def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, 
     #Read md template and compile to html
     pkg = os.path.dirname(os.path.abspath(__file__))
     filepath = os.path.join(pkg, 'templates', 'classification_default.md')
-    file = open(filepath, 'r')
-    md = file.read()
+    f = open(filepath, 'r')
+    md = f.read()
     markdown = mistune.Markdown()
-    t = Template(markdown(md))
+    html = markdown(md)
+
+    #Add css
+    filepath = os.path.join(pkg, 'templates', 'github.css')
+    f = open(filepath, 'r')
+    css = f.read()
+    html = '<style>'+css+'</style>'+html
+    t = Template(html)
 
     #Feature importance
     try:
