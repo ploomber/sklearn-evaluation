@@ -68,7 +68,7 @@ cf = plt.figure()
 plot_confusion_matrix(cm)
 
 #Save confusion matrix
-cf.save.fig("cf.png")
+cf.savefig("cf.png")
 
 # Normalize the confusion matrix by row (i.e by the number of samples
 # in each class)
@@ -80,3 +80,4 @@ plot_confusion_matrix(cm_normalized, title='Normalized confusion matrix')
 #plt.show()
 
 #Save normalized confusion matrix
+ncf.savefig("ncf.png")
