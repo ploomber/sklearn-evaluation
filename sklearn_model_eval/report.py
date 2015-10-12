@@ -3,12 +3,18 @@ import plots as p
 from cStringIO import StringIO
 import base64
 import re
+import os
+import mistune
 from datetime import datetime
 
 def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, path=None, name=None):
-    #Read html template
-    file = open('templates/report_template.html', 'r')
-    t = Template(file.read())
+    #Read md template and compile to html
+    pkg = os.path.dirname(os.path.abspath(__file__))
+    filepath = os.path.join(pkg, 'templates', 'min.md')
+    file = open(filepath, 'r')
+    md = file.read()
+    markdown = mistune.Markdown()
+    t = Template(markdown(md))
 
     #Feature importance
     try:
@@ -21,24 +27,31 @@ def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, 
         fi_warning = 'This model does not have feature importances.'
 
     #Confusion matrix
-    cm = p.confusion_matrix_plot(y_true, y_pred, target_names)
+    cm = p.confusion_matrix_(y_true, y_pred, target_names)
     cm_base64 = figure2base64(cm)
     #ROC
-    roc = p.roc_plot(y_true, y_score)
+    #roc = p.roc(y_true, y_score)
+    #FIX
+    roc = p.confusion_matrix_(y_true, y_pred, target_names)
+
+
+
     roc_base64 = figure2base64(roc)
     #Precision-Recall
-    pr = p.precision_recall_plot(y_true, y_score)
+    #pr = p.precision_recall(y_true, y_score)
+    #FIX
+    pr = p.confusion_matrix_(y_true, y_pred, target_names)
     pr_base64 = figure2base64(pr)
 
     d = {'model_name': get_model_name(model),
          'date': datetime.now().strftime('%B %d %Y %H:%M'),
          'model_properties': prettify_dict(model.get_params()),
          'feature_list':  prettify_list(feature_list),
-         'feature_importance_plot':  fi_base64,
+         'feature_importance_plot':  base64_2_html(fi_base64),
          'feature_importance_warning': fi_warning,
-         'confusion_matrix': cm_base64,
-         'roc': roc_base64,
-         'precision_recall': pr_base64,
+         'confusion_matrix': base64_2_html(cm_base64),
+         'roc': base64_2_html(roc_base64),
+         'precision_recall': base64_2_html(pr_base64),
          }
 
     #Replace values in template
@@ -46,12 +59,14 @@ def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, 
     #If path is provided, save report to disk
     if path is not None:
         name = d['model_name']+'.html' if name==None else name
-        report_file = open(name, 'w')
+        report_file = open(path+name, 'w')
         report_file.write(t)
         report_file.close()
     else:
         return t
 
+def base64_2_html(img):
+    return '<img src="data:image/png;base64,'+img+'"></img>'
 
 def figure2base64(fig):
     io = StringIO()
@@ -60,7 +75,7 @@ def figure2base64(fig):
     return fig_base64
 
 def prettify_list(l):
-    l = [str(idx+1)+'. '+el for idx,el in enumerate(l)]
+    l = [str(idx+1)+'. '+str(el) for idx,el in enumerate(l)]
     return reduce(lambda x,y:x+'<br>'+y, l)
 
 def prettify_dict(d):
