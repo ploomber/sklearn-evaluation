@@ -1,17 +1,6 @@
 from unittest import TestCase
-from matplotlib.testing.decorators import image_comparison
-from matplotlib.backends.backend_agg import FigureCanvasAgg
 from sklearn_model_eval import plots
 from sklearn.externals import joblib
-
-
-import numpy as np
-import matplotlib
-import matplotlib.pyplot as plt
-
-import matplotlib.image as mpimg
-
-
 from matplotlib.testing.compare import compare_images
 
 class TestDumb(TestCase):
