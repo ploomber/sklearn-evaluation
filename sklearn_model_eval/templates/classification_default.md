@@ -10,9 +10,6 @@ $model_properties
 
 $feature_list
 
-##Feature importance
-
-$feature_importance_plot
 
 ##Confusion Matrix
 

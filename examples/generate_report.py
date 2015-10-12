@@ -1,22 +1,37 @@
+import numpy as np
 from sklearn import svm, datasets
 from sklearn.cross_validation import train_test_split
+from sklearn.preprocessing import label_binarize
+from sklearn.multiclass import OneVsRestClassifier
+from sklearn.datasets import make_classification
+from sklearn.ensemble import ExtraTreesClassifier
 
 from sklearn_model_eval.report import generate_report
 
-# import some data to play with
+
+# Import some data to play with
 iris = datasets.load_iris()
 X = iris.data
 y = iris.target
 
-# Split the data into a training set and a test set
-X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+# Add noisy features to make the problem harder
+random_state = np.random.RandomState(0)
+n_samples, n_features = X.shape
+X = np.c_[X, random_state.randn(n_samples, 200 * n_features)]
 
-# Run classifier, using a model that is too regularized (C too low) to see
-# the impact on the results
-classifier = svm.SVC(kernel='linear', C=0.01)
-y_pred = classifier.fit(X_train, y_train).predict(X_test)
+# shuffle and split training and test sets
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
+                                                    random_state=0)
 
-y_score = y_pred
+# Learn to predict each class against the other
+classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
+                                 random_state=random_state))
+classifier = classifier.fit(X_train, y_train)
+
+y_pred = classifier.predict(X_test)
+y_score = classifier.decision_function(X_test)
+
+
 feature_list = range(4)
 target_names = ['setosa', 'versicolor', 'virginica']
 

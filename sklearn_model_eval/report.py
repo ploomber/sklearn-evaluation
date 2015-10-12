@@ -10,7 +10,7 @@ from datetime import datetime
 def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, path=None, name=None):
     #Read md template and compile to html
     pkg = os.path.dirname(os.path.abspath(__file__))
-    filepath = os.path.join(pkg, 'templates', 'min.md')
+    filepath = os.path.join(pkg, 'templates', 'classification_default.md')
     file = open(filepath, 'r')
     md = file.read()
     markdown = mistune.Markdown()
@@ -30,17 +30,10 @@ def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, 
     cm = p.confusion_matrix_(y_true, y_pred, target_names)
     cm_base64 = figure2base64(cm)
     #ROC
-    #roc = p.roc(y_true, y_score)
-    #FIX
-    roc = p.confusion_matrix_(y_true, y_pred, target_names)
-
-
-
+    roc = p.roc(y_true, y_score)
     roc_base64 = figure2base64(roc)
     #Precision-Recall
-    #pr = p.precision_recall(y_true, y_score)
-    #FIX
-    pr = p.confusion_matrix_(y_true, y_pred, target_names)
+    pr = p.precision_recall(y_true, y_score)
     pr_base64 = figure2base64(pr)
 
     d = {'model_name': get_model_name(model),
