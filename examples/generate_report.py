@@ -35,4 +35,5 @@ y_score = classifier.decision_function(X_test)
 feature_list = range(4)
 target_names = ['setosa', 'versicolor', 'virginica']
 
+#Generate report
 generate_report(classifier, y_test, y_pred, y_score, feature_list, target_names, path='/Users/Edu/Desktop/', name='test.html')

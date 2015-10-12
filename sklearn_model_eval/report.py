@@ -7,6 +7,14 @@ import os
 import mistune
 from datetime import datetime
 
+class ReportGenerator:
+    def __init__(self, savepath, template, css):
+        pass
+
+    def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, name):
+        pass
+
+
 def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, path=None, name=None):
     #Read md template and compile to html
     pkg = os.path.dirname(os.path.abspath(__file__))
