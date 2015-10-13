@@ -38,6 +38,16 @@ from sklearn.cross_validation import train_test_split
 from sklearn.preprocessing import label_binarize
 from sklearn.multiclass import OneVsRestClassifier
 
+#To pickle y_test and y_pred
+from sklearn.externals import joblib
+#To work with paths
+import os
+
+#Paths for file saving
+module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+models_path = os.path.join(module_path, 'dummy_models')
+baselline_path = os.path.join(module_path, 'baseline_images')
+
 # Import some data to play with
 iris = datasets.load_iris()
 X = iris.data

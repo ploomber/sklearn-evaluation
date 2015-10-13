@@ -33,8 +33,17 @@ from sklearn import svm, datasets
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 
+
 #To pickle y_test and y_pred
 from sklearn.externals import joblib
+#To work with paths
+import os
+
+#Paths for file saving
+module_path = os.path.join(os.path.dirname(os.path.abspath(__file__)), '..')
+models_path = os.path.join(module_path, 'dummy_models')
+baselline_path = os.path.join(module_path, 'baseline_images')
+
 
 # import some data to play with
 iris = datasets.load_iris()
@@ -50,8 +59,8 @@ classifier = svm.SVC(kernel='linear', C=0.01)
 y_pred = classifier.fit(X_train, y_train).predict(X_test)
 
 #Pickle arrays so tests can use them
-joblib.dump(y_test, 'confusion_matrix_y_test.pkl')
-joblib.dump(y_pred, 'confusion_matrix_y_pred.pkl')
+joblib.dump(y_test, os.path.join(models_path, 'confusion_matrix_y_test.pkl'))
+joblib.dump(y_pred, os.path.join(models_path, 'confusion_matrix_y_pred.pkl'))
 
 
 def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
@@ -75,7 +84,7 @@ cf = plt.figure()
 plot_confusion_matrix(cm)
 
 #Save confusion matrix
-cf.savefig("cf.png")
+cf.savefig(os.path.join(baselline_path, 'confusion_matrix.png'))
 
 # Normalize the confusion matrix by row (i.e by the number of samples
 # in each class)
@@ -87,4 +96,4 @@ plot_confusion_matrix(cm_normalized, title='Normalized confusion matrix')
 #plt.show()
 
 #Save normalized confusion matrix
-ncf.savefig("ncf.png")
+ncf.savefig(os.path.join(baselline_path, 'normalized_confusion_matrix.png'))

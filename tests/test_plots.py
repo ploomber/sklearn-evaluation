@@ -8,6 +8,9 @@ module_path = os.path.dirname(os.path.abspath(__file__))
 models_path = os.path.join(module_path, 'dummy_models')
 result_path = os.path.join(module_path, 'result_images')
 
+#Tolerance for image comparison
+tol=50
+
 class Test_Confusion_Matrix(TestCase):
     def test_confusion_matrix(self):
         #Load y_pred, y_test
@@ -18,7 +21,7 @@ class Test_Confusion_Matrix(TestCase):
         #Save it
         cf.savefig(os.path.join(result_path, 'confusion_matrix.png'))
         #Compare
-        result = equal_images(expected='baseline_images/confusion_matrix.png', actual='result_images/confusion_matrix.png', tol=38, basepath=module_path)
+        result = equal_images(expected='baseline_images/confusion_matrix.png', actual='result_images/confusion_matrix.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
     def test_normalized_confusion_matrix(self):
         #Load y_pred, y_test
@@ -29,5 +32,17 @@ class Test_Confusion_Matrix(TestCase):
         #Save it
         ncf.savefig(os.path.join(result_path, 'normalized_confusion_matrix.png'))
         #Compare
-        result = equal_images(expected='baseline_images/normalized_confusion_matrix.png', actual='result_images/normalized_confusion_matrix.png', tol=50, basepath=module_path)
+        result = equal_images(expected='baseline_images/normalized_confusion_matrix.png', actual='result_images/normalized_confusion_matrix.png', tol=tol, basepath=module_path)
+        self.assertTrue(result)
+
+class Test_Feature_Importances(TestCase):
+    def test_confusion_matrix(self):
+        #Load model
+        model = joblib.load(os.path.join(models_path,'feature_importances_model.pkl'))
+        #Generate plot
+        fi = plots.feature_importance(model)
+        #Save it
+        fi.savefig(os.path.join(result_path, 'feature_importances.png'))
+        #Compare
+        result = equal_images(expected='baseline_images/feature_importances.png', actual='result_images/feature_importances.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
