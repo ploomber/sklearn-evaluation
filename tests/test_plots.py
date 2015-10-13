@@ -60,7 +60,16 @@ class Test_Precision_Recall(TestCase):
         result = equal_images(expected='baseline_images/precision_recall.png', actual='result_images/precision_recall.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
     def test_multi_precision_recall(self):
-        pass
+        #Load y_score, y_test
+        y_score = joblib.load(os.path.join(models_path,'multi_precision_recall_y_score.pkl'))
+        y_test = joblib.load(os.path.join(models_path,'multi_precision_recall_y_test.pkl'))
+        #Generate plot
+        pr = plots.precision_recall(y_test, y_score)
+        #Save plot
+        pr.savefig(os.path.join(result_path, 'multi_precision_recall.png'))
+        #Compare
+        result = equal_images(expected='baseline_images/multi_precision_recall.png', actual='result_images/multi_precision_recall.png', tol=tol, basepath=module_path)
+        self.assertTrue(result)
 
 class Test_ROC(TestCase):
     def test_roc(self):
@@ -75,4 +84,13 @@ class Test_ROC(TestCase):
         result = equal_images(expected='baseline_images/roc.png', actual='result_images/roc.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
     def test_multi_roc(self):
-        pass
+        #Load y_score, y_test
+        y_score = joblib.load(os.path.join(models_path,'multi_roc_y_score.pkl'))
+        y_test = joblib.load(os.path.join(models_path,'multi_roc_y_test.pkl'))
+        #Generate plot
+        pr = plots.roc(y_test, y_score)
+        #Save plot
+        pr.savefig(os.path.join(result_path, 'multi_roc.png'))
+        #Compare
+        result = equal_images(expected='baseline_images/multi_roc.png', actual='result_images/multi_roc.png', tol=tol, basepath=module_path)
+        self.assertTrue(result)
