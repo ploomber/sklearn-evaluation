@@ -42,7 +42,7 @@ def confusion_matrix_(y_test, y_pred, target_names, normalize=False, title='Conf
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
 def roc(y_true, y_score, title="ROC curve"):
     #Binarize input
-    y_true = label_binarize(y_true, classes=list(set(y_true)))
+    #y_true = label_binarize(y_true, classes=list(set(y_true)))
     n_classes = y_true.shape[1]
 
     fpr = dict()
@@ -88,7 +88,7 @@ def roc(y_true, y_score, title="ROC curve"):
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
 def precision_recall(y_true, y_score, title="Precision-Recall curve"):
     #Binarize input
-    y_true = label_binarize(y_true, classes=list(set(y_true)))
+    #y_true = label_binarize(y_true, classes=list(set(y_true)))
     n_classes = y_true.shape[1]
 
     precision = dict()

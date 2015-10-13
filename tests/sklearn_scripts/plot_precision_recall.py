@@ -118,7 +118,7 @@ y_score = classifier.fit(X_train, y_train).decision_function(X_test)
 
 #Pickle arrays so tests can use them
 joblib.dump(y_test, os.path.join(models_path, 'precision_recall_y_test.pkl'))
-joblib.dump(y_score, os.path.join(models_path, 'precission_recall_y_score.pkl'))
+joblib.dump(y_score, os.path.join(models_path, 'precision_recall_y_score.pkl'))
 
 
 # Compute Precision-Recall and plot curve
