@@ -19,7 +19,7 @@ $confusion_matrix
 
 $roc
 
-##Precission Recall
+##Precision Recall
 
 $precision_recall
 

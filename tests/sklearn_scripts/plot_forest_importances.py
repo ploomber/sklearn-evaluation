@@ -66,5 +66,6 @@ plt.xlim([-1, 10])
 
 #Pickle model
 joblib.dump(forest, os.path.join(models_path, 'feature_importances_model.pkl'))
+#Save plot
 fi.savefig(os.path.join(baselline_path, 'feature_importances.png'))
 
