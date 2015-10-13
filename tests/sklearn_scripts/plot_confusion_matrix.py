@@ -33,6 +33,9 @@ from sklearn import svm, datasets
 from sklearn.cross_validation import train_test_split
 from sklearn.metrics import confusion_matrix
 
+#To pickle y_test and y_pred
+from sklearn.externals import joblib
+
 # import some data to play with
 iris = datasets.load_iris()
 X = iris.data
@@ -45,6 +48,10 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
 # the impact on the results
 classifier = svm.SVC(kernel='linear', C=0.01)
 y_pred = classifier.fit(X_train, y_train).predict(X_test)
+
+#Pickle arrays so tests can use them
+joblib.dump(y_test, 'confusion_matrix_y_test.pkl')
+joblib.dump(y_pred, 'confusion_matrix_y_pred.pkl')
 
 
 def plot_confusion_matrix(cm, title='Confusion matrix', cmap=plt.cm.Blues):
@@ -79,6 +86,5 @@ ncf = plt.figure()
 plot_confusion_matrix(cm_normalized, title='Normalized confusion matrix')
 #plt.show()
 
-cf.savefig("ncf.png")
-
 #Save normalized confusion matrix
+ncf.savefig("ncf.png")
