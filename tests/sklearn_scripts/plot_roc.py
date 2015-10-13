@@ -72,8 +72,14 @@ classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
 y_score = classifier.fit(X_train, y_train).decision_function(X_test)
 
 #Pickle arrays so tests can use them
-joblib.dump(y_test, os.path.join(models_path, 'roc_y_test.pkl'))
-joblib.dump(y_score, os.path.join(models_path, 'roc_y_score.pkl'))
+#This is for multiclass classification
+joblib.dump(y_test, os.path.join(models_path, 'multi_roc_y_test.pkl'))
+joblib.dump(y_score, os.path.join(models_path, 'multi_roc_y_score.pkl'))
+
+#Pickle arrays so tests can use them
+#This is for binary classification
+joblib.dump(y_test[:,2], os.path.join(models_path, 'roc_y_test.pkl'))
+joblib.dump(y_score[:,2], os.path.join(models_path, 'roc_y_score.pkl'))
 
 # Compute ROC curve and ROC area for each class
 fpr = dict()

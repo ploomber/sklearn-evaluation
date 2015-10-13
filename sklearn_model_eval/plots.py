@@ -41,9 +41,28 @@ def confusion_matrix_(y_test, y_pred, target_names, normalize=False, title='Conf
 #Receiver operating characteristic (ROC)
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
 def roc(y_true, y_score, title="ROC curve"):
-    #Binarize input
-    #y_true = label_binarize(y_true, classes=list(set(y_true)))
-    n_classes = y_true.shape[1]
+    '''
+        Plot ROC curve based on true labels and model predictions.
+        y_score (n_classes * n_rows) - Scores for a given prediction
+        y_true  (n_classes * n_rows) - True label for a given prediction (assumes binary input)
+    '''
+    #y_score MUST contain one column per class, so get the number of classes
+    #except when is a binary classification
+    if len(y_score.shape) == 1:
+        n_classes = 2
+    else:
+        n_classes = y_score.shape[1]
+
+    #Asume y_true is in binary format for now...
+
+    #y_true can be in binarized form or not,
+    #if it's not in binary format, binarize
+    #binary_format = True
+    #if not binary_format:
+    #    y_true = label_binarize(y_true, classes=list(set(y_true)))
+
+    #Now that both y_true is in the correct format, check input shape
+    #Check y_true and y_score have correct shape
 
     fpr = dict()
     tpr = dict()
@@ -87,10 +106,30 @@ def roc(y_true, y_score, title="ROC curve"):
 #Precision-recall
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
 def precision_recall(y_true, y_score, title="Precision-Recall curve"):
-    #Binarize input
-    #y_true = label_binarize(y_true, classes=list(set(y_true)))
-    n_classes = y_true.shape[1]
+    '''
+        Plot Precision-Recall curve based on true labels and model predictions.
+        y_score (n_classes * n_rows) - Scores for a given prediction
+        y_true  (n_classes * n_rows) - True label for a given prediction (assumes binary input)
+    '''
+    #y_score MUST contain one column per class, so get the number of classes
+    #except when is a binary classification
+    if len(y_score.shape) == 1:
+        n_classes = 2
+    else:
+        n_classes = y_score.shape[1]
 
+    #Asume y_true is in binary format for now...
+
+    #y_true can be in binarized form or not,
+    #if it's not in binary format, binarize
+    #binary_format = True
+    #if not binary_format:
+    #    y_true = label_binarize(y_true, classes=list(set(y_true)))
+
+    #Now that both y_true is in the correct format, check input shape
+    #Check y_true and y_score have correct shape
+    
+    
     precision = dict()
     recall = dict()
     average_precision = dict()
