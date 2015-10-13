@@ -8,7 +8,7 @@ import mistune
 from datetime import datetime
 
 class ReportGenerator:
-    def __init__(self, savepath, template, css):
+    def __init__(self, savepath, template=None, css):
         pass
 
     def generate_report(model, y_true, y_pred, y_score, feature_list, target_names, name):
