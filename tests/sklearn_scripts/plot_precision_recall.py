@@ -115,6 +115,12 @@ classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
                                  random_state=random_state))
 y_score = classifier.fit(X_train, y_train).decision_function(X_test)
 
+
+#Pickle arrays so tests can use them
+joblib.dump(y_test, os.path.join(models_path, 'precision_recall_y_test.pkl'))
+joblib.dump(y_score, os.path.join(models_path, 'precission_recall_y_score.pkl'))
+
+
 # Compute Precision-Recall and plot curve
 precision = dict()
 recall = dict()
@@ -139,7 +145,10 @@ plt.ylim([0.0, 1.05])
 plt.xlim([0.0, 1.0])
 plt.title('Precision-Recall example: AUC={0:0.2f}'.format(average_precision[0]))
 plt.legend(loc="lower left")
-plt.show()
+#plt.show()
+
+#Save precision-recall curve
+plt.savefig(os.path.join(baselline_path, 'precision_recall.png'))
 
 # Plot Precision-Recall curve for each class
 plt.clf()
@@ -157,4 +166,8 @@ plt.xlabel('Recall')
 plt.ylabel('Precision')
 plt.title('Extension of Precision-Recall curve to multi-class')
 plt.legend(loc="lower right")
-plt.show()
+#plt.show()
+
+#Save precision-recall curve
+plt.savefig(os.path.join(baselline_path, 'multi_precision_recall.png'))
+

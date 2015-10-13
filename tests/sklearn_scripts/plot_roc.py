@@ -71,6 +71,10 @@ classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
                                  random_state=random_state))
 y_score = classifier.fit(X_train, y_train).decision_function(X_test)
 
+#Pickle arrays so tests can use them
+joblib.dump(y_test, os.path.join(models_path, 'roc_y_test.pkl'))
+joblib.dump(y_score, os.path.join(models_path, 'roc_y_score.pkl'))
+
 # Compute ROC curve and ROC area for each class
 fpr = dict()
 tpr = dict()
@@ -93,7 +97,10 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Receiver operating characteristic example')
 plt.legend(loc="lower right")
-plt.show()
+#plt.show()
+
+##Save roc curve
+plt.savefig(os.path.join(baselline_path, 'roc.png'))
 
 # Plot ROC curve
 plt.figure()
@@ -111,4 +118,7 @@ plt.xlabel('False Positive Rate')
 plt.ylabel('True Positive Rate')
 plt.title('Some extension of Receiver operating characteristic to multi-class')
 plt.legend(loc="lower right")
-plt.show()
+#plt.show()
+
+##Save roc curve
+plt.savefig(os.path.join(baselline_path, 'multi_roc.png'))

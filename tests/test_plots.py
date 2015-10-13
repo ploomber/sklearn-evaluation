@@ -46,3 +46,15 @@ class Test_Feature_Importances(TestCase):
         #Compare
         result = equal_images(expected='baseline_images/feature_importances.png', actual='result_images/feature_importances.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
+
+class Test_Precision_Recall(TestCase):
+    def test_precision_recall(self):
+        pass
+    def test_multi_precision_recall(self):
+        pass
+
+class Test_ROC(TestCase):
+    def test_roc(self):
+        pass
+    def test_multi_roc(self):
+        pass
