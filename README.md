@@ -14,9 +14,9 @@ Generate evaluation plots with a single function call.
 ```python
 from sklearn_model_eval import plots
 
-...code for data loading and model training...
+#code for data loading and model training
 
-plots.confusion_matrix_(y_test, y_pred, target_names=target_names)
+plots.confusion_matrix_(y_true, y_pred, target_names=target_names)
 ```
 
 <img src="tests/baseline_images/confusion_matrix.png" style="width:auto;height:auto;max-height:300px">
@@ -27,11 +27,17 @@ See this Jupyter [notebook](examples/plots.ipynb) for more examples.
 
 Generate good looking tables from your model easily.
 
-
 ##Report generation module
 
 Generate HTML reports in one line.
 
+#Install
+
+```python
+git clone https://github.com/edublancas/sklearn-model-evaluation
+cd sklearn-model-evaluation
+python setup.py install
+```
 
 #Design caveats
 
@@ -41,3 +47,4 @@ Generate HTML reports in one line.
 
 * Print lists-like objects as nice html tables in reports
 * Include more plots (learning plot, for example)
+* plots.confusion_matrix_ should be plots.confusion_matrix
