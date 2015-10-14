@@ -42,7 +42,7 @@ rg = ReportGenerator(savepath='~/my-awesome-models')
 rg.generate_report(model=forest, y_true=y_true, y_pred=y_pred, y_score=y_score, feature_list=feature_list, target_names=target_names, name=name)
 ```
 
-The code above will generate a report [like this.](examples/sample_report.html)
+The code above will generate a report [like this.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/sample_report.html)
 
 
 #Install
