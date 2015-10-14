@@ -50,7 +50,7 @@ Reports are self-contained, all images are included in the html file using [base
 
 Note: cloning takes a bit since baseline images and trained models are needed for testing. I'll fix it soon.
 
-```bash
+```shell
 git clone https://github.com/edublancas/sklearn-model-evaluation
 cd sklearn-model-evaluation
 python setup.py install
