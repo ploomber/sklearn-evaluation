@@ -41,9 +41,9 @@ joblib.dump(y_score, os.path.join(models_path, 'classifier_with_feature_importan
 joblib.dump(X, os.path.join(models_path, 'classifier_with_feature_importances_x.pkl'))
 
 #Generate feature list
-feature_list = range(X.shape[1]) #FIND A BETTER WAY
+feature_list = range(X.shape[1])
 #Generate target names
-target_names = range(len(set(y))) #FIND A BETTER WAY
+target_names = range(len(set(y)))
 #Name
 name = 'test_report'
 

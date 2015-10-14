@@ -44,8 +44,9 @@ def confusion_matrix_(y_test, y_pred, target_names, normalize=False, title='Conf
 def roc(y_true, y_score, title="ROC curve"):
     '''
         Plot ROC curve based on true labels and model predictions.
-        y_score (n_classes * n_rows) - Scores for a given prediction
-        y_true  (n_classes * n_rows) - True label for a given prediction (assumes binary input)
+        y_score (n_rows * n_classes) - Scores for a given prediction
+        y_true  (n_rows * 1) - True label for a given prediction
+        Assumes all classes are present in y_true, binarizes and orders.
     '''
     #y_score MUST contain one column per class, so get the number of classes
     #except when is a binary classification
@@ -110,8 +111,9 @@ def roc(y_true, y_score, title="ROC curve"):
 def precision_recall(y_true, y_score, title="Precision-Recall curve"):
     '''
         Plot Precision-Recall curve based on true labels and model predictions.
-        y_score (n_classes * n_rows) - Scores for a given prediction
-        y_true  (n_classes * n_rows) - True label for a given prediction (assumes binary input)
+        y_score (n_rows * n_classes) - Scores for a given prediction
+        y_true  (n_rows * 1) - True label for a given prediction (assumes binary input)
+        Assumes all classes are present in y_true, binarizes and orders.
     '''
     #y_score MUST contain one column per class, so get the number of classes
     #except when is a binary classification

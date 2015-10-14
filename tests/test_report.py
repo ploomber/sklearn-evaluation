@@ -36,6 +36,8 @@ class Test_Complete_Classification_Report(TestCase):
         self.assertEqual(report, dummy_report)
     def test_default_template_no_feature_list(self):
         pass
+    def test_default_template_no_scores(self):
+        pass
     def test_default_template_no_target_names(self):
         pass
     def test_default_template_model_without_feature_importances(self):

@@ -23,3 +23,6 @@ $roc
 
 $precision_recall
 
+##Feature importances
+
+$feature_importance_plot

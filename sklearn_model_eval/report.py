@@ -25,17 +25,20 @@ class ReportGenerator:
         css = f.read()
         html = '<style>'+css+'</style>'+html
         t = Template(html)
+
+        #Get name for the model
+        model_name = get_model_name(model)
     
         #Feature importance
+        #Check you have everything you need: model, feature list
+        #Check that model has feature_importances_ attribute
         try:
-            fi,table = p.feature_importance_plot(model, feature_list)
+            fi = p.feature_importance(model, feature_list)
             fi_base64 = figure2base64(fi)
-            fi_warning = ''
-        except:
-            fi = ''
-            fi_base64 = ''
-            fi_warning = 'This model does not have feature importances.'
-    
+            fi_content = base64_2_html(fi_base64)
+        except AttributeError:
+            fi_content = '%s does not support feature importances' % (model_name)
+
         #Confusion matrix
         cm = p.confusion_matrix_(y_true, y_pred, target_names)
         cm_base64 = figure2base64(cm)
@@ -46,12 +49,11 @@ class ReportGenerator:
         pr = p.precision_recall(y_true, y_score)
         pr_base64 = figure2base64(pr)
     
-        d = {'model_name': get_model_name(model),
+        d = {'model_name': model_name,
              'date': datetime.now().strftime('%B %d %Y %H:%M'),
              'model_properties': prettify_dict(model.get_params()),
              'feature_list':  prettify_list(feature_list),
-             'feature_importance_plot':  base64_2_html(fi_base64),
-             'feature_importance_warning': fi_warning,
+             'feature_importance_plot':  fi_content,
              'confusion_matrix': base64_2_html(cm_base64),
              'roc': base64_2_html(roc_base64),
              'precision_recall': base64_2_html(pr_base64),
