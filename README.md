@@ -14,10 +14,11 @@ from sklearn_model_eval import plots
 ...code for dataloading and model training...
 
 plots.confusion_matrix_(y_test, y_pred, target_names=target_names)
-<img src="tests/baseline_images_confusion_matrix.png">
 ```
 
+<img src="tests/baseline_images/confusion_matrix.png">
 
+See this Jupyter [notebook](examples/plots.ipynb) for more examples.
 
 ##Tables
 
