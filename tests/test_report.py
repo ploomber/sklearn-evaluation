@@ -1,11 +1,14 @@
 from unittest import TestCase
 from sklearn_model_eval.report import ReportGenerator
 from sklearn.externals import joblib
+from freezegun import freeze_time
+
 import os
 
 module_path = os.path.dirname(os.path.abspath(__file__))
 models_path = os.path.join(module_path, 'dummy_models')
 
+@freeze_time("2015-10-13 18:59") #Date when the dummy report was created
 class Test_Complete_Classification_Report(TestCase):
     def test_default_template(self):
         #Load a model
