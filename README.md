@@ -1,6 +1,6 @@
 #scikit-learn model evaluation
 
-Note: this project is in a very early stage of development.
+**Note: this project is in a very early stage of development.**
 
 scikit-learn model evaluation is a package to make model evaluation much easier.
 
@@ -44,6 +44,7 @@ rg.generate_report(model=forest, y_true=y_true, y_pred=y_pred, y_score=y_score, 
 
 The code above will generate a report [like this.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/sample_report.html)
 
+Reports are self-contained, all images are included in the html file using [base64](https://en.wikipedia.org/wiki/Base64).
 
 #Install
 
