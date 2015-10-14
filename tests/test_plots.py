@@ -11,6 +11,9 @@ result_path = os.path.join(module_path, 'result_images')
 #Tolerance for image comparison
 tol=50
 
+#Tests missing:
+#With bad input (wrong shape, not all classes present in non-binary form)
+
 class Test_Confusion_Matrix(TestCase):
     def test_confusion_matrix(self):
         #Load y_pred, y_test

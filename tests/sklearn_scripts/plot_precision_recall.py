@@ -97,10 +97,6 @@ iris = datasets.load_iris()
 X = iris.data
 y = iris.target
 
-# Binarize the output
-y = label_binarize(y, classes=[0, 1, 2])
-n_classes = y.shape[1]
-
 # Add noisy features
 random_state = np.random.RandomState(0)
 n_samples, n_features = X.shape
@@ -110,20 +106,23 @@ X = np.c_[X, random_state.randn(n_samples, 200 * n_features)]
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
                                                     random_state=random_state)
 
+#Pickle arrays so tests can use them (and before binarize)
+#This is for multiclass classification
+joblib.dump(y_test, os.path.join(models_path, 'multi_precision_recall_y_test.pkl'))
+
+# Binarize the output
+y_train = label_binarize(y_train, classes=[0, 1, 2])
+y_test = label_binarize(y_test, classes=[0, 1, 2])
+n_classes = y_train.shape[1]
+
+joblib.dump(y_test[:,0], os.path.join(models_path, 'precision_recall_y_test.pkl'))
+
 # Run classifier
 classifier = OneVsRestClassifier(svm.SVC(kernel='linear', probability=True,
                                  random_state=random_state))
 y_score = classifier.fit(X_train, y_train).decision_function(X_test)
 
-
-#Pickle arrays so tests can use them
-#This is for multiclass classification
-joblib.dump(y_test, os.path.join(models_path, 'multi_precision_recall_y_test.pkl'))
 joblib.dump(y_score, os.path.join(models_path, 'multi_precision_recall_y_score.pkl'))
-
-#Pickle arrays so tests can use them
-#This is for binary classification
-joblib.dump(y_test[:,0], os.path.join(models_path, 'precision_recall_y_test.pkl'))
 joblib.dump(y_score[:,0], os.path.join(models_path, 'precision_recall_y_score.pkl'))
 
 

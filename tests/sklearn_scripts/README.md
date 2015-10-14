@@ -1,1 +1,1 @@
-Scripts taken from the scikit-learn docs.
+plot_* scripts taken from scikit-learn docs.

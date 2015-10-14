@@ -15,6 +15,7 @@ import tables as t
 
 from sklearn.preprocessing import label_binarize
 
+
 #Confusion matrix
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 def confusion_matrix_(y_test, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
@@ -59,7 +60,8 @@ def roc(y_true, y_score, title="ROC curve"):
     #if it's not in binary format, binarize
     #binary_format = True
     #if not binary_format:
-    #    y_true = label_binarize(y_true, classes=list(set(y_true)))
+    
+    y_true = label_binarize(y_true, classes=list(set(y_true)))
 
     #Now that both y_true is in the correct format, check input shape
     #Check y_true and y_score have correct shape
@@ -124,7 +126,8 @@ def precision_recall(y_true, y_score, title="Precision-Recall curve"):
     #if it's not in binary format, binarize
     #binary_format = True
     #if not binary_format:
-    #    y_true = label_binarize(y_true, classes=list(set(y_true)))
+    
+    y_true = label_binarize(y_true, classes=list(set(y_true)))
 
     #Now that both y_true is in the correct format, check input shape
     #Check y_true and y_score have correct shape
