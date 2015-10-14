@@ -26,22 +26,32 @@ class ReportGenerator:
         html = '<style>'+css+'</style>'+html
         t = Template(html)
 
+        #Get the placeholders in the template
+        #so things that the user do not want are not computed
+
         #Get name for the model
         model_name = get_model_name(model)
     
         #Feature importance
-        #Check you have everything you need: model, feature list
-        #Check that model has feature_importances_ attribute
         try:
             fi = p.feature_importance(model, feature_list)
-            fi_base64 = figure2base64(fi)
-            fi_content = base64_2_html(fi_base64)
+            fi_content = figure2html(fi)
         except AttributeError:
             fi_content = '%s does not support feature importances' % (model_name)
+        except TypeError:
+            fi_content = 'To compute this plot you need to provide a model and a feature list'
+        except:
+            fi_content = 'An unkwown error happened while computing feature importances plot'
 
         #Confusion matrix
-        cm = p.confusion_matrix_(y_true, y_pred, target_names)
-        cm_base64 = figure2base64(cm)
+        try:
+            cm = p.confusion_matrix_(y_true, y_pred, target_names)
+            cm_content = figure2html(cm)
+        except TypeError:
+            cm_content = 'To compute this plot you need to provide y_true, y_pred and target_names'
+        except:
+            cm_content = 'An unkwown error happened while computing the confusion matrix'
+
         #ROC
         roc = p.roc(y_true, y_score)
         roc_base64 = figure2base64(roc)
@@ -54,7 +64,7 @@ class ReportGenerator:
              'model_properties': prettify_dict(model.get_params()),
              'feature_list':  prettify_list(feature_list),
              'feature_importance_plot':  fi_content,
-             'confusion_matrix': base64_2_html(cm_base64),
+             'confusion_matrix': cm_content,
              'roc': base64_2_html(roc_base64),
              'precision_recall': base64_2_html(pr_base64),
              }
@@ -69,6 +79,9 @@ class ReportGenerator:
             report_file.close()
         else:
             return t
+
+def figure2html(fig):
+    return base64_2_html(figure2base64(fig))
 
 def base64_2_html(img):
     return '<img src="data:image/png;base64,'+img+'"></img>'
