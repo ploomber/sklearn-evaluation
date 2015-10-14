@@ -47,7 +47,7 @@ The code above will generate a report [like this.](examples/sample_report.html)
 
 #Install
 
-```python
+```bash
 git clone https://github.com/edublancas/sklearn-model-evaluation
 cd sklearn-model-evaluation
 python setup.py install
