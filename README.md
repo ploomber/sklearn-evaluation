@@ -31,6 +31,20 @@ Generate good looking tables from your model easily.
 
 Generate HTML reports in one line.
 
+```python
+from sklearn_model_eval.report import ReportGenerator
+
+#code for data loading and model training
+
+#Instantiate ReportGenerator with a path to save the HTML files
+rg = ReportGenerator(savepath='~/my-awesome-models')
+#Generate report
+rg.generate_report(model=forest, y_true=y_true, y_pred=y_pred, y_score=y_score, feature_list=feature_list, target_names=target_names, name=name)
+```
+
+The code above will generate a report [like this.](examples/sample_report.html)
+
+
 #Install
 
 ```python
