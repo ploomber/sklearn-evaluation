@@ -39,7 +39,7 @@ class Test_Confusion_Matrix(TestCase):
         self.assertTrue(result)
 
 class Test_Feature_Importances(TestCase):
-    def test_confusion_matrix(self):
+    def test_feature_importances(self):
         #Load model
         model = joblib.load(os.path.join(models_path,'feature_importances_model.pkl'))
         #Generate plot

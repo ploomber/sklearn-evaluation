@@ -8,7 +8,7 @@ import os
 module_path = os.path.dirname(os.path.abspath(__file__))
 models_path = os.path.join(module_path, 'dummy_models')
 
-@freeze_time("2015-10-13 18:59") #Date when the dummy report was created
+@freeze_time("2015-10-14 10:42") #Date when the dummy report was created
 class Test_Complete_Classification_Report(TestCase):
     def test_default_template(self):
         #Load a model
