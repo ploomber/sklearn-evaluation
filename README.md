@@ -6,7 +6,7 @@ scikit-learn model evaluation is a package to make model evaluation much easier.
 
 #Usage
 
-The package is divided in modules that have defined functionality.
+The package is divided in modules that have specific functionality.
 
 ##Plots module
 
