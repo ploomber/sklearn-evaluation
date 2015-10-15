@@ -27,6 +27,42 @@ See this Jupyter [notebook](examples/plots.ipynb) for more examples.
 
 Generate good looking tables from your model easily.
 
+```python
+from sklearn_model_eval import tables
+
+#for for data loading and training
+
+tables.feature_importances(model, feature_list)
+```
+
+```
++-----------+--------------+-----------+
+| name      |   importance |       std |
++===========+==============+===========+
+| Feature 0 |    0.250398  | 0.0530907 |
++-----------+--------------+-----------+
+| Feature 1 |    0.232397  | 0.0523836 |
++-----------+--------------+-----------+
+| Feature 2 |    0.148898  | 0.0331814 |
++-----------+--------------+-----------+
+| Feature 3 |    0.0553634 | 0.0128296 |
++-----------+--------------+-----------+
+| Feature 8 |    0.05401   | 0.0122248 |
++-----------+--------------+-----------+
+| Feature 5 |    0.053878  | 0.01289   |
++-----------+--------------+-----------+
+| Feature 6 |    0.0525828 | 0.0130225 |
++-----------+--------------+-----------+
+| Feature 9 |    0.0510197 | 0.0129436 |
++-----------+--------------+-----------+
+| Feature 7 |    0.0509633 | 0.0117197 |
++-----------+--------------+-----------+
+| Feature 4 |    0.0504887 | 0.012844  |
++-----------+--------------+-----------+
+```
+
+Also, running this in Jupyter will generate a pandas-like output. See [notebook](examples/plots.ipynb)
+
 ##Report generation module
 
 Generate HTML reports in one line.
