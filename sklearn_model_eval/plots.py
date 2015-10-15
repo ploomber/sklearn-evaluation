@@ -181,7 +181,7 @@ def feature_importance(model, feature_list=None, n=None):
     #Plot all features if n is not provided, otherwise plot top n features
     n = len(feature_list) if n is None else n
 
-    f_imp = t.feature_importances(model, feature_list, format=None)
+    f_imp = t._compute_feature_importances(model, feature_list)
     importances = map(lambda x:x['importance'], f_imp)[:n]
     stds = map(lambda x:x['std'], f_imp)[:n]
     names = map(lambda x:x['name'], f_imp)[:n]
