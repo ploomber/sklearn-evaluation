@@ -16,7 +16,7 @@ setup(name='sklearn-evaluation',
           'matplotlib',
           'pymongo',
           #add report generator dependencies
-      ]
+      ],
       test_suite='nose.collector',
       tests_require=['nose'],
       )
