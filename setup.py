@@ -12,7 +12,7 @@ setup(name='sklearn-evaluation',
       keywords = ['datascience'],
       classifiers = [],
       install_requires=[
-          'sklearn',
+          'scikit-learn',
           'matplotlib',
           'pymongo',
           #add report generator dependencies
