@@ -6,7 +6,7 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.datasets import make_classification
 from sklearn.ensemble import ExtraTreesClassifier
 
-from sklearn_model_eval.report import generate_report
+from sklearn_evaluation.report import generate_report
 
 
 # Import some data to play with

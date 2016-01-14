@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sklearn_model_eval.report import ReportGenerator
+from sklearn_evaluation.report import ReportGenerator
 from sklearn.externals import joblib
 from freezegun import freeze_time
 

@@ -12,7 +12,7 @@ The package is divided in modules that have specific functionality.
 
 Generate evaluation plots with a single function call.
 ```python
-from sklearn_model_eval import plots
+from sklearn_evaluation import plots
 
 #code for data loading and model training
 
@@ -28,7 +28,7 @@ See this Jupyter [notebook](examples/plots.ipynb) for more examples.
 Generate good looking tables from your model easily.
 
 ```python
-from sklearn_model_eval import tables
+from sklearn_evaluation import tables
 
 #for for data loading and training
 
@@ -68,7 +68,7 @@ Also, running this in Jupyter will generate a pandas-like output. See [notebook]
 Generate HTML reports in one line.
 
 ```python
-from sklearn_model_eval.report import ReportGenerator
+from sklearn_evaluation.report import ReportGenerator
 
 #code for data loading and model training
 

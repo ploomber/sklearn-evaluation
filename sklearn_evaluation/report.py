@@ -2,10 +2,10 @@ from string import Template
 import plots as p
 from cStringIO import StringIO
 import base64
-import re
 import os
 import mistune
 from datetime import datetime
+from utils import get_model_name
 
 class ReportGenerator:
     def __init__(self, savepath=None, template=None, css=None):
@@ -98,8 +98,3 @@ def prettify_list(l):
 
 def prettify_dict(d):
     return prettify_list([key+': '+str(d[key]) for key in d.keys()])
-
-def get_model_name(model):
-    s = str(type(model))
-    model_name = re.search(".*'(.+?)'.*", s).group(1).split(".")[-1]
-    return model_name

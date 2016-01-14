@@ -1,5 +1,5 @@
 from unittest import TestCase
-from sklearn_model_eval import plots
+from sklearn_evaluation import plots
 from sklearn.externals import joblib
 from testing.image_testing import equal_images
 import os

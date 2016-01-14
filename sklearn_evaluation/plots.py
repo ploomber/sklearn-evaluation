@@ -15,6 +15,7 @@ import tables as t
 
 from sklearn.preprocessing import label_binarize
 
+#Classification plots
 
 #Confusion matrix
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
@@ -197,3 +198,6 @@ def feature_importance(model, feature_list=None, n=None):
     return fig
 
 
+#clustering plots
+
+#

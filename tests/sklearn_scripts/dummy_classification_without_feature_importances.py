@@ -1,7 +1,7 @@
 from sklearn import datasets
 from sklearn.svm import SVC
 from sklearn.cross_validation import train_test_split
-from sklearn_model_eval.report import ReportGenerator
+from sklearn_evaluation.report import ReportGenerator
 
 #To pickle y_test and y_pred
 from sklearn.externals import joblib
