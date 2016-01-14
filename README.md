@@ -1,5 +1,7 @@
 #scikit-learn model evaluation
 
+`pip install sklearn-evaluation`
+
 **Note: this project is in a very early stage of development.**
 
 scikit-learn model evaluation is a package to make model evaluation much easier.
