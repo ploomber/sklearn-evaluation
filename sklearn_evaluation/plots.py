@@ -196,8 +196,3 @@ def feature_importance(model, feature_list=None, n=None):
     ax.set_xticklabels(names, rotation=90)
     ax.set_xlim([-1, 10])
     return fig
-
-
-#clustering plots
-
-#

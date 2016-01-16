@@ -14,3 +14,6 @@ class Logger:
         model = {'name': name, 'parameters': params, 'datetime': dt}
         model.update(keywords)
         self.collection.insert_one(model)
+        #Return datetime in case the user wants to use it to identify
+        #the record
+        return dt
