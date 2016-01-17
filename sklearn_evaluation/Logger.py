@@ -14,4 +14,4 @@ class Logger:
         model = {'name': name, 'parameters': params, 'datetime': dt}
         model.update(keywords)
         inserted_id = self.collection.insert_one(model).inserted_id
-        return inserted_id
+        return inserted_id.str
