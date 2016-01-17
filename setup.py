@@ -15,6 +15,7 @@ setup(name='sklearn-evaluation',
           'scikit-learn',
           'matplotlib',
           'pymongo',
+          'tabulate',
           #add report generator dependencies
       ],
       test_suite='nose.collector',
