@@ -10,8 +10,7 @@ from sklearn.metrics import precision_recall_curve, average_precision_score
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
 import matplotlib.pyplot as plt
-
-import tables as t
+import tables
 
 from sklearn.preprocessing import label_binarize
 
@@ -181,8 +180,8 @@ def feature_importance(model, feature_list=None, n=None):
     feature_list = range(total_features) if feature_list is None else feature_list
     #Plot all features if n is not provided, otherwise plot top n features
     n = len(feature_list) if n is None else n
-
-    f_imp = t._compute_feature_importances(model, feature_list)
+    #Compute feature importances, use private method to avoid getting formatted results
+    f_imp = tables._compute_feature_importances(model, feature_list)
     importances = map(lambda x:x['importance'], f_imp)[:n]
     stds = map(lambda x:x['std'], f_imp)[:n]
     names = map(lambda x:x['name'], f_imp)[:n]
@@ -192,6 +191,27 @@ def feature_importance(model, feature_list=None, n=None):
     ax = fig.add_subplot(111)
     ax.set_title("Feature importances")
     ax.bar(range(len(importances)), importances, color="r", yerr=stds, align="center")
+    ax.set_xticks(range(len(names)))
+    ax.set_xticklabels(names, rotation=90)
+    ax.set_xlim([-1, 10])
+    return fig
+
+
+def feature_importances_from_list(features, feature_importances, top_n=None):
+    '''
+        Plot top_n features by passing a list of features and a list of features importances.
+    '''
+    fts = zip(results['features'], results['feature_importances'])
+    fts.sort(key=lambda t: t[1])
+    top_n = top_n if top_n else len(features)
+    top_fts = fts[::-1][:top_n]
+    names = [ft[0] for ft in top_fts]
+    importances = [ft[1] for ft in top_fts]
+    fig = Figure()
+    canvas = FigureCanvas(fig)
+    ax = fig.add_subplot(111)
+    ax.set_title("Feature importances")
+    ax.bar(range(len(importances)), importances, color="r", align="center")
     ax.set_xticks(range(len(names)))
     ax.set_xticklabels(names, rotation=90)
     ax.set_xlim([-1, 10])
