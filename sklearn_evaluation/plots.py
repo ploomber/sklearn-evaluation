@@ -218,7 +218,7 @@ def feature_importances_from_list(features, feature_importances, top_n=None):
     ax.set_xlim([-1, 10])
     return fig
 
-def plot_precision_at_varying_percent(test_labels, test_predictions, title='Precision at various percentages'):
+def precision_at_percentages(test_labels, test_predictions, title='Precision at various percentages'):
     '''
         Plots precision for various percent values
     '''
