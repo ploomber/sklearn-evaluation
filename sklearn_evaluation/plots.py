@@ -202,7 +202,7 @@ def feature_importances_from_list(features, feature_importances, top_n=None):
     '''
         Plot top_n features by passing a list of features and a list of features importances.
     '''
-    fts = zip(results['features'], results['feature_importances'])
+    fts = zip(features, feature_importances)
     fts.sort(key=lambda t: t[1])
     top_n = top_n if top_n else len(features)
     top_fts = fts[::-1][:top_n]
