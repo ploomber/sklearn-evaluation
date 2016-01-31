@@ -1,8 +1,15 @@
-#scikit-learn model evaluation
+#sklearn-evaluation
+
+Utilities for making scikit-learn evaluation much easier.
+
+**Note: this project is in a very early stage of development.**
+
+I'm using this for my personal projects. The plots and tables module are well-tested, but still try it at your own risk.
+
+#Install
 
 `pip install sklearn-evaluation`
 
-**Note: this project is in a very early stage of development.**
 
 scikit-learn model evaluation is a package to make model evaluation much easier.
 
@@ -84,19 +91,9 @@ The code above will generate a report [like this.](http://htmlpreview.github.com
 
 Reports are self-contained, all images are included in the html file using [base64](https://en.wikipedia.org/wiki/Base64).
 
-#Install
-
-Note: cloning takes a bit since baseline images and trained models are needed for testing. I'll fix it soon.
-
-```shell
-git clone https://github.com/edublancas/sklearn-model-evaluation
-cd sklearn-model-evaluation
-python setup.py install
-```
-
 #Design caveats
 
-* Precision-Recall and ROC curve use `label_binarize` each time they are used.
+* Precision-Recall and ROC curve use `label_binarize` each time they are used, which is expensive for large datasets.
 
 #TODO
 
