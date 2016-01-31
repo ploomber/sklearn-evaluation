@@ -10,9 +10,6 @@ I'm using this for my personal projects. The plots and tables module are well-te
 
 `pip install sklearn-evaluation`
 
-
-scikit-learn model evaluation is a package to make model evaluation much easier.
-
 #Usage
 
 The package is divided in modules that have specific functionality.
