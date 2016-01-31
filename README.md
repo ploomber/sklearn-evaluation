@@ -36,7 +36,7 @@ Generate good looking tables from your model easily.
 ```python
 from sklearn_evaluation import tables
 
-#for for data loading and training
+#code for data loading and training
 
 tables.feature_importances(model, feature_list)
 ```
