@@ -8,7 +8,7 @@ $model_properties
 
 ##Features
 
-$feature_list
+$feature_names
 
 
 ##Confusion Matrix

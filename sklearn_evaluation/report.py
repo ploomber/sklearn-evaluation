@@ -54,9 +54,14 @@ class TrainedClassificationModel(object):
         return self._model_name
 
 class ReportGenerator:
+    '''
+        Generate HTML reports from TrainedClassificationModel instances.
+        If savepath is None, generate_report() will return HTML code,
+        otherwise, HTML file will be saved there.
+    '''
     def __init__(self, savepath=None):
         self.savepath = savepath
-    def generate_report(self, trained_model):
+    def __call__(self, trained_model):
         #Read md template and compile to html
         pkg = os.path.dirname(os.path.abspath(__file__))
         filepath = os.path.join(pkg, 'templates', 'classification_default.md')
@@ -76,14 +81,16 @@ class ReportGenerator:
         #so things that the user do not want are not computed
 
         #Get name for the model
-        model_name = get_model_name(model)
+        model_class_name = get_model_name(trained_model.model)
+        #If trained_model does not have a model_name, use model_class_name
+        model_name = model_class_name if trained_model.model_name is None else trained_model.model_name
     
         #Feature importance
         try:
             fi = p.feature_importance(trained_model.model, trained_model.feature_names)
             fi_content = figure2html(fi)
         except AttributeError:
-            fi_content = '%s does not support feature importances' % (model_name)
+            fi_content = '%s does not support feature importances' % (model_class_name)
         except TypeError:
             fi_content = 'To compute this plot you need to provide a model and a feature list'
         except:
@@ -92,7 +99,7 @@ class ReportGenerator:
         #Confusion matrix
         try:
             cm = p.confusion_matrix(trained_model.y_true, trained_model.y_pred,
-                target_names)
+                trained_model.target_names)
             cm_content = figure2html(cm)
         except TypeError:
             cm_content = 'To compute this plot you need to provide y_true, y_pred and target_names'
@@ -120,8 +127,8 @@ class ReportGenerator:
         t = t.substitute(d)
         #If path is provided, save report to disk
         if self.savepath is not None:
-            name = d['model_name']+'.html' if name==None else name
-            report_file = open(self.savepath+name, 'w')
+            path_to_report = os.path.join(self.savepath, model_name+'.html')
+            report_file = open(path_to_report, 'w')
             report_file.write(t)
             report_file.close()
         else:
