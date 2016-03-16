@@ -2,11 +2,7 @@
 
 [![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation)
 
-Utilities for making scikit-learn evaluation much easier.
-
-**Note: this project is in a very early stage of development.**
-
-I'm using this for my personal projects. The plots and tables module are well-tested, but still try it at your own risk.
+Utilities for evaluating scikit-learn models.
 
 #Install
 
