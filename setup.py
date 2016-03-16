@@ -14,7 +14,6 @@ setup(name='sklearn-evaluation',
       install_requires=[
           'scikit-learn',
           'matplotlib',
-          'pymongo',
           'tabulate',
           #add report generator dependencies
       ],
