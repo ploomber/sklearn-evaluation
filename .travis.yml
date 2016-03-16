@@ -6,4 +6,4 @@ install:
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
   - "pip install -r requirements.txt"
 script:
-- "nosetests"
+  - "nosetests"
