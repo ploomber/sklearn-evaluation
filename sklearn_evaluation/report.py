@@ -7,6 +7,18 @@ import mistune
 from datetime import datetime
 from utils import get_model_name
 
+from pydoc import locate
+import inspect
+class ModuleProxy:
+    def __init__(self, module_name):
+        self.module_name = module_name
+    def __getattr__(self, function_name):
+        #Get the corresponding function from the package
+        fn =  locate('{}.{}'.format(self.module_name, function_name))
+        #Get the function signature
+        signature = inspect.getargspec(tm.plots.confusion_matrix)
+        #Call the function with the appropiate parameters
+
 class TrainedClassificationModel(object):
     '''
         This class encapsulates the results of a model that has been trained, 
@@ -52,6 +64,10 @@ class TrainedClassificationModel(object):
     @property
     def model_name(self):
         return self._model_name
+
+    #This method enables access to the plots, metrics and tables modules
+    def __getattr__(self, name):
+        return ModuleProxy(name)
 
 class ReportGenerator:
     '''
