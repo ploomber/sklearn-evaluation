@@ -26,6 +26,13 @@ class Test_threshold_at(TestCase):
         threshold = threshold_at(self.scores, 1.0)
         self.assertEqual(threshold, 0.1)
 
+    def test_proportion_less_than_zero(self):
+        self.assertRaises(ValueError, threshold_at, self.scores, -0.1)
+
+    def test_proportion_more_than_one(self):
+        self.assertRaises(ValueError, threshold_at, self.scores, proportion=1.1)
+
+
 class Test_binarize_scores_at(TestCase):
     def setUp(self):
         self.scores = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
@@ -44,6 +51,12 @@ class Test_binarize_scores_at(TestCase):
         binary_scores = binarize_scores_at(self.scores, 1.0)
         expected = np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
         np.testing.assert_equal(binary_scores, expected)
+
+    def test_proportion_less_than_zero(self):
+        self.assertRaises(ValueError, binarize_scores_at, self.scores, -0.1)
+
+    def test_proportion_more_than_one(self):
+        self.assertRaises(ValueError, binarize_scores_at, self.scores, proportion=1.1)
 
 
 class Test_precision_at(TestCase):
@@ -75,6 +88,11 @@ class Test_precision_at(TestCase):
         self.assertEqual(prec, 0.5)
         self.assertEqual(cutoff, 10)
 
+    def test_proportion_less_than_zero(self):
+        self.assertRaises(ValueError, precision_at, [1], [0], -0.1)
+
+    def test_proportion_more_than_one(self):
+        self.assertRaises(ValueError, precision_at, [1], [0], proportion=1.1)
 
 class Test_labels_at(TestCase):
     def test_no_labels_at_1(self):
@@ -155,6 +173,12 @@ class Test_labels_at(TestCase):
         labels = labels_at(y_true, y_score, proportion=0.3, normalize=True)
         self.assertEqual(labels, 0.5)
 
+    def test_proportion_less_than_zero(self):
+        self.assertRaises(ValueError, labels_at, [1], [0], -0.1)
+
+    def test_proportion_more_than_one(self):
+        self.assertRaises(ValueError, labels_at, [1], [0], proportion=1.1)
+
 class Test_tp_at(TestCase):
     def test_with_nas(self):
         y_true = np.array([1, nan, 1, 1, 1, 1, 1, 1, 1, nan])
@@ -210,6 +234,12 @@ class Test_tp_at(TestCase):
         tps = tp_at(y_true, y_score, proportion=1.0)
         self.assertEqual(tps, 4)
 
+    def test_proportion_less_than_zero(self):
+        self.assertRaises(ValueError, tp_at, [1], [0], -0.1)
+
+    def test_proportion_more_than_one(self):
+        self.assertRaises(ValueError, tp_at, [1], [0], proportion=1.1)
+
 class Test_fp_at(TestCase):
     def test_with_nas(self):
         y_true = np.array([0, nan, 1, 1, 1, 1, 1, 1, 1, nan])
@@ -264,3 +294,9 @@ class Test_fp_at(TestCase):
         y_score = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
         fps = fp_at(y_true, y_score, proportion=1.0)
         self.assertEqual(fps, 6)
+
+    def test_proportion_less_than_zero(self):
+        self.assertRaises(ValueError, fp_at, [1], [0], -0.1)
+
+    def test_proportion_more_than_one(self):
+        self.assertRaises(ValueError, fp_at, [1], [0], proportion=1.1)
