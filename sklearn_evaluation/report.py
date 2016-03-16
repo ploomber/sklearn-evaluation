@@ -54,7 +54,7 @@ class TrainedClassificationModel(object):
         return self._model_name
 
 class ReportGenerator:
-    def __init__(self, savepath=None, template=None, css=None):
+    def __init__(self, savepath=None):
         self.savepath = savepath
     def generate_report(self, trained_model):
         #Read md template and compile to html
