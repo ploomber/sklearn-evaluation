@@ -71,19 +71,25 @@ Also, running this in Jupyter will generate a pandas-like output. See [notebook]
 
 ##Report generation module
 
-Generate HTML reports in one line.
+Generate HTML reports.
 
 ```python
+from sklearn_evaluation.trained_models import TrainedClassificationModel
 from sklearn_evaluation.report import ReportGenerator
 
 #code for data loading and model training
 
-#Instantiate ReportGenerator with a path to save the HTML files
-rg = ReportGenerator(savepath='~/my-awesome-models')
-#Generate report
-rg.generate_report(model=forest, y_true=y_true, y_pred=y_pred, y_score=y_score, feature_list=feature_list, target_names=target_names, name=name)
+#Created a TrainedClassificationModel that packs everything about your model
+tm = TrainedClassificationModel(classifier, y_test, y_pred, y_score,
+    feature_list, target_names, model_name='sample_model_report')
+
+#Instantiate a ReportGenerator which takes a TrainedClassificationModel
+#instance and generates HTML reports
+report_gen = ReportGenerator(savepath='~/models')
+#Save HTML file
+report_gen(tm)
 ```
 
-The code above will generate a report [like this.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/sample_report.html)
+The code above will generate a report [like this.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/sample_model_report.html)
 
 Reports are self-contained, all images are included in the html file using [base64](https://en.wikipedia.org/wiki/Base64).
