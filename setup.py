@@ -18,5 +18,5 @@ setup(name='sklearn-evaluation',
           #add report generator dependencies
       ],
       test_suite='nose.collector',
-      tests_require=['nose'],
+      tests_require=['nose'], #add freezegun
       )
