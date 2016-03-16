@@ -27,7 +27,7 @@ from sklearn_evaluation import plots
 plots.confusion_matrix_(y_true, y_pred, target_names=target_names)
 ```
 
-<img src="tests/baseline_images/confusion_matrix.png" style="width:auto;height:auto;max-height:200px">
+![confusion matrix](examples/cm.png)
 
 See this Jupyter [notebook](examples/plots.ipynb) for more examples.
 
