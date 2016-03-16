@@ -1,6 +1,8 @@
 import numpy as np
 from sklearn.metrics import precision_score
+from decorators import validate_proportion
 
+@validate_proportion
 def precision_at(labels, scores, proportion, ignore_nas=False):
     '''
     Calculates precision at a given proportion.
@@ -25,7 +27,7 @@ def precision_at(labels, scores, proportion, ignore_nas=False):
 
     return precision, cutoff_value
 
-
+@validate_proportion
 def __threshold_at(y_score, proportion):
     #Sort scores in descending order    
     scores_sorted = np.sort(y_score)[::-1]
@@ -36,6 +38,7 @@ def __threshold_at(y_score, proportion):
     threshold_value = scores_sorted[threshold_index]
     return threshold_value
 
+@validate_proportion
 def __binarize_scores_at(y_score, proportion):
     threshold_value = __threshold_at(y_score, proportion)
     y_score_binary = np.array(map(lambda x: int(x>=threshold_value), y_score))
@@ -60,26 +63,31 @@ def __precision(y_true, y_pred):
     precision = precision_score(y_true, y_pred)
     return precision
 
+@validate_proportion
 def tp_at(y_true, y_score, proportion):
     y_pred = __binarize_scores_at(y_score, proportion)
     tp = (y_pred == 1) & (y_true == 1)
     return tp.sum()
 
+@validate_proportion
 def fp_at(y_true, y_score, proportion):
     y_pred = __binarize_scores_at(y_score, proportion)
     fp = (y_pred == 1) & (y_true == 0)
     return fp.sum()
 
+@validate_proportion
 def tn_at(y_true, y_score, proportion):
     y_pred = __binarize_scores_at(y_score, proportion)
     tn = (y_pred == 0) & (y_true == 0)
     return tn.sum()
 
+@validate_proportion
 def fn_at(y_true, y_score, proportion):
     y_pred = __binarize_scores_at(y_score, proportion)
     fn = (y_pred == 0) & (y_true == 1)
     return fn.sum()
 
+@validate_proportion
 def labels_at(y_true, y_score, proportion, normalize=False):
     '''
         Return the number of labels encountered in the top  X proportion
