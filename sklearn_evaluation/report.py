@@ -29,7 +29,7 @@ class TrainedClassificationModel(object):
         self._model_name = model_name
         #TODO: perform basic logic checking,
         #raise Exception if necessary
-    
+
     #Properties should be read-only to ensure instance integrity
     @property
     def model(self):
@@ -56,7 +56,7 @@ class TrainedClassificationModel(object):
 class ReportGenerator:
     def __init__(self, savepath=None, template=None, css=None):
         self.savepath = savepath
-    def generate_report(self, model, y_true, y_pred, y_score, feature_list, target_names, name):
+    def generate_report(self, trained_model):
         #Read md template and compile to html
         pkg = os.path.dirname(os.path.abspath(__file__))
         filepath = os.path.join(pkg, 'templates', 'classification_default.md')
@@ -80,7 +80,7 @@ class ReportGenerator:
     
         #Feature importance
         try:
-            fi = p.feature_importance(model, feature_list)
+            fi = p.feature_importance(trained_model.model, trained_model.feature_names)
             fi_content = figure2html(fi)
         except AttributeError:
             fi_content = '%s does not support feature importances' % (model_name)
@@ -91,7 +91,8 @@ class ReportGenerator:
 
         #Confusion matrix
         try:
-            cm = p.confusion_matrix(y_true, y_pred, target_names)
+            cm = p.confusion_matrix(trained_model.y_true, trained_model.y_pred,
+                target_names)
             cm_content = figure2html(cm)
         except TypeError:
             cm_content = 'To compute this plot you need to provide y_true, y_pred and target_names'
@@ -99,16 +100,16 @@ class ReportGenerator:
             cm_content = 'An unkwown error happened while computing the confusion matrix'
 
         #ROC
-        roc = p.roc(y_true, y_score)
+        roc = p.roc(trained_model.y_true, trained_model.y_score)
         roc_base64 = figure2base64(roc)
         #Precision-Recall
-        pr = p.precision_recall(y_true, y_score)
+        pr = p.precision_recall(trained_model.y_true, trained_model.y_score)
         pr_base64 = figure2base64(pr)
     
         d = {'model_name': model_name,
              'date': datetime.now().strftime('%B %d %Y %H:%M'),
-             'model_properties': prettify_dict(model.get_params()),
-             'feature_list':  prettify_list(feature_list),
+             'model_properties': prettify_dict(trained_model.model.get_params()),
+             'feature_names':  prettify_list(trained_model.feature_names),
              'feature_importance_plot':  fi_content,
              'confusion_matrix': cm_content,
              'roc': base64_2_html(roc_base64),
