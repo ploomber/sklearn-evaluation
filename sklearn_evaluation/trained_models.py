@@ -48,8 +48,8 @@ class TrainedClassificationModel(object):
         return self._model_name
 
     #This method enables access to the plots, metrics and tables modules
-    #def __getattr__(self, name):
-    #    return ModuleProxy(name)
+    def __getattr__(self, name):
+        return ModuleProxy(name)
 
 class ModuleProxy:
     def __init__(self, module_name):
