@@ -1,5 +1,7 @@
 #sklearn-evaluation
 
+[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation)
+
 Utilities for making scikit-learn evaluation much easier.
 
 **Note: this project is in a very early stage of development.**
