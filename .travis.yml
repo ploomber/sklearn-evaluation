@@ -1,20 +1,9 @@
-sudo: false
 language: python
 python:
   - "2.7"
-cache: apt
-addons:
-  apt:
-    packages:
-    - libatlas-dev
-    - libatlas-base-dev
-    - liblapack-dev
-    - gfortran
-before_install:
-  - wget http://repo.continuum.io/miniconda/Miniconda-latest-Linux-x86_64.sh -O miniconda.sh
-  - bash miniconda.sh -b -p $HOME/miniconda
-  - export PATH="$HOME/miniconda/bin:$PATH"
-  - conda update --yes conda
+sudo: required
 install:
-  - conda install --yes python=$TRAVIS_PYTHON_VERSION pip numpy scipy nose
-  - pip install -r requirements.txt
+  - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
+  - "pip install -r requirements.txt"
+script:
+- "nosetests"
