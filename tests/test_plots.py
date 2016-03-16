@@ -20,7 +20,7 @@ class Test_Confusion_Matrix(TestCase):
         y_pred = joblib.load(os.path.join(models_path,'confusion_matrix_y_pred.pkl'))
         y_test = joblib.load(os.path.join(models_path,'confusion_matrix_y_test.pkl'))
         #Generate plot
-        cf = plots.confusion_matrix_(y_test, y_pred, target_names=['setosa', 'versicolor', 'virginica'])
+        cf = plots.confusion_matrix(y_test, y_pred, target_names=['setosa', 'versicolor', 'virginica'])
         #Save it
         cf.savefig(os.path.join(result_path, 'confusion_matrix.png'))
         #Compare
@@ -31,7 +31,7 @@ class Test_Confusion_Matrix(TestCase):
         y_pred = joblib.load(os.path.join(models_path,'confusion_matrix_y_pred.pkl'))
         y_test = joblib.load(os.path.join(models_path,'confusion_matrix_y_test.pkl'))
         #Generate plot
-        ncf = plots.confusion_matrix_(y_test, y_pred, target_names=['setosa', 'versicolor', 'virginica'], normalize=True, title="Normalized confusion matrix")
+        ncf = plots.confusion_matrix(y_test, y_pred, target_names=['setosa', 'versicolor', 'virginica'], normalize=True, title="Normalized confusion matrix")
         #Save it
         ncf.savefig(os.path.join(result_path, 'normalized_confusion_matrix.png'))
         #Compare

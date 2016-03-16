@@ -1,7 +1,8 @@
 #Numpy and sklearn
 import numpy as np
-#Metric for confusion matrix
-from sklearn.metrics import confusion_matrix
+#Metric for confusion matrix (renamed to avoid problems with
+#our own confusion_matrix function)
+from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 #Metric for ROC
 from sklearn.metrics import roc_curve, auc
 #Metric for Precision-Recall
@@ -20,8 +21,8 @@ from sklearn.preprocessing import label_binarize
 
 #Confusion matrix
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-def confusion_matrix_(y_test, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
-    cm = confusion_matrix(y_test, y_pred)
+def confusion_matrix(y_test, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+    cm = sk_confusion_matrix(y_test, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     np.set_printoptions(precision=2)

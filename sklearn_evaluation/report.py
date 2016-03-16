@@ -45,7 +45,7 @@ class ReportGenerator:
 
         #Confusion matrix
         try:
-            cm = p.confusion_matrix_(y_true, y_pred, target_names)
+            cm = p.confusion_matrix(y_true, y_pred, target_names)
             cm_content = figure2html(cm)
         except TypeError:
             cm_content = 'To compute this plot you need to provide y_true, y_pred and target_names'
