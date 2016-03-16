@@ -8,7 +8,9 @@ I'm using this for my personal projects. The plots and tables module are well-te
 
 #Install
 
-`pip install sklearn-evaluation`
+```bash
+pip install sklearn-evaluation
+```
 
 #Usage
 
