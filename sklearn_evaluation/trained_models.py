@@ -48,15 +48,27 @@ class TrainedClassificationModel(object):
         return self._model_name
 
     #This method enables access to the plots, metrics and tables modules
-    def __getattr__(self, name):
-        return ModuleProxy(name)
+    def __getattr__(self, module_name):
+        return ModuleProxy(module_name, self)
 
 class ModuleProxy:
-    def __init__(self, module_name):
+    def __init__(self, module_name, trained_model):
         self.module_name = module_name
+        self.trained_model = trained_model
     def __getattr__(self, function_name):
         #Get the corresponding function from the package
         fn =  locate('{}.{}'.format(self.module_name, function_name))
+        #Raise error if function does not exist
         #Get the function signature
-        signature = inspect.getargspec(tm.plots.confusion_matrix)
-        #Call the function with the appropiate parameters
+        fn_args = set(inspect.getargspec(fn).args)
+        #Get list of properties in trained_model remove leading _
+        properties = set([name[1:] for name in self.trained_model.__dict__.keys()])
+        #See which parameters from the function match trained_model
+        #properties
+        matched_properties = list(fn_args.intersection(properties))
+        tuples = [(key, getattr(self.trained_model, key)) for key in matched_properties]
+        kwargs = {key: value for (key, value) in tuples}
+        #Raise error if some of the properties are empty
+        #Call function with given properties
+        return fn(**kwargs)
+        

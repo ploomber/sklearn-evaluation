@@ -21,8 +21,8 @@ from sklearn.preprocessing import label_binarize
 
 #Confusion matrix
 #http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-def confusion_matrix(y_test, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
-    cm = sk_confusion_matrix(y_test, y_pred)
+def confusion_matrix(y_true, y_pred, target_names, normalize=False, title='Confusion matrix', cmap=plt.cm.Blues):
+    cm = sk_confusion_matrix(y_true, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     np.set_printoptions(precision=2)
