@@ -1,5 +1,6 @@
 from pydoc import locate
 import inspect
+from functools import partial
 
 class TrainedClassificationModel(object):
     '''
@@ -69,6 +70,9 @@ class ModuleProxy:
         tuples = [(key, getattr(self.trained_model, key)) for key in matched_properties]
         kwargs = {key: value for (key, value) in tuples}
         #Raise error if some of the properties are empty
-        #Call function with given properties
-        return fn(**kwargs)
+        
+        #Partially apply the function, so
+        #the user can still call it with the rest of the paramteters
+        partial_fn = partial(fn, **kwargs)
+        return partial_fn
         
