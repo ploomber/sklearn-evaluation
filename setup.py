@@ -15,7 +15,7 @@ setup(name='sklearn-evaluation',
           'scikit-learn',
           'matplotlib',
           'tabulate',
-          #add report generator dependencies
+          'decorator'
       ],
       test_suite='nose.collector',
       tests_require=['nose'], #add freezegun
