@@ -58,7 +58,8 @@ class ModuleProxy:
         self.trained_model = trained_model
     def __getattr__(self, function_name):
         #Get the corresponding function from the package
-        fn =  locate('{}.{}'.format(self.module_name, function_name))
+        fn =  locate('{}.{}.{}'.format(__package__,
+            self.module_name, function_name))
         if fn is None:
             raise Exception("Couldn't locate '{}' in '{}' module"
                 .format(function_name, self.module_name))
