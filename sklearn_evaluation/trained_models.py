@@ -59,20 +59,20 @@ class ModuleProxy:
     def __getattr__(self, function_name):
         #Get the corresponding function from the package
         fn =  locate('{}.{}'.format(self.module_name, function_name))
-        #Raise error if function does not exist
+        #TODO: Raise error if function does not exist
         #Get the function signature
-        fn_args = set(inspect.getargspec(fn).args)
-        #Get list of properties in trained_model remove leading _
-        properties = set([name[1:] for name in self.trained_model.__dict__.keys()])
-        #See which parameters from the function match trained_model
-        #properties
-        matched_properties = list(fn_args.intersection(properties))
-        tuples = [(key, getattr(self.trained_model, key)) for key in matched_properties]
-        kwargs = {key: value for (key, value) in tuples}
-        #Raise error if some of the properties are empty
-        
-        #Partially apply the function, so
-        #the user can still call it with the rest of the paramteters
-        partial_fn = partial(fn, **kwargs)
+        fn_args = inspect.getargspec(fn).args
+        #Get list of properties in trained_model
+        properties = [name[1:] for name in self.trained_model.__dict__.keys()]
+        #Get the size of the intersection
+        size = len(set(fn_args).intersection(set(properties)))
+        #Get values for the properties up until index
+        values = [getattr(self.trained_model, key) for key in fn_args[:size]]
+        #TODO: Raise error if some of the properties are empty
+        #Partially apply function
+        partial_fn = partial(fn, *values)
+        #seems like fn_args = set(inspect.getargspec(fn).args)
+        #is not working in decorated functions
+        #print 'sending values: {}'.format(kwargs.values())
         return partial_fn
         

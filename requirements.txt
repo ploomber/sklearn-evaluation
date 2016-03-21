@@ -13,3 +13,4 @@ scikit-learn==0.16.1
 scipy==0.16.0
 six==1.10.0
 tabulate==0.7.5
+decorator==4.0.9
