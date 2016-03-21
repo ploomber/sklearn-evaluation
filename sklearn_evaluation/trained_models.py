@@ -59,7 +59,9 @@ class ModuleProxy:
     def __getattr__(self, function_name):
         #Get the corresponding function from the package
         fn =  locate('{}.{}'.format(self.module_name, function_name))
-        #TODO: Raise error if function does not exist
+        if fn is None:
+            raise Exception("Couldn't locate '{}' in '{}' module"
+                .format(function_name, self.module_name))
         #Get the function signature
         fn_args = inspect.getargspec(fn).args
         #Get list of properties in trained_model
@@ -68,11 +70,10 @@ class ModuleProxy:
         size = len(set(fn_args).intersection(set(properties)))
         #Get values for the properties up until index
         values = [getattr(self.trained_model, key) for key in fn_args[:size]]
-        #TODO: Raise error if some of the properties are empty
+        if None in values:
+            arg_name = fn_args[values.index(None)]
+            raise Exception('{} is needed to compute {}'
+                .format(arg_name, function_name))
         #Partially apply function
-        partial_fn = partial(fn, *values)
-        #seems like fn_args = set(inspect.getargspec(fn).args)
-        #is not working in decorated functions
-        #print 'sending values: {}'.format(kwargs.values())
-        return partial_fn
-        
+        return partial(fn, *values)
+
