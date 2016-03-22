@@ -52,8 +52,13 @@ class ClassificationModelResults(object):
     def __getattr__(self, module_name):
         return ModuleProxy(module_name, self)
 
-class ModuleProxy:
+class ModuleProxy(object):
     def __init__(self, module_name, trained_model):
+        #Only these modules are available trough this class
+        AVAILABLE_MODULES = ['metrics', 'plots', 'tables']
+        if module_name not in AVAILABLE_MODULES:
+            raise ImportError("Cannot import '{}'' module. Only {} are allowed".
+                format(module_name, reduce(lambda x,y: x+', '+y, AVAILABLE_MODULES)))
         self.module_name = module_name
         self.trained_model = trained_model
     def __getattr__(self, function_name):
@@ -77,4 +82,3 @@ class ModuleProxy:
                 .format(arg_name, function_name))
         #Partially apply function
         return partial(fn, *values)
-
