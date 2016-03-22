@@ -57,7 +57,7 @@ class ModuleProxy(object):
         #Only these modules are available trough this class
         AVAILABLE_MODULES = ['metrics', 'plots', 'tables']
         if module_name not in AVAILABLE_MODULES:
-            raise ImportError("Cannot import '{}'' module. Only {} are allowed".
+            raise ImportError("Cannot import '{}' module. Only {} are allowed".
                 format(module_name, reduce(lambda x,y: x+', '+y, AVAILABLE_MODULES)))
         self.module_name = module_name
         self.trained_model = trained_model
