@@ -177,7 +177,7 @@ def precision_recall(y_true, y_score, title="Precision-Recall curve"):
     return fig
 
 #http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def feature_importance(model, feature_list=None, n=None):
+def feature_importances(model, feature_list=None, n=None):
     #If no feature_list is provided, assign numbers
     total_features = len(model.feature_importances_)
     feature_list = range(total_features) if feature_list is None else feature_list
@@ -220,7 +220,7 @@ def feature_importances_from_list(features, feature_importances, top_n=None):
     ax.set_xlim([-1, 10])
     return fig
 
-def precision_at_proportions(test_labels, test_predictions, ax=None, **kwargs):
+def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
     '''
         Plots precision for various percent values
     '''
@@ -230,7 +230,7 @@ def precision_at_proportions(test_labels, test_predictions, ax=None, **kwargs):
 
     #Calculate points
     percents = [0.01 * i for i in range(1, 101)]
-    precs_and_cutoffs = [precision_at(test_labels, test_predictions, percent=p) for p in percents]
+    precs_and_cutoffs = [precision_at(y_true, y_score, percent=p) for p in percents]
     precs, cutoffs = zip(*precs_and_cutoffs)
 
     #Plot and set nice defaults for title and axis labels
