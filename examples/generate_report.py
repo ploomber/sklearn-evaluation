@@ -6,7 +6,7 @@ from sklearn.multiclass import OneVsRestClassifier
 from sklearn.datasets import make_classification
 from sklearn.ensemble import ExtraTreesClassifier
 
-from sklearn_evaluation.trained_models import TrainedClassificationModel
+from sklearn_evaluation.model_results import ClassificationModelResults
 from sklearn_evaluation.report import ReportGenerator
 
 # Import some data to play with
@@ -35,7 +35,7 @@ feature_list = range(4)
 target_names = ['setosa', 'versicolor', 'virginica']
 
 #Create a trained model instance
-tm = TrainedClassificationModel(classifier, y_test, y_pred, y_score,
+tm = ClassificationModelResults(classifier, y_test, y_pred, y_score,
     feature_list, target_names, model_name='sample_model_report')
 
 #Generate report

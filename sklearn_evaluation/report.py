@@ -9,7 +9,7 @@ from utils import get_model_name
 
 class ReportGenerator:
     '''
-        Generate HTML reports from TrainedClassificationModel instances.
+        Generate HTML reports from ClassificationModelResults instances.
         If savepath is None, generate_report() will return HTML code,
         otherwise, HTML file will be saved there.
     '''

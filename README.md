@@ -74,16 +74,16 @@ Also, running this in Jupyter will generate a pandas-like output. See [notebook]
 Generate HTML reports.
 
 ```python
-from sklearn_evaluation.trained_models import TrainedClassificationModel
+from sklearn_evaluation.model_results import ClassificationModelResults
 from sklearn_evaluation.report import ReportGenerator
 
 #code for data loading and model training
 
-#Created a TrainedClassificationModel that packs everything about your model
-tm = TrainedClassificationModel(classifier, y_test, y_pred, y_score,
+#Created a ClassificationModelResults that packs everything about your model
+tm = ClassificationModelResults(classifier, y_test, y_pred, y_score,
     feature_list, target_names, model_name='sample_model_report')
 
-#Instantiate a ReportGenerator which takes a TrainedClassificationModel
+#Instantiate a ReportGenerator which takes a ClassificationModelResults
 #instance and generates HTML reports
 report_gen = ReportGenerator(savepath='~/models')
 #Save HTML file
