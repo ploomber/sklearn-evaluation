@@ -222,19 +222,19 @@ def feature_importances_from_list(features, feature_importances, top_n=None):
 
 def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
     '''
-        Plots precision for various percent values
+        Plots precision for various proportions
     '''
     #If not Axes object is passed use the current one in pyplot
     if ax is None:
         ax = plt.gca()
 
     #Calculate points
-    percents = [0.01 * i for i in range(1, 101)]
-    precs_and_cutoffs = [precision_at(y_true, y_score, percent=p) for p in percents]
+    proportions = [0.01 * i for i in range(1, 101)]
+    precs_and_cutoffs = [precision_at(y_true, y_score, proportion=p) for p in proportions]
     precs, cutoffs = zip(*precs_and_cutoffs)
 
     #Plot and set nice defaults for title and axis labels
-    ax.plot(percents, precs, **kwargs)
+    ax.plot(proportions, precs, **kwargs)
     ax.set_title('Precision at various proportions')
     ax.set_ylabel('Precision')
     ax.set_xlabel('Proportion')
