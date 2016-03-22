@@ -43,7 +43,7 @@ class Test_Feature_Importances(TestCase):
         #Load model
         model = joblib.load(os.path.join(models_path,'feature_importances_model.pkl'))
         #Generate plot
-        fi = plots.feature_importance(model)
+        fi = plots.feature_importances(model)
         #Save it
         fi.savefig(os.path.join(result_path, 'feature_importances.png'))
         #Compare
