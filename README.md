@@ -21,17 +21,31 @@ Generate evaluation plots with a single function call.
 from sklearn_evaluation import plots
 
 #code for data loading and model training
-
+#
 plots.confusion_matrix(y_true, y_pred, target_names=target_names)
 ```
 
 ![confusion matrix](examples/cm.png)
 
-See this Jupyter [notebook](examples/plots.ipynb) for more examples.
+There's also an object-oriented interface:
+
+```python
+from sklearn_evaluation.model_results import ClassificationModelResults
+
+#code for data loading and model training
+
+tm = ClassificationModelResults(classifier, y_test, y_pred, y_score,
+    feature_list, target_names)
+
+#this will produce the sample plot as the first example
+tm.plots.confusion_matrix()
+```
+
+See this Jupyter [notebook](examples/plots.ipynb) for examples using the funcional interface and this [notebook](examples/using-oop-interface.ipynb) for the object-oriented interface.
 
 ##Tables module
 
-Generate good looking tables from your model easily.
+Generate good looking tables from your model results.
 
 ```python
 from sklearn_evaluation import tables
@@ -90,6 +104,6 @@ report_gen = ReportGenerator(savepath='~/models')
 report_gen(tm)
 ```
 
-The code above will generate a report [like this.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/sample_model_report.html)
+The code above will generate a report [like this one.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/sample_model_report.html)
 
 Reports are self-contained, all images are included in the html file using [base64](https://en.wikipedia.org/wiki/Base64).
