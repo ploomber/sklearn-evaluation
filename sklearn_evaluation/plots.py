@@ -102,7 +102,7 @@ def roc(y_true, y_score, title="ROC curve"):
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('False Positive Rate')
     ax.set_ylabel('True Positive Rate')
-    ax.set_title('Receiver operating characteristic example')
+    ax.set_title(title)
     ax.legend(loc="lower right")
     return fig
 
