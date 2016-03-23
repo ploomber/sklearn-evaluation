@@ -21,7 +21,7 @@ Generate evaluation plots with a single function call.
 from sklearn_evaluation import plots
 
 #code for data loading and model training
-#
+
 plots.confusion_matrix(y_true, y_pred, target_names=target_names)
 ```
 
