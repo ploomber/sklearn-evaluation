@@ -24,8 +24,14 @@ def _compute_feature_importances(model, feature_names):
     f = [{'name':feature_names[i], 'importance':importances[i], 'std': std[i]} for i in indices]
     return f
 
-def feature_importances(model, feature_names):
-    data =  _compute_feature_importances(model, feature_names)
+def feature_importances(model, feature_names=None, n=None):
+    #If no feature_names is provided, assign numbers
+    total_features = len(model.feature_importances_)
+    feature_names = range(total_features) if feature_names is None else feature_names
+    #Plot all features if n is not provided, otherwise plot top n features
+    n = len(feature_names) if n is None else n
+    #Return only top n features
+    data =  _compute_feature_importances(model, feature_names)[:n]
     #Convert list of dictionaries to list of tuples
     #that's to show the columns in the correct order: name, importance, std
     rows = [(dic['name'], dic['importance'], dic['std']) for dic in data]
