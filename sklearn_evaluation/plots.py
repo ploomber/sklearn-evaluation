@@ -145,7 +145,9 @@ def precision_recall(y_true, y_score, ax=None, title="Precision-Recall curve"):
             average_precision[i] = average_precision_score(y_true[:, i],
                                                            y_score[:, i])
         # Compute micro-average ROC curve and ROC area
-        precision["micro"], recall["micro"], _ = precision_recall_curve(y_true.ravel(), y_score.ravel())
+        precision["micro"], recall["micro"], _ = precision_recall_curve(
+                                                    y_true.ravel(),
+                                                    y_score.ravel())
         average_precision["micro"] = average_precision_score(y_true, y_score,
                                                              average="micro")
     else:
@@ -160,16 +162,21 @@ def precision_recall(y_true, y_score, ax=None, title="Precision-Recall curve"):
     if n_classes == 2:
         ax.plot(recall[1], precision[1], label='Precision-Recall curve')
     else:
-        ax.plot(recall["micro"], precision["micro"], label='micro-average Precision-recall curve (area = {0:0.2f})'.format(average_precision["micro"]))
+        ax.plot(recall["micro"], precision["micro"],
+                label=('micro-average Precision-recall curve (area = {0:0.2f})'
+                       .format(average_precision["micro"])))
         for i in range(n_classes):
-            ax.plot(recall[i], precision[i], label='P-R curve of class {0} (area = {1:0.2f})'.format(i, average_precision[i]))
+            ax.plot(recall[i], precision[i],
+                    label=('P-R curve of class {0} (area = {1:0.2f})'
+                           .format(i, average_precision[i])))
 
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('Recall')
     ax.set_ylabel('Precision')
     if n_classes == 2:
-        ax.set_title('Precision-Recall curve: AUC={0:0.2f}'.format(average_precision[1]))
+        ax.set_title(('Precision-Recall curve: AUC={0:0.2f}'
+                      .format(average_precision[1])))
     else:
         ax.set_title(title)
     ax.legend(loc="lower right")
@@ -179,11 +186,12 @@ def precision_recall(y_true, y_score, ax=None, title="Precision-Recall curve"):
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
 def feature_importances(model, ax=None, feature_names=None, n=None):
     # If no feature_names is provided, assign numbers
-    total_features = len(model.feature_importances_)
-    feature_names = range(total_features) if feature_names is None else feature_names
+    total = len(model.feature_importances_)
+    feature_names = range(total) if feature_names is None else feature_names
     # Plot all features if n is not provided, otherwise plot top n features
     n = len(feature_names) if n is None else n
-    # Compute feature importances, use private method to avoid getting formatted results
+    # Compute feature importances, use private method to avoid getting
+    # formatted results
     f_imp = tables._compute_feature_importances(model, feature_names)
     importances = map(lambda x: x['importance'], f_imp)[:n]
     stds = map(lambda x: x['std'], f_imp)[:n]
@@ -193,7 +201,8 @@ def feature_importances(model, ax=None, feature_names=None, n=None):
         ax = plt.gca()
 
     ax.set_title("Feature importances")
-    ax.bar(range(len(importances)), importances, color="r", yerr=stds, align="center")
+    ax.bar(range(len(importances)), importances, color="r", yerr=stds,
+           align="center")
     ax.set_xticks(range(len(names)))
     ax.set_xticklabels(names, rotation=90)
     ax.set_xlim([-1, 10])
@@ -203,7 +212,8 @@ def feature_importances(model, ax=None, feature_names=None, n=None):
 def feature_importances_from_list(features, feature_importances, ax=None,
                                   top_n=None):
     '''
-        Plot top_n features by passing a list of features and a list of features importances.
+        Plot top_n features by passing a list of features and a list of
+        features importances.
     '''
     fts = zip(features, feature_importances)
     fts.sort(key=lambda t: t[1])
@@ -232,7 +242,7 @@ def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
 
     # Calculate points
     proportions = [0.01 * i for i in range(1, 101)]
-    precs_and_cutoffs = [precision_at(y_true, y_score, proportion=p) for p in proportions]
+    precs_and_cutoffs = [precision_at(y_true, y_score, p) for p in proportions]
     precs, cutoffs = zip(*precs_and_cutoffs)
 
     # Plot and set nice defaults for title and axis labels
