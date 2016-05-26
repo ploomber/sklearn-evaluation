@@ -1,47 +1,41 @@
 import numpy as np
+import matplotlib.pyplot as plt
+import tables
+from metrics import precision_at
 
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 from sklearn.metrics import roc_curve, auc
 from sklearn.metrics import precision_recall_curve, average_precision_score
-
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-import matplotlib.pyplot as plt
-
-import tables
-from metrics import precision_at
-
 from sklearn.preprocessing import label_binarize
 
 
 # Confusion matrix
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-def confusion_matrix(y_true, y_pred, target_names, normalize=False,
+def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
                      title='Confusion matrix', cmap=plt.cm.Blues):
     cm = sk_confusion_matrix(y_true, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
     np.set_printoptions(precision=2)
-    fig = Figure()
-    canvas = FigureCanvas(fig)
-    ax = fig.add_subplot(111)
-    im = ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
-    fig.colorbar(im)
+
+    if ax is None:
+        ax = plt.gca()
+
+    ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
     tick_marks = np.arange(len(target_names))
     ax.set_xticks(tick_marks)
     ax.set_xticklabels(target_names, rotation=45)
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(target_names)
-    fig.tight_layout()
     ax.set_title(title)
     ax.set_ylabel('True label')
     ax.set_xlabel('Predicted label')
-    return fig
+    return ax
 
 
 # Receiver operating characteristic (ROC)
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
-def roc(y_true, y_score, title="ROC curve"):
+def roc(y_true, y_score, ax=None, title="ROC curve"):
     '''
         Plot ROC curve based on true labels and model predictions.
         y_score (n_rows * n_classes) - Scores for a given prediction
@@ -85,9 +79,9 @@ def roc(y_true, y_score, title="ROC curve"):
 
     # Plot of a ROC curve for class 1 if binary classifier
     # Plot all classes and micro-average if multiclass classifier
-    fig = Figure()
-    canvas = FigureCanvas(fig)
-    ax = fig.add_subplot(111)
+    if ax is None:
+        ax = plt.gca()
+
     if n_classes == 2:
         ax.plot(fpr[1], tpr[1], label='ROC curve (area = %0.2f)' % roc_auc[1])
     else:
@@ -105,7 +99,7 @@ def roc(y_true, y_score, title="ROC curve"):
     ax.set_ylabel('True Positive Rate')
     ax.set_title(title)
     ax.legend(loc="lower right")
-    return fig
+    return ax
 
 # Receiver operating characteristic (ROC) with cross validation
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
@@ -113,7 +107,7 @@ def roc(y_true, y_score, title="ROC curve"):
 
 # Precision-recall
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
-def precision_recall(y_true, y_score, title="Precision-Recall curve"):
+def precision_recall(y_true, y_score, ax=None, title="Precision-Recall curve"):
     '''
         Plot Precision-Recall curve based on true labels and model predictions.
         y_score (n_rows * n_classes) - Scores for a given prediction
@@ -159,9 +153,9 @@ def precision_recall(y_true, y_score, title="Precision-Recall curve"):
 
     # Plot of a ROC curve for class 1 if binary classifier
     # Plot all classes and micro-average if multiclass classifier
-    fig = Figure()
-    canvas = FigureCanvas(fig)
-    ax = fig.add_subplot(111)
+    if ax is None:
+        ax = plt.gca()
+
     if n_classes == 2:
         ax.plot(recall[1], precision[1], label='Precision-Recall curve')
     else:
@@ -178,11 +172,11 @@ def precision_recall(y_true, y_score, title="Precision-Recall curve"):
     else:
         ax.set_title(title)
     ax.legend(loc="lower right")
-    return fig
+    return ax
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def feature_importances(model, feature_names=None, n=None):
+def feature_importances(model, ax=None, feature_names=None, n=None):
     # If no feature_names is provided, assign numbers
     total_features = len(model.feature_importances_)
     feature_names = range(total_features) if feature_names is None else feature_names
@@ -190,22 +184,23 @@ def feature_importances(model, feature_names=None, n=None):
     n = len(feature_names) if n is None else n
     # Compute feature importances, use private method to avoid getting formatted results
     f_imp = tables._compute_feature_importances(model, feature_names)
-    importances = map(lambda x:x['importance'], f_imp)[:n]
-    stds = map(lambda x:x['std'], f_imp)[:n]
-    names = map(lambda x:x['name'], f_imp)[:n]
+    importances = map(lambda x: x['importance'], f_imp)[:n]
+    stds = map(lambda x: x['std'], f_imp)[:n]
+    names = map(lambda x: x['name'], f_imp)[:n]
 
-    fig = Figure()
-    canvas = FigureCanvas(fig)
-    ax = fig.add_subplot(111)
+    if ax is None:
+        ax = plt.gca()
+
     ax.set_title("Feature importances")
     ax.bar(range(len(importances)), importances, color="r", yerr=stds, align="center")
     ax.set_xticks(range(len(names)))
     ax.set_xticklabels(names, rotation=90)
     ax.set_xlim([-1, 10])
-    return fig
+    return ax
 
 
-def feature_importances_from_list(features, feature_importances, top_n=None):
+def feature_importances_from_list(features, feature_importances, ax=None,
+                                  top_n=None):
     '''
         Plot top_n features by passing a list of features and a list of features importances.
     '''
@@ -215,22 +210,22 @@ def feature_importances_from_list(features, feature_importances, top_n=None):
     top_fts = fts[::-1][:top_n]
     names = [ft[0] for ft in top_fts]
     importances = [ft[1] for ft in top_fts]
-    fig = Figure()
-    canvas = FigureCanvas(fig)
-    ax = fig.add_subplot(111)
+
+    if ax is None:
+        ax = plt.gca()
+
     ax.set_title("Feature importances")
     ax.bar(range(len(importances)), importances, color="r", align="center")
     ax.set_xticks(range(len(names)))
     ax.set_xticklabels(names, rotation=90)
     ax.set_xlim([-1, 10])
-    return fig
+    return ax
 
 
 def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
     '''
         Plots precision for various proportions
     '''
-    # If not Axes object is passed use the current one in pyplot
     if ax is None:
         ax = plt.gca()
 
