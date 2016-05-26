@@ -21,10 +21,11 @@ def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
     if ax is None:
         ax = plt.gca()
 
-    ax.imshow(cm, interpolation='nearest', cmap=plt.cm.Blues)
+    im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
+    plt.colorbar(im, ax=ax)
     tick_marks = np.arange(len(target_names))
     ax.set_xticks(tick_marks)
-    ax.set_xticklabels(target_names, rotation=45)
+    ax.set_xticklabels(target_names)
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(target_names)
     ax.set_title(title)
