@@ -1,11 +1,16 @@
 from string import Template
-import plots as p
+import plots
 from cStringIO import StringIO
 import base64
 import os
 import mistune
 from datetime import datetime
 from utils import get_model_name
+
+
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 
 class ReportGenerator:
     '''
@@ -41,8 +46,13 @@ class ReportGenerator:
     
         #Feature importance
         try:
-            fi = p.feature_importance(trained_model.model, trained_model.feature_names)
-            fi_content = figure2html(fi)
+            fig = Figure()
+            FigureCanvas(fig)
+            ax = fig.add_subplot(111)
+            plots.feature_importance(trained_model.model,
+                                     trained_model.feature_names,
+                                     ax=ax)
+            fi_content = figure2html(fig)
         except AttributeError:
             fi_content = '%s does not support feature importances' % (model_class_name)
         except TypeError:
@@ -52,20 +62,31 @@ class ReportGenerator:
 
         #Confusion matrix
         try:
-            cm = p.confusion_matrix(trained_model.y_true, trained_model.y_pred,
-                trained_model.target_names)
-            cm_content = figure2html(cm)
+            fig = Figure()
+            FigureCanvas(fig)
+            ax = fig.add_subplot(111)
+            plots.confusion_matrix(trained_model.y_true,
+                                   trained_model.y_pred,
+                                   ax,
+                                   trained_model.target_names)
+            cm_content = figure2html(fig)
         except TypeError:
             cm_content = 'To compute this plot you need to provide y_true, y_pred and target_names'
         except:
             cm_content = 'An unkwown error happened while computing the confusion matrix'
 
         #ROC
-        roc = p.roc(trained_model.y_true, trained_model.y_score)
-        roc_base64 = figure2base64(roc)
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.roc(trained_model.y_true, trained_model.y_score, ax=ax)
+        roc_base64 = figure2base64(fig)
         #Precision-Recall
-        pr = p.precision_recall(trained_model.y_true, trained_model.y_score)
-        pr_base64 = figure2base64(pr)
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.precision_recall(trained_model.y_true, trained_model.y_score, ax=ax)
+        pr_base64 = figure2base64(fig)
     
         d = {'model_name': model_name,
              'date': datetime.now().strftime('%B %d %Y %H:%M'),

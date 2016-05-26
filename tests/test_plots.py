@@ -4,6 +4,9 @@ from sklearn.externals import joblib
 from testing.image_testing import equal_images
 import os
 
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
 module_path = os.path.dirname(os.path.abspath(__file__))
 models_path = os.path.join(module_path, 'dummy_models')
 result_path = os.path.join(module_path, 'result_images')
@@ -20,9 +23,14 @@ class Test_Confusion_Matrix(TestCase):
         y_pred = joblib.load(os.path.join(models_path,'confusion_matrix_y_pred.pkl'))
         y_test = joblib.load(os.path.join(models_path,'confusion_matrix_y_test.pkl'))
         #Generate plot
-        cf = plots.confusion_matrix(y_test, y_pred, target_names=['setosa', 'versicolor', 'virginica'])
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.confusion_matrix(y_test, y_pred,
+                               target_names=['setosa', 'versicolor', 'virginica'],
+                               ax=ax)
         #Save it
-        cf.savefig(os.path.join(result_path, 'confusion_matrix.png'))
+        fig.savefig(os.path.join(result_path, 'confusion_matrix.png'))
         #Compare
         result = equal_images(expected='baseline_images/confusion_matrix.png', actual='result_images/confusion_matrix.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
@@ -31,9 +39,16 @@ class Test_Confusion_Matrix(TestCase):
         y_pred = joblib.load(os.path.join(models_path,'confusion_matrix_y_pred.pkl'))
         y_test = joblib.load(os.path.join(models_path,'confusion_matrix_y_test.pkl'))
         #Generate plot
-        ncf = plots.confusion_matrix(y_test, y_pred, target_names=['setosa', 'versicolor', 'virginica'], normalize=True, title="Normalized confusion matrix")
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.confusion_matrix(y_test, y_pred,
+                ax=ax,
+                target_names=['setosa', 'versicolor', 'virginica'],
+                normalize=True,
+                title="Normalized confusion matrix")
         #Save it
-        ncf.savefig(os.path.join(result_path, 'normalized_confusion_matrix.png'))
+        fig.savefig(os.path.join(result_path, 'normalized_confusion_matrix.png'))
         #Compare
         result = equal_images(expected='baseline_images/normalized_confusion_matrix.png', actual='result_images/normalized_confusion_matrix.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
@@ -43,9 +58,12 @@ class Test_Feature_Importances(TestCase):
         #Load model
         model = joblib.load(os.path.join(models_path,'feature_importances_model.pkl'))
         #Generate plot
-        fi = plots.feature_importances(model)
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.feature_importances(model, ax=ax)
         #Save it
-        fi.savefig(os.path.join(result_path, 'feature_importances.png'))
+        fig.savefig(os.path.join(result_path, 'feature_importances.png'))
         #Compare
         result = equal_images(expected='baseline_images/feature_importances.png', actual='result_images/feature_importances.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
@@ -56,9 +74,12 @@ class Test_Precision_Recall(TestCase):
         y_score = joblib.load(os.path.join(models_path,'precision_recall_y_score.pkl'))
         y_test = joblib.load(os.path.join(models_path,'precision_recall_y_test.pkl'))
         #Generate plot
-        pr = plots.precision_recall(y_test, y_score)
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.precision_recall(y_test, y_score, ax=ax)
         #Save plot
-        pr.savefig(os.path.join(result_path, 'precision_recall.png'))
+        fig.savefig(os.path.join(result_path, 'precision_recall.png'))
         #Compare
         result = equal_images(expected='baseline_images/precision_recall.png', actual='result_images/precision_recall.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
@@ -67,9 +88,12 @@ class Test_Precision_Recall(TestCase):
         y_score = joblib.load(os.path.join(models_path,'multi_precision_recall_y_score.pkl'))
         y_test = joblib.load(os.path.join(models_path,'multi_precision_recall_y_test.pkl'))
         #Generate plot
-        pr = plots.precision_recall(y_test, y_score)
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.precision_recall(y_test, y_score, ax=ax)
         #Save plot
-        pr.savefig(os.path.join(result_path, 'multi_precision_recall.png'))
+        fig.savefig(os.path.join(result_path, 'multi_precision_recall.png'))
         #Compare
         result = equal_images(expected='baseline_images/multi_precision_recall.png', actual='result_images/multi_precision_recall.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
@@ -80,9 +104,12 @@ class Test_ROC(TestCase):
         y_score = joblib.load(os.path.join(models_path,'roc_y_score.pkl'))
         y_test = joblib.load(os.path.join(models_path,'roc_y_test.pkl'))
         #Generate plot
-        pr = plots.roc(y_test, y_score)
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.roc(y_test, y_score, ax=ax)
         #Save plot
-        pr.savefig(os.path.join(result_path, 'roc.png'))
+        fig.savefig(os.path.join(result_path, 'roc.png'))
         #Compare
         result = equal_images(expected='baseline_images/roc.png', actual='result_images/roc.png', tol=tol, basepath=module_path)
         self.assertTrue(result)
@@ -91,9 +118,12 @@ class Test_ROC(TestCase):
         y_score = joblib.load(os.path.join(models_path,'multi_roc_y_score.pkl'))
         y_test = joblib.load(os.path.join(models_path,'multi_roc_y_test.pkl'))
         #Generate plot
-        pr = plots.roc(y_test, y_score)
+        fig = Figure()
+        FigureCanvas(fig)
+        ax = fig.add_subplot(111)
+        plots.roc(y_test, y_score)
         #Save plot
-        pr.savefig(os.path.join(result_path, 'multi_roc.png'))
+        fig.savefig(os.path.join(result_path, 'multi_roc.png'))
         #Compare
         result = equal_images(expected='baseline_images/multi_roc.png', actual='result_images/multi_roc.png', tol=tol, basepath=module_path)
         self.assertTrue(result)

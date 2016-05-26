@@ -1,5 +1,4 @@
 import inspect
-import functools
 from decorator import decorator
 
 @decorator

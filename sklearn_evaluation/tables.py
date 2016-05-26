@@ -1,8 +1,7 @@
 import numpy as np
 from tabulate import tabulate
 
-#https://github.com/pydata/pandas/blob/78fcce40c4e19f8e3a1b32d103c56c52124c284a/pandas/core/frame.py
-#https://ipython.org/ipython-doc/dev/config/integrating.html
+#http://ipython.readthedocs.org/en/stable/config/integrating.html
 class Table():
     def __init__(self, content, header):
         self.content = content
