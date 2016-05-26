@@ -3,9 +3,13 @@ import plots
 from cStringIO import StringIO
 import base64
 import os
-import mistune
 from datetime import datetime
 from utils import get_model_name
+
+try:
+    import mistune
+except:
+    raise Exception('You need to install mistune to use the report module')
 
 
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
