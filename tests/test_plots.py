@@ -46,8 +46,7 @@ class Test_Confusion_Matrix(TestCase):
         plots.confusion_matrix(y_test, y_pred,
                 ax=ax,
                 target_names=['setosa', 'versicolor', 'virginica'],
-                normalize=True,
-                title="Normalized confusion matrix")
+                normalize=True)
         #Save it
         fig.savefig(os.path.join(result_path, 'normalized_confusion_matrix.png'))
         #Compare

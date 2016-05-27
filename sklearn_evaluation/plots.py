@@ -13,7 +13,7 @@ from sklearn.preprocessing import label_binarize
 # Confusion matrix
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
-                     title='Confusion matrix', cmap=plt.cm.Blues):
+                     cmap=plt.cm.Blues):
     """
     Plot confustion matrix.
 
@@ -23,8 +23,15 @@ def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
         Correct target values (Ground truth).
     y_pred : array-like
         Target predicted classes (Model predictions).
+    target_names : list
+        List containing the names of the target classes
     ax: matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
+    normalize : bool
+        Normalize the confusion matrix
+    cmap : matplotlib Colormap
+        Colormap used for coloring the matrix
+
 
     Returns
     -------
@@ -47,7 +54,12 @@ def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
     ax.set_xticklabels(target_names)
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(target_names)
+
+    title = 'Confustion matrix'
+    if normalize:
+        title += ' (normalized)'
     ax.set_title(title)
+
     ax.set_ylabel('True label')
     ax.set_xlabel('Predicted label')
     return ax
@@ -55,13 +67,26 @@ def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
 
 # Receiver operating characteristic (ROC)
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
-def roc(y_true, y_score, ax=None, title="ROC curve"):
-    '''
-        Plot ROC curve based on true labels and model predictions.
-        y_score (n_rows * n_classes) - Scores for a given prediction
-        y_true  (n_rows * 1) - True label for a given prediction
-        Assumes all classes are present in y_true, binarizes and orders.
-    '''
+def roc(y_true, y_score, ax=None):
+    """
+    Plot ROC curve.
+
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_rows, n_classes]
+        Correct target values (Ground truth).
+    y_score : array-like, shape = [n_rows]
+        Target scores (Model predictions).
+    ax: matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    """
+    # Assumes all classes are present in y_true, binarizes and orders.
     # y_score MUST contain one column per class, so get the number of classes
     # except when is a binary classification
     if len(y_score.shape) == 1:
@@ -117,7 +142,7 @@ def roc(y_true, y_score, ax=None, title="ROC curve"):
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('False Positive Rate')
     ax.set_ylabel('True Positive Rate')
-    ax.set_title(title)
+    ax.set_title('ROC')
     ax.legend(loc="lower right")
     return ax
 
@@ -127,14 +152,27 @@ def roc(y_true, y_score, ax=None, title="ROC curve"):
 
 # Precision-recall
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_precision_recall.html
-def precision_recall(y_true, y_score, ax=None, title="Precision-Recall curve"):
-    '''
-        Plot Precision-Recall curve based on true labels and model predictions.
-        y_score (n_rows * n_classes) - Scores for a given prediction
-        y_true  (n_rows * 1) - True label for a given prediction
-         (assumes binary input)
-        Assumes all classes are present in y_true, binarizes and orders.
-    '''
+def precision_recall(y_true, y_score, ax=None):
+    """
+    Plot precision-recall curve.
+
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_rows]
+        Correct target values (Ground truth).
+    y_score : array-like, shape = [n_rows, n_classes]
+        Target scores (Model predictions).
+    ax : matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    """
+    # (assumes binary input)
+    # Assumes all classes are present in y_true, binarizes and orders.
     # y_score MUST contain one column per class, so get the number of classes
     # except when is a binary classification
     if len(y_score.shape) == 1:
@@ -197,24 +235,44 @@ def precision_recall(y_true, y_score, ax=None, title="Precision-Recall curve"):
         ax.set_title(('Precision-Recall curve: AUC={0:0.2f}'
                       .format(average_precision[1])))
     else:
-        ax.set_title(title)
+        ax.set_title('Precision-Recall')
     ax.legend(loc="lower right")
     return ax
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def feature_importances(model, ax=None, feature_names=None, n=None):
+def feature_importances(model, feature_names=None, ax=None, top_n=None):
+    """
+    Plot precision values at different proportions.
+
+    Parameters
+    ----------
+    model : sklearn model
+        sklearn model with a feature_importances_ attribute.
+    feature_names : array-like
+        Feature names.
+    ax : matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+    top_n : int
+        Only plot the top_n features. If None will plot very feature.
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    """
     # If no feature_names is provided, assign numbers
     total = len(model.feature_importances_)
     feature_names = range(total) if feature_names is None else feature_names
     # Plot all features if n is not provided, otherwise plot top n features
-    n = len(feature_names) if n is None else n
+    top_n = len(feature_names) if top_n is None else top_n
     # Compute feature importances, use private method to avoid getting
     # formatted results
     f_imp = tables._compute_feature_importances(model, feature_names)
-    importances = map(lambda x: x['importance'], f_imp)[:n]
-    stds = map(lambda x: x['std'], f_imp)[:n]
-    names = map(lambda x: x['name'], f_imp)[:n]
+    importances = map(lambda x: x['importance'], f_imp)[:top_n]
+    stds = map(lambda x: x['std'], f_imp)[:top_n]
+    names = map(lambda x: x['name'], f_imp)[:top_n]
 
     if ax is None:
         ax = plt.gca()
@@ -230,10 +288,26 @@ def feature_importances(model, ax=None, feature_names=None, n=None):
 
 def feature_importances_from_list(features, feature_importances, ax=None,
                                   top_n=None):
-    '''
-        Plot top_n features by passing a list of features and a list of
-        features importances.
-    '''
+    """
+    Plot feature importances.
+
+    Parameters
+    ----------
+    features : array-like
+        Feature names.
+    y_score : array-like
+        Feature importance values.
+    ax : matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+    top_n : int
+        Only plot the top_n features. If None will plot very feature.
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    """
     fts = zip(features, feature_importances)
     fts.sort(key=lambda t: t[1])
     top_n = top_n if top_n else len(features)
@@ -252,7 +326,7 @@ def feature_importances_from_list(features, feature_importances, ax=None,
     return ax
 
 
-def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
+def precision_at_proportions(y_true, y_score, ax=None):
     """
     Plot precision values at different proportions.
 
@@ -262,7 +336,7 @@ def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
         Correct target values (Ground truth).
     y_score : array-like
         Target scores (Model predictions).
-    ax: matplotlib Axes
+    ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
     Returns
@@ -280,7 +354,7 @@ def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
     precs, cutoffs = zip(*precs_and_cutoffs)
 
     # Plot and set nice defaults for title and axis labels
-    ax.plot(proportions, precs, **kwargs)
+    ax.plot(proportions, precs)
     ax.set_title('Precision at various proportions')
     ax.set_ylabel('Precision')
     ax.set_xlabel('Proportion')
