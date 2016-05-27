@@ -1,3 +1,4 @@
+"""Plotting functions."""
 import numpy as np
 import matplotlib.pyplot as plt
 import tables
@@ -13,6 +14,24 @@ from sklearn.preprocessing import label_binarize
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
                      title='Confusion matrix', cmap=plt.cm.Blues):
+    """
+    Plot confustion matrix.
+
+    Parameters
+    ----------
+    y_true : array-like
+        Correct target values (Ground truth).
+    y_pred : array-like
+        Target predicted classes (Model predictions).
+    ax: matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    """
     cm = sk_confusion_matrix(y_true, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
@@ -234,9 +253,24 @@ def feature_importances_from_list(features, feature_importances, ax=None,
 
 
 def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
-    '''
-        Plots precision for various proportions
-    '''
+    """
+    Plot precision values at different proportions.
+
+    Parameters
+    ----------
+    y_true : array-like
+        Correct target values (Ground truth).
+    y_score : array-like
+        Target scores (Model predictions).
+    ax: matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    """
     if ax is None:
         ax = plt.gca()
 
