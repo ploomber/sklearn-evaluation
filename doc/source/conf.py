@@ -30,7 +30,6 @@ import os
 # ones.
 extensions = [
     'sphinx.ext.autodoc',
-    'sphinx.ext.githubpages',
     'sphinxcontrib.napoleon',
 ]
 
