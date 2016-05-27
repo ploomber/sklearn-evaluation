@@ -2,7 +2,9 @@
 
 [![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation)
 
-Utilities for evaluating scikit-learn models.
+[![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=latest)](http://sklearn-evaluation.readthedocs.io/en/latest/?badge=latest)
+
+Utilities for evaluating scikit-learn models. [Documentation](sklearn-evaluation.rtfd.io)
 
 #Install
 

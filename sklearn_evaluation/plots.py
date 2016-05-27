@@ -147,7 +147,7 @@ def roc(y_true, y_score, ax=None):
     return ax
 
 # Receiver operating characteristic (ROC) with cross validation
-# http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc.html
+# http://scikit-learn.org/stable/auto_examples/model_selection/plot_roc_crossval.html#example-model-selection-plot-roc-crossval-py
 
 
 # Precision-recall
