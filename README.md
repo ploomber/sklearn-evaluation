@@ -4,10 +4,19 @@
 
 Utilities for evaluating scikit-learn models. [Documentation](http://sklearn-evaluation.rtfd.io)
 
-#Install
+# Install  
 
 ```bash
 pip install sklearn-evaluation
+```
+
+# Dependencies
+
+The package only depends on scikit-learn and matplotlib to work. But if you want to use the reports module you need to install `mistune` and `tabulate` for the tables module
+
+```bash
+pip install mistune
+pip install tabulate
 ```
 
 #Usage
@@ -26,22 +35,6 @@ plots.confusion_matrix(y_true, y_pred, target_names=target_names)
 ```
 
 ![confusion matrix](examples/cm.png)
-
-There's also an object-oriented interface:
-
-```python
-from sklearn_evaluation.model_results import ClassificationModelResults
-
-#code for data loading and model training
-
-tm = ClassificationModelResults(classifier, y_test, y_pred, y_score,
-    feature_list, target_names)
-
-#this will produce the sample plot as the first example
-tm.plots.confusion_matrix()
-```
-
-See this Jupyter [notebook](examples/plots.ipynb) for examples using the funcional interface and this [notebook](examples/using-oop-interface.ipynb) for the object-oriented interface.
 
 ##Tables module
 
@@ -83,27 +76,42 @@ tables.feature_importances(model, feature_list)
 
 Also, running this in Jupyter will generate a pandas-like output. See [notebook](examples/plots.ipynb)
 
-##Report generation module
+##Using the OOP interface
 
-Generate HTML reports.
+A simplified API is available by packing the results of your estimator in the `ClassifierEvaluator class`
 
 ```python
-from sklearn_evaluation.model_results import ClassificationModelResults
-from sklearn_evaluation.report import ReportGenerator
+from sklearn_evaluation.evaluate import ClassifierEvaluator
 
-#code for data loading and model training
+# code for data loading and model training
 
-#Created a ClassificationModelResults that packs everything about your model
-tm = ClassificationModelResults(classifier, y_test, y_pred, y_score,
-    feature_list, target_names, model_name='sample_model_report')
+# created a ClassificationModelResults that packs everything about your model
+ce = ClassifierEvaluator(classifier, y_test, y_pred, y_score,
+    feature_list, target_names)
 
-#Instantiate a ReportGenerator which takes a ClassificationModelResults
-#instance and generates HTML reports
-report_gen = ReportGenerator(savepath='~/models')
-#Save HTML file
-report_gen(tm)
+# this will plot the confusion matrix
+ce.confusion_matrix
 ```
 
-The code above will generate a report [like this one.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/sample_model_report.html)
+## Generating reports
+
+Generate reports using Markdown templates.
+
+```python
+ 
+ template = '''
+            # Report
+            {estimator_type}
+            {date}
+            {confusion_matrix}
+            {roc}
+            {precision_recall}
+            '''
+
+ce.generate_report(template, path='report.html')
+```
+
+
+The code above will generate a report [like this one.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/report.html)
 
 Reports are self-contained, all images are included in the html file using [base64](https://en.wikipedia.org/wiki/Base64).
