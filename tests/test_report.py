@@ -42,6 +42,7 @@ class TestReportGeneration(TestCase):
 
         self.template = '''
                             # Report
+                            {estimator_type}{estimator_class}
                             {date}
                             {confusion_matrix}
                             {roc}

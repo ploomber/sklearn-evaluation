@@ -5,10 +5,6 @@ import re
 from datetime import datetime
 
 import matplotlib
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
-
-from utils import get_model_name
 
 try:
     import mistune

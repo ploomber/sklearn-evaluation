@@ -1,8 +1,9 @@
-from . import plots
-from .report import generate
-
 from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 from matplotlib.figure import Figure
+
+from .util import estimator_type, class_name
+from . import plots
+from .report import generate
 
 
 def gen_ax():
@@ -48,6 +49,14 @@ class ClassifierEvaluator(object):
         self._estimator_name = estimator_name
         # TODO: perform basic logic checking,
         # raise Exception if necessary
+
+    @property
+    def estimator_type(self):
+        return estimator_type(self.estimator)
+
+    @property
+    def estimator_class(self):
+        return class_name(self.estimator)
 
     # Properties should be read-only to ensure instance integrity
     @property
