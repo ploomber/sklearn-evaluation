@@ -26,11 +26,11 @@ def test_normalized_confusion_matrix():
     plot.confusion_matrix(y_test, y_pred, target_names, normalize=True)
 
 
-@image_comparison(baseline_images=['roc'],
-                  extensions=['png'],
-                  remove_text=True)
-def test_roc():
-    plot.roc(y_test, y_score)
+#@image_comparison(baseline_images=['roc'],
+#                  extensions=['png'],
+#                  remove_text=True)
+#def test_roc():
+#    plot.roc(y_test, y_score)
 
 
 @image_comparison(baseline_images=['precision_recall'],
