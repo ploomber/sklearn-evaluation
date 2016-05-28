@@ -49,9 +49,10 @@ class TestReportGeneration(TestCase):
                             {confusion_matrix}
                             {roc}
                             {precision_recall}
+                            {feature_importances_table}
                             {feature_importances}
                         '''
 
     def test_stuff(self):
-        pass
-        # self.results.generate_report(self.template, 'report.html')
+        #pass
+        self.results.generate_report(self.template, 'report.html')

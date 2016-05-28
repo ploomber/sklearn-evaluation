@@ -12,11 +12,15 @@ class Table():
         self.content = content
         self.header = header
 
+    @property
+    def html(self):
+        return tabulate(self.content, headers=self.header, tablefmt='html')
+
     def __str__(self):
         return tabulate(self.content, headers=self.header, tablefmt='grid')
 
     def _repr_html_(self):
-        return tabulate(self.content, headers=self.header, tablefmt='html')
+        return self.html
 
 
 def feature_importances(data, top_n=None, feature_names=None):
