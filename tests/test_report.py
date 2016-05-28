@@ -34,13 +34,19 @@ class TestReportGeneration(TestCase):
         feature_names = range(4)
         model_name = 'a model'
 
-        self.results = ClassifierEvaluator(model=model, y_true=y_test,
+        self.results = ClassifierEvaluator(estimator=model, y_true=y_test,
                                            y_pred=y_pred, y_score=y_score,
                                            feature_names=feature_names,
                                            target_names=target_names,
-                                           model_name=model_name)
+                                           estimator_name=model_name)
 
-        self.template = '# Report {confusion_matrix}{roc}{precision_recall}'
+        self.template = '''
+                            # Report
+                            {date}
+                            {confusion_matrix}
+                            {roc}
+                            {precision_recall}
+                        '''
 
     def test_stuff(self):
-        self.results.generate_report(self.template, '~/Desktop/report.html')
+        self.results.generate_report(self.template, 'report.html')

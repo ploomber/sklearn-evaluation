@@ -1,12 +1,14 @@
-from string import Template
-import plots
 from cStringIO import StringIO
 import base64
 import os
-from datetime import datetime
-from utils import get_model_name
-import matplotlib
 import re
+from datetime import datetime
+
+import matplotlib
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
+from utils import get_model_name
 
 try:
     import mistune
@@ -15,8 +17,31 @@ except:
 
 
 def generate(evaluator, template, path=None, style='default'):
+    # extra tags that can also be used in the report but are not evaluator
+    # attributes
+
+    date_utc = '{} UTC'.format(datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'))
+
+    _extra_tags = {
+        'date_utc':  date_utc,
+        'date': datetime.utcnow().strftime('%Y-%m-%d %H:%M:%S'),
+    }
+
+    # check if template is a path to a file
+    # if yes, load the file
+    if template.endswith('.md'):
+        with open(template, 'r') as f:
+            template = f.read()
+
+    # strip lines in template
+    lines = [l.strip() for l in template.splitlines()]
+    template = reduce(lambda x, y: x+'\n'+y, lines)
     # get list of tags from template
     tags = parse_tags(template)
+
+    # remove tags that are _extra_tags since they are not attributes
+    # and the next function will fail
+    tags = filter(lambda t: t not in _extra_tags.keys(), tags)
 
     # get attributes from evaluator using the tags
     attrs = getattr_from_list(evaluator, tags)
@@ -26,11 +51,14 @@ def generate(evaluator, template, path=None, style='default'):
         if isinstance(v, matplotlib.axes.Axes):
             attrs[k] = figure2html(v.get_figure())
 
+    # add key-value pairs to the attrs dict from the extra_tags
+    attrs.update(_extra_tags)
+
     # replace tags with values
     report = template.format(**attrs)
 
-    # apply style
-    report = apply_style(report, style)
+    # compile to html and add style
+    report = to_html(report, style)
 
     if path is not None:
         report_file = open(path, 'w')
@@ -40,13 +68,13 @@ def generate(evaluator, template, path=None, style='default'):
         return report
 
 
-def apply_style(template, style_name):
+def to_html(template, style_name):
     # Read md template and compile to html
-    pkg = os.path.dirname(os.path.abspath(__file__))
     markdown = mistune.Markdown()
     html = markdown(template)
 
     # Add css
+    pkg = os.path.dirname(os.path.abspath(__file__))
     filepath = os.path.join(pkg, 'styles', '{}.css'.format(style_name))
     f = open(filepath, 'r')
     css = f.read()

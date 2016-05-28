@@ -20,9 +20,9 @@ def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
     Parameters
     ----------
     y_true : array-like
-        Correct target values (Ground truth).
+        Correct target values (ground truth).
     y_pred : array-like
-        Target predicted classes (Model predictions).
+        Target predicted classes (estimador predictions).
     target_names : list
         List containing the names of the target classes
     ax: matplotlib Axes
@@ -74,9 +74,9 @@ def roc(y_true, y_score, ax=None):
     Parameters
     ----------
     y_true : array-like, shape = [n_rows, n_classes]
-        Correct target values (Ground truth).
+        Correct target values (ground truth).
     y_score : array-like, shape = [n_rows]
-        Target scores (Model predictions).
+        Target scores (estimador predictions).
     ax: matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
@@ -159,9 +159,9 @@ def precision_recall(y_true, y_score, ax=None):
     Parameters
     ----------
     y_true : array-like, shape = [n_rows]
-        Correct target values (Ground truth).
+        Correct target values (ground truth).
     y_score : array-like, shape = [n_rows, n_classes]
-        Target scores (Model predictions).
+        Target scores (estimador predictions).
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
@@ -333,9 +333,9 @@ def precision_at_proportions(y_true, y_score, ax=None):
     Parameters
     ----------
     y_true : array-like
-        Correct target values (Ground truth).
+        Correct target values (ground truth).
     y_score : array-like
-        Target scores (Model predictions).
+        Target scores (estimador predictions).
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 

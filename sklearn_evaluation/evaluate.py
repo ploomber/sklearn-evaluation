@@ -1,35 +1,58 @@
 from . import plots
-from .util import gen_ax
 from .report import generate
+
+from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
+from matplotlib.figure import Figure
+
+
+def gen_ax():
+    fig = Figure()
+    FigureCanvas(fig)
+    ax = fig.add_subplot(111)
+    return ax
 
 
 class ClassifierEvaluator(object):
-    '''
-        This class encapsulates the results of a model that has been trained,
-        you can pass and instance of this class to ReportGenerator for
-        generating HTML reports. It also performs some basic checks based on
-        the properties (e.g. y_true, y_pred and y_score are the same length,
-        target_names and values in y_pred have same number of different values)
-    '''
-    # All parameters are optional, when creating a report, ReportGenerator
-    # class should be able to figure out what it can generate based on the
-    # parameters
-    def __init__(self, model=None, y_true=None, y_pred=None, y_score=None,
-                 feature_names=None, target_names=None, model_name=None):
-        self._model = model
+    """
+     Encapsuates results from an estimator on a testing set to provide a
+     simplified API from other modules. All parameters are optional, just
+     fill the ones you need for your analysis.
+
+    Parameters
+    ----------
+    estimator : sklearn estimator
+        This object is only used to get feature importances via
+        model.feature_parameters_
+    y_true : array-like
+        Target predicted classes (estimator predictions).
+    y_pred : array-like
+        Correct target values (ground truth).
+     y_score : array-like
+        Target scores (estimador predictions).
+    feature_names : array-like
+        Feature names.
+    target_names : list
+        List containing the names of the target classes
+    estimator_name : str
+        Identifier for the model. This can be later used to idenfity the
+        estimator when generaing reports.
+    """
+    def __init__(self, estimator=None, y_true=None, y_pred=None, y_score=None,
+                 feature_names=None, target_names=None, estimator_name=None):
+        self._estimator = estimator
         self._y_true = y_true
         self._y_pred = y_pred
         self._y_score = y_score
         self._feature_names = feature_names
         self._target_names = target_names
-        self._model_name = model_name
+        self._estimator_name = estimator_name
         # TODO: perform basic logic checking,
         # raise Exception if necessary
 
     # Properties should be read-only to ensure instance integrity
     @property
-    def model(self):
-        return self._model
+    def estimator(self):
+        return self._estimator
 
     @property
     def y_true(self):
@@ -52,8 +75,8 @@ class ClassifierEvaluator(object):
         return self._target_names
 
     @property
-    def model_name(self):
-        return self._model_name
+    def estimator_name(self):
+        return self._estimator_name
 
     @property
     def confusion_matrix(self):
@@ -70,8 +93,8 @@ class ClassifierEvaluator(object):
 
     @property
     def feature_importances(self):
-        return plots.feature_importances(self.model,
-                                         self.model.feature_importances_,
+        return plots.feature_importances(self.estimator,
+                                         self.estimator.feature_importances_,
                                          ax=gen_ax())
 
     @property
@@ -79,5 +102,28 @@ class ClassifierEvaluator(object):
         return plots.precision_at_proportions(self.y_true, self.y_score,
                                               ax=gen_ax())
 
-    def generate_report(self, template, path):
+    def generate_report(self, template, path=None):
+        """
+         Generate HTML report
+
+        Parameters
+        ----------
+        template : markdown-formatted string or path to markdown file
+            Template used for rendeing the report. Any attribute of this
+            object can be included in the report using the {tag} format.
+            e.g.'# Report\n{estimator_name}\n{roc}{precision_recall}'.
+            Apart from every attribute, you can also use {date} and {date_utc}
+            tags to include the date for the report generation using local
+            and UTC timezones repectively.
+
+        path : str
+            Path to save the HTML report. If None, the function will return
+            the HTML code.
+
+        Returns
+        -------
+        report: str
+            Returns the contents of the report if path is None.
+
+        """
         return generate(self, template, path)
