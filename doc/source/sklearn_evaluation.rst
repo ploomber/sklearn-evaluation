@@ -4,10 +4,18 @@ sklearn_evaluation package
 Submodules
 ----------
 
-sklearn_evaluation.evaluate module
-----------------------------------
+sklearn_evaluation.compute module
+---------------------------------
 
-.. automodule:: sklearn_evaluation.evaluate
+.. automodule:: sklearn_evaluation.compute
+    :members:
+    :undoc-members:
+    :show-inheritance:
+
+sklearn_evaluation.evaluator module
+-----------------------------------
+
+.. automodule:: sklearn_evaluation.evaluator
     :members:
     :undoc-members:
     :show-inheritance:

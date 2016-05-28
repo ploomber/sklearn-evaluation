@@ -47,13 +47,6 @@ def test_precision_recall():
 #     plots.feature_importances(model)
 
 
-@image_comparison(baseline_images=['feature_importances_from_list'],
-                  extensions=['png'],
-                  remove_text=True)
-def test_feature_importances_from_list():
-    plots.feature_importances_from_list(feature_names, feature_importances)
-
-
 @image_comparison(baseline_images=['precision_at_proportions'],
                   extensions=['png'],
                   remove_text=True)

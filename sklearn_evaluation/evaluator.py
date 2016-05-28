@@ -5,7 +5,7 @@ from . import plots
 from .report import generate
 
 
-def gen_ax():
+def _gen_ax():
     fig = plt.figure()
     ax = fig.add_subplot(111)
     return ax
@@ -88,26 +88,26 @@ class ClassifierEvaluator(object):
     @property
     def confusion_matrix(self):
         return plots.confusion_matrix(self.y_true, self.y_pred,
-                                      self.target_names, ax=gen_ax())
+                                      self.target_names, ax=_gen_ax())
 
     @property
     def roc(self):
-        return plots.roc(self.y_true, self.y_score, ax=gen_ax())
+        return plots.roc(self.y_true, self.y_score, ax=_gen_ax())
 
     @property
     def precision_recall(self):
-        return plots.precision_recall(self.y_true, self.y_score, ax=gen_ax())
+        return plots.precision_recall(self.y_true, self.y_score, ax=_gen_ax())
 
     @property
     def feature_importances(self):
         return plots.feature_importances(self.estimator,
                                          self.estimator.feature_importances_,
-                                         ax=gen_ax())
+                                         ax=_gen_ax())
 
     @property
     def precision_at_proportions(self):
         return plots.precision_at_proportions(self.y_true, self.y_score,
-                                              ax=gen_ax())
+                                              ax=_gen_ax())
 
     def generate_report(self, template, path=None):
         """

@@ -4,11 +4,11 @@ import numpy as np
 def feature_importances(data, top_n=None, feature_names=None):
     """
     Get and order feature importances from a scikit-learn model
-    or from an array like structure.
+    or from an array-like structure.
 
-    If data is a scikit-learn with sub-estimators (e.g. RandomForest,
-     AdaBoost) the function will compute the standard deviation of each
-     feature.
+    If data is a scikit-learn model with sub-estimators (e.g. RandomForest,
+    AdaBoost) the function will compute the standard deviation of each
+    feature.
 
     Parameters
     ----------
