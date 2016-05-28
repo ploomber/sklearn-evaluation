@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 
 from .util import estimator_type, class_name
 from . import plots
+from . import tables
 from .report import generate
 
 
@@ -101,8 +102,13 @@ class ClassifierEvaluator(object):
     @property
     def feature_importances(self):
         return plots.feature_importances(self.estimator,
-                                         self.estimator.feature_importances_,
+                                         feature_names=self.feature_names,
                                          ax=_gen_ax())
+
+    @property
+    def feature_importances_table(self):
+        return tables.feature_importances(self.estimator,
+                                          feature_names=self.feature_names)
 
     @property
     def precision_at_proportions(self):
