@@ -1,13 +1,9 @@
 import numpy as np
 from sklearn import svm, datasets
 from sklearn.cross_validation import train_test_split
-from sklearn.preprocessing import label_binarize
 from sklearn.multiclass import OneVsRestClassifier
-from sklearn.datasets import make_classification
-from sklearn.ensemble import ExtraTreesClassifier
 
-from sklearn_evaluation.model_results import ClassificationModelResults
-from sklearn_evaluation.report import ReportGenerator
+from sklearn_evaluation.evaluate import ClassifierEvaluator
 
 # Import some data to play with
 iris = datasets.load_iris()
@@ -34,10 +30,18 @@ y_score = classifier.decision_function(X_test)
 feature_list = range(4)
 target_names = ['setosa', 'versicolor', 'virginica']
 
-#Create a trained model instance
-tm = ClassificationModelResults(classifier, y_test, y_pred, y_score,
-    feature_list, target_names, model_name='sample_model_report')
+# Create a trained model instance
+ce = ClassifierEvaluator(classifier, y_test, y_pred, y_score,
+                         feature_list, target_names,
+                         estimator_name='super awesome SVC')
 
-#Generate report
-report_gen = ReportGenerator(savepath='/Users/Edu/Desktop')
-report_gen(tm)
+template = '''
+           # Report
+           {estimator_type}
+           {date}
+           {confusion_matrix}
+           {roc}
+           {precision_recall}
+           '''
+
+ce.generate_report(template, 'report.html')
