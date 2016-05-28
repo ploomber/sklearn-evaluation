@@ -128,13 +128,14 @@ def roc(y_true, y_score, ax=None):
         ax = plt.gca()
 
     if n_classes == 2:
-        ax.plot(fpr[1], tpr[1], label='ROC curve (area = %0.2f)' % roc_auc[1])
+        ax.plot(fpr[1], tpr[1], label=('ROC curve (area = {0:0.2f})'
+                                       .format(roc_auc[1])))
     else:
         ax.plot(fpr["micro"], tpr["micro"],
                 label=('micro-average ROC curve (area = {0:0.2f})'
                        .format(roc_auc["micro"])))
         for i in range(n_classes):
-            ax.plot(fpr[i], tpr[i], label=('ROC curve (area = %0.2f)'
+            ax.plot(fpr[i], tpr[i], label=('ROC curve (area = {0:0.2f})'
                                            .format(roc_auc[i])))
 
     ax.plot([0, 1], [0, 1], 'k--')
