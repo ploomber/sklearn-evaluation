@@ -1,5 +1,4 @@
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
-from matplotlib.figure import Figure
+import matplotlib.pyplot as plt
 
 from .util import estimator_type, class_name
 from . import plots
@@ -7,8 +6,7 @@ from .report import generate
 
 
 def gen_ax():
-    fig = Figure()
-    FigureCanvas(fig)
+    fig = plt.figure()
     ax = fig.add_subplot(111)
     return ax
 
