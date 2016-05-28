@@ -10,6 +10,8 @@ The cool kids way to evaluate scikit-learn models. [Documentation](http://sklear
 pip install sklearn-evaluation
 ```
 
+Works with Python 2. Support for Python 3 soon!
+
 # Dependencies
 
 The package only depends on scikit-learn and matplotlib to work. But if you want to use the reports module you need to install `mistune` and `tabulate` for the tables module
