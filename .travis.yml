@@ -6,5 +6,7 @@ install:
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
   - "pip install -r requirements.txt"
 script:
+  - ls $HOME
+  - ls $HOME/build
   - cd $HOME/build/sklearn-evaluation
   - ./run_tests

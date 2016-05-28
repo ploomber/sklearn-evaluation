@@ -3,7 +3,7 @@ from . import compute
 try:
     from tabulate import tabulate
 except:
-    Exception('tabulate is required to use the tables module')
+    raise ImportError('tabulate is required to use the tables module')
 
 
 # http://ipython.readthedocs.org/en/stable/config/integrating.html

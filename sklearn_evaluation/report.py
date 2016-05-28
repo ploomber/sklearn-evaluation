@@ -15,7 +15,7 @@ import matplotlib
 try:
     import mistune
 except:
-    raise Exception('You need to install mistune to use the report module')
+    raise ImportError('You need to install mistune to use the report module')
 
 
 def generate(evaluator, template, path=None, style='default'):
