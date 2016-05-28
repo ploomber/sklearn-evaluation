@@ -55,7 +55,7 @@ def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(target_names)
 
-    title = 'Confustion matrix'
+    title = 'Confusion matrix'
     if normalize:
         title += ' (normalized)'
     ax.set_title(title)
