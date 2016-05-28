@@ -38,7 +38,7 @@ def roc(y_true, y_score, ax=None):
         for i in range(n_classes):
             _roc(y_true_bin[:, i], y_score[:, i], ax=ax)
     else:
-        _roc(y_true, y_score, ax)
+        _roc(y_true, y_score[:, 1], ax)
 
     # raise error if n_classes = 1?
     return ax

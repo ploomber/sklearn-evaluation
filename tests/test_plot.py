@@ -9,7 +9,8 @@ feature_names = range(4)
 feature_importances = np.array([0.5, 0.4, 0.3, 0.2])
 y_test = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
 y_pred = np.array([1, 0, 1, 1, 1, 0, 0, 0, 0, 0])
-y_score = np.array([0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3])
+y_score = np.array([[0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3],
+                   [0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3]]).T
 
 
 @image_comparison(baseline_images=['confusion_matrix'],
@@ -26,11 +27,11 @@ def test_normalized_confusion_matrix():
     plot.confusion_matrix(y_test, y_pred, target_names, normalize=True)
 
 
-#@image_comparison(baseline_images=['roc'],
-#                  extensions=['png'],
-#                  remove_text=True)
-#def test_roc():
-#    plot.roc(y_test, y_score)
+@image_comparison(baseline_images=['roc'],
+                  extensions=['png'],
+                  remove_text=True)
+def test_roc():
+    plot.roc(y_test, y_score)
 
 
 @image_comparison(baseline_images=['precision_recall'],
@@ -51,4 +52,4 @@ def test_precision_recall():
                   extensions=['png'],
                   remove_text=True)
 def test_precision_at_proportions():
-    plot.precision_at_proportions(y_test, y_score)
+    plot.precision_at_proportions(y_test, y_score[:, 1])
