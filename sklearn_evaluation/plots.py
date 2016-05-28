@@ -12,8 +12,8 @@ from sklearn.preprocessing import label_binarize
 
 # Confusion matrix
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
-                     cmap=plt.cm.Blues):
+def confusion_matrix(y_true, y_pred, target_names=None, ax=None,
+                     normalize=False, cmap=plt.cm.Blues):
     """
     Plot confustion matrix.
 
@@ -24,7 +24,9 @@ def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
     y_pred : array-like
         Target predicted classes (estimador predictions).
     target_names : list
-        List containing the names of the target classes
+        Lst containing the names of the target classes. List mus be in order
+        e.g. ['Label for class 0', 'Label for class 1']. If None, generic
+        labels will be generated e.g. ['Class 0', 'Class 1']
     ax: matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
     normalize : bool
@@ -39,6 +41,22 @@ def confusion_matrix(y_true, y_pred, target_names, ax=None, normalize=False,
         Axes containing the plot
 
     """
+    # calculate how many names you expect
+    values = set(y_true).union(set(y_pred))
+    expected_len = len(values)
+
+    if target_names and (expected_len != len(target_names)):
+        raise ValueError(('Data cointains {} different values, but target'
+                         ' names contains {} values.'.format(expected_len,
+                                                             len(target_names)
+                                                             )))
+
+    # if the user didn't pass target_names, create generic ones
+    if not target_names:
+        values = list(values)
+        values.sort()
+        target_names = ['Class {}'.format(v) for v in values]
+
     cm = sk_confusion_matrix(y_true, y_pred)
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
