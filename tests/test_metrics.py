@@ -1,6 +1,6 @@
 from unittest import TestCase
 from sklearn_evaluation.metrics import (precision_at, labels_at,
-    tp_at, fp_at)
+                                        tp_at, fp_at)
 
 from sklearn_evaluation.metrics import __threshold_at as threshold_at
 from sklearn_evaluation.metrics import __binarize_scores_at as binarize_scores_at
@@ -9,9 +9,12 @@ import numpy as np
 from numpy import nan
 from random import shuffle
 
+
 class Test_threshold_at(TestCase):
+
     def setUp(self):
-        self.scores = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
+        self.scores = np.array(
+            [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
         shuffle(self.scores)
 
     def test_at_10(self):
@@ -30,12 +33,15 @@ class Test_threshold_at(TestCase):
         self.assertRaises(ValueError, threshold_at, self.scores, -0.1)
 
     def test_proportion_more_than_one(self):
-        self.assertRaises(ValueError, threshold_at, self.scores, proportion=1.1)
+        self.assertRaises(
+            ValueError, threshold_at, self.scores, proportion=1.1)
 
 
 class Test_binarize_scores_at(TestCase):
+
     def setUp(self):
-        self.scores = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
+        self.scores = np.array(
+            [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
 
     def test_at_10(self):
         binary_scores = binarize_scores_at(self.scores, 0.1)
@@ -56,35 +62,39 @@ class Test_binarize_scores_at(TestCase):
         self.assertRaises(ValueError, binarize_scores_at, self.scores, -0.1)
 
     def test_proportion_more_than_one(self):
-        self.assertRaises(ValueError, binarize_scores_at, self.scores, proportion=1.1)
+        self.assertRaises(
+            ValueError, binarize_scores_at, self.scores, proportion=1.1)
 
 
 class Test_precision_at(TestCase):
+
     def test_perfect_precision(self):
-        labels = np.array([1  ,1 ,1 ,1 ,1 ,0 ,0 ,0 ,0 ,0])
-        scores = np.array([100,90,80,70,60,50,40,30,20,10])
+        labels = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
+        scores = np.array([100, 90, 80, 70, 60, 50, 40, 30, 20, 10])
         prec, cutoff = precision_at(labels, scores, proportion=0.10)
         self.assertEqual(prec, 1.0)
         self.assertEqual(cutoff, 100)
 
     def test_perfect_precision_with_nas(self):
-        labels = np.array([1, nan, 1, 1, 1 , nan, 0, 0, 0, 0])
-        scores = np.array([100,90,80,70,60,50,40,30,20,10])
-        prec, cutoff = precision_at(labels, scores, proportion=0.10, ignore_nas=True)
+        labels = np.array([1, nan, 1, 1, 1, nan, 0, 0, 0, 0])
+        scores = np.array([100, 90, 80, 70, 60, 50, 40, 30, 20, 10])
+        prec, cutoff = precision_at(
+            labels, scores, proportion=0.10, ignore_nas=True)
         self.assertEqual(prec, 1.0)
         self.assertEqual(cutoff, 100)
 
     def test_baseline_precision(self):
         labels = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
-        scores = np.array([100,90,80,70,60,50,40,30,20,10])
+        scores = np.array([100, 90, 80, 70, 60, 50, 40, 30, 20, 10])
         prec, cutoff = precision_at(labels, scores, proportion=1.0)
         self.assertEqual(prec, 0.5)
         self.assertEqual(cutoff, 10)
 
     def test_baseline_precision_with_nas(self):
         labels = np.array([nan, 1, nan, 1, 1, nan, nan, 0, 0, 0])
-        scores = np.array([100,90,80,70,60,50,40,30,20,10])
-        prec, cutoff = precision_at(labels, scores, proportion=1.0, ignore_nas=True)
+        scores = np.array([100, 90, 80, 70, 60, 50, 40, 30, 20, 10])
+        prec, cutoff = precision_at(
+            labels, scores, proportion=1.0, ignore_nas=True)
         self.assertEqual(prec, 0.5)
         self.assertEqual(cutoff, 10)
 
@@ -94,7 +104,9 @@ class Test_precision_at(TestCase):
     def test_proportion_more_than_one(self):
         self.assertRaises(ValueError, precision_at, [1], [0], proportion=1.1)
 
+
 class Test_labels_at(TestCase):
+
     def test_no_labels_at_1(self):
         y_true = np.array([nan, nan, nan, nan, nan, nan, nan, nan, nan, nan])
         y_score = np.random.rand(1, 10)
@@ -179,7 +191,9 @@ class Test_labels_at(TestCase):
     def test_proportion_more_than_one(self):
         self.assertRaises(ValueError, labels_at, [1], [0], proportion=1.1)
 
+
 class Test_tp_at(TestCase):
+
     def test_with_nas(self):
         y_true = np.array([1, nan, 1, 1, 1, 1, 1, 1, 1, nan])
         y_score = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
@@ -240,7 +254,9 @@ class Test_tp_at(TestCase):
     def test_proportion_more_than_one(self):
         self.assertRaises(ValueError, tp_at, [1], [0], proportion=1.1)
 
+
 class Test_fp_at(TestCase):
+
     def test_with_nas(self):
         y_true = np.array([0, nan, 1, 1, 1, 1, 1, 1, 1, nan])
         y_score = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
