@@ -1,6 +1,6 @@
 from unittest import TestCase
 
-from sklearn.linear_model import LogisticRegression
+from sklearn.ensemble import RandomForestClassifier
 from sklearn.datasets import load_iris
 from sklearn.cross_validation import train_test_split
 
@@ -27,7 +27,7 @@ class TestReportGeneration(TestCase):
                                                             test_size=0.30,
                                                             random_state=0)
 
-        model = LogisticRegression()
+        model = RandomForestClassifier()
         model.fit(X_train, y_train)
 
         y_pred = model.predict(X_test)
@@ -49,6 +49,7 @@ class TestReportGeneration(TestCase):
                             {confusion_matrix}
                             {roc}
                             {precision_recall}
+                            {feature_importances}
                         '''
 
     def test_stuff(self):

@@ -1,4 +1,4 @@
-import numpy as np
+from . import compute
 
 try:
     from tabulate import tabulate
@@ -19,31 +19,31 @@ class Table():
         return tabulate(self.content, headers=self.header, tablefmt='html')
 
 
-# http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def _compute_feature_importances(model, feature_names):
-    # Get feature importances
-    importances = model.feature_importances_
-    # Compute standard deviation
-    std = np.std([est.feature_importances_ for est in model.estimators_],
-                 axis=0)
-    # Get indexes in order
-    indices = np.argsort(importances)[::-1]
-    # Generate lists
-    f = [{'name': feature_names[i], 'importance':importances[i], 'std': std[i]} for i in indices]
-    return f
+def feature_importances(data, top_n=None, feature_names=None):
+    """
+    Get and order feature importances from a scikit-learn model
+    or from an array like structure.
 
+    If data is a scikit-learn with sub-estimators (e.g. RandomForest,
+     AdaBoost) the function will compute the standard deviation of each
+     feature.
 
-def feature_importances(model, feature_names=None, n=None):
-    # If no feature_names is provided, assign numbers
-    total_features = len(model.feature_importances_)
-    feature_names = range(total_features) if feature_names is None else feature_names
-    # Plot all features if n is not provided, otherwise plot top n features
-    n = len(feature_names) if n is None else n
-    # Return only top n features
-    data = _compute_feature_importances(model, feature_names)[:n]
-    # Convert list of dictionaries to list of tuples
-    # that's to show the columns in the correct order: name, importance, std
-    rows = [(dic['name'], dic['importance'], dic['std']) for dic in data]
-    header = ['name', 'importance', 'std']
-    # Remove num key, that's not useful
-    return Table(rows, header)
+    Parameters
+    ----------
+    data : sklearn model or array-like structure
+        Object to get the data from.
+    top_n : int
+        Only get results for the top_n features.
+    feature_names : array-like
+        Feature_names
+
+    Returns
+    -------
+    table
+        Table object with the data. Columns are
+        feature_name, importance and std_ if an sklearn model with
+        sub-estimators was passed in data.
+
+    """
+    res = compute.feature_importances(data, top_n, feature_names)
+    return Table(res, res.dtype.names)

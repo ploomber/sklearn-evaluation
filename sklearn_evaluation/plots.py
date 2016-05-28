@@ -1,8 +1,8 @@
 """Plotting functions."""
 import numpy as np
 import matplotlib.pyplot as plt
-from . import tables
 from .metrics import precision_at
+from . import compute
 
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 from sklearn.metrics import roc_curve, auc
@@ -242,20 +242,25 @@ def precision_recall(y_true, y_score, ax=None):
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def feature_importances(model, feature_names=None, ax=None, top_n=None):
+def feature_importances(data, top_n=None, feature_names=None, ax=None):
     """
-    Plot precision values at different proportions.
+    Get and order feature importances from a scikit-learn model
+    or from an array like structure.
+
+    If data is a scikit-learn with sub-estimators (e.g. RandomForest,
+     AdaBoost) the function will compute the standard deviation of each
+     feature.
 
     Parameters
     ----------
-    model : sklearn model
-        sklearn model with a feature_importances_ attribute.
+    data : sklearn model or array-like structure
+        Object to get the data from.
+    top_n : int
+        Only get results for the top_n features.
     feature_names : array-like
-        Feature names.
+        Feature_names
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
-    top_n : int
-        Only plot the top_n features. If None will plot very feature.
 
     Returns
     -------
@@ -264,66 +269,25 @@ def feature_importances(model, feature_names=None, ax=None, top_n=None):
 
     """
     # If no feature_names is provided, assign numbers
-    total = len(model.feature_importances_)
-    feature_names = range(total) if feature_names is None else feature_names
-    # Plot all features if n is not provided, otherwise plot top n features
-    top_n = len(feature_names) if top_n is None else top_n
-    # Compute feature importances, use private method to avoid getting
-    # formatted results
-    f_imp = tables._compute_feature_importances(model, feature_names)
-    importances = map(lambda x: x['importance'], f_imp)[:top_n]
-    stds = map(lambda x: x['std'], f_imp)[:top_n]
-    names = map(lambda x: x['name'], f_imp)[:top_n]
+    res = compute.feature_importances(data, top_n, feature_names)
+    # number of features returned
+    n_feats = len(res)
 
     if ax is None:
         ax = plt.gca()
 
     ax.set_title("Feature importances")
-    ax.bar(range(len(importances)), importances, color="r", yerr=stds,
-           align="center")
-    ax.set_xticks(range(len(names)))
-    ax.set_xticklabels(names, rotation=90)
-    ax.set_xlim([-1, 10])
-    return ax
 
+    try:
+        ax.bar(range(n_feats), res.importance, yerr=res.std_, color='red',
+               align="center")
+    except:
+        ax.bar(range(n_feats), res.importance, color='red',
+               align="center")
 
-def feature_importances_from_list(features, feature_importances, ax=None,
-                                  top_n=None):
-    """
-    Plot feature importances.
-
-    Parameters
-    ----------
-    features : array-like
-        Feature names.
-    y_score : array-like
-        Feature importance values.
-    ax : matplotlib Axes
-        Axes object to draw the plot onto, otherwise uses current Axes
-    top_n : int
-        Only plot the top_n features. If None will plot very feature.
-
-    Returns
-    -------
-    ax: matplotlib Axes
-        Axes containing the plot
-
-    """
-    fts = zip(features, feature_importances)
-    fts.sort(key=lambda t: t[1])
-    top_n = top_n if top_n else len(features)
-    top_fts = fts[::-1][:top_n]
-    names = [ft[0] for ft in top_fts]
-    importances = [ft[1] for ft in top_fts]
-
-    if ax is None:
-        ax = plt.gca()
-
-    ax.set_title("Feature importances")
-    ax.bar(range(len(importances)), importances, color="r", align="center")
-    ax.set_xticks(range(len(names)))
-    ax.set_xticklabels(names, rotation=90)
-    ax.set_xlim([-1, 10])
+    ax.set_xticks(range(n_feats))
+    ax.set_xticklabels(res.feature_name)
+    ax.set_xlim([-1, n_feats])
     return ax
 
 

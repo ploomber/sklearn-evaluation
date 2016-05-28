@@ -90,7 +90,7 @@ from sklearn_evaluation import ClassifierEvaluator
 ce = ClassifierEvaluator(classifier, y_test, y_pred, y_score,
                          feature_list, target_names)
 
-# this will plot the confusion matrix
+# this plots the confusion matrix
 ce.confusion_matrix
 ```
 
