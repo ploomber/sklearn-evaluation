@@ -1,8 +1,8 @@
 """Plotting functions."""
 import numpy as np
 import matplotlib.pyplot as plt
-import tables
-from metrics import precision_at
+from . import tables
+from .metrics import precision_at
 
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 from sklearn.metrics import roc_curve, auc

@@ -1,4 +1,9 @@
-from cStringIO import StringIO
+try:
+    from cStringIO import StringIO  # py2
+except ImportError:
+    from io import StringIO  # py3
+
+
 import base64
 import os
 import re
