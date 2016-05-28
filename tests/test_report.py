@@ -4,7 +4,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_iris
 from sklearn.cross_validation import train_test_split
 
-from sklearn_evaluation.evaluate import ClassifierEvaluator
+from sklearn_evaluation import ClassifierEvaluator
 
 from sklearn_evaluation.report import parse_tags
 

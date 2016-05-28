@@ -81,7 +81,7 @@ Also, running this in Jupyter will generate a pandas-like output.
 A simplified API is available by packing the results of your estimator in the `ClassifierEvaluator` class.
 
 ```python
-from sklearn_evaluation.evaluate import ClassifierEvaluator
+from sklearn_evaluation import ClassifierEvaluator
 
 # code for data loading and model training
 

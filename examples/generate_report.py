@@ -3,7 +3,7 @@ from sklearn import svm, datasets
 from sklearn.cross_validation import train_test_split
 from sklearn.multiclass import OneVsRestClassifier
 
-from sklearn_evaluation.evaluate import ClassifierEvaluator
+from sklearn_evaluation import ClassifierEvaluator
 
 # Import some data to play with
 iris = datasets.load_iris()
