@@ -29,11 +29,11 @@ The package is divided in modules that have specific functionality.
 
 Generate evaluation plots with a single function call.
 ```python
-from sklearn_evaluation import plots
+from sklearn_evaluation import plot
 
 #code for data loading and model training
 
-plots.confusion_matrix(y_true, y_pred, target_names=target_names)
+plot.confusion_matrix(y_true, y_pred, target_names=target_names)
 ```
 
 ![confusion matrix](examples/cm.png)
@@ -43,11 +43,11 @@ plots.confusion_matrix(y_true, y_pred, target_names=target_names)
 Generate good looking tables from your model results.
 
 ```python
-from sklearn_evaluation import tables
+from sklearn_evaluation import table
 
 #code for data loading and training
 
-tables.feature_importances(model, feature_list)
+table.feature_importances(model)
 ```
 
 ```

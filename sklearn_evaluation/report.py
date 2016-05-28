@@ -8,7 +8,7 @@ import base64
 import os
 import re
 from datetime import datetime
-from . import tables
+from . import table
 
 import matplotlib
 
@@ -49,11 +49,11 @@ def generate(evaluator, template, path=None, style='default'):
     attrs = getattr_from_list(evaluator, tags)
 
     # convert axes objects to HTML with base64,
-    # tables to html
+    # Table to html
     for k, v in attrs.items():
         if isinstance(v, matplotlib.axes.Axes):
             attrs[k] = figure2html(v.get_figure())
-        if isinstance(v, tables.Table):
+        if isinstance(v, table.Table):
             attrs[k] = v.html
 
     # add key-value pairs to the attrs dict from the extra_tags

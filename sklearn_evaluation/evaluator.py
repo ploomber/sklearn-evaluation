@@ -1,8 +1,8 @@
 import matplotlib.pyplot as plt
 
 from .util import estimator_type, class_name
-from . import plots
-from . import tables
+from . import plot
+from . import table
 from .report import generate
 
 
@@ -13,6 +13,7 @@ def _gen_ax():
 
 
 class ClassifierEvaluator(object):
+
     """
      Encapsuates results from an estimator on a testing set to provide a
      simplified API from other modules. All parameters are optional, just
@@ -37,6 +38,7 @@ class ClassifierEvaluator(object):
         Identifier for the model. This can be later used to idenfity the
         estimator when generaing reports.
     """
+
     def __init__(self, estimator=None, y_true=None, y_pred=None, y_score=None,
                  feature_names=None, target_names=None, estimator_name=None):
         self._estimator = estimator
@@ -88,32 +90,32 @@ class ClassifierEvaluator(object):
 
     @property
     def confusion_matrix(self):
-        return plots.confusion_matrix(self.y_true, self.y_pred,
-                                      self.target_names, ax=_gen_ax())
+        return plot.confusion_matrix(self.y_true, self.y_pred,
+                                     self.target_names, ax=_gen_ax())
 
     @property
     def roc(self):
-        return plots.roc(self.y_true, self.y_score, ax=_gen_ax())
+        return plot.roc(self.y_true, self.y_score, ax=_gen_ax())
 
     @property
     def precision_recall(self):
-        return plots.precision_recall(self.y_true, self.y_score, ax=_gen_ax())
+        return plot.precision_recall(self.y_true, self.y_score, ax=_gen_ax())
 
     @property
     def feature_importances(self):
-        return plots.feature_importances(self.estimator,
-                                         feature_names=self.feature_names,
-                                         ax=_gen_ax())
+        return plot.feature_importances(self.estimator,
+                                        feature_names=self.feature_names,
+                                        ax=_gen_ax())
 
     @property
     def feature_importances_table(self):
-        return tables.feature_importances(self.estimator,
-                                          feature_names=self.feature_names)
+        return table.feature_importances(self.estimator,
+                                         feature_names=self.feature_names)
 
     @property
     def precision_at_proportions(self):
-        return plots.precision_at_proportions(self.y_true, self.y_score,
-                                              ax=_gen_ax())
+        return plot.precision_at_proportions(self.y_true, self.y_score,
+                                             ax=_gen_ax())
 
     def generate_report(self, template, path=None):
         """
