@@ -23,9 +23,7 @@ pip install tabulate
 
 #Usage
 
-The package is divided in modules that have specific functionality.
-
-##Plots module
+##`plot` module
 
 Generate evaluation plots with a single function call.
 ```python
@@ -38,7 +36,7 @@ plot.confusion_matrix(y_true, y_pred, target_names=target_names)
 
 ![confusion matrix](examples/cm.png)
 
-##Tables module
+##`table` module
 
 Generate good looking tables from your model results.
 
