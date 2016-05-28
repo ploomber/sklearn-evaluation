@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation) [![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=latest)](http://sklearn-evaluation.readthedocs.io/en/latest/?badge=latest)
 
-Utilities for evaluating scikit-learn models. [Documentation](http://sklearn-evaluation.rtfd.io)
+The cool kids way to evaluate scikit-learn models. [Documentation](http://sklearn-evaluation.rtfd.io)
 
 # Install  
 
@@ -74,18 +74,17 @@ tables.feature_importances(model, feature_list)
 +-----------+--------------+-----------+
 ```
 
-Also, running this in Jupyter will generate a pandas-like output. See [notebook](examples/plots.ipynb)
+Also, running this in Jupyter will generate a pandas-like output.
 
 ##Using the OOP interface
 
-A simplified API is available by packing the results of your estimator in the `ClassifierEvaluator class`
+A simplified API is available by packing the results of your estimator in the `ClassifierEvaluator` class.
 
 ```python
 from sklearn_evaluation.evaluate import ClassifierEvaluator
 
 # code for data loading and model training
 
-# created a ClassificationModelResults that packs everything about your model
 ce = ClassifierEvaluator(classifier, y_test, y_pred, y_score,
     feature_list, target_names)
 
