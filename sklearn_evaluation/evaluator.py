@@ -115,8 +115,8 @@ class ClassifierEvaluator(object):
 
         Parameters
         ----------
-        template : markdown-formatted string or path to markdown file
-            Template used for rendeing the report. Any attribute of this
+        template : markdown-formatted string or path to the template
+            file used for rendeing the report. Any attribute of this
             object can be included in the report using the {tag} format.
             e.g.'# Report{estimator_name}{roc}{precision_recall}'.
             Apart from every attribute, you can also use {date} and {date_utc}

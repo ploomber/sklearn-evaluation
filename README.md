@@ -88,7 +88,7 @@ from sklearn_evaluation import ClassifierEvaluator
 # code for data loading and model training
 
 ce = ClassifierEvaluator(classifier, y_test, y_pred, y_score,
-    feature_list, target_names)
+                         feature_list, target_names)
 
 # this will plot the confusion matrix
 ce.confusion_matrix
