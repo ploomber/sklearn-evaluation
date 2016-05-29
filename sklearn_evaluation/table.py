@@ -6,6 +6,9 @@ except:
     raise ImportError('tabulate is required to use the tables module')
 
 
+__all__ = ['feature_importances']
+
+
 # http://ipython.readthedocs.org/en/stable/config/integrating.html
 class Table():
     def __init__(self, content, header):

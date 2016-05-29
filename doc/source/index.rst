@@ -3,14 +3,24 @@
    You can adapt this file completely to your liking, but it should at least
    contain the root `toctree` directive.
 
-Welcome to sklearn-evaluation's documentation!
-==============================================
+sklearn-evaluation
+==================
 
-Contents:
+Installation
+============
+
+``pip install sklearn-evaluation``
+
+Table of contents
+=================
 
 .. toctree::
    :maxdepth: 2
 
+   plot
+   table
+   evaluator
+   report
 
 Indices and tables
 ==================

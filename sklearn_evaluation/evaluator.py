@@ -6,18 +6,11 @@ from . import table
 from .report import generate
 
 
-def _gen_ax():
-    fig = plt.figure()
-    ax = fig.add_subplot(111)
-    return ax
-
-
 class ClassifierEvaluator(object):
-
     """
-     Encapsuates results from an estimator on a testing set to provide a
-     simplified API from other modules. All parameters are optional, just
-     fill the ones you need for your analysis.
+    Encapsuates results from an estimator on a testing set to provide a
+    simplified API from other modules. All parameters are optional, just
+    fill the ones you need for your analysis.
 
     Parameters
     ----------
@@ -124,7 +117,7 @@ class ClassifierEvaluator(object):
         Parameters
         ----------
         template : markdown-formatted string or path to the template
-            file used for rendeing the report. Any attribute of this
+            file used for rendering the report. Any attribute of this
             object can be included in the report using the {tag} format.
             e.g.'# Report{estimator_name}{roc}{precision_recall}'.
             Apart from every attribute, you can also use {date} and {date_utc}
@@ -142,3 +135,9 @@ class ClassifierEvaluator(object):
 
         """
         return generate(self, template, path)
+
+
+def _gen_ax():
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    return ax

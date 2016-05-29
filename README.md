@@ -2,7 +2,7 @@
 
 [![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation) [![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=latest)](http://sklearn-evaluation.readthedocs.io/en/latest/?badge=latest)
 
-The cool kids way to evaluate scikit-learn models. [Documentation](http://sklearn-evaluation.rtfd.io)
+The cool kids way to evaluate scikit-learn models. [Read the docs.](http://sklearn-evaluation.rtfd.io)
 
 # Install  
 
@@ -12,9 +12,9 @@ pip install sklearn-evaluation
 
 Works with Python 2. Support for Python 3 soon!
 
-# Dependencies
+# Optional dependencies
 
-The package only depends on scikit-learn and matplotlib to work. But if you want to use the reports module you need to install `mistune` and `tabulate` for the tables module
+If you want to use the reports module you need to install `mistune` and `tabulate` for the tables module
 
 ```bash
 pip install mistune

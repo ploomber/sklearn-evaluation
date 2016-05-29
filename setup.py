@@ -1,11 +1,22 @@
-from setuptools import setup
+import re
+import ast
+from setuptools import setup, find_packages
+
+_version_re = re.compile(r'__version__\s+=\s+(.*)')
+
+with open('sklearn_evaluation/__init__.py', 'rb') as f:
+    VERSION = str(ast.literal_eval(_version_re.search(
+        f.read().decode('utf-8')).group(1)))
+
+DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'
+                .format(VERSION))
 
 setup(name='sklearn-evaluation',
-      packages=['sklearn_evaluation'],
-      version='0.2',
+      packages=find_packages(exclude=['tests']),
+      version=VERSION,
       description='Utilities for scikit-learn model evaluation',
       url='http://github.com/edublancas/sklearn-evaluation',
-      download_url='https://github.com/edublancas/sklearn-evaluation/tarball/0.2',
+      download_url=DOWNLOAD_URL,
       author='Eduardo Blancas Reyes',
       author_email='edu.blancas@gmail.com',
       license='MIT',

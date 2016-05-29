@@ -1,7 +1,6 @@
 #### joe made this: https://goel.io/joe
 
-result_images/
-tests/result_images/
+sklearn_evaluation/tests/result_images/
 
 #####=== IPythonNotebook ===#####
 # Temporary data
@@ -60,7 +59,6 @@ coverage.xml
 
 # Sphinx documentation
 doc/build/
-doc/source/
 
 # PyBuilder
 target/
