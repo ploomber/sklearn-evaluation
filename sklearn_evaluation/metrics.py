@@ -33,7 +33,7 @@ def precision_at(y_true, y_score, proportion, ignore_nas=False):
 def __threshold_at(y_score, proportion):
     # Sort scores in descending order
     scores_sorted = np.sort(y_score)[::-1]
-    # Based on the proportion, get the index to split the data
+    # Based on the proportion, get the index to split th
     # if value is negative, return 0
     threshold_index = max(int(len(y_score) * proportion) - 1, 0)
     # Get the cutoff value

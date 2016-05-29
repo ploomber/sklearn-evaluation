@@ -86,9 +86,8 @@ def _precision_recall(y_true, y_score, ax=None):
     if ax is None:
         ax = plt.gca()
 
-    ax.plot(recall, precision, label='Precision-Recall curve')
-    ax.set_title(('Precision-Recall curve: AUC={0:0.2f}'
-                  .format(average_precision)))
+    ax.plot(recall, precision, label=('Precision-Recall curve: AUC={0:0.2f}'
+                                      .format(average_precision)))
     _set_ax_settings(ax)
     return ax
 
@@ -124,12 +123,12 @@ def _precision_recall_multi(y_true, y_score, ax=None):
     ax.plot(recall, precision,
             label=('micro-average Precision-recall curve (area = {0:0.2f})'
                    .format(avg_prec)))
-    ax.set_title('Precision-Recall')
     _set_ax_settings(ax)
     return ax
 
 
 def _set_ax_settings(ax):
+    ax.set_title('Precision-Recall')
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('Recall')
