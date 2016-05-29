@@ -20,6 +20,13 @@ def roc(y_true, y_score, ax=None):
     ax: matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
+    Notes
+    -----
+    It is assumed that the y_score parameter columns are in order. For example,
+    if y_true = [2, 2, 1, 0, 0, 1, 2], then the first column in y_score must
+    countain the scores for class 0, second column for class 1 and so on.
+
+
     Returns
     -------
     ax: matplotlib Axes
@@ -79,14 +86,7 @@ def _roc(y_true, y_score, ax=None):
     roc_auc = auc(fpr, tpr)
 
     ax.plot(fpr, tpr, label=('ROC curve (area = {0:0.2f})'.format(roc_auc)))
-
-    ax.plot([0, 1], [0, 1], 'k--')
-    ax.set_xlim([0.0, 1.0])
-    ax.set_ylim([0.0, 1.05])
-    ax.set_xlabel('False Positive Rate')
-    ax.set_ylabel('True Positive Rate')
-    ax.set_title('ROC')
-    ax.legend(loc="best")
+    _set_ax_settings(ax)
     return ax
 
 
@@ -118,12 +118,15 @@ def _roc_multi(y_true, y_score, ax=None):
 
     ax.plot(fpr, tpr, label=('micro-average ROC curve (area = {0:0.2f})'
                              .format(roc_auc)))
+    _set_ax_settings(ax)
+    return ax
 
+
+def _set_ax_settings(ax):
     ax.plot([0, 1], [0, 1], 'k--')
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('False Positive Rate')
     ax.set_ylabel('True Positive Rate')
     ax.set_title('ROC')
-    ax.legend(loc="lower right")
-    return ax
+    ax.legend(loc="best")

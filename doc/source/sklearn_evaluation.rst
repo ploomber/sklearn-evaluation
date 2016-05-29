@@ -1,16 +1,16 @@
 sklearn_evaluation package
 ==========================
 
+Subpackages
+-----------
+
+.. toctree::
+
+    sklearn_evaluation.plot
+
 Submodules
 ----------
 
-sklearn_evaluation.compute module
----------------------------------
-
-.. automodule:: sklearn_evaluation.compute
-    :members:
-    :undoc-members:
-    :show-inheritance:
 
 sklearn_evaluation.evaluator module
 -----------------------------------
@@ -21,19 +21,18 @@ sklearn_evaluation.evaluator module
     :show-inheritance:
 
 
-sklearn_evaluation.plots module
--------------------------------
+sklearn_evaluation.report module
+--------------------------------
 
-.. automodule:: sklearn_evaluation.plots
+.. automodule:: sklearn_evaluation.report
     :members:
     :undoc-members:
     :show-inheritance:
 
+sklearn_evaluation.table module
+-------------------------------
 
-sklearn_evaluation.tables module
---------------------------------
-
-.. automodule:: sklearn_evaluation.tables
+.. automodule:: sklearn_evaluation.table
     :members:
     :undoc-members:
     :show-inheritance:

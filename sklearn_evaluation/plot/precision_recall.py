@@ -22,6 +22,9 @@ def precision_recall(y_true, y_score, ax=None):
 
     Notes
     -----
+    It is assumed that the y_score parameter columns are in order. For example,
+    if y_true = [2, 2, 1, 0, 0, 1, 2], then the first column in y_score must
+    countain the scores for class 0, second column for class 1 and so on.
 
 
     Returns
@@ -84,14 +87,9 @@ def _precision_recall(y_true, y_score, ax=None):
         ax = plt.gca()
 
     ax.plot(recall, precision, label='Precision-Recall curve')
-
-    ax.set_xlim([0.0, 1.0])
-    ax.set_ylim([0.0, 1.05])
-    ax.set_xlabel('Recall')
-    ax.set_ylabel('Precision')
     ax.set_title(('Precision-Recall curve: AUC={0:0.2f}'
                   .format(average_precision)))
-    ax.legend(loc="best")
+    _set_ax_settings(ax)
     return ax
 
 
@@ -126,11 +124,14 @@ def _precision_recall_multi(y_true, y_score, ax=None):
     ax.plot(recall, precision,
             label=('micro-average Precision-recall curve (area = {0:0.2f})'
                    .format(avg_prec)))
+    ax.set_title('Precision-Recall')
+    _set_ax_settings(ax)
+    return ax
 
+
+def _set_ax_settings(ax):
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel('Recall')
     ax.set_ylabel('Precision')
-    ax.set_title('Precision-Recall')
-    ax.legend(loc="lower right")
-    return ax
+    ax.legend(loc="best")
