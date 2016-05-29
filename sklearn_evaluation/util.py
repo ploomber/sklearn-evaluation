@@ -20,3 +20,11 @@ def _can_iterate(obj):
     is_iterable = isinstance(obj, collections.Iterable)
 
     return is_iterable and not is_string
+
+
+def is_column_vector(x):
+    return len(x.shape) == 2 and x.shape[1] == 1
+
+
+def is_row_vector(x):
+    return len(x.shape) == 1

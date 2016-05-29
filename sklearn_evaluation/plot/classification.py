@@ -1,10 +1,11 @@
 """Plotting functions."""
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn.metrics import confusion_matrix as sk_confusion_matrix
+
 from ..metrics import precision_at
 from .. import compute
-
-from sklearn.metrics import confusion_matrix as sk_confusion_matrix
+from ..util import is_column_vector, is_row_vector
 
 
 # Confusion matrix
@@ -155,6 +156,10 @@ def precision_at_proportions(y_true, y_score, ax=None):
     """
     if ax is None:
         ax = plt.gca()
+
+    y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
+    if not y_score_is_vector:
+        y_score = y_score[:, 1]
 
     # Calculate points
     proportions = [0.01 * i for i in range(1, 101)]

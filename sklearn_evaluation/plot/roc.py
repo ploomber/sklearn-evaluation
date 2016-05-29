@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
 
+from ..util import is_column_vector, is_row_vector
+
 
 def roc(y_true, y_score, ax=None):
     """
@@ -12,7 +14,8 @@ def roc(y_true, y_score, ax=None):
     ----------
     y_true : array-like, shape = [n_samples]
         Correct target values (ground truth).
-    y_score : array-like, shape = [n_samples, n_classes]
+    y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
+    classification or [n_samples, n_classes] for multiclass
         Target scores (estimator predictions).
     ax: matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
@@ -26,8 +29,12 @@ def roc(y_true, y_score, ax=None):
     if ax is None:
         ax = plt.gca()
 
-    # get the number of classes from y_score
-    _, n_classes = y_score.shape
+    # get the number of classes based on the shape of y_score
+    y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
+    if y_score_is_vector:
+        n_classes = 2
+    else:
+        _, n_classes = y_score.shape
 
     # check data shape?
 
@@ -38,7 +45,10 @@ def roc(y_true, y_score, ax=None):
         for i in range(n_classes):
             _roc(y_true_bin[:, i], y_score[:, i], ax=ax)
     else:
-        _roc(y_true, y_score[:, 1], ax)
+        if y_score_is_vector:
+            _roc(y_true, y_score, ax)
+        else:
+            _roc(y_true, y_score[:, 1], ax)
 
     # raise error if n_classes = 1?
     return ax

@@ -52,4 +52,4 @@ def test_precision_recall():
                   extensions=['png'],
                   remove_text=True)
 def test_precision_at_proportions():
-    plot.precision_at_proportions(y_test, y_score[:, 1])
+    plot.precision_at_proportions(y_test, y_score)

@@ -3,6 +3,8 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_curve, average_precision_score
 from sklearn.preprocessing import label_binarize
 
+from ..util import is_column_vector, is_row_vector
+
 
 def precision_recall(y_true, y_score, ax=None):
     """
@@ -12,10 +14,15 @@ def precision_recall(y_true, y_score, ax=None):
     ----------
     y_true : array-like, shape = [n_samples]
         Correct target values (ground truth).
-    y_score : array-like, shape = [n_samples, n_classes]
+    y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
+    classification or [n_samples, n_classes] for multiclass
         Target scores (estimator predictions).
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
+
+    Notes
+    -----
+
 
     Returns
     -------
@@ -27,7 +34,11 @@ def precision_recall(y_true, y_score, ax=None):
         ax = plt.gca()
 
     # get the number of classes from y_score
-    _, n_classes = y_score.shape
+    y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
+    if y_score_is_vector:
+        n_classes = 2
+    else:
+        _, n_classes = y_score.shape
 
     # check data shape?
 
@@ -38,7 +49,10 @@ def precision_recall(y_true, y_score, ax=None):
         for i in range(n_classes):
             _precision_recall(y_true_bin[:, i], y_score[:, i], ax=ax)
     else:
-        _precision_recall(y_true, y_score[:, 1], ax)
+        if y_score_is_vector:
+            _precision_recall(y_true, y_score, ax)
+        else:
+            _precision_recall(y_true, y_score[:, 1], ax)
 
     # raise error if n_classes = 1?
     return ax
