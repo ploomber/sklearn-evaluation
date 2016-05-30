@@ -1,1 +1,0 @@
-plot_* scripts taken from scikit-learn docs.
