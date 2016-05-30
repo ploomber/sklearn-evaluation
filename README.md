@@ -1,6 +1,6 @@
 #sklearn-evaluation
 
-[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation) [![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=latest)](http://sklearn-evaluation.readthedocs.io/en/latest/?badge=latest)
+[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation) [![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=stable)](http://sklearn-evaluation.readthedocs.io/en/stable/?badge=stable)
 
 The cool kids way to evaluate scikit-learn models. [Read the docs.](http://sklearn-evaluation.rtfd.io)
 
