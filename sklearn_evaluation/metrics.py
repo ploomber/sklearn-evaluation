@@ -19,7 +19,7 @@ def precision_at(y_true, y_score, proportion, ignore_nas=False):
     cutoff_value = scores_sorted[cutoff_index]
 
     # Convert scores to binary, by comparing them with the cutoff value
-    scores_binary = np.array(map(lambda x: int(x >= cutoff_value), y_score))
+    scores_binary = np.array([int(y >= cutoff_value) for y in y_score])
     # Calculate precision using sklearn function
     if ignore_nas:
         precision = __precision(y_true, scores_binary)
@@ -44,8 +44,7 @@ def __threshold_at(y_score, proportion):
 @validate.proportion
 def __binarize_scores_at(y_score, proportion):
     threshold_value = __threshold_at(y_score, proportion)
-    y_score_binary = np.array(
-        map(lambda x: int(x >= threshold_value), y_score))
+    y_score_binary = np.array([int(y >= threshold_value) for y in y_score])
     return y_score_binary
 
 
