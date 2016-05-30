@@ -114,3 +114,12 @@ ce.generate_report(template, path='report.html')
 The code above will generate a report [like this one.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/report.html)
 
 Reports are self-contained, all images are included in the html file using [base64](https://en.wikipedia.org/wiki/Base64).
+
+
+## Why?
+
+Oftentimes during my projects I found myself copy pasting code with functions to evaluate my models, or even worse, coding ugly matplotlib lines to do pretty standard things. I love Jupyter, but having notebooks with the exact same plots seems the wrong way of using it, that's the reason behind the markdown reports.
+
+## What to expect next?
+
+The project is still limited to the most common plots for evaluating classifiers, for now, I'll focus on that. I expect to add more plots/tables in the near future. If anyone is interested on contributing to add things for regression or clustering, drop me a line. 
