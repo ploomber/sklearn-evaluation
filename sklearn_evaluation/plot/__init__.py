@@ -4,3 +4,4 @@ from .classification import (confusion_matrix,
 
 from .roc import roc
 from .precision_recall import precision_recall
+from .grid_search import grid_search

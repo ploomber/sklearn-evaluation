@@ -1,6 +1,8 @@
 import re
 import types
 import collections
+from collections import defaultdict
+from itertools import product
 
 
 def estimator_type(model):
@@ -28,3 +30,72 @@ def is_column_vector(x):
 
 def is_row_vector(x):
     return len(x.shape) == 1
+
+
+def _group_by(data, criteria):
+    """
+        Group objects in data using a function or a key
+    """
+    if isinstance(criteria, str):
+        criteria_str = criteria
+
+        def criteria(x):
+            return x[criteria_str]
+
+    res = defaultdict(list)
+    for element in data:
+        key = criteria(element)
+        res[key].append(element)
+    return res
+
+
+def _tuple_getter(params):
+    """
+        Given an iterator (k1, k2), returns a function that when called
+        with an object obj returns a tuple of the form:
+        ((k1, obj.parameters[k1]), (k2, obj.parameters[k2]))
+    """
+    def fn(obj):
+        l = []
+        for p in params:
+            l.append((p, obj.parameters[p]))
+        return tuple(l)
+    return fn
+
+
+def _product(k, v):
+    """
+        Perform the product between two objects
+        even if they don't support iteration
+    """
+    if not _can_iterate(k):
+        k = [k]
+    if not _can_iterate(v):
+        v = [v]
+    return list(product(k, v))
+
+
+def _mapping_to_tuple_pairs(d):
+    """
+        Convert a mapping object (such as a dictionary) to tuple pairs,
+        using its keys and values to generate the pairs and then generating
+        all possible combinations between those
+        e.g. {1: (1,2,3), 2: (4,5)} -> ((1, 1), (1, 2), (1, 3), (2, 4), (2, 5))
+    """
+    t = [_product(k, v) for k, v in d.items()]
+    return tuple(product(*t))
+
+
+# http://stackoverflow.com/questions/18926031/how-to-extract-a-subset-of-a-colormap-as-a-new-colormap-in-matplotlib
+def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
+    import matplotlib.colors as colors
+    import numpy as np
+    new_cmap = colors.LinearSegmentedColormap.from_list(
+        'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
+        cmap(np.linspace(minval, maxval, n)))
+    return new_cmap
+
+
+def default_heatmap():
+    import matplotlib.pyplot as plt
+    return truncate_colormap(plt.cm.OrRd, 0.1, 0.7)
