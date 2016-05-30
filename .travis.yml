@@ -1,6 +1,7 @@
 language: python
 python:
   - "2.7"
+  - "3.5"
 sudo: required
 install:
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
