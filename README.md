@@ -118,7 +118,7 @@ Reports are self-contained, all images are included in the html file using [base
 
 ## Why?
 
-Oftentimes during my projects I found myself copy pasting code with functions to evaluate my models, or even worse, coding ugly matplotlib lines to do pretty standard things. I love Jupyter, but having notebooks with the exact same plots seems the wrong way of using it, that's the reason behind the markdown reports.
+Oftentimes during my projects I found myself copy pasting code with functions to evaluate my models, or even worse, coding ugly matplotlib lines to do pretty standard things. I love Jupyter, but having notebooks with the exact same plots, to just change the model being evaluated seems an overkill, that's the reason behind the markdown reports.
 
 ## What to expect next?
 
