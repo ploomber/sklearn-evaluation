@@ -88,6 +88,32 @@ def test_group_by_using_fn():
 # test mapping to tuple
 
 
+def test_mapping_tuple_single_kv():
+    d = {'a': [1, 2, 3]}
+    assert _mapping_to_tuple_pairs(d) == ((('a', 1),), (('a', 2),),
+                                          (('a', 3),))
+
+
+# def test_mapping_tuple():
+#     d = {'a': [1, 2, 3], 'b': [4]}
+#     assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
+#                                           (('a', 2), ('b', 4)),
+#                                           (('a', 3), ('b', 4)))
+
+
+# def test_mapping_tuple_single_element():
+#     d = {'a': [1, 2, 3], 'b': 4}
+#     assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
+#                                           (('a', 2), ('b', 4)),
+#                                           (('a', 3), ('b', 4)))
+
+
+def test_order_does_not_matter():
+    a = {1: (1, 2, 3), 2: (4, (5, 6))}
+    b = {2: (4, (5, 6)), 1: (1, 2, 3)}
+    assert _mapping_to_tuple_pairs(a) == _mapping_to_tuple_pairs(b)
+
+
 # test product
 
 
@@ -97,6 +123,10 @@ def test_empty():
 
 def test_simple_product_lists():
     assert _product([1, 2], [3, 4]) == [(1, 3), (1, 4), (2, 3), (2, 4)]
+
+
+def test_simple_product_lists_order_matters():
+    assert _product([3, 4], [1, 2]) == [(3, 1), (3, 2), (4, 1), (4, 2)]
 
 
 def test_simple_product_tuples():
