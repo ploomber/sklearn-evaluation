@@ -42,6 +42,12 @@ class TestReportGeneration(TestCase):
                                            target_names=target_names,
                                            estimator_name=model_name)
 
+        self.empty = ClassifierEvaluator(estimator=None, y_true=None,
+                                         y_pred=None, y_score=None,
+                                         feature_names=None,
+                                         target_names=None,
+                                         estimator_name=None)
+
         self.template = '''
                             # Report
                             {estimator_type}
@@ -56,7 +62,33 @@ class TestReportGeneration(TestCase):
                         '''
 
     def test_report_creation_no_style(self):
-        self.results.generate_report(self.template)
+        self.results.generate_report(template=self.template)
 
     def test_report_creation_no_style_save_file(self):
-        self.results.generate_report(self.template, 'report.html')
+        self.results.generate_report(template=self.template,
+                                     path='report.html')
+
+    def test_can_save_with_all_none(self):
+        self.empty.generate_report(template='# Title')
+
+    def test_apply_custom_css(self):
+        with open('empty-expected.html') as f:
+            expected = f.read()
+
+        result = self.empty.generate_report(template='# Title\n ## Section',
+                                            style='default.css')
+
+        assert expected == result
+
+    def test_returning_and_saving_are_the_same(self):
+        self.empty.generate_report(template='# Title\n ## Section',
+                                   path='saved.html',
+                                   style='default.css')
+
+        with open('saved.html') as f:
+            saved = f.read()
+
+        returned = self.empty.generate_report(template='# Title\n ## Section',
+                                              style='default.css')
+
+        assert saved == returned
