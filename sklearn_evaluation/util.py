@@ -1,8 +1,8 @@
 import re
-import types
 import collections
 from collections import defaultdict
 from itertools import product
+from six import string_types
 
 
 def estimator_type(model):
@@ -18,7 +18,7 @@ def class_name(obj):
 
 
 def _can_iterate(obj):
-    is_string = isinstance(obj, types.StringTypes)
+    is_string = isinstance(obj, string_types)
     is_iterable = isinstance(obj, collections.Iterable)
 
     return is_iterable and not is_string

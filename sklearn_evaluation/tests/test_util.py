@@ -62,7 +62,7 @@ def test_group_by_all_different():
         5: [{5: 5}],
         6: [{6: 6}]
      }
-    assert _group_by(all_diferent, lambda s: s.keys()[0]) == d
+    assert _group_by(all_diferent, lambda s: list(s.keys())[0]) == d
 
 
 def test_group_by_group_by_key():
@@ -86,26 +86,6 @@ def test_group_by_using_fn():
     assert _group_by(requires_fn, lambda d: d['k'].strip()) == d
 
 # test mapping to tuple
-
-
-def test_mapping_tuple_single_kv():
-    d = {'a': [1, 2, 3]}
-    assert _mapping_to_tuple_pairs(d) == ((('a', 1),), (('a', 2),),
-                                          (('a', 3),))
-
-
-def test_mapping_tuple():
-    d = {'a': [1, 2, 3], 'b': [4]}
-    assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
-                                          (('a', 2), ('b', 4)),
-                                          (('a', 3), ('b', 4)))
-
-
-def test_mapping_tuple_single_element():
-    d = {'a': [1, 2, 3], 'b': 4}
-    assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
-                                          (('a', 2), ('b', 4)),
-                                          (('a', 3), ('b', 4)))
 
 
 # test product

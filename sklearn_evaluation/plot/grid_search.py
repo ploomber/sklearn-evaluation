@@ -1,8 +1,8 @@
 from operator import itemgetter
-import types
 
 import matplotlib.pyplot as plt
 import numpy as np
+from six import string_types
 
 from ..util import (_group_by, _tuple_getter, _mapping_to_tuple_pairs,
                     default_heatmap)
@@ -47,7 +47,7 @@ def grid_search(grid_scores, to_vary, to_keep=None, ax=None, kind='line',
     if cmap is None:
         cmap = default_heatmap()
 
-    if isinstance(to_vary, types.StringTypes) or len(to_vary) == 1:
+    if isinstance(to_vary, string_types) or len(to_vary) == 1:
         return _grid_search_single(grid_scores, to_vary, to_keep, ax, kind)
     elif len(to_vary) == 2:
         return _grid_search_double(grid_scores, to_vary, to_keep, ax, cmap)
@@ -99,7 +99,7 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
         if kind == 'bar':
             bar_shifter(y, yerr=stds, label=label)
         elif kind == 'line':
-            is_categorical = isinstance(x[0], types.StringTypes)
+            is_categorical = isinstance(x[0], string_types)
             if is_categorical:
                 ints = range(len(x))
                 ax.errorbar(ints, y, yerr=stds, label=label)

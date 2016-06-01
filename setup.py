@@ -25,6 +25,7 @@ setup(name='sklearn-evaluation',
       install_requires=[
           'scikit-learn',
           'matplotlib',
+          'six',
           'decorator'
       ],
       test_suite='nose.collector',
