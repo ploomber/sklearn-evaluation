@@ -1,15 +1,12 @@
-try:
-    from cStringIO import StringIO  # py2
-except ImportError:
-    from io import StringIO  # py3
-
-
 import base64
 import os
 import re
 from datetime import datetime
+from functools import reduce
+
 from . import table
 
+from six import BytesIO
 import matplotlib
 
 try:
@@ -92,13 +89,21 @@ def figure2html(fig):
 
 
 def base64_2_html(img):
-    return '<img src="data:image/png;base64,'+img+'"></img>'
+    try:
+        html = '<img src="data:image/png;base64,'+img+'"></img>'  # py2
+    except:
+        img = img.decode("utf-8")
+        html = '<img src="data:image/png;base64,'+img+'"></img>'  # py3
+    return html
 
 
 def figure2base64(fig):
-    io = StringIO()
+    io = BytesIO()
     fig.savefig(io, format='png')
-    fig_base64 = base64.encodestring(io.getvalue())
+    try:
+        fig_base64 = base64.encodebytes(io.getvalue())  # py3
+    except:
+        fig_base64 = base64.encodestring(io.getvalue())  # py2
     return fig_base64
 
 

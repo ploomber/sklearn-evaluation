@@ -53,6 +53,5 @@ class TestReportGeneration(TestCase):
                             {feature_importances}
                         '''
 
-    def test_stuff(self):
-        pass
-        # self.results.generate_report(self.template, 'report.html')
+    def test_report_creation(self):
+        self.results.generate_report(self.template)

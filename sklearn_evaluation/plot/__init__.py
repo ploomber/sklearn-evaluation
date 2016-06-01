@@ -8,4 +8,4 @@ from .grid_search import grid_search
 
 
 __all__ = ['confusion_matrix', 'feature_importances', 'precision_recall',
-           'roc', 'precision_at_proportions', 'grid_search']
+           'roc', 'precision_at_proportions']
