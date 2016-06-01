@@ -127,7 +127,7 @@ def _grid_search_double(grid_scores, to_vary, to_keep, ax, cmap):
     if len(groups) > 1:
         raise ValueError('You did not specify x')
 
-    group = groups.values()[0]
+    group = list(groups.values())[0]
 
     # group by every possible combination in to_vary
     matrix_elements = _group_by(group, _tuple_getter(to_vary))
