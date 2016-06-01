@@ -57,7 +57,7 @@ def grid_search(grid_scores, to_vary, to_keep=None, ax=None, kind='line',
 
 def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
     # get the parameters list
-    params_set = grid_scores[0].parameters.keys()
+    params_set = list(grid_scores[0].parameters.keys())
 
     # check how many unique values does to_vary has
     to_vary_unique = len(set([g.parameters[to_vary] for g in grid_scores]))
@@ -67,6 +67,9 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
 
     # remove parameter to vary from the list
     params_set.remove(to_vary)
+    # sort params, this is to guarantee that when accessing the groups,
+    # we can do it in a consisten way
+    sorted(params_set)
 
     # from the parameters that remain, group
     # the scores based on the different combinations

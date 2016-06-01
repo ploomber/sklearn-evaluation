@@ -94,18 +94,18 @@ def test_mapping_tuple_single_kv():
                                           (('a', 3),))
 
 
-# def test_mapping_tuple():
-#     d = {'a': [1, 2, 3], 'b': [4]}
-#     assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
-#                                           (('a', 2), ('b', 4)),
-#                                           (('a', 3), ('b', 4)))
+def test_mapping_tuple():
+    d = {'a': [1, 2, 3], 'b': [4]}
+    assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
+                                          (('a', 2), ('b', 4)),
+                                          (('a', 3), ('b', 4)))
 
 
-# def test_mapping_tuple_single_element():
-#     d = {'a': [1, 2, 3], 'b': 4}
-#     assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
-#                                           (('a', 2), ('b', 4)),
-#                                           (('a', 3), ('b', 4)))
+def test_mapping_tuple_single_element():
+    d = {'a': [1, 2, 3], 'b': 4}
+    assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
+                                          (('a', 2), ('b', 4)),
+                                          (('a', 3), ('b', 4)))
 
 
 def test_order_does_not_matter():
