@@ -1,4 +1,4 @@
-__version__ = '0.3dev'
+__version__ = '0.2.1'
 
 from .evaluator import ClassifierEvaluator
 
