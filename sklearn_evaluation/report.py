@@ -8,6 +8,8 @@ import base64
 import os
 import re
 from datetime import datetime
+from functools import reduce
+
 from . import table
 
 import matplotlib

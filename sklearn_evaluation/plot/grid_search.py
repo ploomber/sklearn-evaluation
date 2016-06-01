@@ -1,3 +1,4 @@
+from functools import reduce
 from operator import itemgetter
 
 import matplotlib.pyplot as plt
@@ -67,9 +68,6 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
 
     # remove parameter to vary from the list
     params_set.remove(to_vary)
-    # sort params, this is to guarantee that when accessing the groups,
-    # we can do it in a consisten way
-    sorted(params_set)
 
     # from the parameters that remain, group
     # the scores based on the different combinations

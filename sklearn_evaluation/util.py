@@ -55,9 +55,12 @@ def _tuple_getter(params):
         with an object obj returns a tuple of the form:
         ((k1, obj.parameters[k1]), (k2, obj.parameters[k2]))
     """
+    # sort params for consistency
+    ord_params = sorted(params)
+
     def fn(obj):
         l = []
-        for p in params:
+        for p in ord_params:
             l.append((p, obj.parameters[p]))
         return tuple(l)
     return fn
