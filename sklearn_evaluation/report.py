@@ -15,7 +15,7 @@ except:
     raise ImportError('You need to install mistune to use the report module')
 
 
-def generate(evaluator, template, path=None, style='default'):
+def generate(evaluator, template, path=None, style=None):
     # extra tags that can also be used in the report but are not evaluator
     # attributes
 
@@ -70,17 +70,18 @@ def generate(evaluator, template, path=None, style='default'):
         return report
 
 
-def to_html(template, style_name):
+def to_html(template, style):
     # Read md template and compile to html
     markdown = mistune.Markdown()
     html = markdown(template)
 
     # Add css
-    pkg = os.path.dirname(os.path.abspath(__file__))
-    filepath = os.path.join(pkg, 'styles', '{}.css'.format(style_name))
-    f = open(filepath, 'r')
-    css = f.read()
-    html = '<style>'+css+'</style>'+html
+    if style is not None:
+        pkg = os.path.dirname(os.path.abspath(__file__))
+        filepath = os.path.join(pkg, 'styles', '{}'.format(style))
+        f = open(filepath, 'r')
+        css = f.read()
+        html = '<style>'+css+'</style>'+html
     return html
 
 

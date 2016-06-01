@@ -110,7 +110,7 @@ class ClassifierEvaluator(object):
         return plot.precision_at_proportions(self.y_true, self.y_score,
                                              ax=_gen_ax())
 
-    def generate_report(self, template, path=None):
+    def generate_report(self, template, path=None, style=None):
         """
          Generate HTML report
 
@@ -128,13 +128,17 @@ class ClassifierEvaluator(object):
             Path to save the HTML report. If None, the function will return
             the HTML code.
 
+        style: str
+            Path to a css file to apply style to the report. If None, no
+            style will be applied
+
         Returns
         -------
         report: str
             Returns the contents of the report if path is None.
 
         """
-        return generate(self, template, path)
+        return generate(self, template, path, style)
 
 
 def _gen_ax():
