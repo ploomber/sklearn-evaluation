@@ -60,3 +60,7 @@ class TestReportGeneration(TestCase):
 
     def test_report_creation_no_style_save_file(self):
         self.results.generate_report(self.template, 'report.html')
+
+    def test_report_creation_style_save_file(self):
+        self.results.generate_report(self.template, 'report.html',
+                                     style='assets/simple.css')
