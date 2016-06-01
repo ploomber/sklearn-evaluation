@@ -49,9 +49,14 @@ class TestReportGeneration(TestCase):
                             {confusion_matrix}
                             {roc}
                             {precision_recall}
+
                             {feature_importances_table}
+
                             {feature_importances}
                         '''
 
-    def test_report_creation(self):
+    def test_report_creation_no_style(self):
         self.results.generate_report(self.template)
+
+    def test_report_creation_no_style_save_file(self):
+        self.results.generate_report(self.template, 'report.html')
