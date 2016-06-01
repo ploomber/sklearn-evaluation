@@ -5,13 +5,13 @@ from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from ..metrics import precision_at
 from .. import compute
-from ..util import is_column_vector, is_row_vector
+from ..util import is_column_vector, is_row_vector, default_heatmap
 
 
 # Confusion matrix
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 def confusion_matrix(y_true, y_pred, target_names=None, ax=None,
-                     normalize=False, cmap=plt.cm.Blues):
+                     normalize=False, cmap=None):
     """
     Plot confustion matrix.
 
@@ -30,7 +30,7 @@ def confusion_matrix(y_true, y_pred, target_names=None, ax=None,
     normalize : bool
         Normalize the confusion matrix
     cmap : matplotlib Colormap
-        Colormap used for coloring the matrix
+        If None uses a modified version of matplotlib's OrRd colormap.
 
 
     Returns
@@ -62,6 +62,22 @@ def confusion_matrix(y_true, y_pred, target_names=None, ax=None,
 
     if ax is None:
         ax = plt.gca()
+
+    # this (y, x) may sound counterintuitive. The reason is that
+    # in a matrix cell (i, j) is in row=i and col=j, translating that
+    # to an x, y plane (which matplotlib uses to plot), we need to use
+    # i as the y coordinate (how many steps down) and j as the x coordinate
+    # how many steps to the right.
+    for (y, x), v in np.ndenumerate(cm):
+        try:
+            label = '{:.2}'.format(v)
+        except:
+            label = v
+        ax.text(x, y, label, horizontalalignment='center',
+                verticalalignment='center')
+
+    if cmap is None:
+        cmap = default_heatmap()
 
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
     plt.colorbar(im, ax=ax)
