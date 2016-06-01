@@ -72,23 +72,21 @@ class TestReportGeneration(TestCase):
         self.empty.generate_report(template='# Title')
 
     def test_apply_custom_css(self):
-        with open('empty-expected.html') as f:
+        with open('baseline_html/empty.html') as f:
             expected = f.read()
 
         result = self.empty.generate_report(template='# Title\n ## Section',
-                                            style='default.css')
+                                            style='assets/simple.css')
 
         assert expected == result
 
     def test_returning_and_saving_are_the_same(self):
         self.empty.generate_report(template='# Title\n ## Section',
-                                   path='saved.html',
-                                   style='default.css')
+                                   path='saved.html')
 
         with open('saved.html') as f:
             saved = f.read()
 
-        returned = self.empty.generate_report(template='# Title\n ## Section',
-                                              style='default.css')
+        returned = self.empty.generate_report(template='# Title\n ## Section')
 
         assert saved == returned
