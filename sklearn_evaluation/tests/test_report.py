@@ -61,14 +61,14 @@ class TestReportGeneration(TestCase):
                             {feature_importances}
                         '''
 
-    def test_report_creation_no_style(self):
+    def test_no_style(self):
         self.results.generate_report(template=self.template)
 
-    def test_report_creation_no_style_save_file(self):
+    def test_no_style_save(self):
         self.results.generate_report(template=self.template,
-                                     path='report.html')
+                                     path='tmp_report.html')
 
-    def test_can_save_with_all_none(self):
+    def test_generate_with_all_attr_none(self):
         self.empty.generate_report(template='# Title')
 
     def test_apply_custom_css(self):
@@ -76,25 +76,17 @@ class TestReportGeneration(TestCase):
             expected = f.read()
 
         result = self.empty.generate_report(template='# Title\n ## Section',
-                                            style='assets/simple.css')
+                                            style='static/simple.css')
 
         assert expected == result
 
     def test_returning_and_saving_are_the_same(self):
         self.empty.generate_report(template='# Title\n ## Section',
-                                   path='saved.html')
+                                   path='tmp_report.html')
 
-        with open('saved.html') as f:
+        with open('tmp_report.html') as f:
             saved = f.read()
 
         returned = self.empty.generate_report(template='# Title\n ## Section')
 
         assert saved == returned
-
-    def test_report_creation_style_save_file(self):
-        self.results.generate_report(self.template,
-                                     style='static/simple.css')
-
-    def test_report_creation_style(self):
-        self.results.generate_report(self.template, 'report.html',
-                                     style='static/simple.css')

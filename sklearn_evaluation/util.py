@@ -1,8 +1,10 @@
 import re
 import collections
-from collections import defaultdict
+from collections import defaultdict, namedtuple
 from itertools import product
 from six import string_types
+
+import numpy as np
 
 
 def estimator_type(model):
@@ -49,7 +51,7 @@ def _group_by(data, criteria):
     return res
 
 
-def _tuple_getter(params):
+def _get_params_value(params):
     """
         Given an iterator (k1, k2), returns a function that when called
         with an object obj returns a tuple of the form:
@@ -61,9 +63,18 @@ def _tuple_getter(params):
     def fn(obj):
         l = []
         for p in ord_params:
-            l.append((p, obj.parameters[p]))
+            try:
+                l.append((p, obj.parameters[p]))
+            except:
+                raise ValueError('{} is not a valid parameter'.format(p))
         return tuple(l)
     return fn
+
+
+def _sorted_map_iter(d):
+    ord_keys = sorted(d.keys())
+    for k in ord_keys:
+        yield (k, d[k])
 
 
 def _product(k, v):
@@ -95,6 +106,10 @@ def _mapping_to_tuple_pairs(d):
     return tuple(product(*t))
 
 
+def _flatten_list(l):
+    return [item for sublist in l for item in sublist]
+
+
 # http://stackoverflow.com/questions/18926031/how-to-extract-a-subset-of-a-colormap-as-a-new-colormap-in-matplotlib
 def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
     import matplotlib.colors as colors
@@ -108,3 +123,18 @@ def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
 def default_heatmap():
     import matplotlib.pyplot as plt
     return truncate_colormap(plt.cm.OrRd, 0.1, 0.7)
+
+
+def _dict2named_tuple(d):
+    return namedtuple('NamedTupleFromDict', d.keys())(**d)
+
+
+def _grid_scores_from_dicts(grid_scores):
+    # convert every list in cv_validation_scores
+    # to a numpy array
+    for score in grid_scores:
+        val_scores_key = 'cv_validation_scores'
+        score[val_scores_key] = np.array(score[val_scores_key])
+    # now convert them to named tuples
+    grid_scores = [_dict2named_tuple(d) for d in grid_scores]
+    return grid_scores

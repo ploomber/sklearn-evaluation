@@ -10,8 +10,8 @@ from ..util import is_column_vector, is_row_vector, default_heatmap
 
 # Confusion matrix
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-def confusion_matrix(y_true, y_pred, target_names=None, ax=None,
-                     normalize=False, cmap=None):
+def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
+                     cmap=None, ax=None):
     """
     Plot confustion matrix.
 
@@ -187,4 +187,11 @@ def precision_at_proportions(y_true, y_score, ax=None):
     ax.set_title('Precision at various proportions')
     ax.set_ylabel('Precision')
     ax.set_xlabel('Proportion')
+    ticks = [0.1 * i for i in range(1, 11)]
+    ax.set_xticks(ticks)
+    ax.set_xticklabels(ticks)
+    ax.set_yticks(ticks)
+    ax.set_yticklabels(ticks)
+    ax.set_ylim([0, 1.0])
+    ax.set_xlim([0, 1.0])
     return ax

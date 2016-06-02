@@ -27,7 +27,7 @@ def feature_importances(data, top_n=None, feature_names=None):
         sub-estimators was passed in data.
 
     """
-    # data can be either a sklearn estimator or an interator with
+    # data can be either a sklearn estimator or an iterator with
     # the actual importances values, try to get the values
     try:
         imp = data.feature_importances_
@@ -60,7 +60,7 @@ def feature_importances(data, top_n=None, feature_names=None):
 
     # if the user did not pass feature names create generic names
     if feature_names is None:
-        feature_names = ['Feature {}'.format(n) for n in xrange(1, n_features+1)]
+        feature_names = ['Feature {}'.format(n) for n in range(1, n_features+1)]
         feature_names = np.array(feature_names)
     else:
         feature_names = np.array(feature_names)
