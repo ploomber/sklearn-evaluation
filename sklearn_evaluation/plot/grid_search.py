@@ -6,7 +6,7 @@ import numpy as np
 from six import string_types
 
 from ..util import (_group_by, _tuple_getter, _mapping_to_tuple_pairs,
-                    default_heatmap)
+                    default_heatmap, _sorted_map_iter)
 
 
 def grid_search(grid_scores, to_vary, to_keep=None, ax=None, kind='line',
@@ -42,6 +42,10 @@ def grid_search(grid_scores, to_vary, to_keep=None, ax=None, kind='line',
         Axes containing the plot
 
     """
+    if to_vary is None:
+        raise ValueError(('to_vary can\'t be None, you need to select at least'
+                          ' one value to make the plot.'))
+
     if ax is None:
         ax = plt.gca()
 
@@ -61,10 +65,10 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
     params_set = list(grid_scores[0].parameters.keys())
 
     # check how many unique values does to_vary has
-    to_vary_unique = len(set([g.parameters[to_vary] for g in grid_scores]))
-
-    # check that the union to_vary and to_keep contains all the values
-    # in the params_set
+    try:
+        to_vary_unique = len(set([g.parameters[to_vary] for g in grid_scores]))
+    except:
+        raise ValueError('{} is not a valid parameter.')
 
     # remove parameter to vary from the list
     params_set.remove(to_vary)
@@ -76,7 +80,14 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
     # get the elements in the group that the user wants
     if to_keep:
         keys = _mapping_to_tuple_pairs(to_keep)
-        groups = {k: v for k, v in groups.items() if k in keys}
+        groups = {k: v for k, v in _sorted_map_iter(groups) if k in keys}
+        # check that the filter matched at least one group
+        # otherwise it means the values in to_keep are wrong
+        # either wrong parameter name or parameter value
+        if not groups:
+            raise KeyError(('There wasn\'t any match with the data provided'
+                            ' check that the values in to_keep are correct.'
+                            ))
 
     # bar shifter is just a wrapper arounf matplotlib bar chart
     # which automatically computes the position of the bars
@@ -88,7 +99,7 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
         bar_shifter = BarShifter(g_number=to_vary_unique, g_size=len(groups),
                                  ax=ax)
 
-    for to_keep, group in groups.items():
+    for to_keep, group in _sorted_map_iter(groups):
         # get the x and y coordinates for the plot
         x = [element.parameters[to_vary] for element in group]
         y = [element.mean_validation_score for element in group]
@@ -119,22 +130,36 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
 
 
 def _grid_search_double(grid_scores, to_vary, to_keep, ax, cmap):
-    groups = _group_by(grid_scores, _tuple_getter(to_keep.keys()))
-    keys = _mapping_to_tuple_pairs(to_keep)
-    groups = {k: v for k, v in groups.items() if k in keys}
+    # if a value in to_keep was passed, use it to filter the groups
+    # if not use the set of parameters but remove the ones the user wants
+    # to vary
+    if to_keep is not None:
+        groups = _group_by(grid_scores, _tuple_getter(to_keep.keys()))
+        keys = _mapping_to_tuple_pairs(to_keep)
+        groups = {k: v for k, v in _sorted_map_iter(groups) if k in keys}
+    else:
+        to_keep = list(grid_scores[0].parameters.keys())
+        for p in to_vary:
+            to_keep.remove(p)
+        groups = _group_by(grid_scores, _tuple_getter(to_keep))
 
     # there should be just one group at this point
     if len(groups) > 1:
-        raise ValueError('You did not specify x')
+        raise ValueError(('More than one result matched your criteria.'
+                          ' Make sure you specify parameters using to_vary'
+                          ' and to_keep so only one group matches.'))
+    elif len(groups) == 0:
+        raise KeyError(('There wasn\'t any match with the data provided'
+                        ' check that the values in to_keep are correct.'))
 
     group = list(groups.values())[0]
 
     # group by every possible combination in to_vary
     matrix_elements = _group_by(group, _tuple_getter(to_vary))
 
-    for v in matrix_elements.values():
-        if len(v) > 1:
-            raise ValueError('Group with more than one element')
+    # for v in matrix_elements.values():
+    #     if len(v) > 1:
+    #         raise ValueError('Group with more than one element')
 
     # on each group there must be only one element, get it
     matrix_elements = {k: v[0] for k, v in matrix_elements.items()}
