@@ -77,9 +77,7 @@ def to_html(template, style):
 
     # Add css
     if style is not None:
-        pkg = os.path.dirname(os.path.abspath(__file__))
-        filepath = os.path.join(pkg, 'styles', '{}'.format(style))
-        f = open(filepath, 'r')
+        f = open(style, 'r')
         css = f.read()
         html = '<style>'+css+'</style>'+html
     return html
