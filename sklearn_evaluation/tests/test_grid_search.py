@@ -60,6 +60,15 @@ def test_single_categorial_bar():
     plot.grid_search(grid_scores, to_vary, kind='bar')
 
 
+@image_comparison(baseline_images=['single_numeric_partially_restricted'],
+                  extensions=['png'],
+                  remove_text=True)
+def test_single_numeric_partially_restricted():
+    to_vary = 'n_estimators'
+    to_keep = {'max_features': 'sqrt'}
+    plot.grid_search(grid_scores, to_vary, to_keep, kind='bar')
+
+
 @image_comparison(baseline_images=['single_numeric_restricted_single'],
                   extensions=['png'],
                   remove_text=True)
