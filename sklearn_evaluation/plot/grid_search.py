@@ -67,7 +67,7 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
     # check how many unique values does to_vary has
     try:
         to_vary_unique = len(set([g.parameters[to_vary] for g in grid_scores]))
-    except ValueError:
+    except KeyError:
         raise ValueError('{} is not a valid parameter.'.format(to_vary))
 
     # remove parameter to vary from the list
