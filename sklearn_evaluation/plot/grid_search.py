@@ -67,8 +67,8 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
     # check how many unique values does to_vary has
     try:
         to_vary_unique = len(set([g.parameters[to_vary] for g in grid_scores]))
-    except:
-        raise ValueError('{} is not a valid parameter.')
+    except ValueError:
+        raise ValueError('{} is not a valid parameter.'.format(to_vary))
 
     # remove parameter to vary from the list
     params_set.remove(to_vary)
@@ -140,7 +140,10 @@ def _grid_search_double(grid_scores, to_vary, to_keep, ax, cmap):
     else:
         to_keep = list(grid_scores[0].parameters.keys())
         for p in to_vary:
-            to_keep.remove(p)
+            try:
+                to_keep.remove(p)
+            except ValueError:
+                raise ValueError('{} is not a valid parameter.'.format(p))
         groups = _group_by(grid_scores, _tuple_getter(to_keep))
 
     # there should be just one group at this point
