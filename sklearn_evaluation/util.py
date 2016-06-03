@@ -51,7 +51,7 @@ def _group_by(data, criteria):
     return res
 
 
-def _tuple_getter(params):
+def _get_params_value(params):
     """
         Given an iterator (k1, k2), returns a function that when called
         with an object obj returns a tuple of the form:
@@ -104,6 +104,10 @@ def _mapping_to_tuple_pairs(d):
     for k in ord_keys:
         t.append(_product(k, d[k]))
     return tuple(product(*t))
+
+
+def _flatten_list(l):
+    return [item for sublist in l for item in sublist]
 
 
 # http://stackoverflow.com/questions/18926031/how-to-extract-a-subset-of-a-colormap-as-a-new-colormap-in-matplotlib
