@@ -30,7 +30,7 @@ train_scores_, test_scores_ = validation_curve(
 
 
 def plot_validation_curve(train_scores, test_scores, param_range, param_name,
-                     semilogx=False, ax=None):
+                          semilogx=False, ax=None):
     if ax is None:
         ax = plt.gca()
 
