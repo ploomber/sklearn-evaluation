@@ -6,7 +6,7 @@ import numpy as np
 from six import string_types
 
 from ..util import (_group_by, _tuple_getter, _mapping_to_tuple_pairs,
-                    default_heatmap, _sorted_map_iter)
+                    default_heatmap, _sorted_map_iter, _flatten_list)
 
 
 def grid_search(grid_scores, to_vary, to_keep=None, ax=None, kind='line',
@@ -61,26 +61,24 @@ def grid_search(grid_scores, to_vary, to_keep=None, ax=None, kind='line',
 
 
 def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
-    # get the parameters list
-    params_set = list(grid_scores[0].parameters.keys())
-
     # check how many unique values does to_vary has
     try:
         to_vary_unique = len(set([g.parameters[to_vary] for g in grid_scores]))
     except KeyError:
         raise ValueError('{} is not a valid parameter.'.format(to_vary))
 
+    # get the parameters list
+    params_set = list(grid_scores[0].parameters.keys())
     # remove parameter to vary from the list
     params_set.remove(to_vary)
 
-    # from the parameters that remain, group
-    # the scores based on the different combinations
-    groups = _group_by(grid_scores, _tuple_getter(params_set))
-
     # get the elements in the group that the user wants
     if to_keep:
+        groups = _group_by(grid_scores, _tuple_getter(to_keep.keys()))
         keys = _mapping_to_tuple_pairs(to_keep)
         groups = {k: v for k, v in _sorted_map_iter(groups) if k in keys}
+        grid_scores = _flatten_list(groups.values())
+        groups = _group_by(grid_scores, _tuple_getter(params_set))
         # check that the filter matched at least one group
         # otherwise it means the values in to_keep are wrong
         # either wrong parameter name or parameter value
@@ -88,6 +86,10 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
             raise KeyError(('There wasn\'t any match with the data provided'
                             ' check that the values in to_keep are correct.'
                             ))
+    else:
+        # from the parameters that remain, group
+        # the scores based on the different combinations
+        groups = _group_by(grid_scores, _tuple_getter(params_set))
 
     # bar shifter is just a wrapper arounf matplotlib bar chart
     # which automatically computes the position of the bars

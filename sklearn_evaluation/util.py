@@ -106,6 +106,10 @@ def _mapping_to_tuple_pairs(d):
     return tuple(product(*t))
 
 
+def _flatten_list(l):
+    return [item for sublist in l for item in sublist]
+
+
 # http://stackoverflow.com/questions/18926031/how-to-extract-a-subset-of-a-colormap-as-a-new-colormap-in-matplotlib
 def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
     import matplotlib.colors as colors
