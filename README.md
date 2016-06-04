@@ -1,10 +1,10 @@
 #sklearn-evaluation
 
-[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation) [![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=stable)](http://sklearn-evaluation.readthedocs.io/en/stable/?badge=stable) [![PyPI version](https://badge.fury.io/py/sklearn-evaluation.svg)](https://badge.fury.io/py/sklearn-evaluation)
+[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation) [![PyPI version](https://badge.fury.io/py/sklearn-evaluation.svg)](https://badge.fury.io/py/sklearn-evaluation)
 
 The cool kids way to evaluate scikit-learn models. Works with Python 2 and 3.
 
-[Documentation here.](http://sklearn-evaluation.rtfd.io)
+[Documentation here.](http://edublancas.github.io/sklearn-evaluation)
 
 # Install  
 
