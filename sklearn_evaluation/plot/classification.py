@@ -10,8 +10,8 @@ from ..util import is_column_vector, is_row_vector, default_heatmap
 
 # Confusion matrix
 # http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-def confusion_matrix(y_true, y_pred, target_names=None, ax=None,
-                     normalize=False, cmap=None):
+def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
+                     cmap=None, ax=None):
     """
     Plot confustion matrix.
 
