@@ -65,16 +65,8 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
     # not interested in, until we have only the elements that the user
     # wants to plot
 
-<<<<<<< HEAD
-    # check how many unique values does to_vary has
-    try:
-        to_vary_unique = len(set([g.parameters[to_vary] for g in grid_scores]))
-    except:
-        raise ValueError('{} is not a valid parameter.'.format(to_vary))
-=======
     # get a set with all the parameters
     params = set(grid_scores[0].parameters.keys())
->>>>>>> develop
 
     # remove parameter to vary from the list
     # since we are not filtering on that parameter
