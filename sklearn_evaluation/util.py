@@ -51,7 +51,7 @@ def _group_by(data, criteria):
     return res
 
 
-def _tuple_getter(params):
+def _get_params_value(params):
     """
         Given an iterator (k1, k2), returns a function that when called
         with an object obj returns a tuple of the form:
