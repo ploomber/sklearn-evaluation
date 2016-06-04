@@ -17,6 +17,7 @@ Table of contents
 .. toctree::
    :maxdepth: 2
 
+   usage
    plot
    table
    evaluator
