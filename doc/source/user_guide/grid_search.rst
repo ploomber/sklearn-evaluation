@@ -33,10 +33,10 @@ Evaluating Grid Search Results
 .. ipython:: python
 
     @savefig gs_1.png
-    grid_search(clf.grid_scores_, change='n_estimators')
+    grid_search(clf.grid_scores_, change='n_estimators', kind='bar')
 
 
 .. ipython:: python
 
     @savefig gs_2.png
-    grid_search(clf.grid_scores_, change='n_estimators', kind='bar')
+    grid_search(clf.grid_scores_, change=('n_estimators', 'criterion'), subset={'max_features': 'sqrt'}, kind='bar')
