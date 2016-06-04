@@ -1,5 +1,5 @@
-Usage
-==================
+Evaluating a classifier
+=======================
 
 .. ipython:: python
     :suppress:
