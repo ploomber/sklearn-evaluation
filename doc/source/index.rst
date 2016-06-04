@@ -15,12 +15,10 @@ Table of contents
 =================
 
 .. toctree::
-   :maxdepth: 2
+    :maxdepth: 2
 
-   plot
-   table
-   evaluator
-   report
+    user_guide
+    api
 
 Indices and tables
 ==================
