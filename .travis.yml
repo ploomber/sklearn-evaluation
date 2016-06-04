@@ -5,6 +5,7 @@ python:
 sudo: required
 install:
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
+  - "pip install --upgrade pip"
   - "pip install -r requirements.txt"
 script:
   - cd $HOME/build/edublancas/sklearn-evaluation/sklearn_evaluation/tests

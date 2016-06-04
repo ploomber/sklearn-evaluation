@@ -2,7 +2,6 @@
 
 sklearn_evaluation/tests/result_images/
 sklearn_evaluation/tests/*.html
-sklearn_evaluation/tests/*.css
 
 #####=== IPythonNotebook ===#####
 # Temporary data

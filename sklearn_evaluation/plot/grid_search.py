@@ -5,36 +5,35 @@ import matplotlib.pyplot as plt
 import numpy as np
 from six import string_types
 
-from ..util import (_group_by, _tuple_getter, _mapping_to_tuple_pairs,
-                    default_heatmap)
+from ..util import (_group_by, _get_params_value, _mapping_to_tuple_pairs,
+                    default_heatmap, _sorted_map_iter, _flatten_list)
 
 
-def grid_search(grid_scores, to_vary, to_keep=None, ax=None, kind='line',
-                cmap=None):
+def grid_search(grid_scores, change, subset=None, kind='line', cmap=None,
+                ax=None):
     """
-    Plot results from a sklearnn Grid Search by changing two parameters at most
-    and leaving the rest constant.
+    Plot results from a sklearn grid search by changing two parameters at most.
 
     Parameters
     ----------
     grid_scores : list of named tuples
-        Results from a sklearn Grid Search (get them using the
+        Results from a sklearn grid search (get them using the
         grid_scores_ parameter)
-    to_vary : str or iterable with len<=2
-        Parameter to vary
-    to_keep : dictionary-like
-        parameter-value pairs, such values will keep fixed to plot. You can
-        specify more than one value per parameter
-        (e.g. {'n_estimartors': [1, 10]})
-    ax: matplotlib Axes
-        Axes object to draw the plot onto, otherwise uses current Axes
+    change : str or iterable with len<=2
+        Parameter to change
+    subset : dictionary-like
+        parameter-value(s) pairs to subset from grid_scores.
+        (e.g. {'n_estimartors': [1, 10]}), if None all combinations will be
+        used.
     kind : ['line', 'bar']
-        This only applies whe to_vary is a single parameter. Changes the
+        This only applies whe change is a single parameter. Changes the
         type of plot
     cmap : matplotlib Colormap
-        This only applies when to_vary are two parameters. Colormap used for
+        This only applies when change are two parameters. Colormap used for
         the matrix. If None uses a modified version of matplotlib's OrRd
         colormap.
+    ax: matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
 
     Returns
     -------
@@ -42,60 +41,78 @@ def grid_search(grid_scores, to_vary, to_keep=None, ax=None, kind='line',
         Axes containing the plot
 
     """
+    if change is None:
+        raise ValueError(('change can\'t be None, you need to select at least'
+                          ' one value to make the plot.'))
+
     if ax is None:
         ax = plt.gca()
 
     if cmap is None:
         cmap = default_heatmap()
 
-    if isinstance(to_vary, string_types) or len(to_vary) == 1:
-        return _grid_search_single(grid_scores, to_vary, to_keep, ax, kind)
-    elif len(to_vary) == 2:
-        return _grid_search_double(grid_scores, to_vary, to_keep, ax, cmap)
+    if isinstance(change, string_types) or len(change) == 1:
+        return _grid_search_single(grid_scores, change, subset, kind, ax)
+    elif len(change) == 2:
+        return _grid_search_double(grid_scores, change, subset, cmap, ax)
     else:
-        raise ValueError('to_vary must have length 1 or 2 or be a string')
+        raise ValueError('change must have length 1 or 2 or be a string')
 
 
-def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
-    # get the parameters list
-    params_set = list(grid_scores[0].parameters.keys())
+def _grid_search_single(grid_scores, change, subset, kind, ax):
+    # the logic of this function is to group the grid scores acording
+    # to certain rules and subsequently remove the elements that we are
+    # not interested in, until we have only the elements that the user
+    # wants to plot
 
-    # check how many unique values does to_vary has
-    to_vary_unique = len(set([g.parameters[to_vary] for g in grid_scores]))
-
-    # check that the union to_vary and to_keep contains all the values
-    # in the params_set
+    # get a set with all the parameters
+    params = set(grid_scores[0].parameters.keys())
 
     # remove parameter to vary from the list
-    params_set.remove(to_vary)
+    # since we are not filtering on that parameter
+    try:
+        params.remove(change)
+    except KeyError:
+        raise ValueError('{} is not a valid parameter'.format(change))
 
-    # from the parameters that remain, group
-    # the scores based on the different combinations
-    groups = _group_by(grid_scores, _tuple_getter(params_set))
+    # now need need to filter out the grid_scores that the user
+    # didn't select, for that we have to cases, the first one is when
+    # the user explicitely selected some values
+    if subset:
+        # group the grid_scores based on the values the user selected
+        # in subset
+        groups = _group_by(grid_scores, _get_params_value(subset.keys()))
+        keys = _mapping_to_tuple_pairs(subset)
+        groups = {k: v for k, v in _sorted_map_iter(groups) if k in keys}
+        grid_scores = _flatten_list(groups.values())
+        groups = _group_by(grid_scores, _get_params_value(params))
+        if not groups:
+            raise ValueError(('Your subset didn\'t match any data'
+                              ' verify that the values are correct.'))
+    # if the user didn't select any values don't filter anything
+    # just group the grid_scores depending on the values they
+    # have for the parameters
+    else:
+        groups = _group_by(grid_scores, _get_params_value(params))
 
-    # get the elements in the group that the user wants
-    if to_keep:
-        keys = _mapping_to_tuple_pairs(to_keep)
-        groups = {k: v for k, v in groups.items() if k in keys}
-
-    # bar shifter is just a wrapper arounf matplotlib bar chart
-    # which automatically computes the position of the bars
-    # you need to specify how many groups of bars are gonna be
-    # and the size of such groups. The frst time you call it,
-    # will plot the first element for every group, then the second one
-    # and so on
     if kind == 'bar':
-        bar_shifter = BarShifter(g_number=to_vary_unique, g_size=len(groups),
+        change_unique = len(set([g.parameters[change] for g in grid_scores]))
+        # bar shifter is just a wrapper around matplotlib's bar plot
+        # to automatically calculate the left position on each bar
+        bar_shifter = BarShifter(g_number=change_unique, g_size=len(groups),
                                  ax=ax)
 
-    for to_keep, group in groups.items():
-        # get the x and y coordinates for the plot
-        x = [element.parameters[to_vary] for element in group]
+    for params_kv, group in _sorted_map_iter(groups):
+        # get the x and y values for each grid_score on this group
+        # also calculate the std
+        x = [element.parameters[change] for element in group]
         y = [element.mean_validation_score for element in group]
         stds = [element.cv_validation_scores.std() for element in group]
 
-
-        label = reduce(lambda x, y: x+', '+y, ['{}: {}'.format(*t) for t in to_keep])
+        # take (param, value) and convert them to 'param: value'
+        label = ['{}: {}'.format(*t) for t in params_kv]
+        # now convert it to one string
+        label = reduce(lambda x, y: x+', '+y, label)
 
         if kind == 'bar':
             bar_shifter(y, yerr=stds, label=label)
@@ -112,29 +129,35 @@ def _grid_search_single(grid_scores, to_vary, to_keep, ax, kind):
     ax.set_xticklabels(x)
     ax.set_title('Grid search results')
     ax.set_ylabel('Mean score')
-    ax.set_xlabel(to_vary)
+    ax.set_xlabel(change)
     ax.legend(loc="best")
     ax.margins(0.05)
     return ax
 
 
-def _grid_search_double(grid_scores, to_vary, to_keep, ax, cmap):
-    groups = _group_by(grid_scores, _tuple_getter(to_keep.keys()))
-    keys = _mapping_to_tuple_pairs(to_keep)
-    groups = {k: v for k, v in groups.items() if k in keys}
+def _grid_search_double(grid_scores, change, subset, cmap, ax):
+    # check that the two different parameters were passed
+    if len(set(change)) == 1:
+        raise ValueError('You need to pass two different parameters')
 
-    # there should be just one group at this point
-    if len(groups) > 1:
-        raise ValueError('You did not specify x')
+    # if a value in subset was passed, use it to filter the groups
+    if subset is not None:
+        groups = _group_by(grid_scores, _get_params_value(subset.keys()))
+        keys = _mapping_to_tuple_pairs(subset)
+        groups = {k: v for k, v in _sorted_map_iter(groups) if k in keys}
+        grid_scores = _flatten_list(groups.values())
+        if not groups:
+            raise ValueError(('Your subset didn\'t match any data'
+                              ' verify that the values are correct.'))
 
-    group = list(groups.values())[0]
+    # group by every possible combination in change
+    matrix_elements = _group_by(grid_scores, _get_params_value(change))
 
-    # group by every possible combination in to_vary
-    matrix_elements = _group_by(group, _tuple_getter(to_vary))
-
-    for v in matrix_elements.values():
+    for k, v in matrix_elements.items():
         if len(v) > 1:
-            raise ValueError('Group with more than one element')
+            raise ValueError(('More than one result matched your criteria.'
+                              ' Make sure you specify parameters using change'
+                              ' and subset so only one group matches.'))
 
     # on each group there must be only one element, get it
     matrix_elements = {k: v[0] for k, v in matrix_elements.items()}
@@ -186,6 +209,12 @@ def _grid_search_double(grid_scores, to_vary, to_keep, ax, cmap):
 
 
 class BarShifter:
+    # bar shifter is just a wrapper arounf matplotlib bar chart
+    # which automatically computes the position of the bars
+    # you need to specify how many groups of bars are gonna be
+    # and the size of such groups. The frst time you call it,
+    # will plot the first element for every group, then the second one
+    # and so on
     def __init__(self, g_number, g_size, ax, scale=0.8):
         self.g_number = g_number
         self.g_size = g_size
@@ -201,5 +230,6 @@ class BarShifter:
                     **kwargs)
         self.i += 1
         if self.i == self.g_size:
-            ticks_pos = [x+(self.width*self.g_size)/2.0 for x in range(self.g_number)]
+            n = range(self.g_number)
+            ticks_pos = [x+(self.width*self.g_size)/2.0 for x in n]
             self.ax.set_xticks(ticks_pos)

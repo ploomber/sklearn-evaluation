@@ -1,7 +1,7 @@
 import numpy as np
 
 from sklearn_evaluation.util import (_can_iterate, is_column_vector,
-                                     is_row_vector, _group_by, _tuple_getter,
+                                     is_row_vector, _group_by,
                                      _product, _mapping_to_tuple_pairs)
 
 # can iterate

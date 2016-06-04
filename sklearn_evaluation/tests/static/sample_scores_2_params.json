@@ -1,0 +1,57 @@
+[{
+    "cv_validation_scores": [0.65671641791044777, 0.6766169154228856, 0.71499999999999997, 0.71356783919597988, 0.76381909547738691],
+    "mean_validation_score": 0.70499999999999996,
+    "parameters": {
+        "n_estimators": 1,
+        "criterion": "gini"
+    }
+}, {
+    "cv_validation_scores": [0.75621890547263682, 0.76119402985074625, 0.78500000000000003, 0.81909547738693467, 0.82412060301507539],
+    "mean_validation_score": 0.78900000000000003,
+    "parameters": {
+        "n_estimators": 10,
+        "criterion": "gini"
+    }
+}, {
+    "cv_validation_scores": [0.80597014925373134, 0.82587064676616917, 0.80000000000000004, 0.83417085427135673, 0.83417085427135673],
+    "mean_validation_score": 0.81999999999999995,
+    "parameters": {
+        "n_estimators": 50,
+        "criterion": "gini"
+    }
+}, {
+    "cv_validation_scores": [0.79104477611940294, 0.85572139303482586, 0.82999999999999996, 0.79899497487437188, 0.84422110552763818],
+    "mean_validation_score": 0.82399999999999995,
+    "parameters": {
+        "n_estimators": 100,
+        "criterion": "gini"
+    }
+}, {
+    "cv_validation_scores": [0.70149253731343286, 0.68159203980099503, 0.71999999999999997, 0.77386934673366836, 0.74371859296482412],
+    "mean_validation_score": 0.72399999999999998,
+    "parameters": {
+        "n_estimators": 1,
+        "criterion": "entropy"
+    }
+}, {
+    "cv_validation_scores": [0.75621890547263682, 0.84079601990049746, 0.80500000000000005, 0.79396984924623115, 0.81407035175879394],
+    "mean_validation_score": 0.80200000000000005,
+    "parameters": {
+        "n_estimators": 10,
+        "criterion": "entropy"
+    }
+}, {
+    "cv_validation_scores": [0.8159203980099502, 0.845771144278607, 0.79000000000000004, 0.83919597989949746, 0.82412060301507539],
+    "mean_validation_score": 0.82299999999999995,
+    "parameters": {
+        "n_estimators": 50,
+        "criterion": "entropy"
+    }
+}, {
+    "cv_validation_scores": [0.81094527363184077, 0.84079601990049746, 0.80000000000000004, 0.82412060301507539, 0.82412060301507539],
+    "mean_validation_score": 0.81999999999999995,
+    "parameters": {
+        "n_estimators": 100,
+        "criterion": "entropy"
+    }
+}]
