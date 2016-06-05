@@ -5,31 +5,31 @@ Advanced usage using matplotlib
     :suppress:
 
     from sklearn.ensemble import RandomForestClassifier
-    from sklearn.linear_model import LogisticRegression
     from sklearn.cross_validation import train_test_split
     from sklearn import datasets
     from sklearn_evaluation import plot
 
     import matplotlib.pyplot as plt
 
-    iris = datasets.load_iris()
-    X = iris.data
-    y = iris.target
+    data = datasets.make_classification(200, 10, 5, class_sep=0.7)
+    X = data[0]
+    y = data[1]
 
     # shuffle and split training and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
                                                         random_state=0)
 
-    est = RandomForestClassifier()
+    est = RandomForestClassifier(n_estimators=5)
     est.fit(X_train, y_train)
 
     y_true = y_test
     y_score = est.predict_proba(X_test)
 
-    est2 = LogisticRegression()
-    est2.fit(X_train, y_train)
+    est = RandomForestClassifier(n_estimators=10)
+    est.fit(X_train, y_train)
+    y_score2 = est.predict_proba(X_test)
 
-    y_score2 = est2.predict_proba(X_test)
+
 
 As we mentioned in the previous section, using the functional interface
 provides great flexibility to evaluate your models, this sections includes
@@ -70,25 +70,36 @@ Saving plots
     fig = ax.get_figure()
     fig.savefig('roc.png')
 
+.. ipython:: python
+    :suppress:
+
+    import os
+    os.remove('roc.png')
+
 Comparing several models with one plot
 **************************************
 
 .. ipython:: python
     
+    fig, ax = plt.subplots()
+    plot.roc(y_true, y_score, ax=ax)
+    plot.roc(y_true, y_score2, ax=ax)
+    ax.legend(['Model 1', 'Baseline', 'Model 2'])
     @savefig model_comparison.png
-    plot.roc(y_true, y_score)
-    plot.roc(y_true, y_score2)
+    fig
 
 Grid plots
 **********
 
 .. ipython:: python
 
-    f, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
+    fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
     plot.roc(y_true, y_score, ax=ax1)
     plot.roc(y_true, y_score2, ax=ax2)
+    ax1.legend(['Model 1'])
+    ax2.legend(['Model 2'])
     @savefig grid_plot.png
-    plt.show()
+    fig
 
 Customizing plots
 *****************
