@@ -19,7 +19,9 @@ pip install sklearn-evaluation
 If you want to use the reports module you need to install `mistune` and `tabulate` for the tables module
 
 ```bash
+# for generating reports
 pip install mistune
+# for the table module
 pip install tabulate
 ```
 
