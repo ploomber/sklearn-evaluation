@@ -23,7 +23,7 @@ def grid_search(grid_scores, change, subset=None, kind='line', cmap=None,
         Parameter to change
     subset : dictionary-like
         parameter-value(s) pairs to subset from grid_scores.
-        (e.g. {'n_estimartors': [1, 10]}), if None all combinations will be
+        (e.g. ``{'n_estimartors': [1, 10]}``), if None all combinations will be
         used.
     kind : ['line', 'bar']
         This only applies whe change is a single parameter. Changes the

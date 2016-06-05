@@ -1,7 +1,7 @@
 Classifier evaluation using the OOP interface (report generation)
 =================================================================
 
-We can also use the ClassifierEvaluator class to pack the results from our
+We can also use the :class:`sklearn_evaluation.ClassifierEvaluator` class to pack the results from our
 estimator. This way we can generate plots and tables without having to pass
 the parameters over and over again. If we are evaluating more than one model
 at a time this also gives us a way to keep it organized. Furthermore, the ClassifierEvaluator class offers a way to create HTML reports
@@ -64,8 +64,8 @@ function. The first parameter is a markdown template, we can either directly
 pass a string or a path to a template.
 
 We can include any attribute in the ClassifierEvaluator by passing a tag
-with the format '{attribute}'. Two extra tags are available {date} and
-{date_utc} which add local and UTC timestamps respectively.
+with the format ``{attribute}``. Two extra tags are available ``{date}`` and
+``{date_utc}`` which add local and UTC timestamps respectively.
 
 .. ipython:: python
 

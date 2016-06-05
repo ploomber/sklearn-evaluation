@@ -47,7 +47,8 @@ extensions = [
     'ipython_sphinxext.ipython_directive',
     #'numpydoc.plot_directive',
     'sphinx.ext.autodoc',
-    'sphinxcontrib.napoleon',
+    'sphinx.ext.intersphinx',
+    'numpydoc',
 ]
 
 
@@ -315,3 +316,8 @@ texinfo_documents = [
 
 # If true, do not generate a @detailmenu in the "Top" node's menu.
 #texinfo_no_detailmenu = False
+
+intersphinx_mapping = {
+    'sklearn': ('http://scikit-learn.org/stable', None),
+    'matplotlib': ('http://matplotlib.org/', None),
+}

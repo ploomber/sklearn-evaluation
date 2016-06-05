@@ -11,8 +11,8 @@ Classifier evaluation
 
     import matplotlib.pyplot as plt
 
-sklearn-evluation has two main modules for evaluating classifiers: plot and
-table, let's see an example of how to use them.
+sklearn-evluation has two main modules for evaluating classifiers: :mod:`sklearn_evaluation.plot` and
+:mod:`sklearn_evaluation.table`, let's see an example of how to use them.
 
 First, let's load some data and split it in training and test set.
 
@@ -34,8 +34,8 @@ Now, we are going to train the data using one of the scikit-learn classifiers.
     est.fit(X_train, y_train)
 
 Most of the functions require us to pass the class predictions for the test
-set (y_pred), the scores assigned (y_score) and the ground truth classes
-(y_true), let's define such variables.
+set (``y_pred``), the scores assigned (``y_score``) and the ground truth classes
+(``y_true``), let's define such variables.
 
 .. ipython:: python
 
@@ -51,7 +51,8 @@ a confusion matrix.
     @savefig cm.png
     plot.confusion_matrix(y_true, y_pred)
 
-Some classifiers (such as Random Forest) have feature importances, we can plot
+
+Some classifiers (such as :class:`sklearn.ensemble.RandomForestClassifier`) have feature importances, we can plot
 then passing the estimator object to the feature_importances function.
 
 .. ipython:: python

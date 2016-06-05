@@ -22,15 +22,15 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
     y_pred : array-like, shape = [n_samples]
         Target predicted classes (estimator predictions).
     target_names : list
-        Lst containing the names of the target classes. List mus be in order
-        e.g. ['Label for class 0', 'Label for class 1']. If None, generic
-        labels will be generated e.g. ['Class 0', 'Class 1']
+        Lst containing the names of the target classes. List must be in order
+        e.g. ``['Label for class 0', 'Label for class 1']``. If ``None``,
+        generic labels will be generated e.g. ``['Class 0', 'Class 1']``
     ax: matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
     normalize : bool
         Normalize the confusion matrix
     cmap : matplotlib Colormap
-        If None uses a modified version of matplotlib's OrRd colormap.
+        If ``None`` uses a modified version of matplotlib's OrRd colormap.
 
 
     Returns
@@ -105,11 +105,9 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
 def feature_importances(data, top_n=None, feature_names=None, ax=None):
     """
     Get and order feature importances from a scikit-learn model
-    or from an array-like structure.
-
-    If data is a scikit-learn model with sub-estimators (e.g. RandomForest,
-    AdaBoost) the function will compute the standard deviation of each
-    feature.
+    or from an array-like structure. If data is a scikit-learn model with
+    sub-estimators (e.g. RandomForest, AdaBoost) the function will compute the
+    standard deviation of each feature.
 
     Parameters
     ----------
@@ -118,7 +116,7 @@ def feature_importances(data, top_n=None, feature_names=None, ax=None):
     top_n : int
         Only get results for the top_n features.
     feature_names : array-like
-        Feature_names
+        Feature names
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 

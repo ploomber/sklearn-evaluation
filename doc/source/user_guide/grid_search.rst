@@ -3,12 +3,12 @@ Evaluating Grid Search Results
 
 A common practice in Machine Learning is to train several models with different
 hyperparameters and compare the performance across hyperparameter sets.
-scikit-learn provides a tool to do it: Grid Search, which trains the same model
+scikit-learn provides a tool to do it: :class:`sklearn.grid_search.GridSearchCV`, which trains the same model
 with different parameters. When doing grid search, it is tempting to just take
 the 'best model' and carry on, but analizing the results can give us some
 interesting information, so it's worth taking a look at the results.
 
-sklearn-evaluatio includes a plotting function to evaluate grid search results, this way we can see how the model performs when changing one (or two)
+sklearn-evaluation includes a plotting function to evaluate grid search results, this way we can see how the model performs when changing one (or two)
 hyperparameter(s) by keeping the rest constant.
 
 .. ipython:: python
@@ -48,7 +48,7 @@ a Random Forest, then use the GridSearchCV class to pass the estimator, the
 hypeparameter dictionary and the number of folds for cross-validation.
 
 After fitting the models (note that we call fit on the GridSearchCV instead of
-the estimator itself) we can get the results using the grid_scores_ attribute.
+the estimator itself) we can get the results using the :attr:`sklearn.grid_search.GridSearchCV.grid_scores_` attribute.
 
 .. ipython:: python
 
