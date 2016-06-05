@@ -2,15 +2,14 @@ Evaluating Grid Search Results
 ==============================
 
 A common practice in Machine Learning is to train several models with different
-hyperparameter sets since differents sets have different performance.
-scikit-learn provides a tool to do Grid Search, which trains the same model
-with different parameters. When doing grid search, is tempting to just take
+hyperparameters and compare the performance across hyperparameter sets.
+scikit-learn provides a tool to do it: Grid Search, which trains the same model
+with different parameters. When doing grid search, it is tempting to just take
 the 'best model' and carry on, but analizing the results can give us some
-insight to improve the model.
+interesting information, so it's worth taking a look at the results.
 
-sklearn-evaluatio includes a plotting function to evaluate the performance
-of one or two hyperparameters, this way we can see how the model performs
-by changing one (or two) hyperparameter(s) and keeping the rest constant.
+sklearn-evaluatio includes a plotting function to evaluate grid search results, this way we can see how the model performs when changing one (or two)
+hyperparameter(s) by keeping the rest constant.
 
 .. ipython:: python
     :suppress:
@@ -31,7 +30,7 @@ First, let's load some data.
     X = data[0]
     y = data[1]
 
-Now, we need to define which hyperparameters sets we wan to include in the
+Now, we need to define which hyperparameter sets we wan to include in the
 grid search, we do so by defining a dictionary with hyperparameter-values pairs
 and scikit-learn will automatically generate all possible combinations. For the
 dictionary below, we can generate 16 combinations (4*2*2).

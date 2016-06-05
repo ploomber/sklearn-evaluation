@@ -4,9 +4,7 @@ Classifier evaluation using the OOP interface (report generation)
 We can also use the ClassifierEvaluator class to pack the results from our
 estimator. This way we can generate plots and tables without having to pass
 the parameters over and over again. If we are evaluating more than one model
-at a time this also gives us an organized way of doing so.
-
-Furthermore, the ClassifierEvaluator class offers a way to create HTML reports
+at a time this also gives us a way to keep it organized. Furthermore, the ClassifierEvaluator class offers a way to create HTML reports
 from our model results.
 
 .. ipython:: python
@@ -19,7 +17,7 @@ from our model results.
 
     from sklearn_evaluation import ClassifierEvaluator
 
-First, let's load some data, split for training and testing.
+First, let's load some data and split for training and testing.
 
 .. ipython:: python
 
@@ -67,7 +65,7 @@ pass a string or a path to a template.
 
 We can include any attribute in the ClassifierEvaluator by passing a tag
 with the format '{attribute}'. Two extra tags are available {date} and
-{date_utc} which adds the local and UTC generation timestamps respectively.
+{date_utc} which add local and UTC timestamps respectively.
 
 .. ipython:: python
 
@@ -83,7 +81,7 @@ with the format '{attribute}'. Two extra tags are available {date} and
     report = ce.generate_report(template)
 
 
-The function will return an HTML string containing the report (the images are
+The function will return an HTML string containing the report (images are
 included in the same file). If we want to save it, we can use the path
 parameter. Finally, if we want to apply custom CSS, we can use the style
-parameter with a path to a CSS stylesheet.
+parameter with a path to a CSS file.

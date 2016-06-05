@@ -34,7 +34,7 @@ Now, we are going to train the data using one of the scikit-learn classifiers.
     est.fit(X_train, y_train)
 
 Most of the functions require us to pass the class predictions for the test
-set (y_pred), the scores assigned (y_score) and the ground truth classes,
+set (y_pred), the scores assigned (y_score) and the ground truth classes
 (y_true), let's define such variables.
 
 .. ipython:: python
@@ -52,7 +52,7 @@ a confusion matrix.
     plot.confusion_matrix(y_true, y_pred)
 
 Some classifiers (such as Random Forest) have feature importances, we can plot
-then passing the estimator object.
+then passing the estimator object to the feature_importances function.
 
 .. ipython:: python
 
