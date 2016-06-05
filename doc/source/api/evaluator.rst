@@ -1,6 +1,4 @@
-Object Oriented Interface
+ClassifierEvaluator
 =========================
 
-.. automodule:: sklearn_evaluation.evaluator
-    :members:
-    :undoc-members:
+.. autoclass:: sklearn_evaluation.ClassifierEvaluator

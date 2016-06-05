@@ -18,13 +18,12 @@ First, let's load some data and split it in training and test set.
 
 .. ipython:: python
 
-    iris = datasets.load_iris()
-    X = iris.data
-    y = iris.target
+    data = datasets.make_classification(200, 10, 5, class_sep=0.65)
+    X = data[0]
+    y = data[1]
 
     # shuffle and split training and test sets
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
-                                                        random_state=0)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
 
 Now, we are going to train the data using one of the scikit-learn classifiers.
@@ -58,7 +57,7 @@ then passing the estimator object.
 .. ipython:: python
 
     @savefig fi.png
-    plot.feature_importances(est)
+    plot.feature_importances(est, top_n=5)
 
 A feature importances function is also available in the table module.
 

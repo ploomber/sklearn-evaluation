@@ -369,7 +369,7 @@ class EmbeddedSphinxShell(object):
         # insert relative path to image file in source
         outfile = os.path.relpath(os.path.join(savefig_dir,filename),
                     source_dir)
-
+        
         imagerows = ['.. image:: %s'%outfile]
 
         for kwarg in saveargs[2:]:

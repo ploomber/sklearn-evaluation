@@ -17,8 +17,13 @@ Table of contents
 .. toctree::
     :maxdepth: 2
 
-    user-guide
+    user_guide
     api
+
+License
+=======
+
+.. include:: ../../LICENSE
 
 Indices and tables
 ==================

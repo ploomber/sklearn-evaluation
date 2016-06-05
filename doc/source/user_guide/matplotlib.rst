@@ -11,17 +11,18 @@ Advanced usage using matplotlib
 
     import matplotlib.pyplot as plt
 
-    data = datasets.make_classification(200, 10, 5, class_sep=0.7)
+    data = datasets.make_classification(n_samples=200, n_features=10,
+                                        n_informative=5, class_sep=0.7
     X = data[0]
     y = data[1]
     # shuffle and split training and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
                                                         random_state=0)
-    est = RandomForestClassifier(n_estimators=5)
+    est = RandomForestClassifier(n_estimators=10)
     est.fit(X_train, y_train)
     y_true = y_test
     y_score = est.predict_proba(X_test)
-    est = RandomForestClassifier(n_estimators=10)
+    est = RandomForestClassifier(n_estimators=3)
     est.fit(X_train, y_train)
     y_score2 = est.predict_proba(X_test)
 

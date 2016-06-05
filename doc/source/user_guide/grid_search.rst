@@ -26,9 +26,10 @@ First, let's load some data.
 
 .. ipython:: python
 
-    iris = datasets.load_iris()
-    X = iris.data
-    y = iris.target
+    data = datasets.make_classification(n_samples=200, n_features=10,
+                                        n_informative=4, class_sep=0.5)
+    X = data[0]
+    y = data[1]
 
 Now, we need to define which hyperparameters sets we wan to include in the
 grid search, we do so by defining a dictionary with hyperparameter-values pairs
