@@ -17,7 +17,7 @@ Table of contents
 .. toctree::
     :maxdepth: 2
 
-    user_guide
+    user-guide
     api
 
 Indices and tables

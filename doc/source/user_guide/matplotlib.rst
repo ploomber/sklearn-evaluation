@@ -14,21 +14,16 @@ Advanced usage using matplotlib
     data = datasets.make_classification(200, 10, 5, class_sep=0.7)
     X = data[0]
     y = data[1]
-
     # shuffle and split training and test sets
     X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
                                                         random_state=0)
-
     est = RandomForestClassifier(n_estimators=5)
     est.fit(X_train, y_train)
-
     y_true = y_test
     y_score = est.predict_proba(X_test)
-
     est = RandomForestClassifier(n_estimators=10)
     est.fit(X_train, y_train)
     y_score2 = est.predict_proba(X_test)
-
 
 
 As we mentioned in the previous section, using the functional interface
@@ -60,6 +55,11 @@ Let's see how a ROC curve looks with the new style:
     
     @savefig roc_ggplot.png
     plot.roc(y_true, y_score)
+
+.. ipython:: python
+    :suppress:
+
+    matplotlib.style.use('classic')
 
 Saving plots
 ************
