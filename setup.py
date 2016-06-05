@@ -14,7 +14,8 @@ DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'
 setup(name='sklearn-evaluation',
       packages=find_packages(exclude=['tests']),
       version=VERSION,
-      description='Utilities for scikit-learn model evaluation',
+      description=('scikit-learn model evaluation made easy: plots, tables and'
+                   'markdown reports.'),
       url='http://github.com/edublancas/sklearn-evaluation',
       download_url=DOWNLOAD_URL,
       author='Eduardo Blancas Reyes',
