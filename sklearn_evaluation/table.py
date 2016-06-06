@@ -48,7 +48,7 @@ def feature_importances(data, top_n=None, feature_names=None):
     -------
     table
         Table object with the data. Columns are
-        feature_name, importance (std_ only included for models with
+        feature_name, importance (`std_` only included for models with
         sub-estimators)
 
     """

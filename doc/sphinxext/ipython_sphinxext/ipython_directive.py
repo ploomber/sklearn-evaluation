@@ -876,6 +876,8 @@ class IPythonDirective(Directive):
         (savefig_dir, source_dir, rgxin, rgxout, promptin, promptout,
          mplbackend, exec_lines, hold_count) = self.get_config_options()
 
+        savefig_dir = '/Users/Edu/development/open-source/sklearn-evaluation/doc/source/_static'
+
         if self.shell is None:
             # We will be here many times.  However, when the
             # EmbeddedSphinxShell is created, its interactive shell member

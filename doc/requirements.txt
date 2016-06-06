@@ -1,7 +1,14 @@
-ipython==4.0.1
+# sklearn_evaluation dependencies
 matplotlib==1.5.1
-scipy==0.17.1
+# scipy==0.17.1
 scikit-learn==0.17.1
+# to make sklearn_evaluation work
 sklearn-evaluation==0.3
 mistune==0.7.1
 tabulate==0.7.5
+# sphinx and extensions
+sphinx==1.4.3
+ipython==4.0.1
+numpydoc==0.6.0
+# theme
+sphinx-rtd-theme==0.1.9

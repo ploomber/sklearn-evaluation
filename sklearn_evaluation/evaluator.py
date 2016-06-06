@@ -15,8 +15,7 @@ class ClassifierEvaluator(object):
     Parameters
     ----------
     estimator : sklearn estimator
-        This object is only used to get feature importances via
-        model.feature_parameters_
+        Must have a ``feature_importances_`` attribute.
     y_true : array-like
         Target predicted classes (estimator predictions).
     y_pred : array-like

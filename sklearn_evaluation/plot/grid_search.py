@@ -18,7 +18,7 @@ def grid_search(grid_scores, change, subset=None, kind='line', cmap=None,
     ----------
     grid_scores : list of named tuples
         Results from a sklearn grid search (get them using the
-        grid_scores_ parameter)
+        `grid_scores_` parameter)
     change : str or iterable with len<=2
         Parameter to change
     subset : dictionary-like
