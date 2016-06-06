@@ -45,13 +45,16 @@ class ClassifierEvaluator(object):
 
     @property
     def estimator_type(self):
+        """Estimator name (e.g. RandomForestClassifier)
+        """
         return estimator_type(self.estimator)
 
     @property
     def estimator_class(self):
+        """Estimator class (e.g. sklearn.ensemble.RandomForestClassifier)
+        """
         return class_name(self.estimator)
 
-    # Properties should be read-only to ensure instance integrity
     @property
     def estimator(self):
         return self._estimator
@@ -82,30 +85,42 @@ class ClassifierEvaluator(object):
 
     @property
     def confusion_matrix(self):
+        """Confusion matrix plot
+        """
         return plot.confusion_matrix(self.y_true, self.y_pred,
                                      self.target_names, ax=_gen_ax())
 
     @property
     def roc(self):
+        """ROC plot
+        """
         return plot.roc(self.y_true, self.y_score, ax=_gen_ax())
 
     @property
     def precision_recall(self):
+        """Precision-recall plot
+        """
         return plot.precision_recall(self.y_true, self.y_score, ax=_gen_ax())
 
     @property
     def feature_importances(self):
+        """Feature importances plot
+        """
         return plot.feature_importances(self.estimator,
                                         feature_names=self.feature_names,
                                         ax=_gen_ax())
 
     @property
     def feature_importances_table(self):
+        """Feature importances table
+        """
         return table.feature_importances(self.estimator,
                                          feature_names=self.feature_names)
 
     @property
     def precision_at_proportions(self):
+        """Precision at proportions plot
+        """
         return plot.precision_at_proportions(self.y_true, self.y_score,
                                              ax=_gen_ax())
 
