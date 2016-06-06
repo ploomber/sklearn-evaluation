@@ -39,7 +39,7 @@ to change the style of the plots easily you can use one of the many styles
 available:
 
 .. ipython:: python
-    
+
     import matplotlib.style
     matplotlib.style.available
 
@@ -66,22 +66,22 @@ Saving plots
 ************
 
 .. ipython:: python
-    
+
     ax = plot.roc(y_true, y_score)
     fig = ax.get_figure()
-    fig.savefig('roc.png')
+    fig.savefig('my-roc-curve.png')
 
 .. ipython:: python
     :suppress:
 
     import os
-    os.remove('roc.png')
+    os.remove('my-roc-curve.png')
 
 Comparing several models with one plot
 **************************************
 
 .. ipython:: python
-    
+
     fig, ax = plt.subplots()
     plot.roc(y_true, y_score, ax=ax)
     plot.roc(y_true, y_score2, ax=ax)
@@ -106,7 +106,7 @@ Customizing plots
 *****************
 
 .. ipython:: python
-    
+
     ax = plot.roc(y_true, y_score)
     ax.set_title('This is a custom title')
     @savefig roc_custom.png

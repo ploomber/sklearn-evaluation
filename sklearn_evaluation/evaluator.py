@@ -21,7 +21,7 @@ class ClassifierEvaluator(object):
         Target predicted classes (estimator predictions).
     y_pred : array-like
         Correct target values (ground truth).
-     y_score : array-like
+    y_score : array-like
         Target scores (estimador predictions).
     feature_names : array-like
         Feature names.
