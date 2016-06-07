@@ -2,8 +2,6 @@ import matplotlib.pyplot as plt
 
 from .util import estimator_type, class_name
 from . import plot
-from . import table
-from .report import generate
 
 
 class ClassifierEvaluator(object):
@@ -102,6 +100,8 @@ class ClassifierEvaluator(object):
 
     @property
     def feature_importances_table(self):
+        from . import table
+
         return table.feature_importances(self.estimator,
                                          feature_names=self.feature_names)
 
@@ -138,6 +138,8 @@ class ClassifierEvaluator(object):
             Returns the contents of the report if path is None.
 
         """
+        from .report import generate
+
         return generate(self, template, path, style)
 
 
