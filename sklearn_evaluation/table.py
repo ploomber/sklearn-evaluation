@@ -8,7 +8,7 @@ __all__ = ['feature_importances']
 class Table():
     def __init__(self, content, header):
         try:
-            from tabulate import tabulate
+            self._tabulate = __import__('tabulate').tabulate
         except:
             raise ImportError('tabulate is required to use the table module')
         self.content = content
@@ -16,10 +16,12 @@ class Table():
 
     @property
     def html(self):
-        return tabulate(self.content, headers=self.header, tablefmt='html')
+        return self._tabulate(self.content, headers=self.header,
+                              tablefmt='html')
 
     def __str__(self):
-        return tabulate(self.content, headers=self.header, tablefmt='grid')
+        return self._tabulate(self.content, headers=self.header,
+                              tablefmt='grid')
 
     def _repr_html_(self):
         return self.html
