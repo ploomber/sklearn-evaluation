@@ -3,7 +3,28 @@ import matplotlib.pyplot as plt
 
 
 def learning_curve(train_scores, test_scores, train_sizes, ax=None):
+    """Plot learning curve
 
+    Plot a metric vs number of examples for the training and test set
+
+    Parameters
+    ----------
+    train_scores : array-like
+        Scores for the training set
+    test_scores : array-like
+        Scores for the test set
+    train_sizes : array-like
+        Relative or absolute numbers of training examples used to generate
+        the learning curve
+    ax : matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    """
     if ax is None:
         ax = plt.gca()
 

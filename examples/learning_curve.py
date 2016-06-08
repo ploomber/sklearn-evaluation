@@ -17,7 +17,7 @@ cv = cross_validation.ShuffleSplit(digits.data.shape[0], n_iter=100,
                                    test_size=0.2, random_state=0)
 cv = 5
 estimator = GaussianNB()
-train_sizes = train_sizes = np.linspace(.1, 1.0, 5)
+train_sizes = np.linspace(.1, 1.0, 5)
 train_sizes, train_scores, test_scores = learning_curve(
         estimator, X, y, cv=cv, n_jobs=1, train_sizes=train_sizes)
 plot.learning_curve(train_scores, test_scores, train_sizes)
@@ -28,7 +28,7 @@ cv = cross_validation.ShuffleSplit(digits.data.shape[0], n_iter=10,
                                    test_size=0.2, random_state=0)
 cv = 5
 estimator = SVC(gamma=0.001)
-train_sizes = train_sizes=np.linspace(.1, 1.0, 5)
+train_sizes = np.linspace(.1, 1.0, 5)
 train_sizes, train_scores, test_scores = learning_curve(
         estimator, X, y, cv=cv, n_jobs=1, train_sizes=train_sizes)
 

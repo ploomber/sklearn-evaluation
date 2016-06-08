@@ -25,7 +25,7 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
         Lst containing the names of the target classes. List mus be in order
         e.g. ['Label for class 0', 'Label for class 1']. If None, generic
         labels will be generated e.g. ['Class 0', 'Class 1']
-    ax: matplotlib Axes
+    ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
     normalize : bool
         Normalize the confusion matrix
