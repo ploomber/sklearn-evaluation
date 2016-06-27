@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 
 
 def learning_curve(train_scores, test_scores, train_sizes, ax=None):
-    """Plot learning curve
+    """Plot a learning curve
 
     Plot a metric vs number of examples for the training and test set
 
