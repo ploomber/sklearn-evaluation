@@ -1,0 +1,1 @@
+Images for docs will be stored here.
