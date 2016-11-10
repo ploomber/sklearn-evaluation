@@ -3,7 +3,7 @@
 Install requirements:
 
 ```
-pip install -r requirements_doc.txt
+pip install -r requirements.txt
 ```
 
 Build docs:
