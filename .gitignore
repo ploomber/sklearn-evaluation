@@ -7,8 +7,7 @@ sklearn_evaluation/tests/*.html
 # Do not include docs build folder
 docs/build/
 # Do not include examples produced using ..plot::
-docs/examples/*.png
-docs/examples/*.pdf
+docs/examples/
 
 #####=== IPythonNotebook ===#####
 # Temporary data

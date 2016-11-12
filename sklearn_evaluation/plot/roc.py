@@ -33,6 +33,10 @@ def roc(y_true, y_score, ax=None):
     ax: matplotlib Axes
         Axes containing the plot
 
+    Examples
+    --------
+    .. plot:: ../../examples/roc.py
+
     """
     if ax is None:
         ax = plt.gca()

@@ -38,6 +38,10 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
     ax: matplotlib Axes
         Axes containing the plot
 
+    Examples
+    --------
+    .. plot:: ../../examples/confusion_matrix.py
+
     """
     # calculate how many names you expect
     values = set(y_true).union(set(y_pred))
@@ -124,6 +128,10 @@ def feature_importances(data, top_n=None, feature_names=None, ax=None):
     -------
     ax: matplotlib Axes
         Axes containing the plot
+
+    Examples
+    --------
+    .. plot:: ../../examples/feature_importances.py
 
     """
     # If no feature_names is provided, assign numbers

@@ -33,6 +33,10 @@ def precision_recall(y_true, y_score, ax=None):
     ax: matplotlib Axes
         Axes containing the plot
 
+    Examples
+    --------
+    .. plot:: ../../examples/precision_recall.py
+
     """
     if ax is None:
         ax = plt.gca()
