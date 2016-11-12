@@ -12,7 +12,7 @@ Advanced usage using matplotlib
     import matplotlib.pyplot as plt
 
     data = datasets.make_classification(n_samples=200, n_features=10,
-                                        n_informative=5, class_sep=0.7
+                                        n_informative=5, class_sep=0.7)
     X = data[0]
     y = data[1]
     # shuffle and split training and test sets

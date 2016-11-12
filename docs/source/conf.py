@@ -15,24 +15,11 @@
 import sys
 import os
 
-#from mock import Mock as MagicMock
-
-
-# class Mock(MagicMock):
-#     @classmethod
-#     def __getattr__(cls, name):
-#             return Mock()
-
-#MOCK_MODULES = ['numpy', 'scipy', 'matplotlib', 'matplotlib.pyplot', 'sklearn',
-#                'sklearn.metrics', 'sklearn.preprocessing', 'tabulate',
-#                'mistune']
-#sys.modules.update((mod_name, Mock()) for mod_name in MOCK_MODULES)
-
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-#sys.path.insert(0, os.path.abspath('.'))
-#sys.path.insert(0, os.path.abspath('../sphinxext'))
+sys.path.insert(0, os.path.abspath('../sphinxext'))
+sys.path.insert(0, os.path.abspath('../..'))
 
 # -- General configuration ------------------------------------------------
 
@@ -43,12 +30,10 @@ import os
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    #'ipython_sphinxext.ipython_console_highlighting',
-    #'ipython_sphinxext.ipython_directive',
-    #'numpydoc.plot_directive',
-    'IPython.sphinxext.ipython_directive',
-    'IPython.sphinxext.ipython_console_highlighting',
+    'ipython_sphinxext.ipython_console_highlighting',
+    'ipython_sphinxext.ipython_directive',
     'sphinx.ext.autodoc',
+    'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'numpydoc',
 ]
@@ -323,3 +308,6 @@ intersphinx_mapping = {
     'sklearn': ('http://scikit-learn.org/stable', None),
     'matplotlib': ('http://matplotlib.org/', None),
 }
+
+
+numpydoc_show_class_members = False

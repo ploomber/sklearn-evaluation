@@ -16,6 +16,7 @@ def precision_recall(y_true, y_score, ax=None):
         Correct target values (ground truth).
     y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
               classification or [n_samples, n_classes] for multiclass
+
         Target scores (estimator predictions).
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
