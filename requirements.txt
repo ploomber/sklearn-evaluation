@@ -1,5 +1,4 @@
-# sklearn-evaluation + opt dependencias
-sklearn-evaluation==0.3
+# opt dependencias
 mistune==0.7.1
 tabulate==0.7.5
 

@@ -7,7 +7,6 @@ from .report import generate
 
 
 class ClassifierEvaluator(object):
-
     """
     Encapsuates results from an estimator on a testing set to provide a
     simplified API from other modules. All parameters are optional, just
