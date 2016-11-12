@@ -1,10 +1,9 @@
 import base64
-import os
 import re
 from datetime import datetime
 from functools import reduce
 
-from . import table
+from .table import Table
 
 from six import BytesIO
 import matplotlib
@@ -12,7 +11,7 @@ import matplotlib
 try:
     import mistune
 except:
-    raise ImportError('You need to install mistune to use the report module')
+    raise ImportError('You need to install mistune to generate reports')
 
 
 def generate(evaluator, template, path=None, style=None):
@@ -50,7 +49,7 @@ def generate(evaluator, template, path=None, style=None):
     for k, v in attrs.items():
         if isinstance(v, matplotlib.axes.Axes):
             attrs[k] = figure2html(v.get_figure())
-        if isinstance(v, table.Table):
+        if isinstance(v, Table):
             attrs[k] = v.html
 
     # add key-value pairs to the attrs dict from the extra_tags

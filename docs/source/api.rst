@@ -6,4 +6,4 @@ API Reference
 
     api/plot
     api/table
-    api/report
+    api/evaluator

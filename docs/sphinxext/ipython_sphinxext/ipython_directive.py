@@ -369,7 +369,7 @@ class EmbeddedSphinxShell(object):
         # insert relative path to image file in source
         outfile = os.path.relpath(os.path.join(savefig_dir,filename),
                     source_dir)
-
+        
         imagerows = ['.. image:: %s'%outfile]
 
         for kwarg in saveargs[2:]:
@@ -875,6 +875,9 @@ class IPythonDirective(Directive):
         # Get configuration values.
         (savefig_dir, source_dir, rgxin, rgxout, promptin, promptout,
          mplbackend, exec_lines, hold_count) = self.get_config_options()
+
+        if not os.path.exists(savefig_dir):
+            os.makedirs(savefig_dir)
 
         if self.shell is None:
             # We will be here many times.  However, when the

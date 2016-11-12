@@ -18,12 +18,12 @@ def grid_search(grid_scores, change, subset=None, kind='line', cmap=None,
     ----------
     grid_scores : list of named tuples
         Results from a sklearn grid search (get them using the
-        grid_scores_ parameter)
+        `grid_scores_` parameter)
     change : str or iterable with len<=2
         Parameter to change
     subset : dictionary-like
         parameter-value(s) pairs to subset from grid_scores.
-        (e.g. {'n_estimartors': [1, 10]}), if None all combinations will be
+        (e.g. ``{'n_estimartors': [1, 10]}``), if None all combinations will be
         used.
     kind : ['line', 'bar']
         This only applies whe change is a single parameter. Changes the

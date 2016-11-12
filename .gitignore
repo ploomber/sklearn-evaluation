@@ -2,6 +2,7 @@
 
 sklearn_evaluation/tests/result_images/
 sklearn_evaluation/tests/*.html
+doc/source/_static/
 
 #####=== IPythonNotebook ===#####
 # Temporary data

@@ -1,10 +1,5 @@
 from . import compute
 
-try:
-    from tabulate import tabulate
-except:
-    raise ImportError('tabulate is required to use the tables module')
-
 
 __all__ = ['feature_importances']
 
@@ -12,15 +7,21 @@ __all__ = ['feature_importances']
 # http://ipython.readthedocs.org/en/stable/config/integrating.html
 class Table():
     def __init__(self, content, header):
+        try:
+            self._tabulate = __import__('tabulate').tabulate
+        except:
+            raise ImportError('tabulate is required to use the table module')
         self.content = content
         self.header = header
 
     @property
     def html(self):
-        return tabulate(self.content, headers=self.header, tablefmt='html')
+        return self._tabulate(self.content, headers=self.header,
+                              tablefmt='html')
 
     def __str__(self):
-        return tabulate(self.content, headers=self.header, tablefmt='grid')
+        return self._tabulate(self.content, headers=self.header,
+                              tablefmt='grid')
 
     def _repr_html_(self):
         return self.html
@@ -48,8 +49,8 @@ def feature_importances(data, top_n=None, feature_names=None):
     -------
     table
         Table object with the data. Columns are
-        feature_name, importance and std_ if an sklearn model with
-        sub-estimators was passed in data.
+        feature_name, importance (`std_` only included for models with
+        sub-estimators)
 
     """
     res = compute.feature_importances(data, top_n, feature_names)

@@ -15,7 +15,8 @@ def precision_recall(y_true, y_score, ax=None):
     y_true : array-like, shape = [n_samples]
         Correct target values (ground truth).
     y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
-    classification or [n_samples, n_classes] for multiclass
+              classification or [n_samples, n_classes] for multiclass
+
         Target scores (estimator predictions).
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
@@ -23,8 +24,8 @@ def precision_recall(y_true, y_score, ax=None):
     Notes
     -----
     It is assumed that the y_score parameter columns are in order. For example,
-    if y_true = [2, 2, 1, 0, 0, 1, 2], then the first column in y_score must
-    countain the scores for class 0, second column for class 1 and so on.
+    if ``y_true = [2, 2, 1, 0, 0, 1, 2]``, then the first column in y_score
+    must countain the scores for class 0, second column for class 1 and so on.
 
 
     Returns
