@@ -28,6 +28,11 @@ def validation_curve(train_scores, test_scores, param_range, param_name=None,
     ax: matplotlib Axes
         Axes containing the plot
 
+    Examples
+    --------
+
+    .. plot:: ../../examples/validation_curve.py
+
     """
 
     if ax is None:
