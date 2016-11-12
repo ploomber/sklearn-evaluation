@@ -1,8 +1,13 @@
 #### joe made this: https://goel.io/joe
 
+# Do not include test outout
 sklearn_evaluation/tests/result_images/
 sklearn_evaluation/tests/*.html
-doc/source/_static/
+
+# Do not include docs build folder
+docs/build/
+# Do not include examples produced using ..plot::
+docs/examples/
 
 #####=== IPythonNotebook ===#####
 # Temporary data
