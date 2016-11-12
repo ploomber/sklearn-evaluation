@@ -22,7 +22,7 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
     y_pred : array-like, shape = [n_samples]
         Target predicted classes (estimator predictions).
     target_names : list
-        Lst containing the names of the target classes. List must be in order
+        List containing the names of the target classes. List must be in order
         e.g. ``['Label for class 0', 'Label for class 1']``. If ``None``,
         generic labels will be generated e.g. ``['Class 0', 'Class 1']``
     ax: matplotlib Axes
