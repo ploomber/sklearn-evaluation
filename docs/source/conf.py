@@ -52,7 +52,6 @@ extensions = [
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
     'numpydoc',
-    'plot_directive',
 ]
 
 

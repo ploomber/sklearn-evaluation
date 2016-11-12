@@ -876,7 +876,8 @@ class IPythonDirective(Directive):
         (savefig_dir, source_dir, rgxin, rgxout, promptin, promptout,
          mplbackend, exec_lines, hold_count) = self.get_config_options()
 
-        savefig_dir = '/Users/Edu/development/open-source/sklearn-evaluation/docs/source/_static'
+        if not os.path.exists(savefig_dir):
+            os.makedirs(savefig_dir)
 
         if self.shell is None:
             # We will be here many times.  However, when the
