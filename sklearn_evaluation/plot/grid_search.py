@@ -40,6 +40,11 @@ def grid_search(grid_scores, change, subset=None, kind='line', cmap=None,
     ax: matplotlib Axes
         Axes containing the plot
 
+    Examples
+    --------
+
+    .. plot:: ../../examples/grid_search.py
+
     """
     if change is None:
         raise ValueError(('change can\'t be None, you need to select at least'
