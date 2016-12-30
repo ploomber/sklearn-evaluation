@@ -9,6 +9,11 @@ docs/build/
 # Do not include examples produced using ..plot::
 docs/examples/
 
+# Do not include images generated from running tests
+result_images/
+# Also ignore the test report - should probably save this somewhere else
+tmp_report.html
+
 #####=== IPythonNotebook ===#####
 # Temporary data
 .ipynb_checkpoints/
