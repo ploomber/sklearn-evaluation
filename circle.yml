@@ -13,7 +13,7 @@ machine:
     DOC_URL: ""
 
     # The email is to be used for commits in the Github Page
-    EMAIL: ""
+    EMAIL: "eblancasreyes+ci@gmail.com"
 
 dependencies:
 
