@@ -1,6 +1,6 @@
 #sklearn-evaluation
 
-[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation) [![PyPI version](https://badge.fury.io/py/sklearn-evaluation.svg)](https://badge.fury.io/py/sklearn-evaluation)
+[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg?branch=master)](https://travis-ci.org/edublancas/sklearn-evaluation) [![PyPI version](https://badge.fury.io/py/sklearn-evaluation.svg)](https://badge.fury.io/py/sklearn-evaluation) [![Coverage Status](https://coveralls.io/repos/github/edublancas/sklearn-evaluation/badge.svg?branch=master)](https://coveralls.io/github/edublancas/sklearn-evaluation?branch=master)
 
 scikit-learn model evaluation made easy: plots, tables and markdown reports.
 
