@@ -4,4 +4,6 @@ import matplotlib
 import nose
 matplotlib.use('agg')
 
-nose.main()
+# Relevant:http://stackoverflow.com/questions/7070501/passing-options-to-nose-in-a-python-test-script
+nose.main(argv=['fake', '--with-coverage',
+                '--cover-package=sklearn_evaluation'])
