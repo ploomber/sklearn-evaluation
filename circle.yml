@@ -22,16 +22,14 @@ dependencies:
     - sudo -E apt-get -yq remove texlive-binaries --purge
     - sudo apt-get update
     - sudo apt-get install libatlas-dev libatlas3gf-base
-    - sudo apt-get install build-essential python-dev python-setuptools
+    - sudo apt-xget install build-essential python-dev python-setuptools
+    - pip install --upgrade pip
     # install numpy first as it is a compile time dependency for other packages
     - pip install --upgrade numpy
-    # - pip install --upgrade scipy matplotlib setuptools nose coverage sphinx pillow sphinx-gallery sphinx_rtd_theme
     # Installing required packages for `make -C doc check command` to work.
     - sudo -E apt-get -yq update
     - sudo -E apt-get -yq --no-install-suggests --no-install-recommends --force-yes install dvipng texlive-latex-base texlive-latex-extra
-    # - pip install --upgrade cython numpydoc
-    # - pip install --upgrade scikit-learn
-    - pip install -r requirements.txt
+    - pip install -r requirements.txt --quiet
 
   # The --user is needed to let sphinx see the source and the binaries
   # The pipefail is requested to propagate exit code
@@ -58,4 +56,4 @@ general:
   # Only build when pushing to the master branch
   branches:
     only:
-      master
+      - master
