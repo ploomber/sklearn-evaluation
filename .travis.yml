@@ -10,3 +10,4 @@ install:
 script:
   - cd $HOME/build/edublancas/sklearn-evaluation/sklearn_evaluation/tests
   - ./run_tests
+  - coveralls
