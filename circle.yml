@@ -57,5 +57,7 @@ general:
     - "~/log.txt"
   # Only build when pushing to the master branch
   branches:
-    only:
-      master
+    ignore:
+      - gh-pages
+#    only:
+#      - master
