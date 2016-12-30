@@ -35,7 +35,7 @@ dependencies:
   override:
     - python setup.py clean
     - python setup.py develop
-    - set -o pipefail && cd doc && make html 2>&1 | tee ~/log.txt
+    - set -o pipefail && cd docs && make html 2>&1 | tee ~/log.txt
 test:
   # Grep error on the documentation
   override:
