@@ -38,6 +38,10 @@ def precision_recall(y_true, y_score, ax=None):
     .. plot:: ../../examples/precision_recall.py
 
     """
+    if any((val is None for val in (y_true, y_score))):
+        raise ValueError('y_true and y_score are needed to plot '
+                         'Precision-Recall')
+
     if ax is None:
         ax = plt.gca()
 

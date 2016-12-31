@@ -43,6 +43,10 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
     .. plot:: ../../examples/confusion_matrix.py
 
     """
+    if any((val is None for val in (y_true, y_pred))):
+        raise ValueError("y_true and y_pred are needed to plot confusion "
+                         "matrix")
+
     # calculate how many names you expect
     values = set(y_true).union(set(y_pred))
     expected_len = len(values)
@@ -134,6 +138,11 @@ def feature_importances(data, top_n=None, feature_names=None, ax=None):
     .. plot:: ../../examples/feature_importances.py
 
     """
+    if data is None:
+        raise ValueError('data is needed to plot feature importances '
+                         'when plotting using the evaluator you need to pass '
+                         'an estimator ')
+
     # If no feature_names is provided, assign numbers
     res = compute.feature_importances(data, top_n, feature_names)
     # number of features returned
@@ -176,6 +185,10 @@ def precision_at_proportions(y_true, y_score, ax=None):
         Axes containing the plot
 
     """
+    if any((val is None for val in (y_true, y_score))):
+        raise ValueError('y_true and y_score are needed to plot precision at '
+                         'proportions')
+
     if ax is None:
         ax = plt.gca()
 
