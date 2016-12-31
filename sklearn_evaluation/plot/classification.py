@@ -139,8 +139,8 @@ def feature_importances(data, top_n=None, feature_names=None, ax=None):
 
     """
     if data is None:
-        raise ValueError('data is needed to plot feature importances '
-                         'when plotting using the evaluator you need to pass '
+        raise ValueError('data is needed to plot feature importances. '
+                         'When plotting using the evaluator you need to pass '
                          'an estimator ')
 
     # If no feature_names is provided, assign numbers

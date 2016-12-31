@@ -53,5 +53,10 @@ def feature_importances(data, top_n=None, feature_names=None):
         sub-estimators)
 
     """
+    if data is None:
+        raise ValueError('data is needed to tabulate feature importances. '
+                         'When plotting using the evaluator you need to pass '
+                         'an estimator ')
+
     res = compute.feature_importances(data, top_n, feature_names)
     return Table(res, res.dtype.names)
