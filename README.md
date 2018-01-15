@@ -27,9 +27,9 @@ pip install mistune
 pip install tabulate
 ```
 
-#Usage
+# Usage
 
-##`plot` module
+## `plot` module
 
 Generate evaluation plots with a single function call.
 ```python
@@ -42,7 +42,7 @@ plot.confusion_matrix(y_true, y_pred, target_names=target_names)
 
 ![confusion matrix](examples/cm.png)
 
-##`table` module
+## `table` module
 
 Generate good looking tables from your model results.
 
@@ -82,7 +82,7 @@ table.feature_importances(model)
 
 Also, running this in Jupyter will generate a pandas-like output.
 
-##Using the OOP interface
+## Using the OOP interface
 
 A simplified API is available by packing the results of your estimator in the `ClassifierEvaluator` class.
 
