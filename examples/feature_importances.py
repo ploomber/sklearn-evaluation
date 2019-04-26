@@ -1,8 +1,5 @@
 """
 Feature importances plot
-
-%load_ext autoreload
-%autoreload 2
 """
 import matplotlib.pyplot as plt
 from sklearn import datasets
@@ -18,7 +15,7 @@ model = RandomForestClassifier(n_estimators=1)
 model.fit(X_train, y_train)
 
 # plot all features
-plot.feature_importances(model)
+ax = plot.feature_importances(model)
 plt.show()
 
 # only top 5

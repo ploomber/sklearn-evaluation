@@ -3,6 +3,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
+from sklearn_evaluation.plot.matplotlib import bar
 from ..metrics import precision_at
 from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
@@ -110,7 +111,8 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def feature_importances(data, top_n=None, feature_names=None, ax=None):
+def feature_importances(data, top_n=None, feature_names=None,
+                        orientation='horizontal', ax=None):
     """
     Get and order feature importances from a scikit-learn model
     or from an array-like structure. If data is a scikit-learn model with
@@ -125,6 +127,8 @@ def feature_importances(data, top_n=None, feature_names=None, ax=None):
         Only get results for the top_n features.
     feature_names : array-like
         Feature names
+    orientation: ('horizontal', 'vertical')
+        Bar plot orientation
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
@@ -145,24 +149,10 @@ def feature_importances(data, top_n=None, feature_names=None, ax=None):
 
     # If no feature_names is provided, assign numbers
     res = compute.feature_importances(data, top_n, feature_names)
-    # number of features returned
-    n_feats = len(res)
 
-    if ax is None:
-        ax = plt.gca()
-
+    ax = bar.plot(res.importance, orientation, res.feature_name,
+                  error=None if not hasattr(res, 'std_') else res.std_)
     ax.set_title("Feature importances")
-
-    try:
-        ax.bar(range(n_feats), res.importance, yerr=res.std_, color='red',
-               align="center")
-    except:
-        ax.bar(range(n_feats), res.importance, color='red',
-               align="center")
-
-    ax.set_xticks(range(n_feats))
-    ax.set_xticklabels(res.feature_name)
-    ax.set_xlim([-1, n_feats])
     return ax
 
 
