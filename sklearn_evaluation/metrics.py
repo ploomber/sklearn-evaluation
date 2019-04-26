@@ -3,8 +3,8 @@ from sklearn.metrics import precision_score
 from . import validate
 
 
-@validate.proportion
-def precision_at(y_true, y_score, proportion, ignore_nas=False):
+@validate.argument_is_proportion('top_proportion')
+def precision_at(y_true, y_score, top_proportion, ignore_nas=False):
     '''
     Calculates precision at a given proportion.
     Only supports binary classification.
@@ -14,7 +14,7 @@ def precision_at(y_true, y_score, proportion, ignore_nas=False):
 
     # Based on the proportion, get the index to split the data
     # if value is negative, return 0
-    cutoff_index = max(int(len(y_true) * proportion) - 1, 0)
+    cutoff_index = max(int(len(y_true) * top_proportion) - 1, 0)
     # Get the cutoff value
     cutoff_value = scores_sorted[cutoff_index]
 
@@ -29,22 +29,36 @@ def precision_at(y_true, y_score, proportion, ignore_nas=False):
     return precision, cutoff_value
 
 
-@validate.proportion
-def __threshold_at(y_score, proportion):
+@validate.argument_is_proportion('top_proportion')
+def cutoff_score_at_top_proportion(y_score, top_proportion):
+    """
+    Sort scores and get the score at
+    """
     # Sort scores in descending order
     scores_sorted = np.sort(y_score)[::-1]
     # Based on the proportion, get the index to split th
     # if value is negative, return 0
-    threshold_index = max(int(len(y_score) * proportion) - 1, 0)
+    cutoff_index = max(int(len(y_score) * top_proportion) - 1, 0)
     # Get the cutoff value
-    threshold_value = scores_sorted[threshold_index]
-    return threshold_value
+    cutoff_value = scores_sorted[cutoff_index]
+    return cutoff_value
 
 
-@validate.proportion
-def __binarize_scores_at(y_score, proportion):
-    threshold_value = __threshold_at(y_score, proportion)
-    y_score_binary = np.array([int(y >= threshold_value) for y in y_score])
+@validate.argument_is_proportion('top_proportion')
+def binarize_scores_at_top_proportion(y_score, top_proportion):
+    """Binary scores grabbing the top scores
+    """
+    cutoff_score = cutoff_score_at_top_proportion(y_score, top_proportion)
+    y_score_binary = np.array([int(y >= cutoff_score) for y in y_score])
+    return y_score_binary
+
+
+@validate.argument_is_proportion('quantile')
+def binarize_scores_at_quantile(y_score, quantile):
+    """Binary scores at certain quantile
+    """
+    cutoff_score = np.quantile(y_score, quantile)
+    y_score_binary = (y_score > cutoff_score).astype(int)
     return y_score_binary
 
 
@@ -68,36 +82,36 @@ def __precision(y_true, y_pred):
     return precision
 
 
-@validate.proportion
-def tp_at(y_true, y_score, proportion):
-    y_pred = __binarize_scores_at(y_score, proportion)
+@validate.argument_is_proportion('top_proportion')
+def tp_at(y_true, y_score, top_proportion):
+    y_pred = binarize_scores_at_top_proportion(y_score, top_proportion)
     tp = (y_pred == 1) & (y_true == 1)
     return tp.sum()
 
 
-@validate.proportion
-def fp_at(y_true, y_score, proportion):
-    y_pred = __binarize_scores_at(y_score, proportion)
+@validate.argument_is_proportion('top_proportion')
+def fp_at(y_true, y_score, top_proportion):
+    y_pred = binarize_scores_at_top_proportion(y_score, top_proportion)
     fp = (y_pred == 1) & (y_true == 0)
     return fp.sum()
 
 
-@validate.proportion
-def tn_at(y_true, y_score, proportion):
-    y_pred = __binarize_scores_at(y_score, proportion)
+@validate.argument_is_proportion('top_proportion')
+def tn_at(y_true, y_score, top_proportion):
+    y_pred = binarize_scores_at_top_proportion(y_score, top_proportion)
     tn = (y_pred == 0) & (y_true == 0)
     return tn.sum()
 
 
-@validate.proportion
-def fn_at(y_true, y_score, proportion):
-    y_pred = __binarize_scores_at(y_score, proportion)
+@validate.argument_is_proportion('top_proportion')
+def fn_at(y_true, y_score, top_proportion):
+    y_pred = binarize_scores_at_top_proportion(y_score, top_proportion)
     fn = (y_pred == 0) & (y_true == 1)
     return fn.sum()
 
 
-@validate.proportion
-def labels_at(y_true, y_score, proportion, normalize=False):
+@validate.argument_is_proportion('top_proportion')
+def labels_at(y_true, y_score, top_proportion, normalize=False):
     '''
         Return the number of labels encountered in the top  X proportion
     '''
@@ -108,7 +122,7 @@ def labels_at(y_true, y_score, proportion, normalize=False):
     y_true_sorted = y_true[indexes]
 
     # Grab top x proportion of true values
-    cutoff_index = max(int(len(y_true_sorted) * proportion) - 1, 0)
+    cutoff_index = max(int(len(y_true_sorted) * top_proportion) - 1, 0)
     # add one to index to grab values including that index
     y_true_top = y_true_sorted[:cutoff_index+1]
 
