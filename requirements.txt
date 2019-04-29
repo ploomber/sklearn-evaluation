@@ -1,5 +1,5 @@
 # pkg dependencies
-matplotlib==1.5.1
+matplotlib==3.0.3
 scipy==0.17.1
 scikit-learn
 decorator==4.0.9
