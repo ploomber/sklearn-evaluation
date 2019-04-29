@@ -9,5 +9,5 @@ install:
   - "pip install -r requirements.txt"
 script:
   - cd $HOME/build/edublancas/sklearn-evaluation/sklearn_evaluation/tests
-  - ./run_tests
+  - pytest test_plot.py::test_confusion_matrix
 after_success: coveralls

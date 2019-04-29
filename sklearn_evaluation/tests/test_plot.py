@@ -1,5 +1,6 @@
 import numpy as np
-from matplotlib.testing.decorators import image_comparison
+from matplotlib.testing.decorators import image_comparison, _pytest_image_comparison
+from matplotlib import testing
 
 from sklearn_evaluation import plot
 

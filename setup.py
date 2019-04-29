@@ -28,7 +28,5 @@ setup(name='sklearn-evaluation',
           'matplotlib',
           'six',
           'decorator'
-      ],
-      test_suite='nose.collector',
-      tests_require=['nose'],  # add freezegun
+      ]
       )
