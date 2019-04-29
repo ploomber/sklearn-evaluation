@@ -6,7 +6,7 @@
 
 scikit-learn model evaluation made easy: plots, tables and markdown reports.
 
-Works with Python 2 and 3.
+Support for Python 3 only.
 
 [Documentation here.](http://edublancas.github.io/sklearn-evaluation)
 
