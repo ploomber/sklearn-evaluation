@@ -21,7 +21,8 @@ def metrics_at_thresholds(fn, y_true, y_score, n_thresholds=10, start=0.0,
     if ax is None:
         ax = plt.gca()
 
-    th, m = ThresholdBinarizer.metric_at(fn, y_true, y_score)
+    th, m = ThresholdBinarizer.metric_at(fn, y_true, y_score, n_thresholds,
+                                         start)
 
     ax.plot(th, np.array(m).T, '.--')
     ax.legend([fn_.__name__ for fn_ in fn])
