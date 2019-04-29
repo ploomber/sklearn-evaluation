@@ -8,5 +8,5 @@ install:
   - "pip install -r requirements.txt"
 script:
   - freetype-config --ftversion
-  - pytest tests/test_plot.py::test_confusion_matrix
+  - pytest
 after_success: coveralls
