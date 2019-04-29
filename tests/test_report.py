@@ -72,11 +72,11 @@ class TestReportGeneration(TestCase):
         self.empty.generate_report(template='# Title')
 
     def test_apply_custom_css(self):
-        with open('baseline_html/empty.html') as f:
+        with open('tests/baseline_html/empty.html') as f:
             expected = f.read()
 
         result = self.empty.generate_report(template='# Title\n ## Section',
-                                            style='static/simple.css')
+                                            style='tests/static/simple.css')
 
         assert expected == result
 

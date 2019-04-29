@@ -1,6 +1,6 @@
 #### joe made this: https://goel.io/joe
 
-# Do not include test outout
+# Do not include test output
 sklearn_evaluation/tests/result_images/
 sklearn_evaluation/tests/*.html
 

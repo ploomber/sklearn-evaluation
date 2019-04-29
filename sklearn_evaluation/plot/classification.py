@@ -9,8 +9,6 @@ from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
 
 
-# Confusion matrix
-# http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
                      cmap=None, ax=None):
     """
@@ -32,6 +30,10 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
         Normalize the confusion matrix
     cmap : matplotlib Colormap
         If ``None`` uses a modified version of matplotlib's OrRd colormap.
+
+    Notes
+    -----
+    http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
 
 
     Returns
@@ -65,8 +67,10 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
         target_names = ['Class {}'.format(v) for v in values]
 
     cm = sk_confusion_matrix(y_true, y_pred)
+
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
     np.set_printoptions(precision=2)
 
     if ax is None:

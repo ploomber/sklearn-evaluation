@@ -3,6 +3,10 @@ from sklearn.metrics import precision_score
 from . import validate
 
 
+def confusion_matrix(y_true, y_pred, normalize):
+    pass
+
+
 @validate.argument_is_proportion('top_proportion')
 def precision_at(y_true, y_score, top_proportion, ignore_nas=False):
     '''
