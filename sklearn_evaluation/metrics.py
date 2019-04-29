@@ -23,6 +23,10 @@ class ThresholdBinarizer:
     """
     @staticmethod
     def metric_at(fn, y_true, y_score, n_thresholds=10, start=0.0):
+        """
+        Given scores, binarize them at different thresholds, then compute
+        metrics
+        """
         if util.isiter(fn):
             (thresholds,
              Y_pred) = ThresholdBinarizer.at(y_score,
@@ -39,6 +43,8 @@ class ThresholdBinarizer:
 
     @staticmethod
     def at(y_score, n_thresholds=10, start=0.0):
+        """Binarize scores at different thresholds
+        """
         thresholds = np.linspace(start, 1.0, n_thresholds)
         Y_score = np.tile(y_score, (n_thresholds, 1))
         Y_pred = (Y_score >= thresholds[:, np.newaxis]).astype(int)
