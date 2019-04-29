@@ -6,40 +6,41 @@ from . import validate
 from . import util
 
 
-class Scorer:
+class ThresholdBinarizer:
     """
 
     Examples
     --------
+    >>> from sklearn_evaluation.metrics import ThresholdBinarizer
     >>> from sklearn.metrics import accuracy_score
     >>> from sklearn.metrics import precision_score, recall_score, f1_score
     >>> import numpy as np
     >>> y_true = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
     >>> y_score = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
-    >>> Scorer.metric_at_n_thresholds(accuracy_score, y_true, y_score)
-    >>> Scorer.metric_at_n_thresholds([precision_score, recall_score,
-    >>>                                f1_score], y_true, y_score)
+    >>> ThresholdBinarizer.metric_at(accuracy_score, y_true, y_score)
+    >>> ThresholdBinarizer.metric_at([precision_score, recall_score,
+    >>>                               f1_score], y_true, y_score)
     """
     @staticmethod
-    def metric_at_n_thresholds(fn, y_true, y_score, n_thresold=10, start=0.0):
+    def metric_at(fn, y_true, y_score, n_thresholds=10, start=0.0):
         if util.isiter(fn):
             (thresholds,
-             Y_pred) = Scorer.binarize_at_n_thresholds(y_score,
-                                                       n_thresold=n_thresold)
+             Y_pred) = ThresholdBinarizer.at(y_score,
+                                             n_thresholds=n_thresholds)
             metrics = [np.array([fn_(y_true, y_pred) for y_pred in Y_pred])
                        for fn_ in fn]
             return thresholds, metrics
         else:
             (thresholds,
-             Y_pred) = Scorer.binarize_at_n_thresholds(y_score,
-                                                       n_thresold=n_thresold)
+             Y_pred) = ThresholdBinarizer.at(y_score,
+                                             n_thresholds=n_thresholds)
             metrics = np.array([fn(y_true, y_pred) for y_pred in Y_pred])
             return thresholds, metrics
 
     @staticmethod
-    def binarize_at_n_thresholds(y_score, n_thresold=10, start=0.0):
-        thresholds = np.linspace(start, 1.0, n_thresold)
-        Y_score = np.tile(y_score, (n_thresold, 1))
+    def at(y_score, n_thresholds=10, start=0.0):
+        thresholds = np.linspace(start, 1.0, n_thresholds)
+        Y_score = np.tile(y_score, (n_thresholds, 1))
         Y_pred = (Y_score >= thresholds[:, np.newaxis]).astype(int)
         return thresholds, Y_pred
 
