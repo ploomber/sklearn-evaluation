@@ -11,13 +11,13 @@ from sklearn_evaluation.util import _grid_scores_from_dicts
 # criterion': ['gini', 'entropy']
 # max_features': ['sqrt', 'log2']
 
-with open('static/sample_scores.json') as f:
+with open('tests/static/sample_scores.json') as f:
     grid_scores = _grid_scores_from_dicts(json.loads(f.read()))
 
-with open('static/sample_scores_2_params.json') as f:
+with open('tests/static/sample_scores_2_params.json') as f:
     grid_scores_2_params = _grid_scores_from_dicts(json.loads(f.read()))
 
-with open('static/sample_scores_4_params.json') as f:
+with open('tests/static/sample_scores_4_params.json') as f:
     grid_scores_4_params = _grid_scores_from_dicts(json.loads(f.read()))
 
 # plot tests

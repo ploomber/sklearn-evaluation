@@ -14,6 +14,8 @@ result_images/
 # Also ignore the test report - should probably save this somewhere else
 tmp_report.html
 
+.pytest_cache/
+
 #####=== IPythonNotebook ===#####
 # Temporary data
 .ipynb_checkpoints/
