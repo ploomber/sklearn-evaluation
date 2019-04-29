@@ -1,6 +1,47 @@
+# from collections import OrderedDict
+
 import numpy as np
 from sklearn.metrics import precision_score
 from . import validate
+from . import util
+
+
+class Scorer:
+    """
+
+    Examples
+    --------
+    >>> from sklearn.metrics import accuracy_score
+    >>> from sklearn.metrics import precision_score, recall_score, f1_score
+    >>> import numpy as np
+    >>> y_true = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
+    >>> y_score = np.array([1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
+    >>> Scorer.metric_at_n_thresholds(accuracy_score, y_true, y_score)
+    >>> Scorer.metric_at_n_thresholds([precision_score, recall_score,
+    >>>                                f1_score], y_true, y_score)
+    """
+    @staticmethod
+    def metric_at_n_thresholds(fn, y_true, y_score, n_thresold=10, start=0.0):
+        if util.isiter(fn):
+            (thresholds,
+             Y_pred) = Scorer.binarize_at_n_thresholds(y_score,
+                                                       n_thresold=n_thresold)
+            metrics = [np.array([fn_(y_true, y_pred) for y_pred in Y_pred])
+                       for fn_ in fn]
+            return thresholds, metrics
+        else:
+            (thresholds,
+             Y_pred) = Scorer.binarize_at_n_thresholds(y_score,
+                                                       n_thresold=n_thresold)
+            metrics = np.array([fn(y_true, y_pred) for y_pred in Y_pred])
+            return thresholds, metrics
+
+    @staticmethod
+    def binarize_at_n_thresholds(y_score, n_thresold=10, start=0.0):
+        thresholds = np.linspace(start, 1.0, n_thresold)
+        Y_score = np.tile(y_score, (n_thresold, 1))
+        Y_pred = (Y_score >= thresholds[:, np.newaxis]).astype(int)
+        return thresholds, Y_pred
 
 
 def confusion_matrix(y_true, y_pred, normalize):
@@ -50,10 +91,10 @@ def cutoff_score_at_top_proportion(y_score, top_proportion):
 
 @validate.argument_is_proportion('top_proportion')
 def binarize_scores_at_top_proportion(y_score, top_proportion):
-    """Binary scores grabbing the top scores
+    """Binary scores by sorting them and grabbing a proportion from the top
     """
     cutoff_score = cutoff_score_at_top_proportion(y_score, top_proportion)
-    y_score_binary = np.array([int(y >= cutoff_score) for y in y_score])
+    y_score_binary = np.array(y_score > cutoff_score).astype(int)
     return y_score_binary
 
 

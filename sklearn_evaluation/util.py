@@ -7,6 +7,15 @@ from six import string_types
 import numpy as np
 
 
+def isiter(obj):
+    try:
+        iter(obj)
+    except TypeError:
+        return False
+    else:
+        return True
+
+
 def estimator_type(model):
     s = str(type(model))
     model_name = re.search(".*'(.+?)'.*", s).group(1).split(".")[-1]
