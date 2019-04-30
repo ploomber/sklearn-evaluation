@@ -1,15 +1,13 @@
 import numpy as np
-import matplotlib.pyplot as plt
 from sklearn_evaluation.metrics import compute_at_thresholds
+from sklearn_evaluation.plot.util import set_default_ax
 
 
+@set_default_ax
 def metrics_at_thresholds(fn, y_true, y_score, n_thresholds=10, start=0.0,
                           ax=None):
     """Plot metrics at increasing thresholds
     """
-    if ax is None:
-        ax = plt.gca()
-
     th, m = compute_at_thresholds(fn, y_true, y_score, n_thresholds,
                                   start)
 

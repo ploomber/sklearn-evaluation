@@ -1,3 +1,6 @@
+from copy import copy
+import inspect
+from inspect import signature, _empty
 import re
 import collections
 from collections import defaultdict, namedtuple
@@ -147,3 +150,55 @@ def _grid_scores_from_dicts(grid_scores):
     # now convert them to named tuples
     grid_scores = [_dict2named_tuple(d) for d in grid_scores]
     return grid_scores
+
+
+def map_parameters_in_fn_call(args, kwargs, func):
+    """
+    Based on function signature, parse args to to convert them to key-value
+    pairs and merge them with kwargs
+    Any parameter found in args that does not match the function signature
+    is still passed.
+    Missing parameters are filled with their default values
+    """
+    # Get missing parameters in kwargs to look for them in args
+    args_spec = inspect.getargspec(func).args
+    params_all = set(args_spec)
+    params_missing = params_all - set(kwargs.keys())
+
+    # Remove self parameter from params missing since it's not used
+    if 'self' in args_spec:
+        params_missing.remove('self')
+        offset = 1
+    else:
+        offset = 0
+
+    # Get indexes for those args
+    idxs = [args_spec.index(name) for name in params_missing]
+
+    # Parse args
+    args_parsed = dict()
+
+    for idx in idxs:
+        key = args_spec[idx]
+
+        try:
+            value = args[idx-offset]
+        except IndexError:
+            pass
+        else:
+            args_parsed[key] = value
+
+    parsed = copy(kwargs)
+    parsed.update(args_parsed)
+
+    # fill default values
+    default = {k: v.default for k, v
+               in signature(func).parameters.items()
+               if v.default != _empty}
+
+    to_add = set(default.keys()) - set(parsed.keys())
+
+    default_to_add = {k: v for k, v in default.items() if k in to_add}
+    parsed.update(default_to_add)
+
+    return parsed
