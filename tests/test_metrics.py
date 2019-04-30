@@ -2,72 +2,8 @@ from unittest import TestCase
 from sklearn_evaluation.metrics import (precision_at, labels_at,
                                         tp_at, fp_at)
 
-from sklearn_evaluation.metrics import cutoff_score_at_top_proportion
-from sklearn_evaluation.metrics import binarize_scores_at_top_proportion
-
 import numpy as np
 from numpy import nan
-from random import shuffle
-
-
-class Test_threshold_at(TestCase):
-
-    def setUp(self):
-        self.scores = np.array(
-            [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
-        shuffle(self.scores)
-
-    def test_at_10(self):
-        threshold = cutoff_score_at_top_proportion(self.scores, 0.1)
-        self.assertEqual(threshold, 1.0)
-
-    def test_at_50(self):
-        threshold = cutoff_score_at_top_proportion(self.scores, 0.5)
-        self.assertEqual(threshold, 0.6)
-
-    def test_at_100(self):
-        threshold = cutoff_score_at_top_proportion(self.scores, 1.0)
-        self.assertEqual(threshold, 0.1)
-
-    def test_proportion_less_than_zero(self):
-        self.assertRaises(ValueError, cutoff_score_at_top_proportion,
-                          self.scores, -0.1)
-
-    def test_proportion_more_than_one(self):
-        self.assertRaises(
-            ValueError, cutoff_score_at_top_proportion, self.scores,
-            top_proportion=1.1)
-
-
-class Test_binarize_scores_at_top_proportion(TestCase):
-
-    def setUp(self):
-        self.scores = np.array(
-            [1.0, 0.9, 0.8, 0.7, 0.6, 0.5, 0.4, 0.3, 0.2, 0.1])
-
-    def test_at_10(self):
-        binary_scores = binarize_scores_at_top_proportion(self.scores, 0.1)
-        expected = np.array([1, 0, 0, 0, 0, 0, 0, 0, 0, 0])
-        np.testing.assert_equal(binary_scores, expected)
-
-    def test_at_50(self):
-        binary_scores = binarize_scores_at_top_proportion(self.scores, 0.5)
-        expected = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
-        np.testing.assert_equal(binary_scores, expected)
-
-    def test_at_100(self):
-        binary_scores = binarize_scores_at_top_proportion(self.scores, 1.0)
-        expected = np.array([1, 1, 1, 1, 1, 1, 1, 1, 1, 1])
-        np.testing.assert_equal(binary_scores, expected)
-
-    def test_proportion_less_than_zero(self):
-        self.assertRaises(ValueError, binarize_scores_at_top_proportion,
-                          self.scores, -0.1)
-
-    def test_proportion_more_than_one(self):
-        self.assertRaises(
-            ValueError, binarize_scores_at_top_proportion, self.scores,
-            top_proportion=1.1)
 
 
 class Test_precision_at(TestCase):
