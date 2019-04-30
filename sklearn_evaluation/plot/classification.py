@@ -1,4 +1,6 @@
-"""Plotting functions."""
+"""
+Plotting functions for classifier models
+"""
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix

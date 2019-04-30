@@ -1,3 +1,6 @@
+"""
+Functions for visualizing grid search results
+"""
 from functools import reduce
 from operator import itemgetter
 
