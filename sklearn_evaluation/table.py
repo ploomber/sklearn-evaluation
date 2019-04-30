@@ -26,6 +26,9 @@ class Table():
     def _repr_html_(self):
         return self.html
 
+    def __repr__(self):
+        return str(self)
+
 
 def feature_importances(data, top_n=None, feature_names=None):
     """
