@@ -101,7 +101,7 @@ def binarize_scores_at_top_proportion(y_score, top_proportion):
     """Binary scores by sorting them and grabbing a proportion from the top
     """
     cutoff_score = cutoff_score_at_top_proportion(y_score, top_proportion)
-    y_score_binary = np.array(y_score > cutoff_score).astype(int)
+    y_score_binary = np.array(y_score >= cutoff_score).astype(int)
     return y_score_binary
 
 
@@ -110,7 +110,7 @@ def binarize_scores_at_quantile(y_score, quantile):
     """Binary scores at certain quantile
     """
     cutoff_score = np.quantile(y_score, quantile)
-    y_score_binary = (y_score > cutoff_score).astype(int)
+    y_score_binary = (y_score >= cutoff_score).astype(int)
     return y_score_binary
 
 
