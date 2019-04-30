@@ -165,9 +165,7 @@ def map_parameters_in_fn_call(args, kwargs, func):
     params_all = set(args_spec)
     params_missing = params_all - set(kwargs.keys())
 
-    # Remove self parameter from params missing since it's not used
     if 'self' in args_spec:
-        params_missing.remove('self')
         offset = 1
     else:
         offset = 0

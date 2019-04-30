@@ -122,4 +122,12 @@ def parse_tags(s):
 
 
 def getattr_from_list(obj, attr_names):
-    return {attr: getattr(obj, attr) for attr in attr_names}
+    def _get(obj, attr):
+        attr = getattr(obj, attr)
+
+        if callable(attr):
+            attr = attr()
+
+        return attr
+
+    return {attr: _get(obj, attr) for attr in attr_names}

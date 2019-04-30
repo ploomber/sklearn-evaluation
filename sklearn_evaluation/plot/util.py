@@ -16,3 +16,24 @@ def set_default_ax(func, *args, **kwargs):
         params['ax'] = plt.gca()
 
     return func(**params)
+
+
+def requires_properties(properties):
+
+    @decorator
+    def _requires_properties(func, *args, **kwargs):
+        params = util.map_parameters_in_fn_call(args, kwargs, func)
+        obj = params.get('self')
+
+        if obj is None:
+            raise Exception('This decorator only works on instance methods')
+
+        missing = [p for p in properties if getattr(obj, p) is None]
+
+        if len(missing):
+            raise ValueError('{} requires {} to be set, missing: {}'
+                             .format(func.__name__, properties, missing))
+
+        return func(*args, **kwargs)
+
+    return _requires_properties
