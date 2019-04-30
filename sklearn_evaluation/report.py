@@ -14,6 +14,47 @@ except:
     raise ImportError('You need to install mistune to generate reports')
 
 
+class EvaluatorSerializer:
+    """Serializes elements in an evaluator to an appropriate format
+    """
+    def __init__(self, evaluator):
+        self.evaluator = evaluator
+
+    def __getattr__(self, key):
+        attr = getattr(self.evaluator, key)
+
+        if callable(attr):
+            attr = attr()
+
+        # serialize
+        return attr
+
+
+class ClassifierReport:
+
+    def __init__(self, evaluator, template=None, style=None, env=None):
+        # FIXME: support for many evaluators, maybe event support
+        # dict like parameter
+        self.evaluator = evaluator
+
+        # here doing train returns the EvaluatorSerializer, not the
+        # Classifierevaluator
+        template = """
+
+        # Report on the training set
+        {{train.confusion_matrix()}}
+
+        # Report on the tesing set
+        {{test.confusion_matrix()}}
+        """
+
+    def render(self, embed_plots=True):
+        pass
+
+    def save(path):
+        pass
+
+
 def generate(evaluator, template, path=None, style=None):
     # extra tags that can also be used in the report but are not evaluator
     # attributes
