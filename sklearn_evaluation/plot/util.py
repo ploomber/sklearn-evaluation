@@ -10,7 +10,7 @@ def set_default_ax(func, *args, **kwargs):
     params = util.map_parameters_in_fn_call(args, kwargs, func)
 
     if 'ax' not in params:
-        raise Exception(f'ax is not a parameter in {func}')
+        raise Exception('ax is not a parameter in {}'.format(func))
 
     if params['ax'] is None:
         params['ax'] = plt.gca()
