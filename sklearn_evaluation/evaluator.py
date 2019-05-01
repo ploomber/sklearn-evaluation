@@ -167,7 +167,7 @@ class ClassifierEvaluator(object):
             Returns the contents of the report if path is None.
 
         """
-        from .report import generate
+        from .report.report import generate
 
         return generate(self, template, path, style)
 

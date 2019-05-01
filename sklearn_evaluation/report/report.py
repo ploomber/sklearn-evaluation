@@ -14,22 +14,6 @@ except:
     raise ImportError('You need to install mistune to generate reports')
 
 
-class EvaluatorSerializer:
-    """Serializes elements in an evaluator to an appropriate format
-    """
-    def __init__(self, evaluator):
-        self.evaluator = evaluator
-
-    def __getattr__(self, key):
-        attr = getattr(self.evaluator, key)
-
-        if callable(attr):
-            attr = attr()
-
-        # serialize
-        return attr
-
-
 class ClassifierReport:
 
     def __init__(self, evaluator, template=None, style=None, env=None):

@@ -6,7 +6,7 @@ from sklearn.model_selection import train_test_split
 
 from sklearn_evaluation import ClassifierEvaluator
 
-from sklearn_evaluation.report import parse_tags
+from sklearn_evaluation.report.report import parse_tags
 
 
 class TestTagParsing(TestCase):
