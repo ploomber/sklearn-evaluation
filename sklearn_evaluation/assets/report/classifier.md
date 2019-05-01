@@ -1,3 +1,5 @@
+<style type="text/css">
+
 body {
   font-family: Helvetica, arial, sans-serif;
   font-size: 14px;
@@ -295,3 +297,25 @@ sup {
         word-wrap: break-word;
     }
 }
+
+</style>
+
+# Classifier report
+
+{{e.estimator_type}}
+
+{{e.estimator_class}}
+
+{{e.feature_names}}
+
+
+{{e.confusion_matrix()}}
+
+{{e.roc()}}
+
+{{e.precision_recall()}}
+
+{{e.feature_importances()}}
+
+{{e.feature_importances_table()}}
+

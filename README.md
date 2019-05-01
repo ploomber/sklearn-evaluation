@@ -103,17 +103,7 @@ ce.confusion_matrix
 Generate reports using Markdown templates.
 
 ```python
- 
- template = '''
-            # Report
-            {estimator_type}
-            {date}
-            {confusion_matrix}
-            {roc}
-            {precision_recall}
-            '''
-
-ce.generate_report(template, path='report.html')
+ce.generate_report()
 ```
 
 

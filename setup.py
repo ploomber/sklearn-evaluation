@@ -23,10 +23,12 @@ setup(name='sklearn-evaluation',
       license='MIT',
       keywords=['datascience', 'machinelearning'],
       classifiers=[],
+      include_package_data=True,
       install_requires=[
           'scikit-learn',
           'matplotlib',
           'six',
-          'decorator'
+          'decorator',
+          'jinja2'
       ]
       )

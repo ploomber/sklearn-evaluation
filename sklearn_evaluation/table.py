@@ -14,8 +14,7 @@ class Table():
         self.content = content
         self.header = header
 
-    @property
-    def html(self):
+    def to_html(self):
         return self._tabulate(self.content, headers=self.header,
                               tablefmt='html')
 
@@ -24,7 +23,7 @@ class Table():
                               tablefmt='grid')
 
     def _repr_html_(self):
-        return self.html
+        return self.to_html()
 
     def __repr__(self):
         return str(self)

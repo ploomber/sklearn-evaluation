@@ -1,6 +1,8 @@
 import matplotlib.pyplot as plt
 
 from sklearn_evaluation.plot.util import requires_properties
+from sklearn_evaluation.report.serialize import EvaluatorHTMLSerializer
+from sklearn_evaluation.report.report import Report
 from .util import estimator_type, class_name
 from . import plot
 
@@ -29,6 +31,7 @@ class ClassifierEvaluator(object):
         Identifier for the model. This can be later used to idenfity the
         estimator when generaing reports.
     """
+    TEMPLATE_NAME = 'classifier.md'
 
     def __init__(self, estimator=None, y_true=None, y_pred=None, y_score=None,
                  feature_names=None, target_names=None, estimator_name=None,
@@ -139,23 +142,30 @@ class ClassifierEvaluator(object):
         return plot.precision_at_proportions(self.y_true, self.y_score,
                                              ax=_gen_ax())
 
-    def generate_report(self, template, path=None, style=None):
+    def html_serializable(self):
+        """
+        Returns a EvaluatorHTMLSerializer instance, which is an object with the
+        same methods and properties than a ClassifierEvaluator, but it returns
+        HTML serialized versions of each
+        (i.e. evaluator.feature_importances_table() returns a string with the
+        table in HTML format, evaluator.confusion_matrix() returns a HTML image
+        element with the image content encoded in base64), useful for
+        generating reports using some template system
+        """
+        return EvaluatorHTMLSerializer(self)
+
+    def generate_report(self, template=None):
         """
          Generate HTML report
 
         Parameters
         ----------
-        template : markdown-formatted string or path to the template
-            file used for rendering the report. Any attribute of this
-            object can be included in the report using the {tag} format.
-            e.g.'# Report{estimator_name}{roc}{precision_recall}'.
-            Apart from every attribute, you can also use {date} and {date_utc}
-            tags to include the date for the report generation using local
-            and UTC timezones repectively.
-
-        path : str
-            Path to save the HTML report. If None, the function will return
-            the HTML code.
+        template: str, or pathlib.Path, optional
+            HTML or Markdown template with jinja2 format. If a pathlib.Path
+            object is passed, the content of the file is read. within the
+            template, the evaluator is passed as "e", so you can use things
+            like {{e.confusion_matrix()}} or any other attribute/method. If
+            None, a default template is used
 
         style: str
             Path to a css file to apply style to the report. If None, no
@@ -167,9 +177,7 @@ class ClassifierEvaluator(object):
             Returns the contents of the report if path is None.
 
         """
-        from .report.report import generate
-
-        return generate(self, template, path, style)
+        return Report(self.html_serializable(), template)
 
 
 def _gen_ax():
