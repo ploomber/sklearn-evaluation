@@ -1,7 +1,9 @@
 # testing
 tox==3.9.0
 pytest==3.6
-pytest-cov==2.6.1
+# disabling because of dependency issue with pytest 3.6, need to pin this
+# version because pytest 4 breaks matplotlib image comparison tests
+# pytest-cov==2.6.1
 
 # for coveralls.io
 coveralls==1.1
