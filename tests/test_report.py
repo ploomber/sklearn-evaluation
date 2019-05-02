@@ -31,4 +31,4 @@ class TestReportGeneration(TestCase):
                                            estimator_name=model_name)
 
     def test_can_create_report(self):
-        self.results.generate_report()
+        self.results.make_report()

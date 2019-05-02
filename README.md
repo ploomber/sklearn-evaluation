@@ -103,7 +103,7 @@ ce.confusion_matrix
 Generate reports using Markdown templates.
 
 ```python
-ce.generate_report()
+ce.make_report()
 ```
 
 

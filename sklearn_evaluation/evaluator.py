@@ -154,9 +154,9 @@ class ClassifierEvaluator(object):
         """
         return EvaluatorHTMLSerializer(self)
 
-    def generate_report(self, template=None):
+    def make_report(self, template=None):
         """
-         Generate HTML report
+        Make HTML report
 
         Parameters
         ----------
@@ -173,7 +173,7 @@ class ClassifierEvaluator(object):
 
         Returns
         -------
-        report: str
+        Report
             Returns the contents of the report if path is None.
 
         """
