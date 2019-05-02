@@ -1,6 +1,7 @@
 """
 Functions for visualizing grid search results
 """
+import collections
 from functools import reduce
 from operator import itemgetter
 
@@ -12,16 +13,16 @@ from ..util import (_group_by, _get_params_value, _mapping_to_tuple_pairs,
                     default_heatmap, _sorted_map_iter, _flatten_list)
 
 
-def grid_search(grid_scores, change, subset=None, kind='line', cmap=None,
+def grid_search(cv_results_, change, subset=None, kind='line', cmap=None,
                 ax=None):
     """
     Plot results from a sklearn grid search by changing two parameters at most.
 
     Parameters
     ----------
-    grid_scores : list of named tuples
+    cv_results_ : list of named tuples
         Results from a sklearn grid search (get them using the
-        `grid_scores_` parameter)
+        `cv_results_` parameter)
     change : str or iterable with len<=2
         Parameter to change
     subset : dictionary-like
@@ -58,6 +59,19 @@ def grid_search(grid_scores, change, subset=None, kind='line', cmap=None,
 
     if cmap is None:
         cmap = default_heatmap()
+
+    # FIXME: convert cv_results_ to the old list of namedtuples format so
+    # this still works on sklearn >= 0.20. I need to refactor the code
+    # so it works with the new format
+    gs = collections.namedtuple('grid_scores_', ['parameters',
+                                                 'mean_validation_score',
+                                                 'std_test_score'])
+
+    grid_scores = [gs(p, m, s)
+                   for p, m, s in zip(cv_results_['params'],
+                                      cv_results_[
+                       'mean_test_score'],
+        cv_results_['std_test_score'])]
 
     if isinstance(change, string_types) or len(change) == 1:
         return _grid_search_single(grid_scores, change, subset, kind, ax)
@@ -115,7 +129,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
         # also calculate the std
         x = [element.parameters[change] for element in group]
         y = [element.mean_validation_score for element in group]
-        stds = [element.cv_validation_scores.std() for element in group]
+        stds = [element.std_test_score for element in group]
 
         # take (param, value) and convert them to 'param: value'
         label = ['{}: {}'.format(*t) for t in params_kv]

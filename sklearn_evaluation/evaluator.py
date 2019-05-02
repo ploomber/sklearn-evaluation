@@ -162,7 +162,7 @@ class ClassifierEvaluator(object):
         ----------
         template: str, or pathlib.Path, optional
             HTML or Markdown template with jinja2 format. If a pathlib.Path
-            object is passed, the content of the file is read. within the
+            object is passed, the content of the file is read. Within the
             template, the evaluator is passed as "e", so you can use things
             like {{e.confusion_matrix()}} or any other attribute/method. If
             None, a default template is used

@@ -21,41 +21,39 @@ clf = GridSearchCV(est, parameters, cv=5)
 X, y = datasets.make_classification(1000, 10, 5, class_sep=0.7)
 clf.fit(X, y)
 
-grid_scores = clf.cv_results_
-
 # changing numeric parameter without any restrictions
 # in the rest of the parameter set
-to_vary = 'n_estimators'
-grid_search(clf.cv_results_, to_vary)
-plt.show()
-# you can also use bars
-grid_search(clf.cv_results_, to_vary, kind='bar')
+grid_search(clf.cv_results_, change='n_estimators')
 plt.show()
 
-# changing a categorical variable
-# without any constraints
-to_vary = 'criterion'
-grid_search(clf.cv_results_, to_vary)
+# you can also use bars
+grid_search(clf.cv_results_, change='n_estimators', kind='bar')
 plt.show()
+
+# changing a categorical variable without any constraints
+grid_search(clf.cv_results_, change='criterion')
+plt.show()
+
 # bar
-grid_search(clf.cv_results_, to_vary, kind='bar')
+grid_search(clf.cv_results_, change='criterion', kind='bar')
 plt.show()
 
 
 # varying a numerical parameter but constraining
 # the rest of the parameter set
-to_vary = 'n_estimators'
-to_keep = {'max_features': 'sqrt', 'criterion': 'gini'}
-grid_search(clf.cv_results_, to_vary, to_keep, kind='bar')
+grid_search(clf.cv_results_, change='n_estimators',
+            subset={'max_features': 'sqrt', 'criterion': 'gini'},
+            kind='bar')
 plt.show()
+
 # same as above but letting max_features to have two values
-to_keep = {'max_features': ['sqrt', 'log2'], 'criterion': 'gini'}
-grid_search(clf.cv_results_, to_vary, to_keep, kind='bar')
+grid_search(clf.cv_results_, change='n_estimators',
+            subset={'max_features': ['sqrt', 'log2'], 'criterion': 'gini'},
+            kind='bar')
 plt.show()
 
 # varying two parameters - you can only show this as a
 # matrix so the kind parameter will be ignored
-to_vary = ('n_estimators', 'criterion')
-to_keep = {'max_features': 'sqrt'}
-grid_search(clf.cv_results_, to_vary, to_keep)
+grid_search(clf.cv_results_, change=('n_estimators', 'criterion'),
+            subset={'max_features': 'sqrt'})
 plt.show()
