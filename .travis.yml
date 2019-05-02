@@ -1,23 +1,21 @@
+# python versions available:
+# https://docs.travis-ci.com/user/languages/python/#specifying-python-versions 
+
 language: python
-python:
-  - "3.5"
 sudo: required
 install:
   - pip install tox
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
 matrix:
   include:
-    - python: 3.4.10
+    - python: 3.4
       env:
-       - PY=py3410
-    - python: 3.5.7
+       - PY=py34
+    - python: 3.5
       env:
         - PY=py357
-    - python: 3.6.8
+    - python: 3.6
       env:
-        - PY=py368
-    - python: 3.7.3
-      env:
-        - PY=py373
+        - PY=py36
 
 script: tox -e $PY
