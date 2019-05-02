@@ -27,8 +27,9 @@ setup(name='sklearn-evaluation',
       install_requires=[
           'scikit-learn',
           'matplotlib',
-          'six',
           'decorator',
-          'jinja2'
+          'jinja2',
+          'tabulate',
+          'mistune',
       ]
       )
