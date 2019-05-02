@@ -6,6 +6,7 @@ install:
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
   - "pip install --upgrade pip"
   - "pip install -r requirements.txt"
+  - "pip install ."
 script:
   # freetype version must match for image comparison to work without issues
   # matplotlib 3.0.3 was built using freetype 2.6.1, travis has a lower version
