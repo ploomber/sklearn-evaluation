@@ -15,4 +15,7 @@ matrix:
       env:
         - PY=py36
 
-script: tox -e $PY
+script:
+  - tox -e $PY
+  # build docs so we can detect build errors
+  - cd docs && make html
