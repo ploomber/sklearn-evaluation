@@ -3,17 +3,18 @@ python:
   - "3.5"
 sudo: required
 install:
+  - pip install tox
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
-  - "pip install --upgrade pip"
-  - "pip install -r requirements.txt"
-  - "pip install ."
-script:
-  # freetype version must match for image comparison to work without issues
-  # matplotlib 3.0.3 was built using freetype 2.6.1, travis has a lower version
-  # but still works
-  - freetype-config --ftversion
-  # test doc building
-  - cd docs && make html  && cd ..
-  # run tests
-  - pytest
-after_success: coveralls
+matrix:
+  include:
+    - python: 2.4
+      env:
+       - PY=py34
+    - python: 3.5
+      env:
+        - PY=py35
+    - python: 3.6
+      env:
+        - PY=py36
+
+script: tox -e $TOX_ENV
