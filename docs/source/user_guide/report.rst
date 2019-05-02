@@ -59,29 +59,17 @@ ClassifierEvaluator object, let's see how to plot a confusion matrix.
     @savefig cm_2.png
     ce.confusion_matrix
 
-We can also generate HTML reports from our models by using the generate_report
-function. The first parameter is a markdown template, we can either directly
-pass a string or a path to a template.
-
-We can include any attribute in the ClassifierEvaluator by passing a tag
-with the format ``{attribute}``. Two extra tags are available ``{date}`` and
-``{date_utc}`` which add local and UTC timestamps respectively.
+We can also generate HTML reports from our models by using the make_report
+function. The first parameter is a HTML or Markdown template with jinja2
+format. If a pathlib.Path object is passed, the content of the file is read. Within the template, the evaluator is passed as "e", so you can use things
+like {{e.confusion_matrix()}} or any other attribute/method. If
+None, a default template is used
 
 .. ipython:: python
 
-    template = '''
-                # Report
-                {estimator_type}
-                {date}
-                {confusion_matrix}
-                {roc}
-                {precision_recall}
-               '''
-
-    report = ce.generate_report(template)
+    report = ce.make_report()
 
 
-The function will return an HTML string containing the report (images are
-included in the same file). If we want to save it, we can use the path
-parameter. Finally, if we want to apply custom CSS, we can use the style
-parameter with a path to a CSS file.
+The function returns a Report object, which will automatically render in
+a Jupyter notebook, `report.save('/path/to/report.html')` will save the report
+and `report.rendered` will return a string with the HTML report.

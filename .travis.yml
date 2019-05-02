@@ -13,5 +13,6 @@ script:
   - freetype-config --ftversion
   # test doc building
   - cd docs && make html  && cd ..
+  # run tests
   - pytest
 after_success: coveralls
