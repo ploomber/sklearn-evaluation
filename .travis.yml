@@ -18,4 +18,7 @@ matrix:
 script:
   - tox -e $PY
   # build docs so we can detect build errors
-  - cd docs && make html
+  # - cd docs && make html
+
+# report testing coverage on coveralls
+after_success: coveralls
