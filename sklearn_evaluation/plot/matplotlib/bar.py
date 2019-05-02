@@ -18,7 +18,7 @@ def horizontal(values, labels=None, sort=True, error=None, ax=None):
     >>> import numpy as np
     >>> from sklearn_evaluation.plot.matplotlib import bar
     >>> values = np.arange(10)
-    >>> bar.horizontal(values)
+    >>> ax = bar.horizontal(values)
     >>> plt.show()
 
     Notes
@@ -62,7 +62,7 @@ def vertical(values, labels=None, sort=True, error=None, ax=None):
     >>> import numpy as np
     >>> from sklearn_evaluation.plot.matplotlib import bar
     >>> values = np.arange(10)
-    >>> bar.vertical(values)
+    >>> ax = bar.vertical(values)
     >>> plt.show()
 
     """

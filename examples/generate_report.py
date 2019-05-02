@@ -27,13 +27,7 @@ ce = ClassifierEvaluator(classifier, y_test, y_pred, y_score,
                          feature_list, target_names,
                          estimator_name='super awesome SVC')
 
-template = '''
-           # Report
-           {estimator_type}
-           {date}
-           {confusion_matrix}
-           {roc}
-           {precision_recall}
-           '''
+report = ce.make_report()
 
-ce.generate_report(template, 'report.html')
+# this will automativally render in Jupyter, or you can do report.save('/path')
+report
