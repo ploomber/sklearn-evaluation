@@ -3,11 +3,9 @@ import inspect
 from inspect import signature, _empty
 import re
 import collections
-from collections import defaultdict, namedtuple
+from collections import defaultdict
 from itertools import product
 from six import string_types
-
-import numpy as np
 
 
 def isiter(obj):
@@ -135,21 +133,6 @@ def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
 def default_heatmap():
     import matplotlib.pyplot as plt
     return truncate_colormap(plt.cm.OrRd, 0.1, 0.7)
-
-
-def _dict2named_tuple(d):
-    return namedtuple('NamedTupleFromDict', d.keys())(**d)
-
-
-def _grid_scores_from_dicts(grid_scores):
-    # convert every list in cv_validation_scores
-    # to a numpy array
-    for score in grid_scores:
-        val_scores_key = 'cv_validation_scores'
-        score[val_scores_key] = np.array(score[val_scores_key])
-    # now convert them to named tuples
-    grid_scores = [_dict2named_tuple(d) for d in grid_scores]
-    return grid_scores
 
 
 def map_parameters_in_fn_call(args, kwargs, func):
