@@ -17,7 +17,7 @@ matrix:
 
 script:
   - tox -e $PY
-  # build docs so we can detect build errors
+  # FIXME: build docs so we can detect build errors
   # - cd docs && make html
 
 # report testing coverage on coveralls
