@@ -30,7 +30,7 @@ Now, we are going to train the data using one of the scikit-learn classifiers.
 
 .. ipython:: python
 
-    est = RandomForestClassifier()
+    est = RandomForestClassifier(n_estimators=5)
     est.fit(X_train, y_train)
 
 Most of the functions require us to pass the class predictions for the test

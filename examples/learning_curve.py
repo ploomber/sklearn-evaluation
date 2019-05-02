@@ -1,4 +1,4 @@
-from sklearn.learning_curve import learning_curve
+from sklearn.model_selection import learning_curve
 from sklearn import cross_validation
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
