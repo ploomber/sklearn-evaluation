@@ -7,14 +7,17 @@ install:
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
 matrix:
   include:
-    - python: 2.4
+    - python: 3.4.10
       env:
-       - PY=py34
-    - python: 3.5
+       - PY=py3410
+    - python: 3.5.7
       env:
-        - PY=py35
-    - python: 3.6
+        - PY=py357
+    - python: 3.6.8
       env:
-        - PY=py36
+        - PY=py368
+    - python: 3.7.3
+      env:
+        - PY=py373
 
-script: tox -e $TOX_ENV
+script: tox -e $PY
