@@ -8,9 +8,6 @@ install:
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
 matrix:
   include:
-    - python: 3.4
-      env:
-       - PY=py34
     - python: 3.5
       env:
         - PY=py35
