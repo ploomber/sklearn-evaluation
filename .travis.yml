@@ -1,5 +1,5 @@
 # python versions available:
-# https://docs.travis-ci.com/user/languages/python/#specifying-python-versions 
+# https://docs.travis-ci.com/user/languages/python/#specifying-python-versions
 
 language: python
 sudo: required
@@ -13,7 +13,7 @@ matrix:
        - PY=py34
     - python: 3.5
       env:
-        - PY=py357
+        - PY=py35
     - python: 3.6
       env:
         - PY=py36
