@@ -5,7 +5,7 @@ Classifier evaluation
     :suppress:
 
     from sklearn.ensemble import RandomForestClassifier
-    from sklearn.cross_validation import train_test_split
+    from sklearn.model_selection import train_test_split
     from sklearn import datasets
     from sklearn_evaluation import plot, table
 

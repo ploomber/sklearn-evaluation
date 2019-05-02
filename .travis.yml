@@ -11,5 +11,7 @@ script:
   # matplotlib 3.0.3 was built using freetype 2.6.1, travis has a lower version
   # but still works
   - freetype-config --ftversion
+  # test doc building
+  - cd docs && make html  && cd ..
   - pytest
 after_success: coveralls
