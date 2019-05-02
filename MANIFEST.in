@@ -1,1 +1,1 @@
-include sklearn_evaluation/assets/*
+include src/sklearn_evaluation/assets/*

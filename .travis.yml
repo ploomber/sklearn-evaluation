@@ -19,6 +19,10 @@ script:
   - tox -e $PY
   # FIXME: build docs so we can detect build errors
   # - cd docs && make html
+  # freetype version must match for image comparison to work without issues
+  # matplotlib 3.0.3 was built using freetype 2.6.1, travis has a lower version
+  # but still works
+  - freetype-config --ftversion
 
 # report testing coverage on coveralls
 after_success: coveralls
