@@ -1,6 +1,7 @@
 # testing
 tox==3.9.0
 pytest==3.6
+pytest-cov==2.6.1
 
 # for coveralls.io
 coveralls==1.1
