@@ -6,7 +6,7 @@
 
 scikit-learn model evaluation made easy: plots, tables and markdown reports.
 
-Works with Python 2 and 3.
+Support for Python 3 only.
 
 [Documentation here.](http://edublancas.github.io/sklearn-evaluation)
 
@@ -103,17 +103,7 @@ ce.confusion_matrix
 Generate reports using Markdown templates.
 
 ```python
- 
- template = '''
-            # Report
-            {estimator_type}
-            {date}
-            {confusion_matrix}
-            {roc}
-            {precision_recall}
-            '''
-
-ce.generate_report(template, path='report.html')
+ce.make_report()
 ```
 
 

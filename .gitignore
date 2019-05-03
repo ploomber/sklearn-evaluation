@@ -1,6 +1,9 @@
+.DS_Store
+.coverage*
+
 #### joe made this: https://goel.io/joe
 
-# Do not include test outout
+# Do not include test output
 sklearn_evaluation/tests/result_images/
 sklearn_evaluation/tests/*.html
 
@@ -13,6 +16,8 @@ docs/examples/
 result_images/
 # Also ignore the test report - should probably save this somewhere else
 tmp_report.html
+
+.pytest_cache/
 
 #####=== IPythonNotebook ===#####
 # Temporary data

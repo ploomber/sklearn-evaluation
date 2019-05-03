@@ -1,13 +1,28 @@
+# python versions available:
+# https://docs.travis-ci.com/user/languages/python/#specifying-python-versions
+
 language: python
-python:
-  - "2.7"
-  - "3.5"
 sudo: required
 install:
+  - pip install tox
   - "sudo apt-get install gfortran python-liblas libblas-dev liblapack-dev libatlas-dev"
-  - "pip install --upgrade pip"
-  - "pip install -r requirements.txt"
+matrix:
+  include:
+    - python: 3.5
+      env:
+        - PY=py35
+    - python: 3.6
+      env:
+        - PY=py36
+
 script:
-  - cd $HOME/build/edublancas/sklearn-evaluation/sklearn_evaluation/tests
-  - ./run_tests
+  - tox -e $PY
+  # FIXME: build docs so we can detect build errors
+  # - cd docs && make html
+  # freetype version must match for image comparison to work without issues
+  # matplotlib 3.0.3 was built using freetype 2.6.1, travis has a lower version
+  # but still works
+  - freetype-config --ftversion
+
+# report testing coverage on coveralls
 after_success: coveralls

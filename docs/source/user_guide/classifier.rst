@@ -5,7 +5,7 @@ Classifier evaluation
     :suppress:
 
     from sklearn.ensemble import RandomForestClassifier
-    from sklearn.cross_validation import train_test_split
+    from sklearn.model_selection import train_test_split
     from sklearn import datasets
     from sklearn_evaluation import plot, table
 
@@ -30,7 +30,7 @@ Now, we are going to train the data using one of the scikit-learn classifiers.
 
 .. ipython:: python
 
-    est = RandomForestClassifier()
+    est = RandomForestClassifier(n_estimators=5)
     est.fit(X_train, y_train)
 
 Most of the functions require us to pass the class predictions for the test

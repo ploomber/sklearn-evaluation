@@ -1,6 +1,6 @@
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.cross_validation import train_test_split
+from sklearn.model_selection import train_test_split
 from sklearn_evaluation import ClassifierEvaluator
 
 # Import some data to play with
@@ -27,13 +27,7 @@ ce = ClassifierEvaluator(classifier, y_test, y_pred, y_score,
                          feature_list, target_names,
                          estimator_name='super awesome SVC')
 
-template = '''
-           # Report
-           {estimator_type}
-           {date}
-           {confusion_matrix}
-           {roc}
-           {precision_recall}
-           '''
+report = ce.make_report()
 
-ce.generate_report(template, 'report.html')
+# this will automativally render in Jupyter, or you can do report.save('/path')
+report

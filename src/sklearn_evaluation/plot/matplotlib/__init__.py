@@ -1,0 +1,3 @@
+"""
+Matplotlib plotting code
+"""

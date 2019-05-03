@@ -16,7 +16,7 @@ hyperparameter(s) by keeping the rest constant.
 
     import matplotlib.pyplot as plt
     from sklearn.ensemble import RandomForestClassifier
-    from sklearn.grid_search import GridSearchCV
+    from sklearn.model_selection import GridSearchCV
     from sklearn import datasets
 
     from sklearn_evaluation import plot
@@ -48,14 +48,14 @@ a Random Forest, then use the GridSearchCV class to pass the estimator, the
 hypeparameter dictionary and the number of folds for cross-validation.
 
 After fitting the models (note that we call fit on the GridSearchCV instead of
-the estimator itself) we can get the results using the :attr:`sklearn.grid_search.GridSearchCV.grid_scores_` attribute.
+the estimator itself) we can get the results using the :attr:`sklearn.grid_search.GridSearchCV.cv_results_` attribute.
 
 .. ipython:: python
 
-    est = RandomForestClassifier()
+    est = RandomForestClassifier(n_estimators=5)
     clf = GridSearchCV(est, hyperparameters, cv=3)
     clf.fit(X, y)
-    grid_scores = clf.grid_scores_
+    grid_scores = clf.cv_results_
 
 To generate the plot, we need to pass the grid_scores and the parameter(s) to
 change, let's see how the number of trees in the Random Forest affects
@@ -64,7 +64,7 @@ the performance of the model.
 .. ipython:: python
 
     @savefig gs_1.png
-    plot.grid_search(clf.grid_scores_, change='n_estimators', kind='bar')
+    plot.grid_search(clf.cv_results_, change='n_estimators', kind='bar')
 
 
 We can also subset the grid scores to plot by using the subset parameter (note
@@ -73,7 +73,7 @@ that the hyperparameter in change can also appear in subset).
 .. ipython:: python
 
     @savefig gs_2.png
-    plot.grid_search(clf.grid_scores_, change='n_estimators',
+    plot.grid_search(clf.cv_results_, change='n_estimators',
                      subset={'n_estimators': [10, 50, 100],
                              'criterion': 'gini'},
                      kind='bar')
@@ -86,5 +86,5 @@ to subset max_features to one single value.
 .. ipython:: python
 
     @savefig gs_3.png
-    plot.grid_search(clf.grid_scores_, change=('n_estimators', 'criterion'),
+    plot.grid_search(clf.cv_results_, change=('n_estimators', 'criterion'),
                      subset={'max_features': 'sqrt'})

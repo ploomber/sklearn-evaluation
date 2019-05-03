@@ -1,15 +1,11 @@
-# pkg dependencies
-matplotlib==1.5.1
-scipy==0.17.1
-scikit-learn==0.17.1
-decorator==4.0.9
-six==1.10.0
-mistune==0.7.1
-tabulate==0.7.5
-
 # testing
-nose==1.3.7
-coverage==4.3.1
+tox==3.9.0
+pytest==3.6
+# disabling because of dependency issue with pytest 3.6, need to pin this
+# version because pytest 4 breaks matplotlib image comparison tests
+# pytest-cov==2.6.1
+
+# for coveralls.io
 coveralls==1.1
 
 # docs
