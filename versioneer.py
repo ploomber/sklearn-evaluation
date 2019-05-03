@@ -13,8 +13,8 @@ import datetime
 import click
 
 TESTING = False
-PACKAGE = 'src/skleran_evaluation'
-PACKAGE_NAME = 'skleran_evaluation'
+PACKAGE = 'src/sklearn_evaluation'
+PACKAGE_NAME = 'sklearn_evaluation'
 
 
 def replace_in_file(path_to_file, original, replacement):
