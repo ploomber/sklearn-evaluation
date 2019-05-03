@@ -156,7 +156,7 @@ def cli():
     1. MANUAL: Merge whatever you want to publish to master
     2. MANUAL: Update your CHANGELOG.rst
     2. CREATE A NEW VERSION: python versioneer.py new
-    3. PUBLISH: python versioneer.py [TAG] --production
+    3. PUBLISH: python versioneer.py release [TAG] --production
     """
     pass
 
