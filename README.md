@@ -16,17 +16,6 @@ Support for Python 3 only.
 pip install sklearn-evaluation
 ```
 
-# Optional dependencies
-
-If you want to use the reports module you need to install `mistune` and `tabulate` for the tables module
-
-```bash
-# for generating reports
-pip install mistune
-# for the table module
-pip install tabulate
-```
-
 # Usage
 
 ## `plot` module
@@ -35,7 +24,7 @@ Generate evaluation plots with a single function call.
 ```python
 from sklearn_evaluation import plot
 
-#code for data loading and model training
+# code for data loading and model training
 
 plot.confusion_matrix(y_true, y_pred, target_names=target_names)
 ```
@@ -49,7 +38,7 @@ Generate good looking tables from your model results.
 ```python
 from sklearn_evaluation import table
 
-#code for data loading and training
+# code for data loading and training
 
 table.feature_importances(model)
 ```
@@ -95,7 +84,7 @@ ce = ClassifierEvaluator(classifier, y_test, y_pred, y_score,
                          feature_list, target_names)
 
 # this plots the confusion matrix
-ce.confusion_matrix
+ce.confusion_matrix()
 ```
 
 ## Generating reports
@@ -105,7 +94,6 @@ Generate reports using Markdown templates.
 ```python
 ce.make_report()
 ```
-
 
 The code above will generate a report [like this one.](http://htmlpreview.github.com/?https://github.com/edublancas/sklearn-model-evaluation/blob/master/examples/report.html)
 
