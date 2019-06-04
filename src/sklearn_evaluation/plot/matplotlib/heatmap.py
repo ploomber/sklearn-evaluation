@@ -8,7 +8,8 @@ from operator import itemgetter
 
 @set_default_ax
 def heatmap(observations, ax=None, get_params=itemgetter('params'),
-            get_value=itemgetter('value')):
+            get_value=itemgetter('value'), get_text=itemgetter('value'),
+            kwargs_text=dict(ha='center', va='center', color='w')):
     """
     Plot observations in a heatmap. The data must be a list of dictionaries,
     each dictionary must have a 'params' and 'data' keys. 'params' is another
@@ -17,7 +18,8 @@ def heatmap(observations, ax=None, get_params=itemgetter('params'),
 
     If observations are another kind of object, you can pass callables
     in get_params and get_value to specify how parameters and the value
-    to plot are extracted from each observation
+    to plot are extracted from each observation, if get_text is not None,
+    it will be used to plot some text on each cell
     """
     param_names = sorted(get_params(observations[0]).keys())
 
@@ -51,6 +53,7 @@ def heatmap(observations, ax=None, get_params=itemgetter('params'),
     ax.set_xlabel(param_names[1])
     ax.set_ylabel(param_names[0])
 
-    for i in range(shape[1]):
-        for j in range(shape[0]):
-            ax.text(j, i, m[i, j], ha='center', va='center', color='w')
+    for obs in observations:
+        params, text = get_params(obs), get_text(obs)
+        i, j = [val2coord[name][params[name]] for name in param_names]
+        ax.text(j, i, text, **kwargs_text)

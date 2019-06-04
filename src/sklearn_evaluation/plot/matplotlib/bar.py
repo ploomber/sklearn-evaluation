@@ -10,7 +10,7 @@ def plot(values, orientation, labels=None, sort=True, error=None, ax=None):
 
 
 def horizontal(values, labels=None, sort=True, error=None, ax=None):
-    """Horizontal bar plot
+    """Plots a horizontal bar given a list of values
 
     Examples
     --------
@@ -54,7 +54,7 @@ def horizontal(values, labels=None, sort=True, error=None, ax=None):
 
 
 def vertical(values, labels=None, sort=True, error=None, ax=None):
-    """Vertical bar plot
+    """Plots vertical bars given a list of values
 
     Examples
     --------
@@ -90,3 +90,32 @@ def vertical(values, labels=None, sort=True, error=None, ax=None):
     # ax.figure.tight_layout()
 
     return ax
+
+
+class BarShifter:
+    """
+    bar shifter is just a wrapper arounf matplotlib bar chart
+    which automatically computes the position of the bars
+    you need to specify how many groups of bars are gonna be
+    and the size of such groups. The frst time you call it,
+    will plot the first element for every group, then the second one
+    and so on
+    """
+    def __init__(self, g_number, g_size, ax, scale=0.8):
+        self.g_number = g_number
+        self.g_size = g_size
+        self.ax = ax
+        self.i = 0
+        self.width = (1.0/g_size)*scale
+        self.colors = plt.get_cmap()(np.linspace(0, 1, self.g_size))
+
+    def __call__(self, height, bottom=None, hold=None, **kwargs):
+        left = [x+self.i*self.width for x in range(self.g_number)]
+        self.ax.bar(left, height, self.width, color=self.colors[self.i],
+                    ecolor=self.colors[self.i],
+                    **kwargs)
+        self.i += 1
+        if self.i == self.g_size:
+            n = range(self.g_number)
+            ticks_pos = [x+(self.width*self.g_size)/2.0 for x in n]
+            self.ax.set_xticks(ticks_pos)

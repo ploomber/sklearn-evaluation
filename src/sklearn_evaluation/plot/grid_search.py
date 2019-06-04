@@ -9,6 +9,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 from six import string_types
 
+from sklearn_evaluation.plot.matplotlib.bar import BarShifter
 from ..util import (_group_by, _get_params_value, _mapping_to_tuple_pairs,
                     default_heatmap, _sorted_map_iter, _flatten_list)
 
@@ -228,30 +229,3 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax):
     plt.colorbar(im, ax=ax)
     ax.get_figure().tight_layout()
     return ax
-
-
-class BarShifter:
-    # bar shifter is just a wrapper arounf matplotlib bar chart
-    # which automatically computes the position of the bars
-    # you need to specify how many groups of bars are gonna be
-    # and the size of such groups. The frst time you call it,
-    # will plot the first element for every group, then the second one
-    # and so on
-    def __init__(self, g_number, g_size, ax, scale=0.8):
-        self.g_number = g_number
-        self.g_size = g_size
-        self.ax = ax
-        self.i = 0
-        self.width = (1.0/g_size)*scale
-        self.colors = plt.get_cmap()(np.linspace(0, 1, self.g_size))
-
-    def __call__(self, height, bottom=None, hold=None, **kwargs):
-        left = [x+self.i*self.width for x in range(self.g_number)]
-        self.ax.bar(left, height, self.width, color=self.colors[self.i],
-                    ecolor=self.colors[self.i],
-                    **kwargs)
-        self.i += 1
-        if self.i == self.g_size:
-            n = range(self.g_number)
-            ticks_pos = [x+(self.width*self.g_size)/2.0 for x in n]
-            self.ax.set_xticks(ticks_pos)
