@@ -17,12 +17,12 @@ observations = [
     {'params': {'a': 5, 'b': 1000}, 'value': 0.49},
 ]
 
-from sklearn_evaluation.util import _group_by
+# from sklearn_evaluation.util import _group_by
 
 
-param1, param2 = sorted((observations[0]['params']).keys())
+# param1, param2 = sorted((observations[0]['params']).keys())
 
-_group_by(observations, lambda r: r['params'])
+# _group_by(observations, lambda r: r['params'])
 
-heatmap.heatmap(sample_data)
-plt.show()
+# heatmap.heatmap(sample_data)
+# plt.show()
