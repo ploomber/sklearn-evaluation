@@ -125,12 +125,12 @@ class BarShifter:
 
 
 @set_default_ax
-def bar_groups(records, ax=None):
+def bar_groups(records, ax=None, get_value=lambda data: data):
     dg = DataGrid(records)
     bs = BarShifter(*dg.shape, ax=ax)
 
-    for name, val in dg.rowiter():
-        bs(val, label=f'a={name}')
+    for name, data in dg.rowiter():
+        bs(get_value(data), label=f'a={name}')
 
     ax.set_xticklabels(dg.colnames())
     ax.set_xlabel(dg.params[1])
