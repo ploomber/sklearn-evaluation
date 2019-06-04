@@ -33,3 +33,5 @@ def heatmap(records, ax=None, get_value=lambda data: data,
 
     for i, j, data in dg.celliter():
         ax.text(j, i, get_text(data), **kwargs_text)
+
+    return ax

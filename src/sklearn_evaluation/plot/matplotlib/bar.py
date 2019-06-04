@@ -136,3 +136,5 @@ def bar_groups(records, ax=None, get_value=lambda data: data):
     ax.set_xlabel(dg.params[1])
 
     plt.legend()
+
+    return ax
