@@ -130,7 +130,7 @@ def bar_groups(records, ax=None, get_value=lambda data: data):
     bs = BarShifter(*dg.shape, ax=ax)
 
     for name, data in dg.rowiter():
-        bs([get_value(d) for d in data], label=f'a={name}')
+        bs([get_value(d) for d in data], label=f'{dg.params[0]}={name}')
 
     ax.set_xticklabels(dg.colnames())
     ax.set_xlabel(dg.params[1])
