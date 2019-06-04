@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 
 
@@ -9,6 +10,18 @@ class DataGrid:
 
         # columns that will be interpreted as paramers
         params = sorted(set(df.columns) - set(['data']))
+
+        if len(params) != 2:
+            raise ValueError('There should be exactly two columns apart from '
+                             f'data, found: {len(params)} ({params})')
+
+        # fill with nas if any combination is missing
+        prod = pd.MultiIndex.from_product([df[params[0]].unique(),
+                                           df[params[1]].unique()],
+                                          names=params)
+
+        df = (df.set_index(params)
+              .reindex(prod, fill_value=np.nan).reset_index())
 
         # sort by param colums
         self.shape = len(df[params[0]].unique()), len(df[params[1]].unique())
