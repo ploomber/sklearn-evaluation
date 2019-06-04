@@ -3,19 +3,26 @@ Plotting 2 discrete parameters in a heatmap
 """
 import numpy as np
 from sklearn_evaluation.plot.util import set_default_ax
+from operator import itemgetter
 
 
 @set_default_ax
-def heatmap(observations, ax=None):
+def heatmap(observations, ax=None, get_params=itemgetter('params'),
+            get_value=itemgetter('value')):
     """
     Plot observations in a heatmap. The data must be a list of dictionaries,
     each dictionary must have a 'params' and 'data' keys. 'params' is another
     dictionary with {param_name: param_value} pairs and data is the number
-    to plot in the heatmap
-    """
-    param_names = sorted(observations[0]['params'].keys())
+    to plot in the heatmap.
 
-    params_unique = {val: set([entry['params'][val] for entry in observations])
+    If observations are another kind of object, you can pass callables
+    in get_params and get_value to specify how parameters and the value
+    to plot are extracted from each observation
+    """
+    param_names = sorted(get_params(observations[0]).keys())
+
+    params_unique = {val: set([get_params(entry)[val]
+                     for entry in observations])
                      for val in param_names}
 
     shape = [len(params_unique[param]) for param in param_names]
@@ -28,9 +35,9 @@ def heatmap(observations, ax=None):
     m[:] = np.nan
 
     for obs in observations:
-        params, data = obs['params'], obs['data']
+        params, value = get_params(obs), get_value(obs)
         i, j = [val2coord[name][params[name]] for name in param_names]
-        m[i, j] = data
+        m[i, j] = value
 
     ax.imshow(m)
     ax.set_xticks(np.arange(shape[1]))
