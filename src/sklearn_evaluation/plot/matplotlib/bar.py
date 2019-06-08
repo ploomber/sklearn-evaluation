@@ -104,6 +104,7 @@ class BarShifter:
     will plot the first element for every group, then the second one
     and so on
     """
+
     def __init__(self, g_number, g_size, ax, scale=0.8):
         self.g_number = g_number
         self.g_size = g_size
@@ -112,10 +113,10 @@ class BarShifter:
         self.width = (1.0/g_size)*scale
         self.colors = plt.get_cmap()(np.linspace(0, 1, self.g_size))
 
-    def __call__(self, height, **kwargs):
+    def __call__(self, height, err=None, **kwargs):
         left = [x+self.i*self.width for x in range(self.g_number)]
         self.ax.bar(left, height, self.width, color=self.colors[self.i],
-                    ecolor=self.colors[self.i],
+                    ecolor=self.colors[self.i], yerr=err,
                     **kwargs)
         self.i += 1
         if self.i == self.g_size:
@@ -125,12 +126,15 @@ class BarShifter:
 
 
 @set_default_ax
-def bar_groups(records, ax=None, get_value=lambda data: data):
-    dg = DataGrid(records)
+def bar_groups(records, ax=None, group_by=None, get_value=lambda data: data,
+               get_error=lambda data: None):
+    dg = DataGrid(records, group_by=group_by)
     bs = BarShifter(*dg.shape, ax=ax)
 
     for name, data in dg.rowiter():
-        bs([get_value(d) for d in data], label=f'{dg.params[0]}={name}')
+        bs([get_value(d) for d in data],
+           [get_error(d) for d in data],
+           label=f'{dg.params[0]}={name}')
 
     ax.set_xticklabels(dg.colnames())
     ax.set_xlabel(dg.params[1])
