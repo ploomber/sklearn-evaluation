@@ -1,3 +1,4 @@
+import warnings
 import numpy as np
 
 
@@ -49,8 +50,10 @@ def feature_importances(data, top_n=None, feature_names=None):
 
     # check that the data has the correct format
     if top_n and top_n > n_features:
-        raise ValueError(('top_n ({}) cannot be greater than the number of'
-                          ' features ({})'.format(top_n, n_features)))
+        top_n = n_features
+        warnings.warn(('top_n ({}) is greater than the number of'
+                       ' features ({}), showing all features'
+                       .format(top_n, n_features)))
     if top_n and top_n < 1:
         raise ValueError('top_n cannot be less than 1')
     if feature_names and len(feature_names) != n_features:
@@ -60,7 +63,8 @@ def feature_importances(data, top_n=None, feature_names=None):
 
     # if the user did not pass feature names create generic names
     if feature_names is None:
-        feature_names = ['Feature {}'.format(n) for n in range(1, n_features+1)]
+        feature_names = ['Feature {}'.format(n)
+                         for n in range(1, n_features + 1)]
         feature_names = np.array(feature_names)
     else:
         feature_names = np.array(feature_names)
