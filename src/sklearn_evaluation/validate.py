@@ -8,8 +8,8 @@ def argument_is_proportion(argname):
     def argument_is_proportion(func, *args, **kwargs):
         """Validate that an agument is a proportion [0, 1.0]
         """
-        args = map_parameters_in_fn_call(args, kwargs, func)
-        value = args.get(argname)
+        arg_maps = map_parameters_in_fn_call(args, kwargs, func)
+        value = arg_maps.get(argname)
 
         # Validate value, but only if has a value
         if (not (0 <= value <= 1.0)) and value is not None:
@@ -23,8 +23,8 @@ def argument_is_proportion(argname):
 @decorator
 def proportion(func, *args, **kwargs):
     # Get proportion parameter, look in kwargs and args
-    args = map_parameters_in_fn_call(args, kwargs, func)
-    proportion = args.get('proportion')
+    arg_map = map_parameters_in_fn_call(args, kwargs, func)
+    proportion = arg_map.get('proportion')
 
     # Validate proportion, but only if has a value
     if (not (0 <= proportion <= 1.0)) and proportion is not None:
