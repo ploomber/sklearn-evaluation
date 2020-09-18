@@ -75,7 +75,7 @@ import ast
 
 _version_re = re.compile(r'__version__\s+=\s+(.*)')
 
-with open('../../sklearn_evaluation/__init__.py', 'rb') as f:
+with open('../../src/sklearn_evaluation/__init__.py', 'rb') as f:
     VERSION = str(ast.literal_eval(_version_re.search(
         f.read().decode('utf-8')).group(1)))
 

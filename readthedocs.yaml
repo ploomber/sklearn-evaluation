@@ -1,0 +1,23 @@
+# Read the Docs configuration file
+# See https://docs.readthedocs.io/en/stable/config-file/v2.html for details
+# Regadring the pip._internal.index bug:
+# https://stackoverflow.com/q/59846065/709975
+version: 2
+
+sphinx:
+  configuration: docs/source/conf.py
+
+formats: all
+
+# create conda env from that file
+conda:
+  environment: doc/environment.yml
+
+
+# install package with pip[all] from this directory
+python:
+  install:
+    - method: pip
+      path: .
+      extra_requirements:
+        - all
