@@ -13,8 +13,8 @@ import datetime
 import click
 
 TESTING = False
-PACKAGE = 'src/skleran_evaluation'
-PACKAGE_NAME = 'skleran_evaluation'
+PACKAGE = 'src/sklearn_evaluation'
+PACKAGE_NAME = 'sklearn_evaluation'
 
 
 def replace_in_file(path_to_file, original, replacement):
@@ -156,7 +156,7 @@ def cli():
     1. MANUAL: Merge whatever you want to publish to master
     2. MANUAL: Update your CHANGELOG.rst
     2. CREATE A NEW VERSION: python versioneer.py new
-    3. PUBLISH: python versioneer.py [TAG] --production
+    3. PUBLISH: python versioneer.py release [TAG] --production
     """
     pass
 
