@@ -18,7 +18,7 @@ parameters = {
 est = RandomForestClassifier()
 clf = GridSearchCV(est, parameters, cv=5)
 
-X, y = datasets.make_classification(1000, 10, 5, class_sep=0.7)
+X, y = datasets.make_classification(1000, 10, n_informative=5, class_sep=0.7)
 clf.fit(X, y)
 
 # changing numeric parameter without any restrictions

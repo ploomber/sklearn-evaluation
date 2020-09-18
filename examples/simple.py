@@ -9,7 +9,7 @@ from matplotlib import style
 style.use('seaborn-dark')
 
 # Import some data to play with
-data = datasets.make_classification(1000, 10, 5, class_sep=0.7, n_classes=8)
+data = datasets.make_classification(1000, 10, n_informative=5, class_sep=0.7, n_classes=8)
 X = data[0]
 y = data[1]
 
