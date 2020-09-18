@@ -36,5 +36,6 @@ setup(name='sklearn-evaluation',
           'jinja2',
           'tabulate',
           'mistune',
+          'pandas',
       ]
       )
