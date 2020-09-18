@@ -18,7 +18,8 @@ First, let's load some data and split it in training and test set.
 
 .. ipython:: python
 
-    data = datasets.make_classification(200, 10, 5, class_sep=0.65)
+    data = datasets.make_classification(200, 10, n_informative=5,
+                                        class_sep=0.65)
     X = data[0]
     y = data[1]
 
