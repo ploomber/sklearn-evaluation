@@ -49,11 +49,10 @@ list(dg.celliter())
 
 list(dg.rowiter())
 
-heatmap.heatmap(records)
-plt.show()
+# heatmap.heatmap(records)
 
-import pandas as pd
-df = pd.DataFrame.from_dict(records)
+# import pandas as pd
+# df = pd.DataFrame.from_dict(records)
 
-ax = sns.barplot(x="a", y="data", hue="b", data=df)
-plt.show()
+# ax = sns.barplot(x="a", y="data", hue="b", data=df)
+# plt.show()

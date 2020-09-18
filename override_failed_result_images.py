@@ -40,4 +40,4 @@ print('Copying...')
 
 for old, new in zip(ref, new_location):
     print(f'*  {old} -> {new}')
-    # shutil.copy(old, new)
+    shutil.copy(old, new)
