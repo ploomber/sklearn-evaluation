@@ -1,5 +1,4 @@
 from copy import copy
-import inspect
 from inspect import signature, _empty
 import re
 import collections
@@ -143,8 +142,9 @@ def map_parameters_in_fn_call(args, kwargs, func):
     is still passed.
     Missing parameters are filled with their default values
     """
+    sig = signature(func)
     # Get missing parameters in kwargs to look for them in args
-    args_spec = inspect.getargspec(func).args
+    args_spec = list(sig.parameters)
     params_all = set(args_spec)
     params_missing = params_all - set(kwargs.keys())
 
@@ -174,7 +174,7 @@ def map_parameters_in_fn_call(args, kwargs, func):
 
     # fill default values
     default = {k: v.default for k, v
-               in signature(func).parameters.items()
+               in sig.parameters.items()
                if v.default != _empty}
 
     to_add = set(default.keys()) - set(parsed.keys())

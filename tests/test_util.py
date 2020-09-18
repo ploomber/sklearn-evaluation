@@ -1,8 +1,10 @@
+import pytest
 import numpy as np
 
 from sklearn_evaluation.util import (_can_iterate, is_column_vector,
                                      is_row_vector, _group_by,
-                                     _product, _mapping_to_tuple_pairs)
+                                     _product, _mapping_to_tuple_pairs,
+                                     map_parameters_in_fn_call)
 
 # can iterate
 
@@ -155,3 +157,17 @@ def test_mixed_types():
     a = ['a', 'b']
     b = [(1, 2, 3)]
     assert _product(a, b) == [('a', (1, 2, 3)), ('b', (1, 2, 3))]
+
+
+def fn(a, b, c=None):
+    pass
+
+
+@pytest.mark.parametrize('args, kwargs, expected',
+[
+    [[1,2,3], {}, {'a': 1, 'b': 2, 'c': 3}],
+    [[1,2], {'c': 3}, {'a': 1, 'b': 2, 'c': 3}],
+    [[1,2], {}, {'a': 1, 'b': 2, 'c': None}],
+])
+def test_map_parameters_in_fn_call(args, kwargs, expected):
+    assert map_parameters_in_fn_call(args, kwargs, fn) == expected
