@@ -51,6 +51,7 @@ After fitting the models (note that we call fit on the GridSearchCV instead of
 the estimator itself) we can get the results using the :attr:`sklearn.grid_search.GridSearchCV.cv_results_` attribute.
 
 .. ipython:: python
+    :okwarning:
 
     est = RandomForestClassifier(n_estimators=5)
     clf = GridSearchCV(est, hyperparameters, cv=3)

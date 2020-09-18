@@ -8,6 +8,8 @@
 sklearn_evaluation/tests/result_images/
 sklearn_evaluation/tests/*.html
 
+# generated images from plot directive
+docs/source/savefig/
 # Do not include docs build folder
 docs/build/
 # Do not include examples produced using ..plot::
