@@ -97,7 +97,7 @@ def vertical(values, labels=None, sort=True, error=None, ax=None):
 
 class BarShifter:
     """
-    bar shifter is just a wrapper arounf matplotlib bar chart
+    bar shifter is just a wrapper for matplotlib bar chart
     which automatically computes the position of the bars
     you need to specify how many groups of bars are gonna be
     and the size of such groups. The frst time you call it,
@@ -113,11 +113,11 @@ class BarShifter:
         self.width = (1.0/g_size)*scale
         self.colors = plt.get_cmap()(np.linspace(0, 1, self.g_size))
 
-    def __call__(self, height, err=None, **kwargs):
+    def __call__(self, height, **kwargs):
         left = [x+self.i*self.width for x in range(self.g_number)]
         self.ax.bar(left, height, self.width, color=self.colors[self.i],
-                    ecolor=self.colors[self.i], yerr=err,
-                    **kwargs)
+                    ecolor=self.colors[self.i], **kwargs)
+
         self.i += 1
         if self.i == self.g_size:
             n = range(self.g_number)
