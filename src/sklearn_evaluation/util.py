@@ -1,7 +1,7 @@
 from copy import copy
 from inspect import signature, _empty
 import re
-import collections
+from collections.abc import Iterable
 from collections import defaultdict
 from itertools import product
 from six import string_types
@@ -30,7 +30,7 @@ def class_name(obj):
 
 def _can_iterate(obj):
     is_string = isinstance(obj, string_types)
-    is_iterable = isinstance(obj, collections.Iterable)
+    is_iterable = isinstance(obj, Iterable)
 
     return is_iterable and not is_string
 
