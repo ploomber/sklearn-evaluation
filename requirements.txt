@@ -7,9 +7,3 @@ pytest==3.6
 
 # for coveralls.io
 coveralls==1.1
-
-# docs
-sphinx==1.4.3
-ipython==4.0.1
-numpydoc==0.6.0
-sphinx-rtd-theme==0.1.9

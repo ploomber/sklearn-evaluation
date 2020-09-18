@@ -14,6 +14,11 @@ with open('src/sklearn_evaluation/__init__.py', 'rb') as f:
 DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'
                 .format(VERSION))
 
+DOCS = ['sphinx==1.4.3', 'ipython==4.0.1', 'numpydoc==0.6.0',
+        'sphinx-rtd-theme==0.1.9']
+
+ALL = DOC
+
 setup(name='sklearn-evaluation',
       packages=find_packages('src'),
       package_dir={'': 'src'},
@@ -37,5 +42,8 @@ setup(name='sklearn-evaluation',
           'tabulate',
           'mistune',
           'pandas',
-      ]
+      ],
+      'extras_require': {
+          'all': ALL,
+      }
       )

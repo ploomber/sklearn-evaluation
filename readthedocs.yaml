@@ -11,7 +11,7 @@ formats: all
 
 # create conda env from that file
 conda:
-  environment: doc/environment.yml
+  environment: docs/environment.yml
 
 
 # install package with pip[all] from this directory
