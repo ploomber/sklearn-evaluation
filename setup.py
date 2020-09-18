@@ -20,7 +20,7 @@ DOCS = [
     'sphinx-rtd-theme==0.1.9'
 ]
 
-ALL = DOC
+ALL = DOCS
 
 setup(name='sklearn-evaluation',
       packages=find_packages('src'),
