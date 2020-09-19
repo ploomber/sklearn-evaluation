@@ -1,12 +1,11 @@
 # sklearn-evaluation
 
-[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg)](https://travis-ci.org/edublancas/sklearn-evaluation) [![PyPI version](https://badge.fury.io/py/sklearn-evaluation.svg)](https://badge.fury.io/py/sklearn-evaluation) [![Coverage Status](https://coveralls.io/repos/github/edublancas/sklearn-evaluation/badge.svg)](https://coveralls.io/github/edublancas/sklearn-evaluation) [![CircleCI](https://circleci.com/gh/edublancas/sklearn-evaluation.svg?style=shield)](https://circleci.com/gh/edublancas/sklearn-evaluation)
-
+[![Build Status](https://travis-ci.org/edublancas/sklearn-evaluation.svg)](https://travis-ci.org/edublancas/sklearn-evaluation) [![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=latest)](https://sklearn-evaluation.readthedocs.io/en/latest/?badge=latest) [![PyPI version](https://badge.fury.io/py/sklearn-evaluation.svg)](https://badge.fury.io/py/sklearn-evaluation) [![Coverage Status](https://coveralls.io/repos/github/edublancas/sklearn-evaluation/badge.svg)](https://coveralls.io/github/edublancas/sklearn-evaluation)
 
 
 scikit-learn model evaluation made easy: plots, tables and markdown reports.
 
-Support for Python 3 only.
+Supports Python 3.6 and higher.
 
 [Documentation here.](http://edublancas.github.io/sklearn-evaluation)
 
