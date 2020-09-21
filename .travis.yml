@@ -23,6 +23,7 @@ install:
   # Create a conda env with the current travis python version
   - conda create -q -n conda-env python=$TRAVIS_PYTHON_VERSION
   - conda activate conda-env
+  - conda install pandas --yes
 
   - pip install -r requirements.txt
   - pip install ".[all]"
