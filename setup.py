@@ -16,7 +16,7 @@ DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'.
                 format(VERSION))
 
 DOCS = ['sphinx', 'ipython', 'numpydoc', 'sphinx-rtd-theme']
-TEST = ['jupytext', 'papermill', 'ipykernel']
+TEST = ['jupytext', 'papermill', 'ipykernel', 'pytest']
 
 ALL = DOCS + TEST
 
