@@ -16,8 +16,9 @@ DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'.
                 format(VERSION))
 
 DOCS = ['sphinx', 'ipython', 'numpydoc', 'sphinx-rtd-theme']
+TEST = ['jupytext', 'papermill', 'ipykernel']
 
-ALL = DOCS
+ALL = DOCS + TEST
 
 setup(name='sklearn-evaluation',
       packages=find_packages('src'),
@@ -42,6 +43,7 @@ setup(name='sklearn-evaluation',
           'tabulate',
           'mistune',
           'pandas',
+          'nbformat',
       ],
       extras_require={
           'all': ALL,
