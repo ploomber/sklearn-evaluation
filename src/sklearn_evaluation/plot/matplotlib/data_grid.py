@@ -3,7 +3,6 @@ import pandas as pd
 
 
 class DataGrid:
-
     def __init__(self, records, group_by=None):
         # build data frame
         df = pd.DataFrame.from_dict(records)
@@ -30,10 +29,11 @@ class DataGrid:
         unique = [df[p].unique().tolist() for p in params]
         prod = pd.MultiIndex.from_product(unique, names=params)
 
-        df = (df.set_index(params)
-              .reindex(prod, fill_value=np.nan).reset_index())
+        df = (df.set_index(params).reindex(prod,
+                                           fill_value=np.nan).reset_index())
 
-        self.shape = len(df[group_by[0]].unique()), len(df[group_by[1]].unique())
+        self.shape = len(df[group_by[0]].unique()), len(
+            df[group_by[1]].unique())
         self.df = df.sort_values(group_by)
 
     def celliter(self):
@@ -54,8 +54,10 @@ class DataGrid:
             # group_by, so the values are grouped together for a fixed
             # (param1, param2) combination
             else:
-                values = [df_sub['data'].values
-                          for _, df_sub in group.groupby(self.group_by[1])]
+                values = [
+                    df_sub['data'].values
+                    for _, df_sub in group.groupby(self.group_by[1])
+                ]
                 yield name, values
 
     def rownames(self):
