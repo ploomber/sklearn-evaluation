@@ -1,10 +1,13 @@
 from pathlib import Path
 
 import pytest
+
+# These are fixtures to get the same configuration that matplotlib uses
+# to run tests with pytest. Note that importing other fixtures from that
+# module leads to weird error messages (e.g. "pd", which patches pandas)
+# https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/testing/conftest.py
 from matplotlib.testing.conftest import (mpl_test_settings,
-                                         mpl_image_comparison_parameters,
-                                         pytest_configure, pytest_unconfigure,
-                                         pd)
+                                         mpl_image_comparison_parameters)
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn import datasets
@@ -30,7 +33,10 @@ def grid_search_3_params():
     est = RandomForestClassifier(random_state=42)
     clf = GridSearchCV(est, parameters, cv=5)
 
-    X, y = datasets.make_classification(200, 10, n_informative=5, class_sep=0.7,
+    X, y = datasets.make_classification(200,
+                                        10,
+                                        n_informative=5,
+                                        class_sep=0.7,
                                         random_state=42)
     clf.fit(X, y)
 
@@ -49,7 +55,10 @@ def grid_search_4_params():
     est = RandomForestClassifier(random_state=42)
     clf = GridSearchCV(est, parameters, cv=5)
 
-    X, y = datasets.make_classification(200, 10, n_informative=5, class_sep=0.7,
+    X, y = datasets.make_classification(200,
+                                        10,
+                                        n_informative=5,
+                                        class_sep=0.7,
                                         random_state=42)
     clf.fit(X, y)
 
@@ -66,7 +75,10 @@ def grid_search_2_params():
     est = RandomForestClassifier(random_state=42)
     clf = GridSearchCV(est, parameters, cv=5)
 
-    X, y = datasets.make_classification(200, 10, n_informative=5, class_sep=0.7,
+    X, y = datasets.make_classification(200,
+                                        10,
+                                        n_informative=5,
+                                        class_sep=0.7,
                                         random_state=42)
     clf.fit(X, y)
 
