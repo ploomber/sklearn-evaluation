@@ -65,3 +65,16 @@ def test_row_drop(spec, expected):
     out, _ = selector.fit_transform(df, return_summary=True)
 
     assert set(out.index) == expected
+
+
+def test_row_keep():
+    df = pd.DataFrame({
+        'index': [0, 1, 2],
+        'x': [np.nan, 2, 3],
+        'y': [10, 20, 30],
+    })
+
+    selector = DataSelector([('row_keep', {'keep': ['x']})])
+    out, _ = selector.fit_transform(df, return_summary=True)
+
+    assert set(out.columns) == {'x'}
