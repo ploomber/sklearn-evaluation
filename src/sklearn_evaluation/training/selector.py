@@ -55,8 +55,13 @@ class ColumnDrop(Step):
                               _with_max_na_prop(df, self.max_na_prop))
         return self
 
-    def transform(self, df):
-        return df[[c for c in df.columns if c not in self.to_delete_]]
+    def transform(self, df, return_summary=False):
+        out = df[[c for c in df.columns if c not in self.to_delete_]]
+        return out if not return_summary else (out, self.transform_summary(df))
+
+    def transform_summary(self, df):
+        return 'Deleted {:,} columns: {}'.format(len(self.to_delete_),
+                                                 self.to_delete_)
 
 
 def _incomplete_cases(df):
@@ -76,16 +81,24 @@ class RowDrop(Step):
     def fit(self, df):
         return self
 
-    def transform(self, df):
-        to_delete_ = pd.Index([])
+    def transform(self, df, return_summary=False):
+        to_delete = pd.Index([])
 
         if self.if_nas:
-            to_delete_ = to_delete_.union(_incomplete_cases(df))
+            to_delete = to_delete.union(_incomplete_cases(df))
 
         if self.query:
-            to_delete_ = to_delete_.union(_query(df, self.query))
+            to_delete = to_delete.union(_query(df, self.query))
 
-        return df[~df.index.isin(to_delete_)]
+        out = df[~df.index.isin(to_delete)]
+
+        return out if not return_summary else (out,
+                                               self.transform_summary(
+                                                   df, to_delete))
+
+    def transform_summary(self, df, to_delete):
+        n = len(to_delete)
+        return 'Deleted {:,} rows ({:.1%})'.format(n, n / len(df))
 
 
 class DataSelector:
@@ -93,13 +106,25 @@ class DataSelector:
         steps = steps or []
         self.steps = [_mapping[step[0]](**step[1]) for step in steps]
 
-    def transform(self, df):
+    def transform(self, df, return_summary=False):
         result = df
+        summaries = []
 
         for step in self.steps:
-            result = step.transform(result)
+            if return_summary:
+                result, summary = step.transform(result, return_summary=True)
+                summaries.append(summary)
+            else:
+                result = step.transform(result, return_summary=False)
 
-        return result
+        if not return_summary:
+            return result
+        else:
+            table = tabulate([(type(step).__name__, summary)
+                              for step, summary in zip(self.steps, summaries)],
+                             headers=['Step', 'Summary'],
+                             tablefmt='grid')
+            return result, table
 
     def fit(self, df):
         result = df
@@ -109,8 +134,8 @@ class DataSelector:
 
         return self
 
-    def fit_transform(self, df):
-        return self.fit(df).transform(df)
+    def fit_transform(self, df, return_summary=False):
+        return self.fit(df).transform(df, return_summary=return_summary)
 
     def __repr__(self):
         table = tabulate(

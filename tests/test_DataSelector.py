@@ -41,7 +41,8 @@ def test_column_drop(spec, expected):
     })
 
     selector = DataSelector([('column_drop', spec)])
-    out = selector.fit_transform(df)
+    out, _ = selector.fit_transform(df, return_summary=True)
+
     assert set(out.columns) == expected
 
 
@@ -61,5 +62,6 @@ def test_row_drop(spec, expected):
     }).set_index('index')
 
     selector = DataSelector([('row_drop', spec)])
-    out = selector.fit_transform(df)
+    out, _ = selector.fit_transform(df, return_summary=True)
+
     assert set(out.index) == expected
