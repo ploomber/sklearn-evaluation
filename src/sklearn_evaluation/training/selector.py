@@ -212,7 +212,7 @@ class DataSelector:
         table = '{} with steps:\n'.format(type(self).__name__) + table
         return table
 
-    def _repr_html(self):
+    def _repr_html_(self):
         return self._get_table().to_html()
 
 

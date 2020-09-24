@@ -126,6 +126,15 @@ def test_multi_step():
     assert set(out.index) == {1, 2}
 
 
+def test_repr():
+    df = pd.DataFrame({'x': [1, 2, 3]})
+    selector = DataSelector([['column_drop', {'names': ['x']}]])
+    _, summary = selector.transform(df, return_summary=True)
+
+    assert selector._repr_html_()
+    assert summary._repr_html_()
+
+
 @pytest.mark.parametrize('return_summary', [True, False])
 def test_error_dropping_unknown_column(return_summary):
     df = pd.DataFrame({'x': [1, 2, 3]})
