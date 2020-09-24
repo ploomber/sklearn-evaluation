@@ -54,7 +54,7 @@ def test_column_drop(spec, expected):
     })
 
     selector = DataSelector([('column_drop', spec)])
-    out, _ = selector.fit_transform(df, return_summary=True)
+    out, _ = selector.transform(df, return_summary=True)
 
     assert set(out.columns) == expected
 
@@ -75,7 +75,7 @@ def test_row_drop(spec, expected):
     }).set_index('index')
 
     selector = DataSelector([('row_drop', spec)])
-    out, _ = selector.fit_transform(df, return_summary=True)
+    out, _ = selector.transform(df, return_summary=True)
 
     assert set(out.index) == expected
 
@@ -88,7 +88,7 @@ def test_column_keep():
     })
 
     selector = DataSelector([('column_keep', {'keep': ['x']})])
-    out, _ = selector.fit_transform(df, return_summary=True)
+    out, _ = selector.transform(df, return_summary=True)
 
     assert set(out.columns) == {'x'}
 
@@ -112,6 +112,6 @@ def test_multi_step():
         }),
     ])
 
-    out, _ = selector.fit(df).transform(df, return_summary=True)
-    out, _ = selector.fit_transform(df, return_summary=True)
-    assert not set(out.columns)
+    out, _ = selector.transform(df, return_summary=True)
+    assert set(out.columns) == {'x'}
+    assert set(out.index) == {1, 2}

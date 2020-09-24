@@ -42,10 +42,6 @@ def expand_arguments(func, *args, **kwargs):
 
 
 class Step(abc.ABC):
-    @abc.abstractclassmethod
-    def fit(self, df):
-        pass
-
     @abc.abstractmethod
     def transform(self, df):
         pass
@@ -86,13 +82,11 @@ class ColumnDrop(Step):
         self.max_na_prop = max_na_prop
         self.to_delete_ = None
 
-    def fit(self, df):
+    def transform(self, df, return_summary=False):
         self.to_delete_ = set(self.names + _with_prefix(df, self.prefix) +
                               _with_suffix(df, self.suffix) +
                               _with_max_na_prop(df, self.max_na_prop))
-        return self
 
-    def transform(self, df, return_summary=False):
         out = df[[c for c in df.columns if c not in self.to_delete_]]
         return out if not return_summary else (out, self.transform_summary(df))
 
@@ -115,9 +109,6 @@ class RowDrop(Step):
     def __init__(self, if_nas=False, query=None):
         self.if_nas = if_nas
         self.query = query
-
-    def fit(self, df):
-        return self
 
     def transform(self, df, return_summary=False):
         to_delete = pd.Index([])
@@ -143,9 +134,6 @@ class ColumnKeep(Step):
     @expand_arguments
     def __init__(self, keep):
         self.keep = keep
-
-    def fit(self, df):
-        return self
 
     def transform(self, df, return_summary=False):
         return df[self.keep], self.transform_summary()
@@ -178,15 +166,6 @@ class DataSelector:
                              headers=['Step', 'Summary'],
                              tablefmt='grid')
             return result, table
-
-    def fit(self, df):
-        for step in self.steps:
-            step.fit(df)
-
-        return self
-
-    def fit_transform(self, df, return_summary=False):
-        return self.fit(df).transform(df, return_summary=return_summary)
 
     def __repr__(self):
         table = tabulate(
