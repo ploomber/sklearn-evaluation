@@ -80,14 +80,38 @@ def test_row_drop(spec, expected):
     assert set(out.index) == expected
 
 
-def test_row_keep():
+def test_column_keep():
     df = pd.DataFrame({
         'index': [0, 1, 2],
         'x': [np.nan, 2, 3],
         'y': [10, 20, 30],
     })
 
-    selector = DataSelector([('row_keep', {'keep': ['x']})])
+    selector = DataSelector([('column_keep', {'keep': ['x']})])
     out, _ = selector.fit_transform(df, return_summary=True)
 
     assert set(out.columns) == {'x'}
+
+
+def test_multi_step():
+    df = pd.DataFrame({
+        'index': [0, 1, 2],
+        'x': [np.nan, 2, 3],
+        'y': [10, 20, 30],
+    })
+
+    selector = DataSelector([
+        ('column_keep', {
+            'keep': ['x']
+        }),
+        ('row_drop', {
+            'if_nas': True
+        }),
+        ('column_drop', {
+            'max_na_prop': 0
+        }),
+    ])
+
+    out, _ = selector.fit(df).transform(df, return_summary=True)
+    out, _ = selector.fit_transform(df, return_summary=True)
+    assert not set(out.columns)

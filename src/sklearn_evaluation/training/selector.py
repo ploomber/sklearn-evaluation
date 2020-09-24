@@ -139,7 +139,7 @@ class RowDrop(Step):
         return 'Deleted {:,} rows ({:.1%})'.format(n, n / len(df))
 
 
-class RowKeep(Step):
+class ColumnKeep(Step):
     @expand_arguments
     def __init__(self, keep):
         self.keep = keep
@@ -180,10 +180,8 @@ class DataSelector:
             return result, table
 
     def fit(self, df):
-        result = df
-
         for step in self.steps:
-            result = step.fit(result)
+            step.fit(df)
 
         return self
 
@@ -203,5 +201,5 @@ class DataSelector:
 _mapping = {
     'column_drop': ColumnDrop,
     'row_drop': RowDrop,
-    'row_keep': RowKeep,
+    'column_keep': ColumnKeep,
 }
