@@ -57,7 +57,7 @@ ClassifierEvaluator object, let's see how to plot a confusion matrix.
 .. ipython:: python
 
     @savefig cm_2.png
-    ce.confusion_matrix
+    ce.confusion_matrix()
 
 We can also generate HTML reports from our models by using the make_report
 function. The first parameter is a HTML or Markdown template with jinja2
