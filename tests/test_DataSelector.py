@@ -96,7 +96,7 @@ def test_column_keep():
         'y': [10, 20, 30],
     })
 
-    selector = DataSelector([('column_keep', {'keep': ['x']})])
+    selector = DataSelector([('column_keep', {'names': ['x']})])
     out, _ = selector.transform(df, return_summary=True)
 
     assert set(out.columns) == {'x'}
@@ -111,7 +111,7 @@ def test_multi_step():
 
     selector = DataSelector([
         ('column_keep', {
-            'keep': ['x']
+            'names': ['x']
         }),
         ('row_drop', {
             'if_nas': True

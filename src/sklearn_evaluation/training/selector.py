@@ -13,6 +13,10 @@ from sklearn_evaluation.table import Table
 
 
 def expand_value(value):
+    """
+    If value is a str with at least one dot ("."), try to import it and call
+    it, if anything fails, return the value
+    """
     if isinstance(value, str) and '.' in value:
         parts = value.split('.')
         mod_name, callable = '.'.join(parts[:-1]), parts[-1]
@@ -46,14 +50,16 @@ def expand_arguments(func, *args, **kwargs):
                    for k, v in kwargs.items()})
 
 
-def union_over(argname):
+def concatenate_over(argname):
+    """Decorator to "vectorize" functions and concatenate outputs
+    """
     def _prepare_args(arg_map, value):
         params = copy(arg_map)
         params[argname] = value
         return params
 
     @decorator
-    def _union_over(func, *args, **kwargs):
+    def _concatenate_over(func, *args, **kwargs):
         """Validate that an agument is a proportion [0, 1.0]
         """
         arg_map = map_parameters_in_fn_call(args, kwargs, func)
@@ -66,7 +72,7 @@ def union_over(argname):
         else:
             return func(**arg_map)
 
-    return _union_over
+    return _concatenate_over
 
 
 class Step(abc.ABC):
@@ -84,14 +90,14 @@ class Step(abc.ABC):
         return {k: v for k, v in self.__dict__.items() if k.endswith('_')}
 
 
-@union_over('prefix')
+@concatenate_over('prefix')
 def _with_prefix(df, prefix):
     return [] if not prefix else [
         c for c in df.columns if c.startswith(prefix)
     ]
 
 
-@union_over('suffix')
+@concatenate_over('suffix')
 def _with_suffix(df, suffix):
     return [] if not suffix else [c for c in df.columns if c.endswith(suffix)]
 
@@ -105,8 +111,26 @@ def _with_max_na_prop(df, max_prop):
 
 
 class ColumnDrop(Step):
+    """Drop columns
+
+    Parameters
+    ----------
+    names
+        List of columns to drop
+    prefix
+        Drop columns with this prefix
+    suffix
+        Drop columns with this suffix
+    max_na_prop
+        Drop columns whose proportion of NAs [0, 1] is larger than this
+
+    """
     @expand_arguments
-    def __init__(self, names=None, prefix=None, suffix=None, max_na_prop=None):
+    def __init__(self,
+                 names: list = None,
+                 prefix: str = None,
+                 suffix: str = None,
+                 max_na_prop: float = None):
         self.names = names or []
         self.prefix = prefix
         self.suffix = suffix
@@ -136,8 +160,17 @@ def _query(df, query):
 
 
 class RowDrop(Step):
+    """Drop rows
+
+    Parameters
+    ----------
+    if_nas
+        If True, deletes all rows where there is at leat one NA
+    query
+        Drops all rows matching the query (passed via pandas.query)
+    """
     @expand_arguments
-    def __init__(self, if_nas=False, query=None):
+    def __init__(self, if_nas: bool = False, query: str = None):
         self.if_nas = if_nas
         self.query = query
 
@@ -162,20 +195,34 @@ class RowDrop(Step):
 
 
 class ColumnKeep(Step):
+    """Subset columns
+
+    Parameters
+    ----------
+    names
+        List of columns to keep
+    """
     @expand_arguments
-    def __init__(self, keep):
-        self.keep = keep
+    def __init__(self, names: list):
+        self.names = names
 
     def transform(self, df, return_summary=False):
-        return df[self.keep], self.transform_summary()
+        return df[self.names], self.transform_summary()
 
     def transform_summary(self):
-        return 'Keeping {:,} column(s)'.format(len(self.keep))
+        return 'Keeping {:,} column(s)'.format(len(self.names))
 
 
 class DataSelector:
-    def __init__(self, steps=None):
-        steps = steps or []
+    """Subset a pandas.DataFrame by passing a series of steps
+
+    Parameters
+    ----------
+    steps
+        Steps to apply to the data sequentially (order matters)
+    """
+    def __init__(self, steps: list):
+        steps = steps
         self.steps = [_mapping[step[0]](**step[1]) for step in steps]
 
     def transform(self, df, return_summary=False):
