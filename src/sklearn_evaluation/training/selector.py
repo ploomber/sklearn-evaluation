@@ -217,7 +217,7 @@ class ColumnKeep(Step):
     names
         List of columns to keep
     """
-    def __init__(self, names: list, dotted_path: str = None):
+    def __init__(self, names: list = None, dotted_path: str = None):
         self.names = names or []
         self.dotted_path = dotted_path
 
