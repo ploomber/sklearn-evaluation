@@ -6,6 +6,8 @@ import pandas as pd
 from tabulate import tabulate
 from decorator import decorator
 
+from sklearn_evaluation.exceptions import DataSelectorError
+
 
 def expand_value(value):
     if isinstance(value, str) and '.' in value:
@@ -51,6 +53,7 @@ class Step(abc.ABC):
         args.remove('self')
         return {arg: getattr(self, arg) for arg in args}
 
+    # NOTE: consider deleting this, just show if in the transform summary
     def get_params(self):
         return {k: v for k, v in self.__dict__.items() if k.endswith('_')}
 
@@ -87,7 +90,7 @@ class ColumnDrop(Step):
                               _with_suffix(df, self.suffix) +
                               _with_max_na_prop(df, self.max_na_prop))
 
-        out = df[[c for c in df.columns if c not in self.to_delete_]]
+        out = df.drop(self.to_delete_, axis='columns')
         return out if not return_summary else (out, self.transform_summary(df))
 
     def transform_summary(self, df):
@@ -151,12 +154,17 @@ class DataSelector:
         result = df
         summaries = []
 
-        for step in self.steps:
+        for i, step in enumerate(self.steps):
+            try:
+                result = step.transform(result, return_summary=return_summary)
+            except Exception as e:
+                raise DataSelectorError('Error executing step {} ({})'.format(
+                    i,
+                    type(step).__name__)) from e
+
             if return_summary:
-                result, summary = step.transform(result, return_summary=True)
+                result, summary = result
                 summaries.append(summary)
-            else:
-                result = step.transform(result, return_summary=False)
 
         if not return_summary:
             return result

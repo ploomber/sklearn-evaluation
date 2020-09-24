@@ -4,6 +4,7 @@ import numpy as np
 import pandas as pd
 from sklearn_evaluation.training import DataSelector
 from sklearn_evaluation.training.selector import expand_arguments
+from sklearn_evaluation.exceptions import DataSelectorError
 
 
 def _make_arr(na=0):
@@ -115,3 +116,13 @@ def test_multi_step():
     out, _ = selector.transform(df, return_summary=True)
     assert set(out.columns) == {'x'}
     assert set(out.index) == {1, 2}
+
+
+@pytest.mark.parametrize('return_summary', [True, False])
+def test_error_dropping_unknown_column(return_summary):
+    df = pd.DataFrame({'x': [1, 2, 3]})
+
+    selector = DataSelector([['column_drop', {'names': ['y']}]])
+
+    with pytest.raises(DataSelectorError):
+        selector.transform(df, return_summary=return_summary)
