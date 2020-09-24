@@ -1,8 +1,44 @@
 import abc
 import inspect
+import importlib
 
 import pandas as pd
 from tabulate import tabulate
+from decorator import decorator
+
+
+def expand_value(value):
+    if isinstance(value, str) and '.' in value:
+        parts = value.split('.')
+        mod_name, callable = '.'.join(parts[:-1]), parts[-1]
+
+        try:
+            mod = importlib.import_module(mod_name)
+        except ModuleNotFoundError:
+            return value
+
+        try:
+            fn = getattr(mod, callable)
+        except AttributeError:
+            return value
+
+        return fn()
+    else:
+        return value
+
+
+@decorator
+def expand_arguments(func, *args, **kwargs):
+    """
+    Fnctions decorated with expand_argument call "expand_value" on each
+    passed argument, which will interpred as a "dotted path" any string with
+    dots on it and replace the value by the value returned by a function
+    imported from that location (no arguments passed), if no function
+    is found in such location, the original value is returned
+    """
+    return func(*[expand_value(arg) for arg in args],
+                **{k: expand_value(v)
+                   for k, v in kwargs.items()})
 
 
 class Step(abc.ABC):
@@ -42,6 +78,7 @@ def _with_max_na_prop(df, max_prop):
 
 
 class ColumnDrop(Step):
+    @expand_arguments
     def __init__(self, names=None, prefix=None, suffix=None, max_na_prop=None):
         self.names = names or []
         self.prefix = prefix
@@ -74,6 +111,7 @@ def _query(df, query):
 
 
 class RowDrop(Step):
+    @expand_arguments
     def __init__(self, if_nas=False, query=None):
         self.if_nas = if_nas
         self.query = query
@@ -102,6 +140,7 @@ class RowDrop(Step):
 
 
 class RowKeep(Step):
+    @expand_arguments
     def __init__(self, keep):
         self.keep = keep
 

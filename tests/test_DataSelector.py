@@ -1,13 +1,26 @@
+from pathlib import Path
 import pytest
 import numpy as np
 import pandas as pd
 from sklearn_evaluation.training import DataSelector
+from sklearn_evaluation.training.selector import expand_arguments
 
 
 def _make_arr(na=0):
     arr = np.random.rand(10)
     arr[0:na] = np.nan
     return arr
+
+
+def test_expand_arguments(tmp_directory, add_current_to_sys_path):
+    @expand_arguments
+    def func(a):
+        return a
+
+    Path('functions.py').write_text('def a_function():\n    return [1, 2, 3]')
+
+    assert func('functions.a_function') == [1, 2, 3]
+    assert func(a='functions.a_function') == [1, 2, 3]
 
 
 @pytest.mark.parametrize('spec, expected', [

@@ -1,9 +1,8 @@
-import inspect
 from decorator import decorator
 from sklearn_evaluation.util import map_parameters_in_fn_call
 
-def argument_is_proportion(argname):
 
+def argument_is_proportion(argname):
     @decorator
     def argument_is_proportion(func, *args, **kwargs):
         """Validate that an agument is a proportion [0, 1.0]
@@ -13,8 +12,8 @@ def argument_is_proportion(argname):
 
         # Validate value, but only if has a value
         if (not (0 <= value <= 1.0)) and value is not None:
-            raise ValueError('{argname} must be between 0 and 1.0'
-                             .format(argname=argname))
+            raise ValueError(
+                '{argname} must be between 0 and 1.0'.format(argname=argname))
         return func(*args, **kwargs)
 
     return argument_is_proportion

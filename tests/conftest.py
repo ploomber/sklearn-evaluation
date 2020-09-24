@@ -1,3 +1,8 @@
+from copy import copy
+import sys
+import os
+import shutil
+import tempfile
 from pathlib import Path
 
 import pytest
@@ -20,6 +25,26 @@ def _path_to_tests():
 @pytest.fixture(scope='session')
 def path_to_tests():
     return _path_to_tests()
+
+
+@pytest.fixture()
+def tmp_directory():
+    old = os.getcwd()
+    tmp = tempfile.mkdtemp()
+    os.chdir(str(tmp))
+
+    yield tmp
+
+    shutil.rmtree(str(tmp))
+    os.chdir(old)
+
+
+@pytest.fixture
+def add_current_to_sys_path():
+    old = copy(sys.path)
+    sys.path.insert(0, os.path.abspath('.'))
+    yield sys.path
+    sys.path = old
 
 
 @pytest.fixture(scope='session')
