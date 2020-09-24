@@ -5,11 +5,11 @@ import importlib
 import itertools
 
 import pandas as pd
-from tabulate import tabulate
 from decorator import decorator
 
 from sklearn_evaluation.exceptions import DataSelectorError
 from sklearn_evaluation.util import map_parameters_in_fn_call
+from sklearn_evaluation.table import Table
 
 
 def expand_value(value):
@@ -197,20 +197,23 @@ class DataSelector:
         if not return_summary:
             return result
         else:
-            table = tabulate([(type(step).__name__, summary)
-                              for step, summary in zip(self.steps, summaries)],
-                             headers=['Step', 'Summary'],
-                             tablefmt='grid')
+            table = Table([(type(step).__name__, summary)
+                           for step, summary in zip(self.steps, summaries)],
+                          header=['Step', 'Summary'])
             return result, table
 
+    def _get_table(self):
+        return Table([(type(step).__name__, step.get_args(), step.get_params())
+                      for step in self.steps],
+                     header=['Step', 'Args', 'Params'])
+
     def __repr__(self):
-        table = tabulate(
-            [(type(step).__name__, step.get_args(), step.get_params())
-             for step in self.steps],
-            headers=['Step', 'Args', 'Params'],
-            tablefmt='grid')
+        table = str(self._get_table())
         table = '{} with steps:\n'.format(type(self).__name__) + table
         return table
+
+    def _repr_html(self):
+        return self._get_table().to_html()
 
 
 _mapping = {
