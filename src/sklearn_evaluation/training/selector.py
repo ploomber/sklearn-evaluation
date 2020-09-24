@@ -3,6 +3,7 @@ import abc
 import inspect
 import importlib
 import itertools
+from collections.abc import Mapping
 
 import pandas as pd
 from decorator import decorator
@@ -218,12 +219,12 @@ class DataSelector:
 
     Parameters
     ----------
-    steps
+    *steps
         Steps to apply to the data sequentially (order matters)
     """
-    def __init__(self, steps: list):
+    def __init__(self, *steps):
         steps = steps
-        self.steps = [_mapping[step[0]](**step[1]) for step in steps]
+        self.steps = [_instantiate_step(step) for step in steps]
 
     def transform(self, df, return_summary=False):
         result = df
@@ -261,6 +262,20 @@ class DataSelector:
 
     def _repr_html_(self):
         return self._get_table().to_html()
+
+
+def _instantiate_step(step):
+    if not isinstance(step, Mapping):
+        raise TypeError('step must be a mapping, got {}'.format(
+            type(step).__name__))
+
+    kind = step.pop('kind', None)
+
+    if kind not in _mapping:
+        raise ValueError('Each step must have a kind key with one of '
+                         'the valid values: {}'.format(set(_mapping)))
+
+    return _mapping[kind](**step)
 
 
 _mapping = {

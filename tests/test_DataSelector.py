@@ -62,7 +62,7 @@ def test_column_drop(spec, expected):
         'b_suffix': _make_arr(na=7),
     })
 
-    selector = DataSelector([('column_drop', spec)])
+    selector = DataSelector({**spec, 'kind': 'column_drop'})
     out, _ = selector.transform(df, return_summary=True)
 
     assert set(out.columns) == expected
@@ -83,7 +83,7 @@ def test_row_drop(spec, expected):
         'y': [10, 20, 30],
     }).set_index('index')
 
-    selector = DataSelector([('row_drop', spec)])
+    selector = DataSelector({**spec, 'kind': 'row_drop'})
     out, _ = selector.transform(df, return_summary=True)
 
     assert set(out.index) == expected
@@ -96,7 +96,7 @@ def test_column_keep():
         'y': [10, 20, 30],
     })
 
-    selector = DataSelector([('column_keep', {'names': ['x']})])
+    selector = DataSelector({'kind': 'column_keep', 'names': ['x']})
     out, _ = selector.transform(df, return_summary=True)
 
     assert set(out.columns) == {'x'}
@@ -109,17 +109,20 @@ def test_multi_step():
         'y': [10, 20, 30],
     })
 
-    selector = DataSelector([
-        ('column_keep', {
+    selector = DataSelector(
+        {
+            'kind': 'column_keep',
             'names': ['x']
-        }),
-        ('row_drop', {
+        },
+        {
+            'kind': 'row_drop',
             'if_nas': True
-        }),
-        ('column_drop', {
+        },
+        {
+            'kind': 'column_drop',
             'max_na_prop': 0
-        }),
-    ])
+        },
+    )
 
     out, _ = selector.transform(df, return_summary=True)
     assert set(out.columns) == {'x'}
@@ -128,7 +131,7 @@ def test_multi_step():
 
 def test_repr():
     df = pd.DataFrame({'x': [1, 2, 3]})
-    selector = DataSelector([['column_drop', {'names': ['x']}]])
+    selector = DataSelector({'kind': 'column_drop', 'names': ['x']})
     _, summary = selector.transform(df, return_summary=True)
 
     assert selector._repr_html_()
@@ -139,7 +142,7 @@ def test_repr():
 def test_error_dropping_unknown_column(return_summary):
     df = pd.DataFrame({'x': [1, 2, 3]})
 
-    selector = DataSelector([['column_drop', {'names': ['y']}]])
+    selector = DataSelector({'kind': 'column_drop', 'names': ['y']})
 
     with pytest.raises(DataSelectorError):
         selector.transform(df, return_summary=return_summary)
