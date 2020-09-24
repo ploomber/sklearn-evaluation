@@ -19,6 +19,14 @@ from sklearn_evaluation.util import map_parameters_in_fn_call
 from sklearn_evaluation.table import Table
 
 
+def import_from_dotted_path(dotted_path):
+    parts = dotted_path.split('.')
+    mod_name, callable_ = '.'.join(parts[:-1]), parts[-1]
+    mod = importlib.import_module(mod_name)
+    fn = getattr(mod, callable_)
+    return fn
+
+
 def expand_value(value):
     """
     If value is a str with at least one dot ("."), try to import it and call
@@ -209,15 +217,23 @@ class ColumnKeep(Step):
     names
         List of columns to keep
     """
-    @expand_arguments
-    def __init__(self, names: list):
-        self.names = names
+    def __init__(self, names: list, dotted_path: str = None):
+        self.names = names or []
+        self.dotted_path = dotted_path
 
     def transform(self, df, return_summary=False):
-        return df[self.names], self.transform_summary()
+        to_keep = copy(self.names)
 
-    def transform_summary(self):
-        return 'Keeping {:,} column(s)'.format(len(self.names))
+        if self.dotted_path:
+            fn = import_from_dotted_path(self.dotted_path)
+            to_keep.extend(fn(df))
+            # remove duplicates
+            to_keep = list(set(to_keep))
+
+        return df[to_keep], self.transform_summary(to_keep)
+
+    def transform_summary(self, to_keep):
+        return 'Keeping {:,} column(s)'.format(len(to_keep))
 
 
 class DataSelector:

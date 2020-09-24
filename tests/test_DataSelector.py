@@ -89,17 +89,24 @@ def test_row_drop(spec, expected):
     assert set(out.index) == expected
 
 
-def test_column_keep():
+def test_column_keep(tmp_directory, add_current_to_sys_path):
     df = pd.DataFrame({
         'index': [0, 1, 2],
         'x': [np.nan, 2, 3],
         'y': [10, 20, 30],
     })
 
-    selector = DataSelector({'kind': 'column_keep', 'names': ['x']})
+    Path('col_keep.py').write_text('def fn(df):\n    return ["y"]')
+
+    selector = DataSelector({
+        'kind': 'column_keep',
+        'names': ['x'],
+        'dotted_path': 'col_keep.fn'
+    })
+
     out, _ = selector.transform(df, return_summary=True)
 
-    assert set(out.columns) == {'x'}
+    assert set(out.columns) == {'x', 'y'}
 
 
 def test_multi_step():
