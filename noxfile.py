@@ -16,12 +16,12 @@ def tests(session):
     # run tests in docstrings
     # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
     # doctest docs: https://docs.python.org/3/library/doctest.html
-    # session.run('pytest', 'src/', '--doctest-modules')
+    session.run('pytest', 'src/', '--doctest-modules')
 
     # run examples (this is a hacky way to do it since --doctest-modules will
     # first load any .py files, which are the examples, and then try to run
     # any doctests, there isn't any)
-    # session.run('pytest', 'examples/', '--doctest-modules')
+    session.run('pytest', 'examples/', '--doctest-modules')
 
     # build docs so we can detect build errors
-    # session.run('make', '-C', 'docs/', 'html')
+    session.run('make', '-C', 'docs/', 'html')

@@ -7,3 +7,4 @@ API Reference
     api/plot
     api/table
     api/evaluator
+    api/training

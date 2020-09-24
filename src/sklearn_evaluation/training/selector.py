@@ -1,3 +1,9 @@
+"""
+When training models, it is common to try out different
+subsets of features or subpopulations. ``DataSelector`` allows you to define
+a series of transformations on your data so you can succinctly define a
+subsetting pipeline as a series of dictionaries.
+"""
 from copy import copy
 import abc
 import inspect
@@ -119,9 +125,9 @@ class ColumnDrop(Step):
     names
         List of columns to drop
     prefix
-        Drop columns with this prefix
+        Drop columns with this prefix (or list of)
     suffix
-        Drop columns with this suffix
+        Drop columns with this suffix (or list of)
     max_na_prop
         Drop columns whose proportion of NAs [0, 1] is larger than this
 
@@ -220,13 +226,27 @@ class DataSelector:
     Parameters
     ----------
     *steps
-        Steps to apply to the data sequentially (order matters)
+        Steps to apply to the data sequentially (order matters). Each step
+        must be a dictionary with a key "kind" whose value must be one of
+        "column_drop", "row_drop" or "column_keep". The rest of the key-value
+        pairs must match the signature for the corresponding Step objects
+
     """
     def __init__(self, *steps):
         steps = steps
         self.steps = [_instantiate_step(step) for step in steps]
 
-    def transform(self, df, return_summary=False):
+    def transform(self, df, return_summary: bool = False):
+        """Apply steps
+
+        Parameters
+        ----------
+        df
+            Data frame to transform
+        return_summary
+            If False, the function only returns the output data frame,
+            if True, it also returns a summary table
+        """
         result = df
         summaries = []
 
