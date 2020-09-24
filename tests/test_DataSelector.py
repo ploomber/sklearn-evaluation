@@ -3,7 +3,7 @@ import pytest
 import numpy as np
 import pandas as pd
 from sklearn_evaluation.training import DataSelector
-from sklearn_evaluation.training.selector import expand_arguments
+from sklearn_evaluation.training.selector import expand_arguments, _with_prefix
 from sklearn_evaluation.exceptions import DataSelectorError
 
 
@@ -22,6 +22,14 @@ def test_expand_arguments(tmp_directory, add_current_to_sys_path):
 
     assert func('functions.a_function') == [1, 2, 3]
     assert func(a='functions.a_function') == [1, 2, 3]
+
+
+def test_union_over():
+    """Test the vectorized function
+    """
+    df = pd.DataFrame({'a': [], 'aa': [], 'b': [], 'c': []})
+
+    assert set(_with_prefix(df, ['a', 'b'])) == {'a', 'aa', 'b'}
 
 
 @pytest.mark.parametrize('spec, expected', [

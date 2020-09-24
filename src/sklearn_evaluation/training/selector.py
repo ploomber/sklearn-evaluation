@@ -1,12 +1,15 @@
+from copy import copy
 import abc
 import inspect
 import importlib
+import itertools
 
 import pandas as pd
 from tabulate import tabulate
 from decorator import decorator
 
 from sklearn_evaluation.exceptions import DataSelectorError
+from sklearn_evaluation.util import map_parameters_in_fn_call
 
 
 def expand_value(value):
@@ -43,6 +46,29 @@ def expand_arguments(func, *args, **kwargs):
                    for k, v in kwargs.items()})
 
 
+def union_over(argname):
+    def _prepare_args(arg_map, value):
+        params = copy(arg_map)
+        params[argname] = value
+        return params
+
+    @decorator
+    def _union_over(func, *args, **kwargs):
+        """Validate that an agument is a proportion [0, 1.0]
+        """
+        arg_map = map_parameters_in_fn_call(args, kwargs, func)
+        value = arg_map.get(argname)
+
+        if isinstance(value, list):
+            return list(
+                itertools.chain.from_iterable(
+                    func(**_prepare_args(arg_map, v)) for v in value))
+        else:
+            return func(**arg_map)
+
+    return _union_over
+
+
 class Step(abc.ABC):
     @abc.abstractmethod
     def transform(self, df):
@@ -58,12 +84,14 @@ class Step(abc.ABC):
         return {k: v for k, v in self.__dict__.items() if k.endswith('_')}
 
 
+@union_over('prefix')
 def _with_prefix(df, prefix):
     return [] if not prefix else [
         c for c in df.columns if c.startswith(prefix)
     ]
 
 
+@union_over('suffix')
 def _with_suffix(df, suffix):
     return [] if not suffix else [c for c in df.columns if c.endswith(suffix)]
 
