@@ -117,6 +117,11 @@ def _with_suffix(df, suffix):
     return [] if not suffix else [c for c in df.columns if c.endswith(suffix)]
 
 
+@concatenate_over('substr')
+def _contains(df, substr):
+    return [] if not substr else [c for c in df.columns if substr in c]
+
+
 def _with_max_na_prop(df, max_prop):
     if max_prop is not None:
         na_prop = df.isna().sum(axis='index') / len(df)
@@ -136,6 +141,8 @@ class ColumnDrop(Step):
         Drop columns with this prefix (or list of)
     suffix
         Drop columns with this suffix (or list of)
+    contains
+        Drop columns if they contains this substring
     max_na_prop
         Drop columns whose proportion of NAs [0, 1] is larger than this
 
@@ -145,17 +152,20 @@ class ColumnDrop(Step):
                  names: list = None,
                  prefix: str = None,
                  suffix: str = None,
+                 contains: str = None,
                  max_na_prop: float = None):
         self.names = names or []
         self.prefix = prefix
         self.suffix = suffix
+        self.contains = contains
         self.max_na_prop = max_na_prop
         self.to_delete_ = None
 
     def transform(self, df, return_summary=False):
         self.to_delete_ = set(self.names + _with_prefix(df, self.prefix) +
                               _with_suffix(df, self.suffix) +
-                              _with_max_na_prop(df, self.max_na_prop))
+                              _with_max_na_prop(df, self.max_na_prop) +
+                              _contains(df, self.contains))
 
         out = df.drop(self.to_delete_, axis='columns')
         return out if not return_summary else (out, self.transform_summary(df))

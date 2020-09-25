@@ -50,6 +50,9 @@ def test_union_over():
         'prefix': 'prefix',
         'suffix': 'suffix'
     }, {'y', 'z'}],
+    [{
+        'contains': 'x',
+    }, {'y', 'z'}],
 ])
 def test_column_drop(spec, expected):
     df = pd.DataFrame({
