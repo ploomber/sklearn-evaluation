@@ -7,12 +7,16 @@ from sklearn_evaluation.table import Table
 
 
 class SQLiteTracker:
-    """
-    A simple experiment tracker using SQLite
+    """A simple experiment tracker using SQLite
+
+    Parameters
+    ----------
+    path
+        Database location
 
     """
-    def __init__(self, database):
-        self.conn = sqlite3.connect(database)
+    def __init__(self, path: str):
+        self.conn = sqlite3.connect(path)
 
         cur = self.conn.cursor()
         cur.execute("""

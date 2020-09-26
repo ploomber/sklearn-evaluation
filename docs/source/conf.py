@@ -18,7 +18,8 @@ import os
 # If extensions (or modules to document with autodoc) are in another directory,
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
-# sys.path.insert(0, os.path.abspath('../..'))
+sys.path.insert(0, os.path.abspath('.'))
+import hooks
 
 # -- General configuration ------------------------------------------------
 
@@ -35,7 +36,8 @@ extensions = [
     'sphinx.ext.autodoc',
     'sphinx.ext.autosummary',
     'sphinx.ext.intersphinx',
-    'numpydoc',
+    'sphinx.ext.napoleon',
+    'nbsphinx',
 ]
 
 # Configuration parameters for plot_directive
@@ -309,4 +311,6 @@ intersphinx_mapping = {
     'matplotlib': ('http://matplotlib.org/', None),
 }
 
-numpydoc_show_class_members = False
+
+def setup(app):
+    app.connect('config-inited', hooks.config_init)
