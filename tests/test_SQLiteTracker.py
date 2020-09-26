@@ -78,3 +78,20 @@ def test_reprs():
 
     assert [uuid in repr(tracker) for uuid in uuids] == expected
     assert [uuid in tracker._repr_html_() for uuid in uuids] == expected
+
+
+def test_recent():
+    tracker = SQLiteTracker(':memory:')
+
+    for i in range(5):
+        tracker.insert(i, {'a': i})
+
+    df = tracker.recent(normalize=False)
+
+    assert df.columns.tolist() == ['created', 'content', 'comment']
+    assert df.index.name == 'uuid'
+
+    df = tracker.recent(normalize=True)
+
+    assert df.columns.tolist() == ['created', 'a', 'comment']
+    assert df.index.name == 'uuid'

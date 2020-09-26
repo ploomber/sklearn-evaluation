@@ -28,12 +28,35 @@ class SQLiteTracker:
     def __getitem__(self, uuid):
         """Get experiment with a given uuid
         """
-        # TODO: use pandas to convert the JSON dictionary to columns
         # TODO: make it work for a list of uuids
         return pd.read_sql('SELECT * FROM experiments WHERE uuid = ?',
                            self.conn,
                            params=[uuid],
                            index_col='uuid')
+
+    def recent(self, n=5, normalize=False):
+        """Get most recent experiments as a pandas.DataFrame
+        """
+        query = """
+        SELECT uuid, created, content, comment
+        FROM experiments
+        ORDER BY created DESC
+        LIMIT ?
+        """
+        df = pd.read_sql(query, self.conn, params=[n], index_col='uuid')
+
+        if normalize:
+            # parse and normalize json
+            content = pd.json_normalize(
+                df.pop('content').apply(lambda s: json.loads(s))).set_index(
+                    df.index)
+            df = df.join(content)
+
+            # re order columns to show "comment" at the end
+            comment = df.pop('comment')
+            df.insert(len(df.columns), 'comment', comment)
+
+        return df
 
     def query(self, code):
         """Query the database, returns a pandas.DataFrame
