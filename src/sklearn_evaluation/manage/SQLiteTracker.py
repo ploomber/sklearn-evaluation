@@ -67,7 +67,10 @@ class SQLiteTracker:
 
         Examples
         --------
-        >>> tracker.query(
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker(':memory:') # example in-memory db
+        >>> tracker.insert('my_uuid', {'a': 1})
+        >>> df = tracker.query(
         ... "SELECT uuid, json_extract(parameters, '$.a') FROM experiments")
         """
         df = pd.read_sql(code, self.conn)

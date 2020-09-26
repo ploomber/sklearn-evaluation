@@ -22,7 +22,6 @@ def horizontal(values, labels=None, sort=True, error=None, ax=None):
     >>> from sklearn_evaluation.plot.matplotlib import bar
     >>> values = np.arange(10)
     >>> ax = bar.horizontal(values)
-    >>> plt.show()
 
     Notes
     -----
@@ -66,7 +65,6 @@ def vertical(values, labels=None, sort=True, error=None, ax=None):
     >>> from sklearn_evaluation.plot.matplotlib import bar
     >>> values = np.arange(10)
     >>> ax = bar.vertical(values)
-    >>> plt.show()
 
     """
     if sort:
@@ -104,33 +102,38 @@ class BarShifter:
     will plot the first element for every group, then the second one
     and so on
     """
-
     def __init__(self, g_number, g_size, ax, scale=0.8):
         self.g_number = g_number
         self.g_size = g_size
         self.ax = ax
         self.i = 0
-        self.width = (1.0/g_size)*scale
+        self.width = (1.0 / g_size) * scale
         self.colors = plt.get_cmap()(np.linspace(0, 1, self.g_size))
 
     def __call__(self, height, **kwargs):
-        left = [x+self.i*self.width for x in range(self.g_number)]
-        self.ax.bar(left, height, self.width, color=self.colors[self.i],
-                    ecolor=self.colors[self.i], **kwargs)
+        left = [x + self.i * self.width for x in range(self.g_number)]
+        self.ax.bar(left,
+                    height,
+                    self.width,
+                    color=self.colors[self.i],
+                    ecolor=self.colors[self.i],
+                    **kwargs)
 
         self.i += 1
         if self.i == self.g_size:
             n = range(self.g_number)
-            ticks_pos = [x+(self.width*self.g_size)/2.0 for x in n]
+            ticks_pos = [x + (self.width * self.g_size) / 2.0 for x in n]
             self.ax.set_xticks(ticks_pos)
 
 
 @set_default_ax
-def bar_groups(records, ax=None, group_by=None, get_value=lambda data: data,
+def bar_groups(records,
+               ax=None,
+               group_by=None,
+               get_value=lambda data: data,
                get_error=None):
     dg = DataGrid(records, group_by=group_by)
     bs = BarShifter(*dg.shape, ax=ax)
-
 
     for name, data in dg.rowiter():
         if get_error is not None:
