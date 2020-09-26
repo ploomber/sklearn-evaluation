@@ -1,3 +1,4 @@
+from os import environ
 from pathlib import Path
 from ploomber import DAG
 from ploomber.tasks import NotebookRunner
@@ -5,12 +6,17 @@ from ploomber.products import File
 
 
 def config_init(app, config):
-    """Note: this is executed with docs/ as working directory
     """
+    Note: this is executed with docs/ as working directory (using make html)
+    but from the root directory in readthedocs.org
+    """
+
+    base_path = Path('docs/source' if environ.get('READTHEDOCS') else 'source')
+
     dag = DAG()
 
-    NotebookRunner(Path('source/nbs/SQLiteTracker.md'),
-                   File('source/user_guide/SQLiteTracker.ipynb'),
+    NotebookRunner(base_path / 'nbs/SQLiteTracker.md',
+                   File(base_path / 'user_guide/SQLiteTracker.ipynb'),
                    dag=dag,
                    kernelspec_name='python3')
 
