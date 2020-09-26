@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 import pytest
 from sklearn_evaluation.manage.SQLiteTracker import SQLiteTracker
 
@@ -20,7 +22,7 @@ def test_comment():
     tracker = SQLiteTracker(':memory:')
     uuid = tracker.new()
     tracker.comment(uuid, 'this is a comment')
-    res = tracker.get(uuid)
+    res = tracker[uuid]
 
     assert res.loc[uuid].comment == 'this is a comment'
 
@@ -28,7 +30,7 @@ def test_comment():
 def test_get():
     tracker = SQLiteTracker(':memory:')
     tracker.insert('some_uuid', {'a': 1})
-    res = tracker.get('some_uuid')
+    res = tracker['some_uuid']
     content = res.loc['some_uuid'].content
 
     assert len(res) == 1
@@ -55,5 +57,24 @@ def test_update():
     tracker = SQLiteTracker(':memory:')
     uuid = tracker.new()
     tracker.update(uuid, {})
-    res = tracker.get(uuid)
+    res = tracker[uuid]
     assert len(res) == 1
+
+
+def test_reprs():
+    tracker = SQLiteTracker(':memory:')
+
+    assert 'SQLiteTracker' in repr(tracker)
+    assert 'SQLiteTracker' in tracker._repr_html_()
+    assert '(No experiments saved yet)' in repr(tracker)
+    assert '(No experiments saved yet)' in tracker._repr_html_()
+
+    uuids = [uuid4().hex for _ in range(6)]
+
+    for i, uuid in enumerate(uuids):
+        tracker.insert(uuid, {'a': i})
+
+    expected = [True, True, True, True, True, False]
+
+    assert [uuid in repr(tracker) for uuid in uuids] == expected
+    assert [uuid in tracker._repr_html_() for uuid in uuids] == expected

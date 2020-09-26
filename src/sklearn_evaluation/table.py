@@ -1,6 +1,5 @@
 from . import compute
 
-
 __all__ = ['feature_importances']
 
 
@@ -15,11 +14,13 @@ class Table():
         self.header = header
 
     def to_html(self):
-        return self._tabulate(self.content, headers=self.header,
+        return self._tabulate(self.content,
+                              headers=self.header,
                               tablefmt='html')
 
     def __str__(self):
-        return self._tabulate(self.content, headers=self.header,
+        return self._tabulate(self.content,
+                              headers=self.header,
                               tablefmt='grid')
 
     def _repr_html_(self):
@@ -27,6 +28,9 @@ class Table():
 
     def __repr__(self):
         return str(self)
+
+    def __len__(self):
+        return len(self.content)
 
 
 def feature_importances(data, top_n=None, feature_names=None):

@@ -3,6 +3,7 @@ import sqlite3
 import json
 
 import pandas as pd
+from sklearn_evaluation.table import Table
 
 
 class SQLiteTracker:
@@ -24,7 +25,7 @@ class SQLiteTracker:
         """)
         cur.close()
 
-    def get(self, uuid):
+    def __getitem__(self, uuid):
         """Get experiment with a given uuid
         """
         # TODO: use pandas to convert the JSON dictionary to columns
@@ -93,6 +94,38 @@ class SQLiteTracker:
         """, [comment, uuid])
         cur.close()
 
+    def _recent(self, n=5, fmt='html'):
+        if fmt not in {'html', 'plain'}:
+            raise ValueError('fmt must be one "html" or "plain"')
+
+        cur = self.conn.cursor()
+        cur.execute(
+            """
+        SELECT uuid, created, content, comment
+        FROM experiments
+        ORDER BY created DESC
+        LIMIT ?
+        """, [n])
+        res = cur.fetchall()
+        table = Table(res, header=['uuid', 'created', 'content', 'comment'])
+
+        title_template = '<h4> {} </h4>' if fmt == 'html' else '{}\n'
+        title = title_template.format(type(self).__name__)
+
+        if not len(table):
+            title += '(No experiments saved yet)'
+            if fmt == 'plain':
+                title += '\n'
+
+        if len(table):
+            footer = (('<br>' if fmt == 'html' else '\n') +
+                      '(Most recent experiments)')
+        else:
+            footer = ''
+
+        return (title + (table.to_html() if fmt == 'html' else str(table)) +
+                footer)
+
     def _can_update(self, uuid):
         """Check if an experiment with a given uuid can be updated
         """
@@ -120,6 +153,11 @@ class SQLiteTracker:
                              'uuid "{}" because it does '
                              'not exist'.format(uuid))
 
-    # TODO: implement a function to get the latest experiments
-    # TODO: implement a useful __repr__ (maybe show most recent experiments?)
-    # TODO: implement _repr_html_
+    def __repr__(self):
+        return self._recent(fmt='plain')
+
+    def _repr_html_(self):
+        return self._recent(fmt='html')
+
+    def __del__(self):
+        self.conn.close()
