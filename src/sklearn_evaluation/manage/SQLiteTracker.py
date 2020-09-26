@@ -23,7 +23,7 @@ class SQLiteTracker:
         CREATE TABLE IF NOT EXISTS experiments (
             uuid TEXT NOT NULL UNIQUE,
             created TIMESTAMP default current_timestamp,
-            content TEXT,
+            parameters TEXT,
             comment TEXT
         )
         """)
@@ -42,7 +42,7 @@ class SQLiteTracker:
         """Get most recent experiments as a pandas.DataFrame
         """
         query = """
-        SELECT uuid, created, content, comment
+        SELECT uuid, created, parameters, comment
         FROM experiments
         ORDER BY created DESC
         LIMIT ?
@@ -51,10 +51,10 @@ class SQLiteTracker:
 
         if normalize:
             # parse and normalize json
-            content = pd.json_normalize(
-                df.pop('content').apply(lambda s: json.loads(s))).set_index(
+            parameters = pd.json_normalize(
+                df.pop('parameters').apply(lambda s: json.loads(s))).set_index(
                     df.index)
-            df = df.join(content)
+            df = df.join(parameters)
 
             # re order columns to show "comment" at the end
             comment = df.pop('comment')
@@ -64,6 +64,11 @@ class SQLiteTracker:
 
     def query(self, code):
         """Query the database, returns a pandas.DataFrame
+
+        Examples
+        --------
+        >>> tracker.query(
+        ... "SELECT uuid, json_extract(parameters, '$.a') FROM experiments")
         """
         df = pd.read_sql(code, self.conn)
         if 'uuid' in df:
@@ -81,10 +86,11 @@ class SQLiteTracker:
         VALUES(?)
         """, [uuid])
         cur.close()
+        self.conn.commit()
         return uuid
 
-    def update(self, uuid, content):
-        """Update the content of an empty experiment given its uuid
+    def update(self, uuid, parameters):
+        """Update the parameters of an empty experiment given its uuid
         """
         self._can_update(uuid)
 
@@ -92,21 +98,23 @@ class SQLiteTracker:
         cur.execute(
             """
         UPDATE experiments
-        SET content = ?
+        SET parameters = ?
         WHERE uuid = ?
-        """, [json.dumps(content), uuid])
+        """, [json.dumps(parameters), uuid])
         cur.close()
+        self.conn.commit()
 
-    def insert(self, uuid, content):
+    def insert(self, uuid, parameters):
         """Insert a new experiment
         """
         cur = self.conn.cursor()
         cur.execute(
             """
-        INSERT INTO experiments (uuid, content)
+        INSERT INTO experiments (uuid, parameters)
         VALUES(?, ?)
-        """, [uuid, json.dumps(content)])
+        """, [uuid, json.dumps(parameters)])
         cur.close()
+        self.conn.commit()
 
     def comment(self, uuid, comment):
         """Add a comment to an experiment given its uuid
@@ -120,6 +128,7 @@ class SQLiteTracker:
         WHERE uuid = ?
         """, [comment, uuid])
         cur.close()
+        self.conn.commit()
 
     def _recent(self, n=5, fmt='html'):
         if fmt not in {'html', 'plain'}:
@@ -128,13 +137,13 @@ class SQLiteTracker:
         cur = self.conn.cursor()
         cur.execute(
             """
-        SELECT uuid, created, content, comment
+        SELECT uuid, created, parameters, comment
         FROM experiments
         ORDER BY created DESC
         LIMIT ?
         """, [n])
         res = cur.fetchall()
-        table = Table(res, header=['uuid', 'created', 'content', 'comment'])
+        table = Table(res, header=['uuid', 'created', 'parameters', 'comment'])
 
         title_template = '<h4> {} </h4>' if fmt == 'html' else '{}\n'
         title = title_template.format(type(self).__name__)
@@ -160,7 +169,7 @@ class SQLiteTracker:
 
         cur.execute(
             """
-        SELECT content
+        SELECT parameters
         FROM experiments
         WHERE uuid = ?
         """, [uuid])

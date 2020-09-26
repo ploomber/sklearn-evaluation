@@ -31,10 +31,10 @@ def test_get():
     tracker = SQLiteTracker(':memory:')
     tracker.insert('some_uuid', {'a': 1})
     res = tracker['some_uuid']
-    content = res.loc['some_uuid'].content
+    parameters = res.loc['some_uuid'].parameters
 
     assert len(res) == 1
-    assert content == '{"a": 1}'
+    assert parameters == '{"a": 1}'
 
 
 def test_update_errors():
@@ -88,7 +88,7 @@ def test_recent():
 
     df = tracker.recent(normalize=False)
 
-    assert df.columns.tolist() == ['created', 'content', 'comment']
+    assert df.columns.tolist() == ['created', 'parameters', 'comment']
     assert df.index.name == 'uuid'
 
     df = tracker.recent(normalize=True)
