@@ -13,7 +13,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 ```
 
-```python
+```python tags=["parameters"]
 tracker = SQLiteTracker('my_experiments.db')
 ```
 

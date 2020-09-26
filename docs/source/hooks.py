@@ -11,6 +11,7 @@ def config_init(app, config):
 
     NotebookRunner(Path('source/nbs/SQLiteTracker.md'),
                    File('source/user_guide/SQLiteTracker.ipynb'),
-                   dag=dag)
+                   dag=dag,
+                   kernelspec_name='python3')
 
     dag.build()

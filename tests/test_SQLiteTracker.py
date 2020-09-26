@@ -1,7 +1,7 @@
 from uuid import uuid4
 
 import pytest
-from sklearn_evaluation.manage.SQLiteTracker import SQLiteTracker
+from sklearn_evaluation.SQLiteTracker import SQLiteTracker
 
 
 def test_insert():

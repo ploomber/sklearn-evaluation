@@ -8,3 +8,4 @@ API Reference
     api/table
     api/evaluator
     api/training
+    api/SQLiteTracker
