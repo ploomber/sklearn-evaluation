@@ -83,6 +83,8 @@ type(ordered)
 tracker.comment(ordered.index[0], 'Best performing experiment')
 ```
 
+User `tracker[uuid]` to get a single experiment:
+
 ```python
 tracker[ordered.index[0]]
 ```
