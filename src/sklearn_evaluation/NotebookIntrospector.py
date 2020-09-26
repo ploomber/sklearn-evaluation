@@ -1,16 +1,17 @@
 import base64
 from copy import deepcopy
 from collections.abc import Mapping
+from functools import partial
 
 import nbformat
 from IPython.display import Image, HTML
 
 
-def _safe_eval(source):
+def _safe_eval(source, none_if_error=False):
     try:
         return eval(source)
     except SyntaxError:
-        return source
+        return None if none_if_error else source
 
 
 def _do_nothing(source):
@@ -120,10 +121,12 @@ class NotebookIntrospector(Mapping):
         """
         pass
 
-    def to_dict(self, eval_=False):
-        fn = _safe_eval if eval_ else _do_nothing
+    def to_dict(self, eval_=True, skip_eval_fail=True):
+        fn = partial(_safe_eval,
+                     none_if_error=skip_eval_fail) if eval_ else _do_nothing
         out = deepcopy(self.tag2output)
-        return {k: fn(v['text/plain']) for k, v in out.items()}
+        d = {k: fn(v['text/plain']) for k, v in out.items()}
+        return {k: v for k, v in d.items() if v is not None}
 
     def __repr__(self):
         return '{} with {}'.format(type(self).__name__, set(self.tag2output))

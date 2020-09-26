@@ -59,6 +59,9 @@ import matplotlib.pyplot as plt
 
 # + tags=["a"]
 plt.plot([1, 2, 3], [1, 2, 3])
+
+# + tags=["b"]
+42
 """
 
     path = Path(tmp_path, 'nb.ipynb')
@@ -66,6 +69,7 @@ plt.plot([1, 2, 3], [1, 2, 3])
 
     intr = NotebookIntrospector(path)
     assert isinstance(intr['a'], Image)
+    assert intr.to_dict() == {'b': 42}
 
 
 def test_notebook_with_table(tmp_path):
@@ -74,6 +78,9 @@ import pandas as pd
 
 # + tags=["a"]
 pd.DataFrame({'a': [1,2 ,3]})
+
+# + tags=["b"]
+42
 """
 
     path = Path(tmp_path, 'nb.ipynb')
@@ -81,3 +88,4 @@ pd.DataFrame({'a': [1,2 ,3]})
 
     intr = NotebookIntrospector(path)
     assert isinstance(intr['a'], HTML)
+    assert intr.to_dict() == {'b': 42}
