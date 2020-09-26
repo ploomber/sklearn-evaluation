@@ -51,6 +51,7 @@ def expand_value(value):
         return value
 
 
+# NOTE: consider deleting
 @decorator
 def expand_arguments(func, *args, **kwargs):
     """
