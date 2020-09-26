@@ -4,5 +4,6 @@ channels:
   - conda-forge
 
 dependencies:
+  - pandoc # for nbsphinx
   - python=3.8
   - pip
