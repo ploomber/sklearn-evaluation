@@ -23,14 +23,8 @@ def tests(session):
     # any doctests, there isn't any)
     session.run('pytest', 'examples/', '--doctest-modules')
 
-    session._run('conda',
-                 'env',
-                 'update',
-                 '--prefix',
-                 session.virtualenv.location,
-                 '--file',
-                 'docs/environment.yml',
-                 silent=True)
+    session._run('conda', 'env', 'update', '--prefix',
+                 session.virtualenv.location, '--file', 'docs/environment.yml')
 
     # build docs so we can detect build errors
     session.run('make', '-C', 'docs/', 'html', external=True)
