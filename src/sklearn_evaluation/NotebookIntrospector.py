@@ -1,30 +1,42 @@
+import base64
 from copy import deepcopy
 from collections.abc import Mapping
 
 import nbformat
+from IPython.display import Image, HTML
+
+
+def _safe_eval(source):
+    try:
+        return eval(source)
+    except SyntaxError:
+        return source
+
+
+def _do_nothing(source):
+    return source
 
 
 def _process_cell(cell):
     tags = cell.metadata.get('tags')
+    # TODO: show warning if more than one tag
     return None if not tags else (tags[0], cell.outputs)
 
 
 def _process_output(output):
     out_type = output['output_type']
 
-    if out_type == 'display_data':
-        data = output['data']
-        # matplotlib charts sometimes produce execute_result and display_data
-        # e.g. plt.plot([1, 2, 3], [1, 2, 3]) produces:
-        # [<matplotlib.lines.Line2D at ...>]
-        # and the plot. We ignore any execute_result outputs that only contain
-        # plain text - we still have to find out if this is problematic for
-        # other types of outputs
-        return None if set(data) == {'text/plain'} else data
-    elif out_type == 'stream':
-        # so they all ahve the same format {mime_type: content, ...}
+    if out_type == 'stream':
+        # this happens when doing
+        # a = [1, 2, 3]
+        # print(a)
+        # return dict so they all ahve the same format
+        # {mime_type: content, ...}
         return {'text/plain': output['text']}
-    elif out_type == 'execute_result':
+    elif out_type in {'execute_result', 'display_data'}:
+        # this happens when doing:
+        # a = [1, 2, 3]
+        # a
         return output['data']
     else:
         raise NotImplementedError('Processing output of type "{}" is not '
@@ -33,18 +45,35 @@ def _process_output(output):
 
 def _filter_and_process_outputs(outputs):
     allowed = {'stream', 'display_data', 'execute_result'}
-    outputs = [
-        _process_output(o) for o in outputs if o['output_type'] in allowed
-    ]
-    return [o for o in outputs if o is not None]
+    outputs = [o for o in outputs if o['output_type'] in allowed]
+    # just return the latest output if any
+    return None if not outputs else _process_output(outputs[-1])
+
+
+def _select_mime_type(output):
+    if 'image/png' in output:
+        return Image(data=base64.b64decode(output['image/png']))
+    elif 'text/html' in output:
+        return HTML(output['text/html'])
+    elif 'text/plain' in output:
+        return output['text/plain']
 
 
 class NotebookIntrospector(Mapping):
+    """
+
+    Notes
+    -----
+    Ignores untagged cells, if a cell has more than one tag, it uses the first
+    one as identifier. If a cell has more than one output, it uses the last
+    one and discards the rest.
+    """
     def __init__(self, path):
         self.nb = nbformat.read(path, nbformat.NO_CONVERT)
-        self.tag2outputs = self._tag2outputs()
+        self.tag2output = self._tag2output()
 
-    def _tag2outputs(self):
+    def _tag2output(self):
+        # TODO: raise warning if notebook does not have any tagged cells
 
         cells = [
             _process_cell(c) for c in self.nb.cells if c.cell_type == 'code'
@@ -53,33 +82,36 @@ class NotebookIntrospector(Mapping):
         # ignore untagged cells
         cells = {c[0]: c[1] for c in cells if c is not None}
 
-        # ignore some types of outputs on each cell
+        # ignore some types of outputs on each cell (i.e. errors) and get
+        # the last valid one
         cells = {
             k: _filter_and_process_outputs(outputs)
             for k, outputs in cells.items()
         }
 
+        # TODO: remove entries with None values?
+
         return cells
 
     def __getitem__(self, key):
-        return self.tag2outputs[key]
+        return _select_mime_type(self.tag2output[key])
 
     def __iter__(self):
-        for k in self.tag2outputs:
+        for k in self.tag2output:
             yield k
 
     def __len__(self):
-        return len(self.tag2outputs)
+        return len(self.tag2output)
 
     def eval(self, key):
         # TODO: only eval outputs of type "stream" - we have to keep a
         # secondary dictionary with output types
-        outputs = self.tag2outputs.get(key)
+        outputs = self.tag2output.get(key)
 
         if not len(outputs):
             return None
         if len(outputs) == 1:
-            return eval(outputs[0]['text/plain'])
+            return eval(outputs['text/plain'])
         else:
             return outputs
 
@@ -88,6 +120,13 @@ class NotebookIntrospector(Mapping):
         """
         pass
 
-    def to_dict(self):
-        out = deepcopy(self.tag2outputs)
-        return {k: v[0]['text/plain'] for k, v in out.items()}
+    def to_dict(self, eval_=False):
+        fn = _safe_eval if eval_ else _do_nothing
+        out = deepcopy(self.tag2output)
+        return {k: fn(v['text/plain']) for k, v in out.items()}
+
+    def __repr__(self):
+        return '{} with {}'.format(type(self).__name__, set(self.tag2output))
+
+    def _ipython_key_completions_(self):
+        return self.tag2output.keys()

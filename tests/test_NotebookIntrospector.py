@@ -1,12 +1,26 @@
 from pathlib import Path
 
-import pytest
 import papermill as pm
 import nbformat
 import jupytext
 from sklearn_evaluation import NotebookIntrospector
+from IPython.display import HTML, Image
 
-simple = """
+
+def save_and_execute_notebook(nb_str, path):
+    nb = jupytext.reads(nb_str, fmt='py:light')
+    nb.metadata['kernelspec'] = {
+        'name': 'python3',
+        'language': 'python',
+        'display_name': 'Python 3'
+    }
+
+    nbformat.write(nb, path)
+    pm.execute_notebook(str(path), str(path))
+
+
+def test_simple_notebook(tmp_path):
+    nb_str = """
 # + tags=["a"]
 a = 1
 print(a)
@@ -17,51 +31,53 @@ print(b)
 
 # + tags=["c"]
 c = {'x': 1, 'y': 2}
-print(c)
+c
 """
 
-plot = """
-import matplotlib.pyplot as plt
+    path = Path(tmp_path, 'nb.ipynb')
+    save_and_execute_notebook(nb_str, path)
 
-# + tags=["a"]
-a = 1
-print(a)
-
-# + tags=["b"]
-plt.plot([1, 2, 3], [1, 2, 3])
-"""
-
-table = """
-import pandas as pd
-
-# + tags=["a"]
-a = 1
-print(a)
-
-# + tags=["b"]
-pd.DataFrame({'a': [1,2 ,3]})
-"""
-
-
-@pytest.mark.parametrize('nb_str', [
-    simple,
-])
-def test_noteook_introspector(nb_str, tmp_path):
-    nb_path = Path(tmp_path, 'nb.ipynb')
-
-    nb = jupytext.reads(nb_str, fmt='py:light')
-    nb.metadata['kernelspec'] = {
-        'name': 'python3',
-        'language': 'python',
-        'display_name': 'Python 3'
-    }
-
-    nbformat.write(nb, nb_path)
-    pm.execute_notebook(str(nb_path), str(nb_path))
-
-    intr = NotebookIntrospector(nb_path)
+    intr = NotebookIntrospector(path)
 
     assert set(intr) == {'a', 'b', 'c'}
     assert intr.eval('a') == 1
     assert intr.eval('b') == [1, 2, 3]
     assert intr.eval('c') == {'x': 1, 'y': 2}
+    assert intr.to_dict(eval_=True) == {
+        'a': 1,
+        'b': [1, 2, 3],
+        'c': {
+            'x': 1,
+            'y': 2
+        }
+    }
+
+
+def test_notebook_with_plot(tmp_path):
+    nb_str = """
+import matplotlib.pyplot as plt
+
+# + tags=["a"]
+plt.plot([1, 2, 3], [1, 2, 3])
+"""
+
+    path = Path(tmp_path, 'nb.ipynb')
+    save_and_execute_notebook(nb_str, path)
+
+    intr = NotebookIntrospector(path)
+    assert isinstance(intr['a'], Image)
+
+
+def test_notebook_with_table(tmp_path):
+    nb_str = """
+import pandas as pd
+
+# + tags=["a"]
+pd.DataFrame({'a': [1,2 ,3]})
+"""
+
+    path = Path(tmp_path, 'nb.ipynb')
+    save_and_execute_notebook(nb_str, path)
+
+    intr = NotebookIntrospector(path)
+    assert isinstance(intr['a'], HTML)
