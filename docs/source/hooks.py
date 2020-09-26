@@ -9,7 +9,7 @@ def config_init(app, config):
     """
     dag = DAG()
 
-    NotebookRunner(Path('source/nbs/SQLiteTracker.py'),
+    NotebookRunner(Path('source/nbs/SQLiteTracker.md'),
                    File('source/user_guide/SQLiteTracker.ipynb'),
                    dag=dag)
 
