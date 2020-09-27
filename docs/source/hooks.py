@@ -7,15 +7,11 @@ from ploomber.products import File
 
 def config_init(app, config):
     """
-    Note: this is executed with docs/ as working directory (using make html)
-    but from the root directory in readthedocs.org
+    Note: this is executed from the docs/ directory locally (that's where the
+    Makefile is) but docs/source in readthedocs.org
     """
 
     base_path = Path('' if environ.get('READTHEDOCS') else 'source')
-
-    import os
-    print(os.getcwd())
-    print(os.listdir())
 
     dag = DAG()
 
