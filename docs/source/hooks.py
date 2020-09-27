@@ -11,7 +11,11 @@ def config_init(app, config):
     but from the root directory in readthedocs.org
     """
 
-    base_path = Path('docs/source' if environ.get('READTHEDOCS') else 'source')
+    base_path = Path('' if environ.get('READTHEDOCS') else 'source')
+
+    import os
+    print(os.getcwd())
+    print(os.listdir())
 
     dag = DAG()
 
