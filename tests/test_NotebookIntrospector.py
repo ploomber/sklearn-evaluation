@@ -89,3 +89,18 @@ pd.DataFrame({'a': [1,2 ,3]})
     intr = NotebookIntrospector(path)
     assert isinstance(intr['a'], HTML)
     assert intr.to_dict() == {'b': 42}
+
+
+def test_notebook_with_no_output(tmp_path):
+    nb_str = """
+import pandas as pd
+
+# + tags=["a"]
+x = 1
+"""
+
+    path = Path(tmp_path, 'nb.ipynb')
+    save_and_execute_notebook(nb_str, path)
+
+    intr = NotebookIntrospector(path)
+    assert intr.to_dict() == dict()

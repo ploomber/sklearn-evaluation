@@ -20,8 +20,8 @@ def _do_nothing(source):
 
 def _process_cell(cell):
     tags = cell.metadata.get('tags')
-    # TODO: show warning if more than one tag
-    return None if not tags else (tags[0], cell.outputs)
+    # TODO: show warning if more than one tag or tagged cell with no output
+    return None if (not tags or not cell.outputs) else (tags[0], cell.outputs)
 
 
 def _process_output(output):
@@ -80,7 +80,7 @@ class NotebookIntrospector(Mapping):
             _process_cell(c) for c in self.nb.cells if c.cell_type == 'code'
         ]
 
-        # ignore untagged cells
+        # ignore untagged cells and cells with no output
         cells = {c[0]: c[1] for c in cells if c is not None}
 
         # ignore some types of outputs on each cell (i.e. errors) and get
