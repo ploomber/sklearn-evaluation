@@ -7,6 +7,7 @@ CHANGELOG
 * Adds NotebookIntrospector [Experimental]
 * Migrates tests to ``nox``
 * Adds DataSelector
+* Enables testing with Python 3.8
 
 
 0.5.1 (2020-09-18)
