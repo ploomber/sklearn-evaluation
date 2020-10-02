@@ -2,6 +2,7 @@ import base64
 from copy import deepcopy
 from collections.abc import Mapping
 from functools import partial
+import ast
 
 import nbformat
 from IPython.display import Image, HTML
@@ -9,7 +10,7 @@ from IPython.display import Image, HTML
 
 def _safe_eval(source, none_if_error=False):
     try:
-        return eval(source)
+        return ast.literal_eval(source)
     except SyntaxError:
         return None if none_if_error else source
 
@@ -69,6 +70,9 @@ class NotebookIntrospector(Mapping):
     one as identifier. If a cell has more than one output, it uses the last
     one and discards the rest.
     """
+
+    # TODO: how to handle a print(var) case? it removes the '' and causes a
+    # NameError in eval
     def __init__(self, path):
         self.nb = nbformat.read(path, nbformat.NO_CONVERT)
         self.tag2output = self._tag2output()
@@ -112,7 +116,7 @@ class NotebookIntrospector(Mapping):
         if not len(outputs):
             return None
         if len(outputs) == 1:
-            return eval(outputs['text/plain'])
+            return ast.literal_eval(outputs['text/plain'])
         else:
             return outputs
 
@@ -122,6 +126,7 @@ class NotebookIntrospector(Mapping):
         pass
 
     def to_dict(self, eval_=True, skip_eval_fail=True):
+        # TODO: show warning if failing to eval at least one key
         fn = partial(_safe_eval,
                      none_if_error=skip_eval_fail) if eval_ else _do_nothing
         out = deepcopy(self.tag2output)
