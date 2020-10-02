@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.5.2dev
---------
+0.5.2 (2020-10-02)
+------------------
 * Adds SQLiteTracker for tracking ML experiments using a SQlite backend
 * Adds NotebookIntrospector [Experimental]
 * Migrates tests to ``nox``
