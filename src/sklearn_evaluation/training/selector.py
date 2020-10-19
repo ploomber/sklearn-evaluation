@@ -4,7 +4,7 @@ subsets of features or subpopulations. ``DataSelector`` allows you to define
 a series of transformations on your data so you can succinctly define a
 subsetting pipeline as a series of dictionaries.
 """
-from copy import copy
+from copy import copy, deepcopy
 import abc
 import inspect
 import importlib
@@ -260,7 +260,7 @@ class DataSelector:
 
     """
     def __init__(self, *steps):
-        steps = steps
+        steps = deepcopy(steps)
         self.steps = [_instantiate_step(step) for step in steps]
 
     def transform(self, df, return_summary: bool = False):
