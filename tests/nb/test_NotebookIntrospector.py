@@ -29,3 +29,12 @@ def test_notebook_with_table(tmp_directory, nb_table):
 def test_notebook_with_no_output(tmp_directory, nb_no_output):
     intr = NotebookIntrospector('nb_no_output.ipynb')
     assert dict(intr) == dict()
+
+
+def test_json_serializable(tmp_directory, nb_plot):
+    d = NotebookIntrospector('nb_plot.ipynb').to_json_serializable()
+
+    # must return the plain text representation of the plot (i.e. a str with
+    # "<Figure size YxZ with 1 Axes>")
+    assert 'Figure size' in d['a']
+    assert d['b'] == 42

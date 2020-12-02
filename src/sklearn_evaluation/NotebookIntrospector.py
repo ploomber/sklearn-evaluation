@@ -51,10 +51,10 @@ def _filter_and_process_outputs(outputs):
     return None if not outputs else _process_output(outputs[-1])
 
 
-def _parse_output(output, literal_eval):
-    if 'image/png' in output:
+def _parse_output(output, literal_eval, text_only):
+    if not text_only and 'image/png' in output:
         return Image(data=base64.b64decode(output['image/png']))
-    elif 'text/html' in output:
+    elif not text_only and 'text/html' in output:
         return HTML(output['text/html'])
     elif 'text/plain' in output:
         out = output['text/plain']
@@ -76,8 +76,9 @@ class NotebookIntrospector(Mapping):
     def __init__(self, path, literal_eval=True):
         self.nb = nbformat.read(path, nbformat.NO_CONVERT)
         self.tag2output_raw = self._tag2output()
+        self.literal_eval = literal_eval
         self.tag2output = {
-            k: _parse_output(v, literal_eval=literal_eval)
+            k: _parse_output(v, literal_eval=literal_eval, text_only=False)
             for k, v in self.tag2output_raw.items()
         }
 
@@ -117,6 +118,12 @@ class NotebookIntrospector(Mapping):
 
     def _ipython_key_completions_(self):
         return self.tag2output.keys()
+
+    def to_json_serializable(self):
+        return {
+            k: _parse_output(v, literal_eval=self.literal_eval, text_only=True)
+            for k, v in self.tag2output_raw.items()
+        }
 
 
 class NotebookCollection(Mapping):
