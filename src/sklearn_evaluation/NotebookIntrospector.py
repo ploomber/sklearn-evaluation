@@ -1,14 +1,12 @@
 import base64
-from copy import deepcopy
 from collections.abc import Mapping
-from functools import partial
 import ast
 
 import nbformat
 from IPython.display import Image, HTML
 
 
-def _safe_eval(source, none_if_error=False):
+def _safe_literal_eval(source, none_if_error=False):
     try:
         return ast.literal_eval(source)
     except SyntaxError:
@@ -32,7 +30,7 @@ def _process_output(output):
         # this happens when doing
         # a = [1, 2, 3]
         # print(a)
-        # return dict so they all ahve the same format
+        # return dict so they all have the same format
         # {mime_type: content, ...}
         return {'text/plain': output['text']}
     elif out_type in {'execute_result', 'display_data'}:
@@ -52,13 +50,14 @@ def _filter_and_process_outputs(outputs):
     return None if not outputs else _process_output(outputs[-1])
 
 
-def _select_mime_type(output):
+def _parse_output(output, literal_eval):
     if 'image/png' in output:
         return Image(data=base64.b64decode(output['image/png']))
     elif 'text/html' in output:
         return HTML(output['text/html'])
     elif 'text/plain' in output:
-        return output['text/plain']
+        out = output['text/plain']
+        return out if not literal_eval else _safe_literal_eval(out)
 
 
 class NotebookIntrospector(Mapping):
@@ -73,9 +72,13 @@ class NotebookIntrospector(Mapping):
 
     # TODO: how to handle a print(var) case? it removes the '' and causes a
     # NameError in eval
-    def __init__(self, path):
+    def __init__(self, path, literal_eval=True):
         self.nb = nbformat.read(path, nbformat.NO_CONVERT)
-        self.tag2output = self._tag2output()
+        self.tag2output_raw = self._tag2output()
+        self.tag2output = {
+            k: _parse_output(v, literal_eval=literal_eval)
+            for k, v in self.tag2output_raw.items()
+        }
 
     def _tag2output(self):
         # TODO: raise warning if notebook does not have any tagged cells
@@ -99,7 +102,7 @@ class NotebookIntrospector(Mapping):
         return cells
 
     def __getitem__(self, key):
-        return _select_mime_type(self.tag2output[key])
+        return self.tag2output[key]
 
     def __iter__(self):
         for k in self.tag2output:
@@ -108,33 +111,32 @@ class NotebookIntrospector(Mapping):
     def __len__(self):
         return len(self.tag2output)
 
-    def eval(self, key):
-        # TODO: only eval outputs of type "stream" - we have to keep a
-        # secondary dictionary with output types
-        outputs = self.tag2output.get(key)
-
-        if not len(outputs):
-            return None
-        if len(outputs) == 1:
-            return ast.literal_eval(outputs['text/plain'])
-        else:
-            return outputs
-
-    def display(self, key):
-        """Display an output
-        """
-        pass
-
-    def to_dict(self, eval_=True, skip_eval_fail=True):
-        # TODO: show warning if failing to eval at least one key
-        fn = partial(_safe_eval,
-                     none_if_error=skip_eval_fail) if eval_ else _do_nothing
-        out = deepcopy(self.tag2output)
-        d = {k: fn(v['text/plain']) for k, v in out.items()}
-        return {k: v for k, v in d.items() if v is not None}
-
     def __repr__(self):
         return '{} with {}'.format(type(self).__name__, set(self.tag2output))
 
     def _ipython_key_completions_(self):
         return self.tag2output.keys()
+
+
+class NotebookCollection(Mapping):
+    def __init__(self, paths, to_df=False):
+        self.nbs = {path: NotebookIntrospector(path) for path in paths}
+        self.to_df = to_df
+
+    def __getitem__(self, key):
+        item = [nb[key] for nb in self.nbs.values()]
+        return item if not self.to_df else _to_df(item, index=self.nbs.keys())
+
+    def __iter__(self):
+        for k in self.nbs.keys():
+            yield k
+
+    def __len__(self):
+        return len(self.nbs)
+
+
+def _to_df(values, index):
+    import pandas as pd
+    df = pd.DataFrame(values)
+    df.index = index
+    return df
