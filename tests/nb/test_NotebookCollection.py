@@ -1,3 +1,4 @@
+import pytest
 import pandas as pd
 
 from sklearn_evaluation import NotebookCollection
@@ -30,3 +31,14 @@ def test_collection_to_df(tmp_directory, nb_literals, nb_other_literals):
     }],
                               index=paths)
     assert col['c'].equals(c_expected)
+
+
+@pytest.mark.parametrize('arg, expected', [
+    ['filenames', ['nb_literals', 'nb_other_literals']],
+    [['a', 'b'], ['a', 'b']],
+])
+def test_custom_keys(tmp_directory, nb_literals, nb_other_literals, arg,
+                     expected):
+    paths = ['nb_literals.ipynb', 'nb_other_literals.ipynb']
+    col = NotebookCollection(paths, to_df=True, keys=arg)
+    assert list(col) == expected

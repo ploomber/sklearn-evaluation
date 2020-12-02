@@ -1,3 +1,4 @@
+from pathlib import Path
 import base64
 from collections.abc import Mapping
 import ast
@@ -119,8 +120,16 @@ class NotebookIntrospector(Mapping):
 
 
 class NotebookCollection(Mapping):
-    def __init__(self, paths, to_df=False):
-        self.nbs = {path: NotebookIntrospector(path) for path in paths}
+    def __init__(self, paths, to_df=False, keys=None):
+        if keys is None:
+            keys = paths
+        elif keys == 'filenames':
+            keys = [_get_filename(path) for path in paths]
+
+        self.nbs = {
+            key: NotebookIntrospector(path)
+            for key, path in zip(keys, paths)
+        }
         self.to_df = to_df
 
     def __getitem__(self, key):
@@ -133,6 +142,11 @@ class NotebookCollection(Mapping):
 
     def __len__(self):
         return len(self.nbs)
+
+
+def _get_filename(path):
+    path = Path(path)
+    return path.name.replace(path.suffix, '')
 
 
 def _to_df(values, index):
