@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+0.5.3dev
+--------
+* ``DataSelector`` copies input steps to prevent mutating input params
+* Simplifies ``NotebookInstrospector`` API and adds first implementation of ``NotebookCollection``
+
+
 0.5.2 (2020-10-02)
 ------------------
 * Adds SQLiteTracker for tracking ML experiments using a SQlite backend
