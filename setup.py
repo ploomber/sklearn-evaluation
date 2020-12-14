@@ -23,9 +23,9 @@ TEST = [
     'pytest',
     # need to pin this version because pytest 4 breaks matplotlib image
     # comparison tests
-    'pytest-cov==2.6.1',
+    'pytest-cov',
     # for coveralls.io
-    'coveralls==1.1',
+    'coveralls',
 ]
 
 ALL = DOCS + TEST
