@@ -16,7 +16,17 @@ DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'.
                 format(VERSION))
 
 DOCS = ['sphinx', 'ipython', 'sphinx-rtd-theme', 'ploomber', 'nbsphinx']
-TEST = ['jupytext', 'papermill', 'ipykernel', 'pytest']
+TEST = [
+    'jupytext',
+    'papermill',
+    'ipykernel',
+    'pytest',
+    # need to pin this version because pytest 4 breaks matplotlib image
+    # comparison tests
+    'pytest-cov==2.6.1',
+    # for coveralls.io
+    'coveralls==1.1',
+]
 
 ALL = DOCS + TEST
 
