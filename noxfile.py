@@ -5,7 +5,6 @@ import nox
 @nox.session(venv_backend='conda',
              python=os.environ.get('TRAVIS_PYTHON_VERSION', '3.7'))
 def tests(session):
-    session.install('-r', 'requirements.txt')
     session.install('.[all]')
 
     # run unit tests and output coverage stats
