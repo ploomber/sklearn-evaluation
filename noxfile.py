@@ -29,3 +29,5 @@ def tests(session):
 
         # build docs so we can detect build errors
         session.run('make', '-C', 'docs/', 'html', external=True)
+
+    session.run('coveralls')
