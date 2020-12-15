@@ -8,9 +8,8 @@ def tests(session):
     session.install('.[all]')
 
     # run unit tests and output coverage stats
-    # disabling --cov=sklearn_evaluation because of dependency problem
-    # with pytest 3.6
-    session.run('pytest', 'tests/')
+    session.run('pytest', 'tests/', '--cov=sklearn_evaluation')
+    session.run('coveralls')
 
     # run tests in docstrings
     # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
@@ -29,5 +28,3 @@ def tests(session):
 
         # build docs so we can detect build errors
         session.run('make', '-C', 'docs/', 'html', external=True)
-
-    session.run('coveralls')
