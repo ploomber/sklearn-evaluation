@@ -1,4 +1,4 @@
-__version__ = '0.5.3'
+__version__ = '0.5.4dev'
 
 from .evaluator import ClassifierEvaluator
 from .NotebookIntrospector import NotebookIntrospector, NotebookCollection
