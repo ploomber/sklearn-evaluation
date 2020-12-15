@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.5.3dev
---------
+0.5.3 (2020-12-15)
+-------------------
 * ``DataSelector`` copies input steps to prevent mutating input params
 * Simplifies ``NotebookInstrospector`` API and adds first implementation of ``NotebookCollection``
 
