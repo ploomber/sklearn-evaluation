@@ -7,21 +7,21 @@ import nox
 def tests(session):
     session.install('.[all]')
 
-    # run unit tests and output coverage stats
-    session.run('pytest', 'tests/', '--cov=sklearn_evaluation')
-
-    # run tests in docstrings
+    # run unit tests
+    # docstrings
     # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
     # doctest docs: https://docs.python.org/3/library/doctest.html
-    session.run('pytest', 'src/', '--doctest-modules',
-                '--cov=sklearn_evaluation')
-
-    # run examples (this is a hacky way to do it since --doctest-modules will
+    # and examples (this is a hacky way to do it since --doctest-modules will
     # first load any .py files, which are the examples, and then try to run
     # any doctests, there isn't any)
-    session.run('pytest', 'examples/', '--doctest-modules',
-                '--cov=sklearn_evaluation')
-
+    session.run(
+        'pytest',
+        'tests/',
+        'src/',
+        'examples/',
+        '--cov=sklearn_evaluation',
+        '--doctest-modules',
+    )
     session.run('coveralls')
 
     if session.python == '3.7':
