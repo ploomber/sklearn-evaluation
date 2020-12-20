@@ -94,9 +94,11 @@ def add_summary_tab(elements, ids):
     out_ids = copy.copy(ids)
 
     if isinstance(elements[0], (HTML, pd.DataFrame)):
-        summary = HTML(metrics_df(elements, ids)._repr_html_())
-        out.append(summary)
-        out_ids.append('Summary')
+        summary = make_summary(elements, ids)
+
+        if summary is not None:
+            out.append(HTML(summary._repr_html_()))
+            out_ids.append('Summary')
 
     return out, out_ids
 
@@ -133,12 +135,21 @@ def to_df(obj):
         raise ValueError('More than one table detected')
 
     df = dfs[0]
-
-    if df.columns[0] == 'Unnamed: 0':
-        df.columns = [None, *df.columns[1:]]
-
+    df.columns = process_columns(df.columns)
     df = df.set_index(df.columns[0])
     return df
+
+
+def process_columns(columns):
+    if isinstance(columns, pd.MultiIndex):
+        return [process_multi_index_col(name) for name in columns]
+    else:
+        return [None, *columns[1:]]
+
+
+def process_multi_index_col(col):
+    names = [name for name in col if 'Unnamed:' not in name]
+    return names[0]
 
 
 def color_negative_red(val):
@@ -161,21 +172,34 @@ def color_min(s):
     return ['color: green' if v else '' for v in is_max]
 
 
-def metrics_df(tables, ids):
-    out = pd.concat([to_df(table) for table in tables])
-    out.index = ids
-    out = out.T
+def make_summary(tables, ids):
+    dfs = [to_df(table) for table in tables]
 
-    if len(tables) == 2:
-        c1, c2 = out.columns
-        diff = out[c2] - out[c1]
-        # TODO: add ratio and percentage
-        out['diff'] = diff
-        styled = out.style.applymap(color_neg_and_pos, subset=['diff'])
+    # Single-row data frames, each metric is a single number
+    # TODO: check dims are consistent
+    if len(dfs[0]) == 1:
+        out = pd.concat(dfs)
+        out.index = ids
+        out = out.T
+
+        if len(tables) == 2:
+            c1, c2 = out.columns
+            diff = out[c2] - out[c1]
+            # TODO: add ratio and percentage
+            out['diff'] = diff
+            styled = out.style.applymap(color_neg_and_pos, subset=['diff'])
+        else:
+            styled = out.style.apply(color_max,
+                                     axis='columns').apply(color_min,
+                                                           axis='columns')
+    # Multiple rows, each metric is a vector
     else:
-        styled = out.style.apply(color_max,
-                                 axis='columns').apply(color_min,
-                                                       axis='columns')
+        # we can only return a summary if dealing with two tables
+        if len(tables) == 2:
+            out = dfs[1] - dfs[0]
+            styled = out.style.applymap(color_neg_and_pos)
+        else:
+            styled = None
 
     return styled
 

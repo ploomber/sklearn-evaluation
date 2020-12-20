@@ -40,7 +40,7 @@ from sklearn_evaluation import NotebookIntrospector, NotebookCollection
 files = [f'{model}.ipynb' for model in models]
 ids = ['rf', 'lr', 'svr']
 
-col = NotebookCollection(files, keys=ids, to_df=True)
+col = NotebookCollection(files[:3], keys=ids, to_df=True)
 # -
 
 col['plot']
@@ -49,29 +49,6 @@ col['metrics']
 
 col['metrics_dict']
 
-# +
-# maybe add a less is better option to color code green/red
-m1 = {'mse': 4.0, 'mae': 2.0, 'max_error': 5.5}
-m2 = {'mse': 3.5, 'mae': 1.9, 'max_error': 10.1}
-m3 = {'mse': 2.5, 'mae': 0.9, 'max_error': 5.1}
-
-# ids = ['exp1', 'exp2', 'exp3']
-
-# +
-# out = metrics_df([m1, m2, m3], ids)
-# out
-# -
-
-d1 = {'mse': {'group1': 4.5, 'group2': 5.5}, 'mae': {'group1': 2.2, 'group2': 1.5}}
-d2 = {'mse': {'group1': 5.8, 'group2': 3.2}, 'mae': {'group1': 3.5, 'group2': 2.1}}
-
-df1 = pd.DataFrame(d1).T
-df2 = pd.DataFrame(d2).T
-
-
-
-
-
-
+col['river']
 
 

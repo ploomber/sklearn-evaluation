@@ -66,7 +66,10 @@ df.columns = d['feature_names']
 df['y_true'] = y_test
 df['y_pred'] = y_pred
 df['error_abs'] = np.abs(y_test - y_pred)
+df['error_sq'] = np.square(y_test - y_pred)
 
 # + tags=["river"]
 # CHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
-df.groupby('CHAS')[['error_abs']].mean()
+error_river = df.groupby('CHAS')[['error_abs', 'error_sq']].mean()
+error_river.columns = ['mae', 'mse']
+error_river
