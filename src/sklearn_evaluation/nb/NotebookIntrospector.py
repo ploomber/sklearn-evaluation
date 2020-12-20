@@ -1,15 +1,21 @@
-from pathlib import Path
 import base64
 from collections.abc import Mapping
 import ast
 
+import pandas as pd
 import nbformat
 from IPython.display import Image, HTML
 
 
 def _safe_literal_eval(source, none_if_error=False):
     try:
-        return ast.literal_eval(source)
+        result = ast.literal_eval(source)
+
+        if isinstance(result, Mapping):
+            result = pd.DataFrame(result, index=[0])
+
+        return result
+
     except SyntaxError:
         return None if none_if_error else source
 
@@ -51,14 +57,14 @@ def _filter_and_process_outputs(outputs):
     return None if not outputs else _process_output(outputs[-1])
 
 
-def _parse_output(output, literal_eval, text_only):
+def _parse_output(output, literal_eval, to_df, text_only):
     if not text_only and 'image/png' in output:
         return Image(data=base64.b64decode(output['image/png']))
     elif not text_only and 'text/html' in output:
         return HTML(output['text/html'])
     elif 'text/plain' in output:
         out = output['text/plain']
-        return out if not literal_eval else _safe_literal_eval(out)
+        return out if not literal_eval else _safe_literal_eval(out, to_df)
 
 
 class NotebookIntrospector(Mapping):
@@ -73,12 +79,15 @@ class NotebookIntrospector(Mapping):
 
     # TODO: how to handle a print(var) case? it removes the '' and causes a
     # NameError in eval
-    def __init__(self, path, literal_eval=True):
+    def __init__(self, path, literal_eval=True, to_df=False):
         self.nb = nbformat.read(path, nbformat.NO_CONVERT)
         self.tag2output_raw = self._tag2output()
         self.literal_eval = literal_eval
         self.tag2output = {
-            k: _parse_output(v, literal_eval=literal_eval, text_only=False)
+            k: _parse_output(v,
+                             literal_eval=literal_eval,
+                             to_df=to_df,
+                             text_only=False)
             for k, v in self.tag2output_raw.items()
         }
 
@@ -124,40 +133,3 @@ class NotebookIntrospector(Mapping):
             k: _parse_output(v, literal_eval=self.literal_eval, text_only=True)
             for k, v in self.tag2output_raw.items()
         }
-
-
-class NotebookCollection(Mapping):
-    def __init__(self, paths, to_df=False, keys=None):
-        if keys is None:
-            keys = paths
-        elif keys == 'filenames':
-            keys = [_get_filename(path) for path in paths]
-
-        self.nbs = {
-            key: NotebookIntrospector(path)
-            for key, path in zip(keys, paths)
-        }
-        self.to_df = to_df
-
-    def __getitem__(self, key):
-        item = [nb[key] for nb in self.nbs.values()]
-        return item if not self.to_df else _to_df(item, index=self.nbs.keys())
-
-    def __iter__(self):
-        for k in self.nbs.keys():
-            yield k
-
-    def __len__(self):
-        return len(self.nbs)
-
-
-def _get_filename(path):
-    path = Path(path)
-    return path.name.replace(path.suffix, '')
-
-
-def _to_df(values, index):
-    import pandas as pd
-    df = pd.DataFrame(values)
-    df.index = index
-    return df

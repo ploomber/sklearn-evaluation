@@ -12,12 +12,16 @@
 #     name: python3
 # ---
 
+# +
 import importlib
+
 from sklearn.datasets import load_boston
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import seaborn as sns
 import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
 
 # + tags=["parameters"]
 model = 'sklearn.ensemble.RandomForestRegressor'
@@ -40,13 +44,29 @@ model.fit(X_train, y_train)
 y_pred = model.predict(X_test)
 
 # + tags=["plot"]
-sns.scatterplot(x=y_pred, y=y_test)
-# -
+ax = plt.gca()
+sns.scatterplot(x=y_pred, y=y_test, ax=ax)
+ax.set_xlim(0, 50)
+ax.set_ylim(0, 50)
+ax.grid()
 
+# + tags=["metrics_dict"]
 metrics_ = {
     'mae': metrics.mean_absolute_error(y_test, y_pred),
     'mse': metrics.mean_squared_error(y_test, y_pred)
 }
+metrics_
 
 # + tags=["metrics"]
 pd.DataFrame(metrics_, index=[0])
+# -
+
+df = pd.DataFrame(X_test)
+df.columns = d['feature_names']
+df['y_true'] = y_test
+df['y_pred'] = y_pred
+df['error_abs'] = np.abs(y_test - y_pred)
+
+# + tags=["river"]
+# CHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
+df.groupby('CHAS')[['error_abs']].mean()
