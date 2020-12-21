@@ -21,8 +21,12 @@ Tools for comparing model results
 # %load_ext autoreload
 # %autoreload 2
 
+# +
 import papermill as pm
 import jupytext
+
+from sklearn_evaluation import NotebookIntrospector, NotebookCollection
+# -
 
 nb = jupytext.read('train.py')
 jupytext.write(nb, 'train.ipynb')
@@ -32,16 +36,15 @@ models = ['sklearn.ensemble.RandomForestRegressor', 'sklearn.linear_model.Linear
 
 for model in models:
     pm.execute_notebook('train.ipynb', f'{model}.ipynb', parameters={'model': model})
-# -
-
-from sklearn_evaluation import NotebookIntrospector, NotebookCollection
 
 # +
 files = [f'{model}.ipynb' for model in models]
 ids = ['rf', 'lr', 'svr']
 
-col = NotebookCollection(files[:3], keys=ids, to_df=True)
+col = NotebookCollection(files[:3], keys=ids)
 # -
+
+col['model_name']
 
 col['plot']
 

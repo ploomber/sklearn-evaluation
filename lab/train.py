@@ -25,6 +25,9 @@ import matplotlib.pyplot as plt
 
 # + tags=["parameters"]
 model = 'sklearn.ensemble.RandomForestRegressor'
+
+# + tags=["model_name"]
+model
 # -
 
 d = load_boston()

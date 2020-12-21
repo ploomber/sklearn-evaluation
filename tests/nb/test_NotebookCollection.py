@@ -5,40 +5,37 @@ from sklearn_evaluation import NotebookCollection
 
 
 def test_collection(tmp_directory, nb_literals, nb_other_literals):
-    col = NotebookCollection(['nb_literals.ipynb', 'nb_other_literals.ipynb'])
+    col = NotebookCollection(['nb_literals.ipynb', 'nb_other_literals.ipynb'],
+                             keys=['nb1', 'nb2'])
+    assert dict(col['a']) == {'nb1': 1, 'nb2': 2}
+    assert dict(col['b']) == {'nb1': [1, 2, 3], 'nb2': [2, 3, 4]}
+    nb1 = pd.DataFrame({'x': 1, 'y': 2}, index=[0])
+    assert col['c']['nb1'].equals(nb1)
+    nb2 = pd.DataFrame({'x': 2, 'y': 3}, index=[0])
+    assert col['c']['nb2'].equals(nb2)
 
-    assert col['a'] == [1, 2]
-    assert col['b'] == [[1, 2, 3], [2, 3, 4]]
-    assert col['c'] == [{'x': 1, 'y': 2}, {'x': 2, 'y': 3}]
+    summary = pd.DataFrame({
+        'nb1': [1, 2],
+        'nb2': [2, 3],
+        'diff': [1, 1]
+    },
+                           index=['x', 'y'])
 
-
-def test_collection_to_df(tmp_directory, nb_literals, nb_other_literals):
-    paths = ['nb_literals.ipynb', 'nb_other_literals.ipynb']
-    col = NotebookCollection(paths, to_df=True)
-
-    a_expected = pd.DataFrame([1, 2], index=paths)
-    assert col['a'].equals(a_expected)
-
-    b_expected = pd.DataFrame([[1, 2, 3], [2, 3, 4]], index=paths)
-    assert col['b'].equals(b_expected)
-
-    c_expected = pd.DataFrame([{
-        'x': 1,
-        'y': 2
-    }, {
-        'x': 2,
-        'y': 3
-    }],
-                              index=paths)
-    assert col['c'].equals(c_expected)
+    assert col['c']['Summary'].data.equals(summary)
 
 
 @pytest.mark.parametrize('arg, expected', [
-    ['filenames', ['nb_literals', 'nb_other_literals']],
-    [['a', 'b'], ['a', 'b']],
+    [
+        'filenames',
+        ['nb_literals', 'nb_other_literals'],
+    ],
+    [
+        ['a', 'b'],
+        ['a', 'b'],
+    ],
 ])
 def test_custom_keys(tmp_directory, nb_literals, nb_other_literals, arg,
                      expected):
     paths = ['nb_literals.ipynb', 'nb_other_literals.ipynb']
-    col = NotebookCollection(paths, to_df=True, keys=arg)
-    assert list(col) == expected
+    col = NotebookCollection(paths, keys=arg)
+    assert list(col.nbs) == expected

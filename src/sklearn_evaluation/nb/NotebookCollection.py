@@ -13,30 +13,30 @@ from .NotebookIntrospector import NotebookIntrospector
 
 
 class NotebookCollection(Mapping):
-    def __init__(self, paths, to_df=False, keys=None):
+    def __init__(self, paths, keys=None):
         if keys is None:
             keys = paths
         elif keys == 'filenames':
             keys = [_get_filename(path) for path in paths]
 
         self.nbs = {
-            key: NotebookIntrospector(path, to_df=to_df)
+            key: NotebookIntrospector(path, to_df=True)
             for key, path in zip(keys, paths)
         }
-
-        # TODO: remove this
-        self.to_df = to_df
 
         nb = list(self.nbs.values())[0]
 
         self._keys = list(nb.tag2output.keys())
-        self._raw = RawOutput(self, to_df)
+        self._raw = RawMapping(self)
 
     def __getitem__(self, key):
         raw = [nb[key] for nb in self.nbs.values()]
         e, ids_out = add_summary_tab(raw, list(self.nbs.keys()))
-        return make_tabs(ids_out, e)
+        m = {k: v for k, v in zip(ids_out, e)}
+        html = make_tabs(ids_out, e)
+        return HTMLOutput(m, html)
 
+    # TODO: get rid of this
     @property
     def raw(self):
         return self._raw
@@ -52,9 +52,34 @@ class NotebookCollection(Mapping):
         return len(self._keys)
 
 
-class AbstractOutput(Mapping):
+class HTMLOutput(Mapping):
+    def __init__(self, mapping, html):
+        self._mapping = mapping
+        self._html = html
+
+    def __getitem__(self, key):
+        return self._mapping[key]
+
+    def _ipython_key_completions_(self):
+        return self._mapping.keys()
+
+    def __iter__(self):
+        for k in self._mapping:
+            yield k
+
+    def __len__(self):
+        return len(self._mapping)
+
+    def _repr_html_(self):
+        return self._html
+
+
+class RawMapping(Mapping):
     def __init__(self, collection):
         self.collection = collection
+
+    def __getitem__(self, key):
+        return {name: nb[key] for name, nb in self.collection.nbs.items()}
 
     def _ipython_key_completions_(self):
         return self.collection.keys()
@@ -67,26 +92,9 @@ class AbstractOutput(Mapping):
         return len(self.collection)
 
 
-class RawOutput(AbstractOutput):
-    def __init__(self, collection, to_df):
-        super().__init__(collection)
-        self.to_df = to_df
-
-    def __getitem__(self, key):
-        item = [nb[key] for nb in self.collection.nbs.values()]
-        return item if not self.to_df else _to_df(item,
-                                                  index=self.collection.keys())
-
-
 def _get_filename(path):
     path = Path(path)
     return path.name.replace(path.suffix, '')
-
-
-def _to_df(values, index):
-    df = pd.DataFrame(values)
-    df.index = index
-    return df
 
 
 def add_summary_tab(elements, ids):
@@ -97,7 +105,7 @@ def add_summary_tab(elements, ids):
         summary = make_summary(elements, ids)
 
         if summary is not None:
-            out.append(HTML(summary._repr_html_()))
+            out.append(summary)
             out_ids.append('Summary')
 
     return out, out_ids
@@ -122,7 +130,7 @@ def make_tabs(names, contents):
   {% endfor %}
 </div>
 """).render(names=names, zip=zip, contents=contents, prefix=prefix)
-    return HTML(html)
+    return html
 
 
 def to_df(obj):
@@ -216,9 +224,7 @@ def process_content(content):
         return data2html_img(content.data)
     elif isinstance(content, HTML):
         return content.data
-    elif isinstance(content, pd.DataFrame):
+    elif hasattr(content, '_repr_html_'):
         return content._repr_html_()
     else:
-        t = type(content)
-        raise NotImplementedError(
-            f'Do not know how to handle object of type {t!r}')
+        return str(content)

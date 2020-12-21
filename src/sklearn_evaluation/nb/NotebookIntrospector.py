@@ -7,11 +7,11 @@ import nbformat
 from IPython.display import Image, HTML
 
 
-def _safe_literal_eval(source, none_if_error=False):
+def _safe_literal_eval(source, to_df=False, none_if_error=False):
     try:
         result = ast.literal_eval(source)
 
-        if isinstance(result, Mapping):
+        if isinstance(result, Mapping) and to_df:
             result = pd.DataFrame(result, index=[0])
 
         return result
@@ -64,7 +64,8 @@ def _parse_output(output, literal_eval, to_df, text_only):
         return HTML(output['text/html'])
     elif 'text/plain' in output:
         out = output['text/plain']
-        return out if not literal_eval else _safe_literal_eval(out, to_df)
+        return out if not literal_eval else _safe_literal_eval(out,
+                                                               to_df=to_df)
 
 
 class NotebookIntrospector(Mapping):
@@ -130,6 +131,9 @@ class NotebookIntrospector(Mapping):
 
     def to_json_serializable(self):
         return {
-            k: _parse_output(v, literal_eval=self.literal_eval, text_only=True)
+            k: _parse_output(v,
+                             literal_eval=self.literal_eval,
+                             to_df=False,
+                             text_only=True)
             for k, v in self.tag2output_raw.items()
         }
