@@ -25,6 +25,7 @@ import matplotlib.pyplot as plt
 
 # + tags=["parameters"]
 model = 'sklearn.ensemble.RandomForestRegressor'
+params = {'min_samples_leaf': 1,  'n_estimators': 50}
 
 # + tags=["model_name"]
 model
@@ -40,7 +41,11 @@ class_ = getattr(importlib.import_module(module), name)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 
-model = class_()
+model = class_(**params)
+
+# + tags=["model_params"]
+model.get_params()
+# -
 
 model.fit(X_train, y_train)
 
@@ -52,13 +57,12 @@ sns.scatterplot(x=y_pred, y=y_test, ax=ax)
 ax.set_xlim(0, 50)
 ax.set_ylim(0, 50)
 ax.grid()
+# -
 
-# + tags=["metrics_dict"]
 metrics_ = {
     'mae': metrics.mean_absolute_error(y_test, y_pred),
     'mse': metrics.mean_squared_error(y_test, y_pred)
 }
-metrics_
 
 # + tags=["metrics"]
 pd.DataFrame(metrics_, index=[0])
@@ -76,3 +80,6 @@ df['error_sq'] = np.square(y_test - y_pred)
 error_river = df.groupby('CHAS')[['error_abs', 'error_sq']].mean()
 error_river.columns = ['mae', 'mse']
 error_river
+# -
+
+

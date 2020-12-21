@@ -1,3 +1,4 @@
+from difflib import HtmlDiff
 import random
 import string
 import base64
@@ -5,6 +6,7 @@ import copy
 from pathlib import Path
 from collections.abc import Mapping
 
+import black
 import pandas as pd
 from IPython.display import HTML, Image
 from jinja2 import Template
@@ -13,15 +15,28 @@ from .NotebookIntrospector import NotebookIntrospector
 
 
 class NotebookCollection(Mapping):
-    def __init__(self, paths, keys=None):
-        if keys is None:
-            keys = paths
-        elif keys == 'filenames':
-            keys = [_get_filename(path) for path in paths]
+    """Compare output from a collection of notebooks
+
+    Parameters
+    ----------
+    paths : list
+        Paths to notebooks to load
+
+    ids : list or 'filenames', default=None
+        List of ids (one per notebook), if None, paths are used as identifiers,
+        if 'filenames', the file name is extracted from each path and used
+        as identifier (ignores extension)
+
+    """
+    def __init__(self, paths, ids=None):
+        if ids is None:
+            ids = paths
+        elif ids == 'filenames':
+            ids = [_get_filename(path) for path in paths]
 
         self.nbs = {
-            key: NotebookIntrospector(path, to_df=True)
-            for key, path in zip(keys, paths)
+            id_: NotebookIntrospector(path, to_df=False)
+            for id_, path in zip(ids, paths)
         }
 
         nb = list(self.nbs.values())[0]
@@ -102,11 +117,15 @@ def add_summary_tab(elements, ids):
     out_ids = copy.copy(ids)
 
     if isinstance(elements[0], (HTML, pd.DataFrame)):
-        summary = make_summary(elements, ids)
+        summary = make_df_summary(elements, ids)
+    elif isinstance(elements[0], Mapping):
+        summary = make_mapping_summary(elements)
+    else:
+        summary = None
 
-        if summary is not None:
-            out.append(summary)
-            out_ids.append('Summary')
+    if summary is not None:
+        out.append(summary)
+        out_ids.append('Summary')
 
     return out, out_ids
 
@@ -171,16 +190,31 @@ def color_neg_and_pos(val):
 
 
 def color_max(s):
-    is_max = s == s.max()
+    is_max = s == s[~s.isna()].max()
     return ['color: red' if v else '' for v in is_max]
 
 
 def color_min(s):
-    is_max = s == s.min()
+    is_max = s == s[~s.isna()].min()
     return ['color: green' if v else '' for v in is_max]
 
 
-def make_summary(tables, ids):
+_htmldiff = HtmlDiff()
+
+
+def make_mapping_summary(mappings):
+    if len(mappings) != 2:
+        return None
+
+    m1, m2 = mappings
+
+    s1 = black.format_str(str(m1), mode=_fm).splitlines()
+    s2 = black.format_str(str(m2), mode=_fm).splitlines()
+
+    return _htmldiff.make_file(s1, s2)
+
+
+def make_df_summary(tables, ids):
     dfs = [to_df(table) for table in tables]
 
     # Single-row data frames, each metric is a single number
@@ -217,6 +251,9 @@ def data2html_img(data):
     return '<img src="data:image/png;base64, {}"/>'.format(img)
 
 
+_fm = black.FileMode(string_normalization=False, line_length=40)
+
+
 def process_content(content):
     """Returns an HTML string representation of the content
     """
@@ -226,5 +263,8 @@ def process_content(content):
         return content.data
     elif hasattr(content, '_repr_html_'):
         return content._repr_html_()
+    elif isinstance(content, Mapping):
+        c = black.format_str(str(content), mode=_fm)
+        return f'<pre>{c}</pre>'
     else:
         return str(content)
