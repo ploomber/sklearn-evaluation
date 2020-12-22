@@ -1,3 +1,4 @@
+from functools import partial
 from difflib import HtmlDiff
 import random
 import string
@@ -9,9 +10,11 @@ from collections.abc import Mapping
 import black
 import pandas as pd
 from IPython.display import HTML, Image
-from jinja2 import Template
+from jinja2 import Environment, PackageLoader
 
 from .NotebookIntrospector import NotebookIntrospector
+
+_env = Environment(loader=PackageLoader('sklearn_evaluation', 'assets/nb'))
 
 
 class NotebookCollection(Mapping):
@@ -28,7 +31,7 @@ class NotebookCollection(Mapping):
         as identifier (ignores extension)
 
     """
-    def __init__(self, paths, ids=None):
+    def __init__(self, paths, ids=None, scores=False):
         if ids is None:
             ids = paths
         elif ids == 'filenames':
@@ -43,10 +46,11 @@ class NotebookCollection(Mapping):
 
         self._keys = list(nb.tag2output.keys())
         self._raw = RawMapping(self)
+        self._scores = scores
 
     def __getitem__(self, key):
         raw = [nb[key] for nb in self.nbs.values()]
-        e, ids_out = add_summary_tab(raw, list(self.nbs.keys()))
+        e, ids_out = add_compare_tab(raw, list(self.nbs.keys()), self._scores)
         m = {k: v for k, v in zip(ids_out, e)}
         html = make_tabs(ids_out, e)
         return HTMLOutput(m, html)
@@ -112,12 +116,12 @@ def _get_filename(path):
     return path.name.replace(path.suffix, '')
 
 
-def add_summary_tab(elements, ids):
+def add_compare_tab(elements, ids, scores_arg):
     out = copy.copy(elements)
     out_ids = copy.copy(ids)
 
     if isinstance(elements[0], (HTML, pd.DataFrame)):
-        summary = make_df_summary(elements, ids)
+        summary = make_df_summary(elements, ids, scores_arg)
     elif isinstance(elements[0], Mapping):
         summary = make_mapping_summary(elements)
     else:
@@ -125,7 +129,7 @@ def add_summary_tab(elements, ids):
 
     if summary is not None:
         out.append(summary)
-        out_ids.append('Summary')
+        out_ids.append('Compare')
 
     return out, out_ids
 
@@ -133,22 +137,13 @@ def add_summary_tab(elements, ids):
 def make_tabs(names, contents):
     # random prefix to prevent multiple tab outputs to clash with each other
     prefix = ''.join(random.choice(string.ascii_lowercase) for i in range(3))
-
     contents = [process_content(content) for content in contents]
-    html = Template("""
-<ul class="nav nav-tabs" id="myTab" role="tablist">
-  {% for name in names %}
-  <li class="nav-item" role="presentation">
-    <a class="nav-link" id="{{prefix}}-{{name}}-tab" data-toggle="tab" href="#{{prefix}}-{{name}}" role="tab" aria-controls="{{prefix}}-{{name}}" aria-selected="true">{{name}}</a>
-  </li>
-  {% endfor %}
-</ul>
-<div class="tab-content" id="myTabContent">
-  {% for name, content in zip(names, contents) %}
-  <div class="tab-pane fade" id="{{prefix}}-{{name}}" role="tabpanel" aria-labelledby="{{prefix}}-{{name}}-tab">{{content}}</div>
-  {% endfor %}
-</div>
-""").render(names=names, zip=zip, contents=contents, prefix=prefix)
+    template = _env.get_template('template.html')
+
+    html = template.render(names=names,
+                           zip=zip,
+                           contents=contents,
+                           prefix=prefix)
     return html
 
 
@@ -179,24 +174,52 @@ def process_multi_index_col(col):
     return names[0]
 
 
-def color_negative_red(val):
-    color = 'red' if val < 0 else 'black'
-    return 'color: %s' % color
+def color_neg_green(s):
+    return (s < 0).replace({True: 'color: green', False: 'color: red'})
 
 
-def color_neg_and_pos(val):
-    color = 'green' if val < 0 else 'red'
-    return 'color: %s' % color
+def color_neg_red(s):
+    return (s < 0).replace({True: 'color: red', False: 'color: green'})
 
 
-def color_max(s):
-    is_max = s == s[~s.isna()].max()
-    return ['color: red' if v else '' for v in is_max]
+def color(s, which, color):
+    to_color = s == getattr(s[~s.isna()], which)()
+    return [f'color: {color}' if v else '' for v in to_color]
 
 
-def color_min(s):
-    is_max = s == s[~s.isna()].min()
-    return ['color: green' if v else '' for v in is_max]
+_color_map = {
+    'error': {
+        'max': partial(color, which='max', color='red'),
+        'min': partial(color, which='min', color='green'),
+    },
+    'score': {
+        'max': partial(color, which='max', color='green'),
+        'min': partial(color, which='min', color='red'),
+    }
+}
+
+
+def is_score(scores_arg, index):
+    if not scores_arg:
+        return False
+    elif scores_arg is True:
+        return True
+    else:
+        return index in scores_arg
+
+
+def split_errors_and_scores(axis, scores_arg, axis_second, transpose=False):
+    scores = [i for i in axis if is_score(scores_arg, i)]
+    errors = list(set(axis) - set(scores))
+
+    errors_slice = pd.IndexSlice[errors, axis_second]
+    scores_slice = pd.IndexSlice[scores, axis_second]
+
+    if transpose:
+        errors_slice = errors_slice[::-1]
+        scores_slice = scores_slice[::-1]
+
+    return errors_slice, scores_slice
 
 
 _htmldiff = HtmlDiff()
@@ -214,7 +237,12 @@ def make_mapping_summary(mappings):
     return _htmldiff.make_file(s1, s2)
 
 
-def make_df_summary(tables, ids):
+def color_max(s):
+    is_max = s == s[~s.isna()].max()
+    return ['color: red' if v else '' for v in is_max]
+
+
+def make_df_summary(tables, ids, scores_arg):
     dfs = [to_df(table) for table in tables]
 
     # Single-row data frames, each metric is a single number
@@ -223,23 +251,47 @@ def make_df_summary(tables, ids):
         out = pd.concat(dfs)
         out.index = ids
         out = out.T
+        errors, scores = split_errors_and_scores(out.index,
+                                                 scores_arg,
+                                                 axis_second=out.columns)
 
         if len(tables) == 2:
             c1, c2 = out.columns
-            diff = out[c2] - out[c1]
-            # TODO: add ratio and percentage
-            out['diff'] = diff
-            styled = out.style.applymap(color_neg_and_pos, subset=['diff'])
-        else:
-            styled = out.style.apply(color_max,
-                                     axis='columns').apply(color_min,
-                                                           axis='columns')
+            out['diff'] = out[c2] - out[c1]
+            out['diff_relative'] = (out[c2] - out[c1]) / out[c2]
+            out['ratio'] = out[c2] / out[c1]
+
+        styled = out.style.apply(_color_map['error']['max'],
+                                 subset=errors,
+                                 axis='columns')
+        styled = styled.apply(_color_map['error']['min'],
+                              subset=errors,
+                              axis='columns')
+        styled = styled.apply(_color_map['score']['max'],
+                              subset=scores,
+                              axis='columns')
+        styled = styled.apply(_color_map['score']['min'],
+                              subset=scores,
+                              axis='columns')
+
+        styled = styled.format({'diff_relative': '{:.2%}'})
+
     # Multiple rows, each metric is a vector
     else:
         # we can only return a summary if dealing with two tables
         if len(tables) == 2:
+            # TODO: generate "Compare diff", "Compare diff relative"
+            # and "Compare ratio"
             out = dfs[1] - dfs[0]
-            styled = out.style.applymap(color_neg_and_pos)
+            errors, scores = split_errors_and_scores(out.columns,
+                                                     scores_arg,
+                                                     axis_second=out.index,
+                                                     transpose=True)
+
+            styled = out.style.apply(color_neg_green,
+                                     subset=errors,
+                                     axis='rows')
+            styled = styled.apply(color_neg_red, subset=scores, axis='rows')
         else:
             styled = None
 
