@@ -19,17 +19,17 @@ def save_and_execute_notebook(nb_str, path):
 @pytest.fixture
 def nb_literals():
     content = """
-# + tags=["a"]
-a = 1
-print(a)
+# + tags=["int"]
+int_ = 1
+print(int_)
 
-# + tags=["b"]
-b = [1, 2, 3]
-print(b)
+# + tags=["list"]
+list_ = [1, 2, 3]
+print(list_)
 
-# + tags=["c"]
-c = {'x': 1, 'y': 2}
-c
+# + tags=["dict"]
+dict_ = {'x': 1, 'y': 2}
+dict_
 """
     save_and_execute_notebook(content, 'nb_literals.ipynb')
 
@@ -37,17 +37,17 @@ c
 @pytest.fixture
 def nb_other_literals():
     content = """
-# + tags=["a"]
-a = 2
-print(a)
+# + tags=["int"]
+int_ = 2
+print(int_)
 
-# + tags=["b"]
-b = [2, 3, 4]
-print(b)
+# + tags=["list"]
+list_ = [2, 3, 4]
+print(list_)
 
-# + tags=["c"]
-c = {'x': 2, 'y': 3}
-c
+# + tags=["dict"]
+dict_ = {'x': 2, 'y': 3}
+dict_
 """
     save_and_execute_notebook(content, 'nb_other_literals.ipynb')
 

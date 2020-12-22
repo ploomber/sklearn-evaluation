@@ -32,7 +32,8 @@ class Table:
 
     @classmethod
     def from_columns(cls, content, header):
-        return cls(zip(*fixed_length_lists(content)), header)
+        rows = list(zip(*fixed_length_lists(content)))
+        return cls(rows, header)
 
     def to_html(self):
         return self._tabulate(self.content,

@@ -17,6 +17,8 @@ from .sets import differences
 from ..table import Table
 
 _env = Environment(loader=PackageLoader('sklearn_evaluation', 'assets/nb'))
+_fm = black.FileMode(string_normalization=False, line_length=40)
+_htmldiff = HtmlDiff()
 
 
 class NotebookCollection(Mapping):
@@ -47,20 +49,14 @@ class NotebookCollection(Mapping):
         nb = list(self.nbs.values())[0]
 
         self._keys = list(nb.tag2output.keys())
-        self._raw = RawMapping(self)
         self._scores = scores
 
     def __getitem__(self, key):
         raw = [nb[key] for nb in self.nbs.values()]
         e, ids_out = add_compare_tab(raw, list(self.nbs.keys()), self._scores)
-        m = {k: v for k, v in zip(ids_out, e)}
-        html = make_tabs(ids_out, e)
-        return HTMLOutput(m, html)
-
-    # TODO: get rid of this
-    @property
-    def raw(self):
-        return self._raw
+        mapping = {k: v for k, v in zip(ids_out, e)}
+        html = tabs_html_from_content(ids_out, e)
+        return HTMLMapping(mapping, html)
 
     def __iter__(self):
         for k in self._keys:
@@ -73,7 +69,9 @@ class NotebookCollection(Mapping):
         return len(self._keys)
 
 
-class HTMLOutput(Mapping):
+class HTMLMapping(Mapping):
+    """A mapping that has an HTML representation
+    """
     def __init__(self, mapping, html):
         self._mapping = mapping
         self._html = html
@@ -95,30 +93,15 @@ class HTMLOutput(Mapping):
         return self._html
 
 
-class RawMapping(Mapping):
-    def __init__(self, collection):
-        self.collection = collection
-
-    def __getitem__(self, key):
-        return {name: nb[key] for name, nb in self.collection.nbs.items()}
-
-    def _ipython_key_completions_(self):
-        return self.collection.keys()
-
-    def __iter__(self):
-        for k in self.collection:
-            yield k
-
-    def __len__(self):
-        return len(self.collection)
-
-
 def _get_filename(path):
     path = Path(path)
     return path.name.replace(path.suffix, '')
 
 
 def add_compare_tab(elements, ids, scores_arg):
+    """
+    Processes tab contents and ids, adding a "Compare" tab if possible
+    """
     out = copy.copy(elements)
     out_ids = copy.copy(ids)
 
@@ -126,6 +109,7 @@ def add_compare_tab(elements, ids, scores_arg):
         summary = compare_df(elements, ids, scores_arg)
     elif isinstance(elements[0], Mapping):
         summary = compare_diff(elements)
+    # lists with dicts fail because they are not hashable
     elif isinstance(elements[0], (list, set)):
         summary = compare_sets(elements, ids=ids)
     else:
@@ -138,27 +122,35 @@ def add_compare_tab(elements, ids, scores_arg):
     return out, out_ids
 
 
-def make_tabs(names, contents):
+def tabs_html_from_content(names, contents):
+    """
+    Generate the tabs and content to display as an HTML string
+    """
     # random prefix to prevent multiple tab outputs to clash with each other
     prefix = ''.join(random.choice(string.ascii_lowercase) for i in range(3))
-    contents = [process_content(content) for content in contents]
+    contents_html = [to_html_str(content) for content in contents]
     template = _env.get_template('template.html')
-
     html = template.render(names=names,
                            zip=zip,
-                           contents=contents,
+                           contents=contents_html,
                            prefix=prefix)
     return html
 
 
 def to_df(obj):
+    """
+    Converts pandas.DataFrame, if the object is already one, returns it.
+    Otherwise it tried to convert it from a HTML table. Raises an error
+    if more than one table is detected
+    """
     if isinstance(obj, pd.DataFrame):
         return obj
 
     dfs = pd.read_html(obj.data)
 
     if len(dfs) > 1:
-        raise ValueError('More than one table detected')
+        raise NotImplementedError('More than one table detected, only outputs'
+                                  ' with a single table are supported')
 
     df = dfs[0]
     df.columns = process_columns(df.columns)
@@ -167,6 +159,10 @@ def to_df(obj):
 
 
 def process_columns(columns):
+    """
+    Helper function to parse column names from pandas.DataFrame objects
+    parsed from HTML tables
+    """
     if isinstance(columns, pd.MultiIndex):
         return [process_multi_index_col(name) for name in columns]
     else:
@@ -174,6 +170,10 @@ def process_columns(columns):
 
 
 def process_multi_index_col(col):
+    """
+    Helper function to parse column names from pandas.DataFrame objects
+    with  multi indexes parsed from HTML tables
+    """
     names = [name for name in col if 'Unnamed:' not in name]
     return names[0]
 
@@ -187,6 +187,9 @@ def color_neg_red(s):
 
 
 def color(s, which, color):
+    """
+    pandas.DataFrame function to add color to cell's text
+    """
     to_color = s == getattr(s[~s.isna()], which)()
     return [f'color: {color}' if v else '' for v in to_color]
 
@@ -203,17 +206,26 @@ _color_map = {
 }
 
 
-def is_score(scores_arg, index):
-    if not scores_arg:
+def is_in(elements, value):
+    """
+    Determines if a value is in a list. It also handles degenerate cases
+    when instead of a list, elements is True, False  or None
+    """
+    if not elements:
         return False
-    elif scores_arg is True:
+    elif elements is True:
         return True
     else:
-        return index in scores_arg
+        return value in elements
 
 
 def split_errors_and_scores(axis, scores_arg, axis_second, transpose=False):
-    scores = [i for i in axis if is_score(scores_arg, i)]
+    """
+    Determines which metrics are scores and which ones are metrics based on
+    the "scores_arg". Returns a pd.IndexSlice object that can be used in
+    pandas.DataFrame styling functions
+    """
+    scores = [i for i in axis if is_in(scores_arg, i)]
     errors = list(set(axis) - set(scores))
 
     errors_slice = pd.IndexSlice[errors, axis_second]
@@ -226,10 +238,10 @@ def split_errors_and_scores(axis, scores_arg, axis_second, transpose=False):
     return errors_slice, scores_slice
 
 
-_htmldiff = HtmlDiff()
-
-
 def compare_diff(mappings):
+    """
+    Generates an HTML object with a diff view of two mappings
+    """
     if len(mappings) != 2:
         return None
 
@@ -238,26 +250,30 @@ def compare_diff(mappings):
     s1 = black.format_str(str(m1), mode=_fm).splitlines()
     s2 = black.format_str(str(m2), mode=_fm).splitlines()
 
-    return _htmldiff.make_file(s1, s2)
+    return HTML(_htmldiff.make_file(s1, s2))
 
 
 def compare_sets(sets, ids):
+    """
+    Generates a Table object with three columns comparing two sets: 1) elements
+    in both sets, 2) elements in the first set and 3) elements in the second
+    set. Raises an error if sets does not have two elements
+    """
     if len(sets) != 2:
         return None
 
     header = ['Both'] + [f'Only in {id_}' for id_ in ids]
 
-    t = Table.from_columns(content=differences(*sets), header=header)
-
-    return t.to_html()
-
-
-def color_max(s):
-    is_max = s == s[~s.isna()].max()
-    return ['color: red' if v else '' for v in is_max]
+    return Table.from_columns(content=differences(*sets), header=header)
 
 
 def compare_df(tables, ids, scores_arg):
+    """
+    Generates a comparison from a list of tables. Taables can be either a
+    pandas.DataFrame or a str with an HTML table. The output depends
+    on the number of tables and rows. Returns a pandas.DataFrame with style
+    added (colors)
+    """
     dfs = [to_df(table) for table in tables]
 
     # Single-row data frames, each metric is a single number
@@ -314,14 +330,13 @@ def compare_df(tables, ids, scores_arg):
 
 
 def data2html_img(data):
+    """Converts a png image (bytes) to HTML str with the image in base64
+    """
     img = base64.encodebytes(data).decode('utf-8')
     return '<img src="data:image/png;base64, {}"/>'.format(img)
 
 
-_fm = black.FileMode(string_normalization=False, line_length=40)
-
-
-def process_content(content):
+def to_html_str(content):
     """Returns an HTML string representation of the content
     """
     if isinstance(content, Image):
@@ -332,6 +347,7 @@ def process_content(content):
         return content._repr_html_()
     elif isinstance(content, Mapping):
         c = black.format_str(str(content), mode=_fm)
+        # add <pre></pre> to keep whitespace
         return f'<pre>{c}</pre>'
     else:
         return str(content)

@@ -9,8 +9,8 @@ def differences(a, b):
     a = set(a)
     b = set(b)
 
-    a_only = a - b
-    b_only = b - a
-    both = a & b
+    a_only = sorted(a - b)
+    b_only = sorted(b - a)
+    both = sorted(a & b)
 
     return both, a_only, b_only
