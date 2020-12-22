@@ -20,4 +20,10 @@ def config_init(app, config):
                    dag=dag,
                    kernelspec_name='python3')
 
+    NotebookRunner(base_path / 'nbs/NotebookCollection.py',
+                   File(base_path / 'user_guide/NotebookCollection.ipynb'),
+                   dag=dag,
+                   kernelspec_name='python3',
+                   local_execution=True)
+
     dag.build()

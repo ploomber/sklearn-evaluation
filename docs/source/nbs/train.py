@@ -39,6 +39,10 @@ tokens = model.split('.')
 name, module = tokens[-1], '.'.join(tokens[:-1])
 class_ = getattr(importlib.import_module(module), name)
 
+# + tags=["feature_names"]
+d['feature_names']
+# -
+
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
 
 model = class_(**params)
@@ -61,7 +65,8 @@ ax.grid()
 
 metrics_ = {
     'mae': metrics.mean_absolute_error(y_test, y_pred),
-    'mse': metrics.mean_squared_error(y_test, y_pred)
+    'mse': metrics.mean_squared_error(y_test, y_pred),
+    'r2': metrics.r2_score(y_test, y_pred),
 }
 
 # + tags=["metrics"]
@@ -79,7 +84,11 @@ df['error_sq'] = np.square(y_test - y_pred)
 # CHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
 error_river = df.groupby('CHAS')[['error_abs', 'error_sq']].mean()
 error_river.columns = ['mae', 'mse']
-error_river
-# -
 
+def r2_score(df):
+    return metrics.r2_score(df.y_true, df.y_pred)
 
+r2 = pd.DataFrame(df.groupby('CHAS').apply(r2_score))
+r2.columns = ['r2']
+
+error_river.merge(r2, on='CHAS')

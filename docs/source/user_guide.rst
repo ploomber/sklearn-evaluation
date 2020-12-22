@@ -10,3 +10,4 @@ User Guide
     user_guide/grid_search
     user_guide/matplotlib
     user_guide/SQLiteTracker
+    user_guide/NotebookCollection
