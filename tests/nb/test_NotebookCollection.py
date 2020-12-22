@@ -10,7 +10,7 @@ def test_collection(tmp_directory, nb_literals, nb_other_literals):
     assert dict(col['b']) == {'nb1': [1, 2, 3], 'nb2': [2, 3, 4]}
     assert col['c']['nb1'] == {'x': 1, 'y': 2}
     assert col['c']['nb2'] == {'x': 2, 'y': 3}
-    assert col['c']['Summary']
+    assert col['c']['Compare']
 
 
 @pytest.mark.parametrize('arg, expected', [

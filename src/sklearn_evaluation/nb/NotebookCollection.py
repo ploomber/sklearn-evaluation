@@ -122,7 +122,7 @@ def add_compare_tab(elements, ids, scores_arg):
 
     if isinstance(elements[0], (HTML, pd.DataFrame)):
         summary = make_df_summary(elements, ids, scores_arg)
-    elif isinstance(elements[0], Mapping):
+    elif isinstance(elements[0], (Mapping, list)):
         summary = make_mapping_summary(elements)
     else:
         summary = None
