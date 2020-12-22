@@ -1,17 +1,38 @@
+from copy import copy
+
 from . import compute
 
 __all__ = ['feature_importances']
 
 
+def extend_to(list_, n):
+    needed = n - len(list_)
+
+    if needed > 0:
+        to_add = [None] * needed
+        return list(list_) + to_add
+    else:
+        return copy(list_)
+
+
+def fixed_length_lists(lists):
+    max_length = max([len(list_) for list_ in lists])
+    return [extend_to(list_, n=max_length) for list_ in lists]
+
+
 # http://ipython.readthedocs.org/en/stable/config/integrating.html
-class Table():
+class Table:
     def __init__(self, content, header):
         try:
             self._tabulate = __import__('tabulate').tabulate
-        except:
+        except ImportError:
             raise ImportError('tabulate is required to use the table module')
         self.content = content
         self.header = header
+
+    @classmethod
+    def from_columns(cls, content, header):
+        return cls(zip(*fixed_length_lists(content)), header)
 
     def to_html(self):
         return self._tabulate(self.content,

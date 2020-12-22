@@ -13,6 +13,8 @@ from IPython.display import HTML, Image
 from jinja2 import Environment, PackageLoader
 
 from .NotebookIntrospector import NotebookIntrospector
+from .sets import differences
+from ..table import Table
 
 _env = Environment(loader=PackageLoader('sklearn_evaluation', 'assets/nb'))
 
@@ -121,15 +123,17 @@ def add_compare_tab(elements, ids, scores_arg):
     out_ids = copy.copy(ids)
 
     if isinstance(elements[0], (HTML, pd.DataFrame)):
-        summary = make_df_summary(elements, ids, scores_arg)
-    elif isinstance(elements[0], (Mapping, list)):
-        summary = make_mapping_summary(elements)
+        summary = compare_df(elements, ids, scores_arg)
+    elif isinstance(elements[0], Mapping):
+        summary = compare_diff(elements)
+    elif isinstance(elements[0], (list, set)):
+        summary = compare_sets(elements, ids=ids)
     else:
         summary = None
 
     if summary is not None:
-        out.append(summary)
-        out_ids.append('Compare')
+        out.insert(0, summary)
+        out_ids.insert(0, 'Compare')
 
     return out, out_ids
 
@@ -225,7 +229,7 @@ def split_errors_and_scores(axis, scores_arg, axis_second, transpose=False):
 _htmldiff = HtmlDiff()
 
 
-def make_mapping_summary(mappings):
+def compare_diff(mappings):
     if len(mappings) != 2:
         return None
 
@@ -237,12 +241,23 @@ def make_mapping_summary(mappings):
     return _htmldiff.make_file(s1, s2)
 
 
+def compare_sets(sets, ids):
+    if len(sets) != 2:
+        return None
+
+    header = ['Both'] + [f'Only in {id_}' for id_ in ids]
+
+    t = Table.from_columns(content=differences(*sets), header=header)
+
+    return t.to_html()
+
+
 def color_max(s):
     is_max = s == s[~s.isna()].max()
     return ['color: red' if v else '' for v in is_max]
 
 
-def make_df_summary(tables, ids, scores_arg):
+def compare_df(tables, ids, scores_arg):
     dfs = [to_df(table) for table in tables]
 
     # Single-row data frames, each metric is a single number

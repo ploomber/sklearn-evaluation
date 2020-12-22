@@ -1,10 +1,6 @@
+from unittest.mock import Mock
+
 import numpy as np
-
-try:
-    from unittest.mock import Mock  # py3
-except:
-    from mock import Mock  # py2
-
 from sklearn_evaluation import table
 
 
@@ -35,8 +31,9 @@ def test_feature_importances_feature_names():
     feature_names = ['thing_a', 'thing_b', 'thing_c', 'thing_d', 'thing_e']
     with open('tests/static/table_ft_names.txt', 'r') as f:
         expected = f.read()
-    assert expected == str(table.feature_importances(feature_importances,
-                           feature_names=feature_names))
+    assert expected == str(
+        table.feature_importances(feature_importances,
+                                  feature_names=feature_names))
 
 
 def test_feature_importances_w_subestimators():
@@ -54,3 +51,31 @@ def test_feature_importances_w_subestimators():
     with open('tests/static/table_w_subestimator.txt', 'r') as f:
         expected = f.read()
     assert expected == str(table.feature_importances(rf))
+
+
+def test_extend_to():
+    assert table.extend_to([1], n=3) == [1, None, None]
+
+
+def test_fixed_length_lists():
+    assert table.fixed_length_lists([
+        [1, 2, 3],
+        [],
+        [1],
+        [1, 2],
+    ]) == [[1, 2, 3], [None, None, None], [1, None, None], [1, 2, None]]
+
+
+def test_from_columns():
+    t = table.Table.from_columns(content=[[1, 2, 3], [4], [5, 6]],
+                                 header=['a', 'b', 'c'])
+
+    assert str(t) == ('+-----+-----+-----+'
+                      '\n|   a |   b |   c |'
+                      '\n+=====+=====+=====+'
+                      '\n|   1 |   4 |   5 |'
+                      '\n+-----+-----+-----+'
+                      '\n|   2 |     |   6 |'
+                      '\n+-----+-----+-----+'
+                      '\n|   3 |     |     |'
+                      '\n+-----+-----+-----+')
