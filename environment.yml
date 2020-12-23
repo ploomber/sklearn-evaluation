@@ -1,0 +1,12 @@
+# conda env for binder
+name: sk-eval
+
+channels:
+  - conda-forge
+
+dependencies:
+  - python=3.7
+  - lxml # for pandas.read_html, used in NotebookCollection
+  - pip
+  - pip:
+    - jupytext
