@@ -49,10 +49,7 @@ files = [f'{i}.ipynb' for i in ids]
 
 # execute notebooks using papermill
 for f, p in zip(files, params):
-    pm.execute_notebook('train.ipynb',
-                        output_path=f,
-                        parameters=p,
-                        progress_bar=False)
+    pm.execute_notebook('train.ipynb', output_path=f, parameters=p)
 # -
 
 # Let's now use `NotebookCollection` to compare results.
@@ -118,5 +115,3 @@ nbs_two['feature_names']
 nbs['model_params']['random_forest_1']
 
 nbs['plot']['random_forest_2']
-
-

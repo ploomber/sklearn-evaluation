@@ -9,4 +9,8 @@ dependencies:
   - lxml # for pandas.read_html, used in NotebookCollection
   - pip
   - pip:
+    - sklearn-evaluation
+    # NotebookCollection example
     - jupytext
+    - papermill
+    - seaborn
