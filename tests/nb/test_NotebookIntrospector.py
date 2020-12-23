@@ -5,11 +5,18 @@ from IPython.display import HTML, Image
 def test_simple_notebook(tmp_directory, nb_literals):
     intr = NotebookIntrospector('nb_literals.ipynb')
 
-    assert set(intr) == {'a', 'b', 'c'}
-    assert intr['a'] == 1
-    assert intr['b'] == [1, 2, 3]
-    assert intr['c'] == {'x': 1, 'y': 2}
-    assert dict(intr) == {'a': 1, 'b': [1, 2, 3], 'c': {'x': 1, 'y': 2}}
+    assert set(intr) == {'int', 'list', 'dict'}
+    assert intr['int'] == 1
+    assert intr['list'] == [1, 2, 3]
+    assert intr['dict'] == {'x': 1, 'y': 2}
+    assert dict(intr) == {
+        'int': 1,
+        'list': [1, 2, 3],
+        'dict': {
+            'x': 1,
+            'y': 2
+        }
+    }
 
 
 def test_notebook_with_plot(tmp_directory, nb_plot):

@@ -1,9 +1,13 @@
 .nox
+*.ipynb
 .vscode
 .DS_Store
 .coverage*
 
-#### joe made this: https://goel.io/joe
+
+# ploomber-generated files when building docs
+*.source
+
 
 # Do not include test output
 sklearn_evaluation/tests/result_images/

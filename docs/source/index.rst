@@ -15,15 +15,6 @@ Installation
 
    pip install sklearn-evaluation
 
-Optional Dependencies
-*********************
-
-.. code-block:: bash
-
-    # for generating reports
-    pip install mistune
-    # for tables
-    pip install tabulate
 
 Table of contents
 *****************

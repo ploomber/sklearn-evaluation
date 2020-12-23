@@ -1,0 +1,94 @@
+<style>
+    .tab {
+        overflow: hidden;
+        border: 1px solid #ccc;
+        background-color: #f1f1f1;
+        border-radius: 2px;
+    }
+
+    .tab button {
+        background-color: inherit;
+        float: left;
+        border: none;
+        outline: none;
+        cursor: pointer;
+        padding: 8px;
+        transition: 0.3s;
+    }
+
+    .tab button:hover {
+        background-color: #ddd;
+    }
+
+    .tab button.active {
+        background-color: #DEDEDE;
+    }
+
+    .tabcontent {
+        display: none;
+        padding: 6px 12px;
+        border: 1px solid #F4F4F4;
+        border-top: none;
+    }
+
+    .tabcontent {
+        animation: fadeEffect 1s;
+    }
+
+    @keyframes fadeEffect {
+        from {
+            opacity: 0;
+        }
+
+        to {
+            opacity: 1;
+        }
+    }
+</style>
+
+
+<!-- Tab links -->
+<div class="tab">
+    {% for name in names %}
+    <button class="{{prefix}}-tablinks" onclick="{{prefix}}_openTab(event, '{{name}}')"
+        id="{{prefix}}-{{name}}-button">{{name}}</button>
+    {% endfor %}
+</div>
+
+<!-- Tab content -->
+{% for name, content in zip(names, contents) %}
+<div id="{{prefix}}-{{name}}" class="{{prefix}}-tabcontent">
+    {{content}}
+</div>
+{% endfor %}
+
+<script>
+    function {{prefix}}_hideAll() {
+        tabcontent = document.getElementsByClassName("{{prefix}}-tabcontent");
+        for (i = 0; i < tabcontent.length; i++) {
+            tabcontent[i].style.display = "none";
+        }
+    }
+
+    function {{prefix}}_deactivateTabs() {
+        tablinks = document.getElementsByClassName("{{prefix}}-tablinks");
+        for (i = 0; i < tablinks.length; i++) {
+            tablinks[i].className = tablinks[i].className.replace(" active", "");
+        }
+    }
+
+    function {{prefix}}_showTab(tabName) {
+        document.getElementById('{{prefix}}-' + tabName).style.display = "block";
+        document.getElementById('{{prefix}}-' + tabName + '-button').className += " active";
+    }
+
+    function {{prefix}}_openTab(evt, tabName) {
+        {{prefix}}_hideAll();
+        {{prefix}}_deactivateTabs();
+        {{prefix}}_showTab(tabName);
+    }
+
+    {{prefix}}_hideAll();
+    {{prefix}}_deactivateTabs();
+    {{prefix}}_showTab(document.getElementsByClassName("{{prefix}}-tablinks")[0].textContent);
+</script>

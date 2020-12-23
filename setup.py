@@ -15,7 +15,15 @@ with open('src/sklearn_evaluation/__init__.py', 'rb') as f:
 DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'.
                 format(VERSION))
 
-DOCS = ['sphinx', 'ipython', 'sphinx-rtd-theme', 'ploomber', 'nbsphinx']
+DOCS = [
+    'sphinx',
+    'ipython',
+    'sphinx-rtd-theme',
+    'ploomber',
+    'nbsphinx',
+    'seaborn',
+]
+
 TEST = [
     'jupytext',
     'papermill',
@@ -40,7 +48,7 @@ setup(name='sklearn-evaluation',
       url='http://github.com/edublancas/sklearn-evaluation',
       download_url=DOWNLOAD_URL,
       author='Eduardo Blancas Reyes',
-      author_email='fkq8@blancas.io',
+      author_email='github@blancas.io',
       license='MIT',
       keywords=['datascience', 'machinelearning'],
       classifiers=[],
