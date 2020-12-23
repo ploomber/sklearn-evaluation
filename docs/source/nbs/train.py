@@ -25,7 +25,7 @@ import matplotlib.pyplot as plt
 
 # + tags=["parameters"]
 model = 'sklearn.ensemble.RandomForestRegressor'
-params = {'min_samples_leaf': 1,  'n_estimators': 50}
+params = {'min_samples_leaf': 1, 'n_estimators': 50}
 
 # + tags=["model_name"]
 model
@@ -40,7 +40,7 @@ name, module = tokens[-1], '.'.join(tokens[:-1])
 class_ = getattr(importlib.import_module(module), name)
 
 # + tags=["feature_names"]
-d['feature_names']
+list(d['feature_names'])
 # -
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
@@ -85,8 +85,10 @@ df['error_sq'] = np.square(y_test - y_pred)
 error_river = df.groupby('CHAS')[['error_abs', 'error_sq']].mean()
 error_river.columns = ['mae', 'mse']
 
+
 def r2_score(df):
     return metrics.r2_score(df.y_true, df.y_pred)
+
 
 r2 = pd.DataFrame(df.groupby('CHAS').apply(r2_score))
 r2.columns = ['r2']
