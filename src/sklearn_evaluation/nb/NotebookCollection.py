@@ -24,6 +24,11 @@ _htmldiff = HtmlDiff()
 class NotebookCollection(Mapping):
     """Compare output from a collection of notebooks
 
+    To access output, notebooks must tag the cells (one tag per cell). For
+    instructions on tagging cells, `see this <https://jupyterbook.org/advanced/advanced.html#how-should-i-add-cell-tags-and-metadata-to-my-notebooks>`_.
+
+    :doc:`Click here <../user_guide/NotebookCollection>` to see the user guide.
+
     Parameters
     ----------
     paths : list
@@ -33,7 +38,6 @@ class NotebookCollection(Mapping):
         List of ids (one per notebook), if None, paths are used as identifiers,
         if 'filenames', the file name is extracted from each path and used
         as identifier (ignores extension)
-
     """
     def __init__(self, paths, ids=None, scores=False):
         if ids is None:

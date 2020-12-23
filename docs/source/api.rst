@@ -9,3 +9,4 @@ API Reference
     api/evaluator
     api/training
     api/SQLiteTracker
+    api/nbs

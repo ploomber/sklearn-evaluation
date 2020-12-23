@@ -9,6 +9,8 @@ from sklearn_evaluation.table import Table
 class SQLiteTracker:
     """A simple experiment tracker using SQLite
 
+    :doc:`Click here <../user_guide/SQLiteTracker>` to see the user guide.
+
     Parameters
     ----------
     path
