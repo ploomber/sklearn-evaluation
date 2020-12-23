@@ -22,6 +22,9 @@ DOCS = [
     'ploomber',
     'nbsphinx',
     'seaborn',
+    # to display progress bar when executing notebooks using papermill
+    # in NotebookCollection.py example
+    'ipywidgets'
 ]
 
 TEST = [
