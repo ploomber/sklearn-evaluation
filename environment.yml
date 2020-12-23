@@ -9,6 +9,8 @@ dependencies:
   - lxml # for pandas.read_html, used in NotebookCollection
   - pip
   - pip:
+    # Binder docs say setup.py is automatically installed but it's not working
+    - git+https://github.com/edublancas/sklearn-evaluation
     # NotebookCollection example
     - jupytext
     - papermill
