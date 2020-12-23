@@ -1,5 +1,6 @@
 from os import environ
 from pathlib import Path
+import urllib
 
 import jupytext
 import nbformat
@@ -9,11 +10,23 @@ from ploomber.products import File
 from ploomber.constants import TaskStatus
 
 
-def make_task(dag, path_in, path_out):
+def binder_badge(path):
+    _binder_badge = """
+[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/edublancas/sklearn-evaluation/master?filepath={})
+"""
+    return _binder_badge.format(urllib.parse.quote_plus(f'docs/source/{path}'))
+
+
+def make_task(dag, rel_path_in, rel_path_out, base_path):
+    path_in = base_path / rel_path_in
+    path_out = base_path / rel_path_out
+
     nb = jupytext.read(path_in)
 
     fmt = nbformat.versions[nbformat.current_nbformat]
     nb.cells.append(fmt.new_code_cell(metadata=dict(tags=['parameters'])))
+
+    nb.cells.insert(0, fmt.new_markdown_cell(binder_badge(rel_path_in)))
 
     name = Path(path_in).name.split('.')[0]
     path_preprocessed = Path(path_in).parent / (name + '-preprocessed.ipynb')
@@ -57,11 +70,11 @@ def config_init(app, config):
 
     dag = DAG()
 
-    make_task(dag, base_path / 'nbs/SQLiteTracker.md',
-              base_path / 'user_guide/SQLiteTracker.ipynb')
+    make_task(dag, 'nbs/SQLiteTracker.md', 'user_guide/SQLiteTracker.ipynb',
+              base_path)
 
-    make_task(dag, base_path / 'nbs/NotebookCollection.py',
-              base_path / 'user_guide/NotebookCollection.ipynb')
+    make_task(dag, 'nbs/NotebookCollection.py',
+              'user_guide/NotebookCollection.ipynb', base_path)
 
     dag.build()
 
