@@ -8,6 +8,11 @@ from IPython.display import Image, HTML
 
 
 def _safe_literal_eval(source, to_df=False, none_if_error=False):
+    """
+    Evaluates a literal, if the code cannot be parsed, it returns the original
+    source as a string unless non_if_error is True, in such case it returns
+    None
+    """
     try:
         result = ast.literal_eval(source)
 
@@ -69,7 +74,10 @@ def _parse_output(output, literal_eval, to_df, text_only):
 
 
 class NotebookIntrospector(Mapping):
-    """
+    """Retrieve output from a notebook file with tagged cells.
+
+    For instructions on tagging cells,
+    `see this <https://jupyterbook.org/advanced/advanced.html#how-should-i-add-cell-tags-and-metadata-to-my-notebooks>`_.
 
     Notes
     -----

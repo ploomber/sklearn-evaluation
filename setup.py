@@ -39,7 +39,12 @@ TEST = [
     'coveralls',
 ]
 
-ALL = DOCS + TEST
+DEV = [
+    'flake8',
+    'yapf',
+]
+
+ALL = DOCS + TEST + DEV
 
 setup(name='sklearn-evaluation',
       packages=find_packages('src'),

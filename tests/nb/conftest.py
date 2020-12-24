@@ -14,6 +14,7 @@ def save_and_execute_notebook(nb_str, path):
 
     nbformat.write(nb, path)
     pm.execute_notebook(str(path), str(path))
+    return str(path)
 
 
 @pytest.fixture
@@ -89,3 +90,14 @@ import pandas as pd
 x = 1
 """
     save_and_execute_notebook(content, 'nb_no_output.ipynb')
+
+
+@pytest.fixture
+def nb_invalid_output():
+    content = """
+import numpy as np
+
+# + tags=["numpy_array"]
+np.array([1, 2, 3])
+"""
+    return save_and_execute_notebook(content, 'nb_invalid_output.ipynb')

@@ -38,6 +38,11 @@ def test_notebook_with_no_output(tmp_directory, nb_no_output):
     assert dict(intr) == dict()
 
 
+def test_notebook_with_invalid_output(tmp_directory, nb_invalid_output):
+    intr = NotebookIntrospector(nb_invalid_output, literal_eval=True)
+    assert intr['numpy_array'] == 'array([1, 2, 3])'
+
+
 def test_json_serializable(tmp_directory, nb_plot):
     d = NotebookIntrospector('nb_plot.ipynb').to_json_serializable()
 

@@ -56,7 +56,7 @@ for f, p in zip(files, params):
 #
 # We just have to pass a list of files to use, and optionally, ids for each notebook (uses the path by default).
 #
-# The only requirement for this to work is to tag cells in the notebooks, each tag then becomes a key in the notebook collection. (To activate the tags menu click on `View -> Cell toolbar -> Tags`).
+# The only requirement for this to work is to tag cells in the notebooks, each tag then becomes a key in the notebook collection. For instructions on adding tags, [see this](https://jupyterbook.org/advanced/advanced.html#how-should-i-add-cell-tags-and-metadata-to-my-notebooks).
 #
 # Extracted tables color cells to make it easier to spot the best and worst experiment. By default it assumes that metrics are errors (smaller is better), if you only have score metrics (larger is better), pass `scores=True`, if you have errors and scores, pass a list of scores:
 
