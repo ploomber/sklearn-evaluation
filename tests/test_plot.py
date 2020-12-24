@@ -1,14 +1,10 @@
+from unittest.mock import Mock
+
 import numpy as np
-from matplotlib.testing.decorators import image_comparison, _pytest_image_comparison
+from matplotlib.testing.decorators import image_comparison
 from matplotlib import testing
 
 from sklearn_evaluation import plot
-
-try:
-    from unittest.mock import Mock  # py3
-except:
-    from mock import Mock  # py2
-
 
 target_names = range(2)
 feature_names = range(4)
@@ -16,7 +12,7 @@ feature_importances = np.array([0.5, 0.4, 0.3, 0.2])
 y_test = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
 y_pred = np.array([1, 0, 1, 1, 1, 0, 0, 0, 0, 0])
 y_score = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                   [0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3]]).T
+                    [0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3]]).T
 y_score_vector = np.array([0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3])
 
 
@@ -126,3 +122,14 @@ def test_precision_at_proportions():
                   remove_text=True)
 def test_precision_at_proportions_y_score_vector():
     plot.precision_at_proportions(y_test, y_score_vector)
+
+
+@image_comparison(baseline_images=['validation_curve'],
+                  extensions=['png'],
+                  remove_text=True)
+def test_validation_curve():
+    acc_train = np.arange(0.1, 1.0, step=0.1)[:, np.newaxis]
+    acc_val = acc_train - 0.5
+    train_size = np.arange(100, 1000, step=100)
+
+    plot.validation_curve(acc_train, acc_val, train_size)
