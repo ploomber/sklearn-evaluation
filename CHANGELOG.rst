@@ -1,6 +1,12 @@
 CHANGELOG
 =========
 
+0.5.4dev
+--------
+* ``NotebookCollection`` displays output using HTML and tabs
+* Adds links to try out the examples in binder
+
+
 0.5.3 (2020-12-15)
 -------------------
 * ``DataSelector`` copies input steps to prevent mutating input params
