@@ -23,7 +23,6 @@ def tests(session):
         'tests/',
         'src/',
         'examples/',
-        '--cov-report term-missing',
         '--cov=sklearn_evaluation',
         '--doctest-modules',
     )
