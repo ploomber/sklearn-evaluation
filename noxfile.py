@@ -5,6 +5,8 @@ import nox
 @nox.session(venv_backend='conda',
              python=os.environ.get('TRAVIS_PYTHON_VERSION', '3.8'))
 def tests(session):
+    session.conda_install('lxml')
+
     # if we remove the --editable flag pytest throws an error, because there
     # are two copies of the pkg (src/ and site-packages/), this is a quick
     # way to fix it
