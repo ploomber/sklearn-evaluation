@@ -5,7 +5,7 @@
 #       extension: .py
 #       format_name: light
 #       format_version: '1.5'
-#       jupytext_version: 1.6.0
+#       jupytext_version: 1.8.0
 #   kernelspec:
 #     display_name: Python 3
 #     language: python
@@ -43,7 +43,7 @@ class_ = getattr(importlib.import_module(module), name)
 list(d['feature_names'])
 # -
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
 
 model = class_(**params)
 

@@ -1,6 +1,6 @@
 # # Analyzing results from notebooks
 #
-# The `.ipynb` format is capable of holding tables and charts in a standalone file. This makes it a great choice for model evaluation reports. `NotebookCollection` allows you to retrieve results from previously executed notebooks to quickly compare the differences.
+# The `.ipynb` format is capable of storing tables and charts in a standalone file. This makes it a great choice for model evaluation reports. `NotebookCollection` allows you to retrieve results from previously executed notebooks to compare them.
 
 # +
 import papermill as pm
@@ -9,12 +9,12 @@ import jupytext
 from sklearn_evaluation import NotebookCollection
 # -
 
-# Let's first generate a few notebooks, we have a `train.py` script that contains code for training a model, let's convert that to a jupyter notebook using jupytext:
+# Let's first generate a few notebooks, we have a `train.py` script that trains a single model, let's convert it to a jupyter notebook:
 
 nb = jupytext.read('train.py')
 jupytext.write(nb, 'train.ipynb')
 
-# Now, we use papermill to execute the notebook with different parameters, we'll run 4 models: 2 random forest, a linear regression and a support vector regression:
+# We use papermill to execute the notebook with different parameters, we'll train 4 models: 2 random forest, a linear regression and a support vector regression:
 
 # +
 # models with their corresponding parameters
@@ -52,13 +52,11 @@ for f, p in zip(files, params):
     pm.execute_notebook('train.ipynb', output_path=f, parameters=p)
 # -
 
-# Let's now use `NotebookCollection` to compare results.
+# To use `NotebookCollection`, we pass a a list of paths, and optionally, ids for each notebook (uses paths by default).
 #
-# We just have to pass a list of files to use, and optionally, ids for each notebook (uses the path by default).
+# The only requirement is that cells whose output we want to extract must have tags, each tag then becomes a key in the notebook collection. For instructions on adding tags, [see this](https://jupyterbook.org/advanced/advanced.html#how-should-i-add-cell-tags-and-metadata-to-my-notebooks).
 #
-# The only requirement for this to work is to tag cells in the notebooks, each tag then becomes a key in the notebook collection. For instructions on adding tags, [see this](https://jupyterbook.org/advanced/advanced.html#how-should-i-add-cell-tags-and-metadata-to-my-notebooks).
-#
-# Extracted tables color cells to make it easier to spot the best and worst experiment. By default it assumes that metrics are errors (smaller is better), if you only have score metrics (larger is better), pass `scores=True`, if you have errors and scores, pass a list of scores:
+# Extracted tables add colors to certain cells to identify the best and worst metrics. By default, it assumes that metrics are errors (smaller is better). If you are using scores (larger is better), pass `scores=True`, if you have both, pass a list of scores:
 
 nbs = NotebookCollection(paths=files, ids=ids, scores=['r2'])
 
@@ -68,22 +66,22 @@ list(nbs)
 
 # `model_params` contains a dictionary with model parameters, let's get them (click on the tabs to switch):
 
-# Pro-tip: then typing the tag, press the "Tab" key for autocompletion!
+# pro-tip: then typing the tag, press the "Tab" key for autocompletion!
 nbs['model_params']
 
 # `plot` has a `y_true` vs `y_pred` chart:
 
 nbs['plot']
 
-# If any cell outputs a pandas DataFrame, we can also retrieve it. `metrics` outputs a data frame with a single row where columns are mean absolute error (mae) and mean squared error (mse).
+# On each notebook, `metrics` outputs a data frame with a single row with mean absolute error (mae) and mean squared error (mse) as columns.
 #
-# For single-row tables, a "Compare" tab is added showing all results at once with colors to identify the minimum (green) and maximum (red) error values and the other way around for scores:
+# For single-row tables, a "Compare" tab shows all results at once:
 
 nbs['metrics']
 
-# We can quickly see that the first random forest is performing the best in both metrics.
+# We can see that the second random forest is performing the best in both metrics.
 #
-# Multi-row tables can also be retrieved, `river` contains a table where we have both error metrics broken down by the `CHAS` indicator features. Multi-row tables *do not* display the "Compare" tab:
+# `river` contains a multi-row table where with error metrics broken down by the `CHAS` indicator feature. Multi-row tables *do not* display the "Compare" tab:
 
 nbs['river']
 
@@ -92,7 +90,7 @@ nbs['river']
 # only compare two notebooks
 nbs_two = NotebookCollection(paths=files[:2], ids=ids[:2], scores=['r2'])
 
-# The output that compares single-row tables includes a diff column, with the error difference between experiments. Error reductions are showed in green, increments in red:
+# Comparing single-row tables includes a diff column with the error difference between experiments. Error reductions are showed in green, increments in red:
 
 nbs_two['metrics']
 
@@ -104,7 +102,7 @@ nbs_two['river']
 
 nbs_two['model_params']
 
-# Lists (and sets) are compared depending on their elements:
+# Lists (and sets) are compared based on elements existence:
 
 nbs_two['feature_names']
 
