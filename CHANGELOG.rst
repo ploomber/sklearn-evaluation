@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.5.4dev
---------
+0.5.4 (2020-12-28)
+-------------------
 * ``NotebookCollection`` displays output using HTML and tabs
 * Adds links to try out the examples in binder
 
