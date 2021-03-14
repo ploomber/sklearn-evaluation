@@ -1,10 +1,14 @@
 # sklearn-evaluation
 
 
-![CI](https://github.com/edublancas/sklearn-evaluation/workflows/CI/badge.svg) [![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=latest)](https://sklearn-evaluation.readthedocs.io/en/latest/?badge=latest) [![PyPI version](https://badge.fury.io/py/sklearn-evaluation.svg)](https://badge.fury.io/py/sklearn-evaluation) [![Coverage Status](https://coveralls.io/repos/github/edublancas/sklearn-evaluation/badge.svg)](https://coveralls.io/github/edublancas/sklearn-evaluation)
+![CI](https://github.com/edublancas/sklearn-evaluation/workflows/CI/badge.svg)
+[![Documentation Status](https://readthedocs.org/projects/sklearn-evaluation/badge/?version=latest)](https://sklearn-evaluation.readthedocs.io/en/latest/?badge=latest)
+[![PyPI version](https://badge.fury.io/py/sklearn-evaluation.svg)](https://badge.fury.io/py/sklearn-evaluation)
+[![Coverage Status](https://coveralls.io/repos/github/edublancas/sklearn-evaluation/badge.svg)](https://coveralls.io/github/edublancas/sklearn-evaluation)
+![Twitter Follow](https://img.shields.io/twitter/follow/edublancas?label=Follow&style=social)
 [![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/edublancas/sklearn-evaluation/master?filepath=docs%2Fsource%2Fnbs)
 
-Machine learning model evaluation made easy: plots, tables, HTML reports, experiment tracking and Jupyter notebook analysis.
+Machine learning model evaluation made easy: plots, tables, HTML reports, experiment tracking, and Jupyter notebook analysis.
 
 Supports Python 3.6 and higher.
 
