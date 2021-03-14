@@ -35,6 +35,7 @@ TEST = [
     # need to pin this version because pytest 4 breaks matplotlib image
     # comparison tests
     'pytest-cov',
+    # TODO: update config so coveralls 3 works
     'coveralls<3',
 ]
 
