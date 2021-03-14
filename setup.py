@@ -35,8 +35,7 @@ TEST = [
     # need to pin this version because pytest 4 breaks matplotlib image
     # comparison tests
     'pytest-cov',
-    # for coveralls.io
-    'coveralls',
+    'coveralls<3',
 ]
 
 DEV = [
