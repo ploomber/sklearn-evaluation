@@ -72,10 +72,12 @@ setup(
         'tabulate',
         'jinja2',
         # reports
-        'ipython',
         'mistune',
         'pandas',
         'nbformat',
+        # notebook compare
+        'ipython',
+        'black',
     ],
     extras_require={
         'all': ALL,
