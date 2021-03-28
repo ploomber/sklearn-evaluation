@@ -1,6 +1,10 @@
 CHANGELOG
 =========
 
+0.5.5dev
+--------
+* Adds missing dependency (``IPython``), required by ``NotebookIntrospector``
+
 0.5.4 (2020-12-28)
 -------------------
 * ``NotebookCollection`` displays output using HTML and tabs

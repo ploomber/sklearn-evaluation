@@ -17,7 +17,6 @@ DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'.
 
 DOCS = [
     'sphinx',
-    'ipython',
     'sphinx-rtd-theme',
     'ploomber',
     'nbsphinx',
@@ -46,31 +45,40 @@ DEV = [
 
 ALL = DOCS + TEST + DEV
 
-setup(name='sklearn-evaluation',
-      packages=find_packages('src'),
-      package_dir={'': 'src'},
-      py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
-      version=VERSION,
-      description=('scikit-learn model evaluation made easy: plots, tables and'
-                   'markdown reports.'),
-      url='http://github.com/edublancas/sklearn-evaluation',
-      download_url=DOWNLOAD_URL,
-      author='Eduardo Blancas Reyes',
-      author_email='github@blancas.io',
-      license='MIT',
-      keywords=['datascience', 'machinelearning'],
-      classifiers=[],
-      include_package_data=True,
-      install_requires=[
-          'scikit-learn',
-          'matplotlib',
-          'decorator',
-          'jinja2',
-          'tabulate',
-          'mistune',
-          'pandas',
-          'nbformat',
-      ],
-      extras_require={
-          'all': ALL,
-      })
+setup(
+    name='sklearn-evaluation',
+    packages=find_packages('src'),
+    package_dir={'': 'src'},
+    py_modules=[splitext(basename(path))[0] for path in glob('src/*.py')],
+    version=VERSION,
+    description=('scikit-learn model evaluation made easy: plots, tables and'
+                 'markdown reports.'),
+    url='http://github.com/edublancas/sklearn-evaluation',
+    download_url=DOWNLOAD_URL,
+    author='Eduardo Blancas Reyes',
+    author_email='github@blancas.io',
+    license='MIT',
+    keywords=['datascience', 'machinelearning'],
+    classifiers=[],
+    include_package_data=True,
+    install_requires=[
+        # compute metrics
+        'scikit-learn',
+        # plotting
+        'matplotlib',
+        # misc
+        'decorator',
+        # metric tables
+        'tabulate',
+        'jinja2',
+        # reports
+        'mistune',
+        'pandas',
+        'nbformat',
+        # notebook compare
+        'ipython',
+        'black',
+    ],
+    extras_require={
+        'all': ALL,
+    })
