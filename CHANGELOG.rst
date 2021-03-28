@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.5.6dev
+--------
+
 0.5.5 (2021-03-28)
 ------------------
 * Adds missing dependency (``IPython``), required by ``NotebookIntrospector``
