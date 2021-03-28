@@ -41,6 +41,7 @@ TEST = [
 DEV = [
     'flake8',
     'yapf',
+    'twine',
 ]
 
 ALL = DOCS + TEST + DEV
