@@ -2,6 +2,7 @@
 Setup tasks (requires invoke: pip install invoke)
 """
 from invoke import task
+import versioneer
 
 
 @task
@@ -21,3 +22,17 @@ def setup(c, version=None):
           )  # lxml needed for NotebookCollection.py example
 
     print(f'Done! Activate your environment with:\nconda activate {env_name}')
+
+
+@task
+def new(c):
+    """Release a new version
+    """
+    versioneer.release(project_root='.', tag=True)
+
+
+@task
+def upload(c, tag, production=True):
+    """Upload to PyPI
+    """
+    versioneer.upload(tag, production=production)
