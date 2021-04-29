@@ -4,7 +4,7 @@ import papermill as pm
 import pytest
 
 
-def save_and_execute_notebook(nb_str, path):
+def save_notebook(nb_str, path, execute=True):
     nb = jupytext.reads(nb_str, fmt='py:light')
     nb.metadata['kernelspec'] = {
         'name': 'python3',
@@ -13,7 +13,10 @@ def save_and_execute_notebook(nb_str, path):
     }
 
     nbformat.write(nb, path)
-    pm.execute_notebook(str(path), str(path))
+
+    if execute:
+        pm.execute_notebook(str(path), str(path))
+
     return str(path)
 
 
@@ -32,7 +35,7 @@ print(list_)
 dict_ = {'x': 1, 'y': 2}
 dict_
 """
-    save_and_execute_notebook(content, 'nb_literals.ipynb')
+    save_notebook(content, 'nb_literals.ipynb')
 
 
 @pytest.fixture
@@ -50,7 +53,7 @@ print(list_)
 dict_ = {'x': 2, 'y': 3}
 dict_
 """
-    save_and_execute_notebook(content, 'nb_other_literals.ipynb')
+    save_notebook(content, 'nb_other_literals.ipynb')
 
 
 @pytest.fixture
@@ -64,7 +67,7 @@ plt.plot([1, 2, 3], [1, 2, 3])
 # + tags=["b"]
 42
 """
-    save_and_execute_notebook(content, 'nb_plot.ipynb')
+    save_notebook(content, 'nb_plot.ipynb')
 
 
 @pytest.fixture
@@ -78,7 +81,7 @@ pd.DataFrame({'a': [1,2 ,3]})
 # + tags=["b"]
 42
 """
-    save_and_execute_notebook(content, 'nb_table.ipynb')
+    save_notebook(content, 'nb_table.ipynb')
 
 
 @pytest.fixture
@@ -89,7 +92,7 @@ import pandas as pd
 # + tags=["a"]
 x = 1
 """
-    save_and_execute_notebook(content, 'nb_no_output.ipynb')
+    save_notebook(content, 'nb_no_output.ipynb')
 
 
 @pytest.fixture
@@ -100,4 +103,34 @@ import numpy as np
 # + tags=["numpy_array"]
 np.array([1, 2, 3])
 """
-    return save_and_execute_notebook(content, 'nb_invalid_output.ipynb')
+    return save_notebook(content, 'nb_invalid_output.ipynb')
+
+
+@pytest.fixture
+def nb_injected_parameters():
+    content = """
+import numpy as np
+
+# + tags=["injected-parameters"]
+# Parameters
+x = 1
+y = [1, 2]
+z = {'a': 1, 'b': 2}
+"""
+    return save_notebook(content, 'nb.ipynb', execute=False)
+
+
+@pytest.fixture
+def nb_injected_parameters_multiple_lines():
+    content = """
+import numpy as np
+
+# + tags=["injected-parameters"]
+# Parameters
+x = 1
+y = [1,
+    2,]
+z = {'a': 1,
+     'b': 2}
+"""
+    return save_notebook(content, 'nb.ipynb', execute=False)

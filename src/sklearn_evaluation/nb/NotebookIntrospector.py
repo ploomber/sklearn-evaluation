@@ -2,6 +2,7 @@ import base64
 from collections.abc import Mapping
 import ast
 
+import parso
 import pandas as pd
 import nbformat
 from IPython.display import Image, HTML
@@ -71,6 +72,44 @@ def _parse_output(output, literal_eval, to_df, text_only):
         out = output['text/plain']
         return out if not literal_eval else _safe_literal_eval(out,
                                                                to_df=to_df)
+
+
+def find_cell_with_tag(cells, tag):
+    for cell in cells:
+        if ('metadata' in cell and 'tags' in cell['metadata']
+                and tag in cell['metadata']['tags']):
+            return cell
+
+
+def parse_injected_parameters_cell(cells):
+    # this is a very simple implementation, for a more robust solution
+    # re-implement with ast or parso
+    cell = find_cell_with_tag(cells, tag='injected-parameters')
+
+    if not cell:
+        return dict()
+
+    children = parso.parse(cell['source']).children
+
+    statements = [
+        _process_stmt(c) for c in children
+        if c.type in {'simple_stmt', 'expr_stmt'}
+    ]
+
+    return {
+        stmt.children[0].value:
+        ast.literal_eval(stmt.children[2].get_code().strip())
+        for stmt in statements if stmt is not None
+    }
+
+
+def _process_stmt(stmt):
+    if stmt.type == 'expr_stmt':
+        return stmt
+    else:
+        for c in stmt.children:
+            if c.type == 'expr_stmt':
+                return c
 
 
 class NotebookIntrospector(Mapping):
@@ -145,3 +184,6 @@ class NotebookIntrospector(Mapping):
                              text_only=True)
             for k, v in self.tag2output_raw.items()
         }
+
+    def get_injected_parameters(self):
+        return parse_injected_parameters_cell(self.nb.cells)

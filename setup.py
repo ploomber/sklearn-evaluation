@@ -79,6 +79,8 @@ setup(
         # notebook compare
         'ipython',
         'black',
+        # extracting injected parameters from notebooks
+        'parso',
     ],
     extras_require={
         'all': ALL,
