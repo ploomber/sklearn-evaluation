@@ -3,6 +3,7 @@ CHANGELOG
 
 0.5.6dev
 --------
+* Fixes error that caused grid search plot to fail when a parameter had a ``None`` value (#40)
 
 0.5.5 (2021-03-28)
 ------------------
