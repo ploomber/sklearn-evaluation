@@ -189,9 +189,10 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax):
     # and sort the results to make sure the matrix axis
     # is showed in increasing order
     row_names = sorted(set([t[0] for t in matrix_elements.keys()]),
-                       key=itemgetter(1))
+                   key=lambda x: (x[1] is None, x[1]))
     col_names = sorted(set([t[1] for t in matrix_elements.keys()]),
-                       key=itemgetter(1))
+                   key=lambda x: (x[1] is None, x[1]))
+
 
     # size of the matrix
     cols = len(col_names)
