@@ -28,7 +28,7 @@ def setup(c, version=None):
 def new(c):
     """Release a new version
     """
-    versioneer.release(project_root='.', tag=True)
+    versioneer.version(project_root='.', tag=True)
 
 
 @task
