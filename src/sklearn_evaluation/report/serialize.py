@@ -24,7 +24,6 @@ class EvaluatorHTMLSerializer:
 class HTMLSerializableCallable:
     """Wraps a method so that the results is serialized after it is run
     """
-
     def __init__(self, attr):
         self.attr = attr
 
@@ -47,10 +46,10 @@ def figure2html(fig):
 
 def base64_2_html(img):
     try:
-        html = '<img src="data:image/png;base64,'+img+'"></img>'  # py2
-    except:
+        html = '<img src="data:image/png;base64,' + img + '"></img>'  # py2
+    except Exception:
         img = img.decode("utf-8")
-        html = '<img src="data:image/png;base64,'+img+'"></img>'  # py3
+        html = '<img src="data:image/png;base64,' + img + '"></img>'  # py3
     return html
 
 
@@ -59,15 +58,17 @@ def figure2base64(fig):
     fig.savefig(io, format='png')
     try:
         fig_base64 = base64.encodebytes(io.getvalue())  # py3
-    except:
+    except Exception:
         fig_base64 = base64.encodestring(io.getvalue())  # py2
     return fig_base64
 
 
-def prettify_list(l):
-    l = [str(idx+1)+'. '+str(el) for idx, el in enumerate(l)]
-    return reduce(lambda x, y: x+'<br>'+y, l)
+def prettify_list(elements):
+    elements = [
+        str(idx + 1) + '. ' + str(el) for idx, el in enumerate(elements)
+    ]
+    return reduce(lambda x, y: x + '<br>' + y, elements)
 
 
 def prettify_dict(d):
-    return prettify_list([key+': '+str(d[key]) for key in d.keys()])
+    return prettify_list([key + ': ' + str(d[key]) for key in d.keys()])

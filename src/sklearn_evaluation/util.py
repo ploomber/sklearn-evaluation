@@ -70,13 +70,14 @@ def _get_params_value(params):
     ord_params = sorted(params)
 
     def fn(obj):
-        l = []
+        keys = []
         for p in ord_params:
             try:
-                l.append((p, obj.parameters[p]))
-            except:
+                keys.append((p, obj.parameters[p]))
+            except KeyError:
                 raise ValueError('{} is not a valid parameter'.format(p))
-        return tuple(l)
+        return tuple(keys)
+
     return fn
 
 
@@ -115,12 +116,14 @@ def _mapping_to_tuple_pairs(d):
     return tuple(product(*t))
 
 
-def _flatten_list(l):
-    return [item for sublist in l for item in sublist]
+def _flatten_list(elements):
+    return [item for sublist in elements for item in sublist]
 
 
-# http://stackoverflow.com/questions/18926031/how-to-extract-a-subset-of-a-colormap-as-a-new-colormap-in-matplotlib
 def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
+    """
+    http://stackoverflow.com/questions/18926031/how-to-extract-a-subset-of-a-colormap-as-a-new-colormap-in-matplotlib # noqa
+    """
     import matplotlib.colors as colors
     import numpy as np
     new_cmap = colors.LinearSegmentedColormap.from_list(
@@ -163,7 +166,7 @@ def map_parameters_in_fn_call(args, kwargs, func):
         key = args_spec[idx]
 
         try:
-            value = args[idx-offset]
+            value = args[idx - offset]
         except IndexError:
             pass
         else:
@@ -173,9 +176,10 @@ def map_parameters_in_fn_call(args, kwargs, func):
     parsed.update(args_parsed)
 
     # fill default values
-    default = {k: v.default for k, v
-               in sig.parameters.items()
-               if v.default != _empty}
+    default = {
+        k: v.default
+        for k, v in sig.parameters.items() if v.default != _empty
+    }
 
     to_add = set(default.keys()) - set(parsed.keys())
 

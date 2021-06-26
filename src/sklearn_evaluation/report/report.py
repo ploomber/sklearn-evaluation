@@ -3,16 +3,14 @@ from pathlib import Path
 
 try:
     import mistune
-except:
+except ModuleNotFoundError:
     raise ImportError('You need to install mistune to generate reports')
-
 
 # import mistune
 from sklearn_evaluation.report.util import jinja_env
 
 
 class Report:
-
     def __init__(self, evaluator, template=None):
         self.evaluator = evaluator
 

@@ -2,7 +2,6 @@ from unittest.mock import Mock
 
 import numpy as np
 from matplotlib.testing.decorators import image_comparison
-from matplotlib import testing
 
 from sklearn_evaluation import plot
 

@@ -11,8 +11,8 @@ import pytest
 # to run tests with pytest. Note that importing other fixtures from that
 # module leads to weird error messages (e.g. "pd", which patches pandas)
 # https://github.com/matplotlib/matplotlib/blob/master/lib/matplotlib/testing/conftest.py
-from matplotlib.testing.conftest import (mpl_test_settings,
-                                         mpl_image_comparison_parameters)
+from matplotlib.testing.conftest import (  # noqa
+    mpl_test_settings, mpl_image_comparison_parameters)
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn import datasets

@@ -55,18 +55,6 @@ def test_single_numeric_partially_restricted(grid_search_3_params):
                      kind='bar')
 
 
-@image_comparison(baseline_images=['single_numeric_partially_restricted'],
-                  extensions=['png'],
-                  remove_text=True)
-def test_single_numeric_partially_restricted(grid_search_3_params):
-    to_vary = 'n_estimators'
-    to_keep = {'max_features': 'sqrt'}
-    plot.grid_search(grid_search_3_params.cv_results_,
-                     to_vary,
-                     to_keep,
-                     kind='bar')
-
-
 @image_comparison(baseline_images=['single_numeric_restricted_single'],
                   extensions=['png'],
                   remove_text=True)

@@ -11,8 +11,12 @@ from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
 
 
-def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
-                     cmap=None, ax=None):
+def confusion_matrix(y_true,
+                     y_pred,
+                     target_names=None,
+                     normalize=False,
+                     cmap=None,
+                     ax=None):
     """
     Plot confustion matrix.
 
@@ -57,10 +61,10 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
     expected_len = len(values)
 
     if target_names and (expected_len != len(target_names)):
-        raise ValueError(('Data cointains {} different values, but target'
-                         ' names contains {} values.'.format(expected_len,
-                                                             len(target_names)
-                                                             )))
+        raise ValueError(
+            ('Data cointains {} different values, but target'
+             ' names contains {} values.'.format(expected_len,
+                                                 len(target_names))))
 
     # if the user didn't pass target_names, create generic ones
     if not target_names:
@@ -86,9 +90,12 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
     for (y, x), v in np.ndenumerate(cm):
         try:
             label = '{:.2}'.format(v)
-        except:
+        except Exception:
             label = v
-        ax.text(x, y, label, horizontalalignment='center',
+        ax.text(x,
+                y,
+                label,
+                horizontalalignment='center',
                 verticalalignment='center')
 
     if cmap is None:
@@ -117,8 +124,11 @@ def confusion_matrix(y_true, y_pred, target_names=None, normalize=False,
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-def feature_importances(data, top_n=None, feature_names=None,
-                        orientation='horizontal', ax=None):
+def feature_importances(data,
+                        top_n=None,
+                        feature_names=None,
+                        orientation='horizontal',
+                        ax=None):
     """
     Get and order feature importances from a scikit-learn model
     or from an array-like structure. If data is a scikit-learn model with
@@ -156,7 +166,9 @@ def feature_importances(data, top_n=None, feature_names=None,
     # If no feature_names is provided, assign numbers
     res = compute.feature_importances(data, top_n, feature_names)
 
-    ax = bar.plot(res.importance, orientation, res.feature_name,
+    ax = bar.plot(res.importance,
+                  orientation,
+                  res.feature_name,
                   error=None if not hasattr(res, 'std_') else res.std_)
     ax.set_title("Feature importances")
     return ax

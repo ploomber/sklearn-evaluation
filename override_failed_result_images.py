@@ -14,7 +14,6 @@ print('Found failed images...')
 for f in failed:
     print('* ', f)
 
-
 print('Getting reference images to replace...')
 
 
@@ -22,17 +21,19 @@ def get_ref_image(path):
     path = Path(path)
     return path.with_name(path.name.replace('-failed-diff', ''))
 
-ref = [get_ref_image(f) for f in failed]
 
+ref = [get_ref_image(f) for f in failed]
 
 for f in ref:
     print('* ', f)
+
 
 def get_new_location(path):
     path = Path(path)
     # get rid of the first part "result_images", and add the new relative
     # location inside tests/baseline_images
     return Path('tests', 'baseline_images', *path.parts[1:])
+
 
 new_location = [get_new_location(f) for f in ref]
 

@@ -32,7 +32,7 @@ def feature_importances(data, top_n=None, feature_names=None):
     # the actual importances values, try to get the values
     try:
         imp = data.feature_importances_
-    except:
+    except AttributeError:
         imp = np.array(data)
 
     # in case the user passed an estimator, it may have an estimators_
@@ -42,7 +42,7 @@ def feature_importances(data, top_n=None, feature_names=None):
         sub_imp = np.array([e.feature_importances_ for e in data.estimators_])
         # calculate std
         std = np.std(sub_imp, axis=0)
-    except:
+    except Exception:
         std = None
 
     # get the number of features
@@ -51,9 +51,9 @@ def feature_importances(data, top_n=None, feature_names=None):
     # check that the data has the correct format
     if top_n and top_n > n_features:
         top_n = n_features
-        warnings.warn(('top_n ({}) is greater than the number of'
-                       ' features ({}), showing all features'
-                       .format(top_n, n_features)))
+        warnings.warn(
+            ('top_n ({}) is greater than the number of'
+             ' features ({}), showing all features'.format(top_n, n_features)))
     if top_n and top_n < 1:
         raise ValueError('top_n cannot be less than 1')
     if feature_names and len(feature_names) != n_features:
@@ -63,8 +63,9 @@ def feature_importances(data, top_n=None, feature_names=None):
 
     # if the user did not pass feature names create generic names
     if feature_names is None:
-        feature_names = ['Feature {}'.format(n)
-                         for n in range(1, n_features + 1)]
+        feature_names = [
+            'Feature {}'.format(n) for n in range(1, n_features + 1)
+        ]
         feature_names = np.array(feature_names)
     else:
         feature_names = np.array(feature_names)
@@ -83,8 +84,7 @@ def feature_importances(data, top_n=None, feature_names=None):
                                          names=names)
     else:
         names = 'feature_name,importance'
-        res = np.core.records.fromarrays([feature_names, imp],
-                                         names=names)
+        res = np.core.records.fromarrays([feature_names, imp], names=names)
 
     # get subset if top_n is not none
     if top_n:
