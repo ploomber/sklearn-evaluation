@@ -3,7 +3,6 @@ Functions for visualizing grid search results
 """
 import collections
 from functools import reduce
-from operator import itemgetter
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -14,7 +13,11 @@ from ..util import (_group_by, _get_params_value, _mapping_to_tuple_pairs,
                     default_heatmap, _sorted_map_iter, _flatten_list)
 
 
-def grid_search(cv_results_, change, subset=None, kind='line', cmap=None,
+def grid_search(cv_results_,
+                change,
+                subset=None,
+                kind='line',
+                cmap=None,
                 ax=None):
     """
     Plot results from a sklearn grid search by changing two parameters at most.
@@ -64,15 +67,15 @@ def grid_search(cv_results_, change, subset=None, kind='line', cmap=None,
     # FIXME: convert cv_results_ to the old list of namedtuples format so
     # this still works on sklearn >= 0.20. I need to refactor the code
     # so it works with the new format
-    gs = collections.namedtuple('grid_scores_', ['parameters',
-                                                 'mean_validation_score',
-                                                 'std_test_score'])
+    gs = collections.namedtuple(
+        'grid_scores_',
+        ['parameters', 'mean_validation_score', 'std_test_score'])
 
-    grid_scores = [gs(p, m, s)
-                   for p, m, s in zip(cv_results_['params'],
-                                      cv_results_[
-                       'mean_test_score'],
-        cv_results_['std_test_score'])]
+    grid_scores = [
+        gs(p, m, s) for p, m, s in
+        zip(cv_results_['params'], cv_results_['mean_test_score'],
+            cv_results_['std_test_score'])
+    ]
 
     if isinstance(change, string_types) or len(change) == 1:
         return _grid_search_single(grid_scores, change, subset, kind, ax)
@@ -122,7 +125,8 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
         change_unique = len(set([g.parameters[change] for g in grid_scores]))
         # bar shifter is just a wrapper around matplotlib's bar plot
         # to automatically calculate the left position on each bar
-        bar_shifter = BarShifter(g_number=change_unique, g_size=len(groups),
+        bar_shifter = BarShifter(g_number=change_unique,
+                                 g_size=len(groups),
                                  ax=ax)
 
     for params_kv, group in _sorted_map_iter(groups):
@@ -135,7 +139,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
         # take (param, value) and convert them to 'param: value'
         label = ['{}: {}'.format(*t) for t in params_kv]
         # now convert it to one string
-        label = reduce(lambda x, y: x+', '+y, label)
+        label = reduce(lambda x, y: x + ', ' + y, label)
 
         if kind == 'bar':
             bar_shifter(y, yerr=stds, label=label)
@@ -189,10 +193,9 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax):
     # and sort the results to make sure the matrix axis
     # is showed in increasing order
     row_names = sorted(set([t[0] for t in matrix_elements.keys()]),
-                   key=lambda x: (x[1] is None, x[1]))
+                       key=lambda x: (x[1] is None, x[1]))
     col_names = sorted(set([t[1] for t in matrix_elements.keys()]),
-                   key=lambda x: (x[1] is None, x[1]))
-
+                       key=lambda x: (x[1] is None, x[1]))
 
     # size of the matrix
     cols = len(col_names)
@@ -220,7 +223,10 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax):
     # set text on cells
     for (x, y), v in m.items():
         label = '{:.3}'.format(v.mean_validation_score)
-        ax.text(x, y, label, horizontalalignment='center',
+        ax.text(x,
+                y,
+                label,
+                horizontalalignment='center',
                 verticalalignment='center')
 
     ax.set_xticks(range(cols))

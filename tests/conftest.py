@@ -108,3 +108,23 @@ def grid_search_2_params():
     clf.fit(X, y)
 
     return clf
+
+
+@pytest.fixture(scope='session')
+def grid_search_param_with_none():
+    parameters = {
+        'max_depth': [2, None],
+        'criterion': ['gini', 'entropy'],
+    }
+
+    est = RandomForestClassifier(random_state=42)
+    clf = GridSearchCV(est, parameters, cv=5)
+
+    X, y = datasets.make_classification(200,
+                                        10,
+                                        n_informative=5,
+                                        class_sep=0.7,
+                                        random_state=42)
+    clf.fit(X, y)
+
+    return clf
