@@ -25,7 +25,7 @@ class NotebookCollection(Mapping):
     """Compare output from a collection of notebooks
 
     To access output, notebooks must tag the cells (one tag per cell). For
-    instructions on tagging cells, `see this <https://jupyterbook.org/advanced/advanced.html#how-should-i-add-cell-tags-and-metadata-to-my-notebooks>`_.
+    instructions on tagging cells, `see this <https://papermill.readthedocs.io/en/latest/usage-parameterize.html>`_.
 
     :doc:`Click here <../user_guide/NotebookCollection>` to see the user guide.
 

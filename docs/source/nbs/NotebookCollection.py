@@ -54,7 +54,7 @@ for f, p in zip(files, params):
 
 # To use `NotebookCollection`, we pass a a list of paths, and optionally, ids for each notebook (uses paths by default).
 #
-# The only requirement is that cells whose output we want to extract must have tags, each tag then becomes a key in the notebook collection. For instructions on adding tags, [see this](https://jupyterbook.org/advanced/advanced.html#how-should-i-add-cell-tags-and-metadata-to-my-notebooks).
+# The only requirement is that cells whose output we want to extract must have tags, each tag then becomes a key in the notebook collection. For instructions on adding tags, [see this](https://papermill.readthedocs.io/en/latest/usage-parameterize.html).
 #
 # Extracted tables add colors to certain cells to identify the best and worst metrics. By default, it assumes that metrics are errors (smaller is better). If you are using scores (larger is better), pass `scores=True`, if you have both, pass a list of scores:
 

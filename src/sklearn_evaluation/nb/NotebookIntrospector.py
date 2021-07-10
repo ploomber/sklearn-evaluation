@@ -77,7 +77,7 @@ class NotebookIntrospector(Mapping):
     """Retrieve output from a notebook file with tagged cells.
 
     For instructions on tagging cells,
-    `see this <https://jupyterbook.org/advanced/advanced.html#how-should-i-add-cell-tags-and-metadata-to-my-notebooks>`_.
+    `see this <https://papermill.readthedocs.io/en/latest/usage-parameterize.html>`_.
 
     Notes
     -----
