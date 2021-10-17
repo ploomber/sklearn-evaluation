@@ -2,7 +2,6 @@
 Setup tasks (requires invoke: pip install invoke)
 """
 from invoke import task
-import versioneer
 
 
 @task
@@ -28,11 +27,13 @@ def setup(c, version=None):
 def new(c):
     """Release a new version
     """
-    versioneer.version(project_root='.', tag=True)
+    from pkgmt import versioneer
+    versioneer.release(project_root='.', tag=True)
 
 
 @task
 def upload(c, tag, production=True):
     """Upload to PyPI
     """
+    from pkgmt import versioneer
     versioneer.upload(tag, production=production)

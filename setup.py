@@ -42,6 +42,7 @@ DEV = [
     'flake8',
     'yapf',
     'twine',
+    'pkgmt',
 ]
 
 ALL = DOCS + TEST + DEV
