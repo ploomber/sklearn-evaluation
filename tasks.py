@@ -25,10 +25,10 @@ def setup(c, version=None):
 
 @task
 def new(c):
-    """Release a new version
+    """Create a new version
     """
     from pkgmt import versioneer
-    versioneer.release(project_root='.', tag=True)
+    versioneer.version(project_root='.', tag=True)
 
 
 @task
