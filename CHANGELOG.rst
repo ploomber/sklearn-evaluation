@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.5.8dev
+--------
+
 0.5.7 (2021-10-17)
 ------------------
 * Adds ``NotebookIntrospector.get_injected_parameters``
