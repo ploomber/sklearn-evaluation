@@ -25,7 +25,7 @@ def precision_recall(y_true, y_score, ax=None):
     -----
     It is assumed that the y_score parameter columns are in order. For example,
     if ``y_true = [2, 2, 1, 0, 0, 1, 2]``, then the first column in y_score
-    must countain the scores for class 0, second column for class 1 and so on.
+    must contain the scores for class 0, second column for class 1 and so on.
 
 
     Returns

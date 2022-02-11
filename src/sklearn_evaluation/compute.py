@@ -36,7 +36,7 @@ def feature_importances(data, top_n=None, feature_names=None):
         imp = np.array(data)
 
     # in case the user passed an estimator, it may have an estimators_
-    # attribute, which includes importnaces for every sub-estimator
+    # attribute, which includes importances for every sub-estimator
     # get them if possible
     try:
         sub_imp = np.array([e.feature_importances_ for e in data.estimators_])

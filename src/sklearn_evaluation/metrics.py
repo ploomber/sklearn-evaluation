@@ -80,7 +80,7 @@ def __precision(y_true, y_pred):
     y_pred = np.copy(y_pred)
 
     # precision = tp/(tp+fp)
-    # True nehatives do not affect precision value, so for every missing
+    # True negatives do not affect precision value, so for every missing
     # value in y_true, replace it with 0 and also replace the value
     # in y_pred with 0
     is_nan = np.isnan(y_true)

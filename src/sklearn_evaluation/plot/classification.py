@@ -18,7 +18,7 @@ def confusion_matrix(y_true,
                      cmap=None,
                      ax=None):
     """
-    Plot confustion matrix.
+    Plot confusion matrix.
 
     Parameters
     ----------
