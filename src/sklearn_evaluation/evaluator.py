@@ -9,7 +9,7 @@ from . import plot
 
 class ClassifierEvaluator(object):
     """
-    Encapsuates results from an estimator on a testing set to provide a
+    Encapsulates results from an estimator on a testing set to provide a
     simplified API from other modules. All parameters are optional, just
     fill the ones you need for your analysis.
 
@@ -22,14 +22,14 @@ class ClassifierEvaluator(object):
     y_pred : array-like
         Correct target values (ground truth).
     y_score : array-like
-        Target scores (estimador predictions).
+        Target scores (estimator predictions).
     feature_names : array-like
         Feature names.
     target_names : list
         List containing the names of the target classes
     estimator_name : str
-        Identifier for the model. This can be later used to idenfity the
-        estimator when generaing reports.
+        Identifier for the model. This can be later used to identify the
+        estimator when generating reports.
     """
     TEMPLATE_NAME = 'classifier.md'
 

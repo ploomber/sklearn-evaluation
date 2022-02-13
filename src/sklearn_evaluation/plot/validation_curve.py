@@ -6,7 +6,7 @@ def validation_curve(train_scores, test_scores, param_range, param_name=None,
                      semilogx=False, ax=None):
     """Plot a validation curve
 
-    Plot a metric vs hyperpameter values for the training and test set
+    Plot a metric vs hyperparameter values for the training and test set
 
     Parameters
     ----------

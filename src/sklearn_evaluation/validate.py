@@ -5,7 +5,7 @@ from sklearn_evaluation.util import map_parameters_in_fn_call
 def argument_is_proportion(argname):
     @decorator
     def argument_is_proportion(func, *args, **kwargs):
-        """Validate that an agument is a proportion [0, 1.0]
+        """Validate that an argument is a proportion [0, 1.0]
         """
         arg_maps = map_parameters_in_fn_call(args, kwargs, func)
         value = arg_maps.get(argname)
