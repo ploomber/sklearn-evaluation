@@ -1,3 +1,5 @@
+> **Jupyter/VSCode/PyCharm user?** Check out my [latest project](https://github.com/ploomber/ploomber) to build modular data pipelines!
+
 # sklearn-evaluation
 
 
