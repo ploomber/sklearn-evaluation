@@ -139,7 +139,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
         # take (param, value) and convert them to 'param: value'
         label = ['{}: {}'.format(*t) for t in params_kv]
         # now convert it to one string
-        label = reduce(lambda x, y: x + ', ' + y, label)
+        label = reduce(lambda x, y: x + ', ' + y, label, '')
 
         if kind == 'bar':
             bar_shifter(y, yerr=stds, label=label)
