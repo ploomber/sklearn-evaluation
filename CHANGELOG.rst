@@ -3,6 +3,7 @@ CHANGELOG
 
 0.5.8dev
 --------
+* Fixes an error in ``plot.grid_search`` when parameters grid has a single parameter
 
 0.5.7 (2021-10-17)
 ------------------
