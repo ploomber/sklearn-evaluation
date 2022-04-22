@@ -129,7 +129,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
                                  g_size=len(groups),
                                  ax=ax)
 
-    for params_kv, group in _sorted_map_iter(groups):
+    for params_kv, group in groups.items():
         # get the x and y values for each grid_score on this group
         # also calculate the std
         x = [element.parameters[change] for element in group]
@@ -139,7 +139,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
         # take (param, value) and convert them to 'param: value'
         label = ['{}: {}'.format(*t) for t in params_kv]
         # now convert it to one string
-        label = reduce(lambda x, y: x + ', ' + y, label, '')
+        label = ', '.join(label)
 
         if kind == 'bar':
             bar_shifter(y, yerr=stds, label=label)
