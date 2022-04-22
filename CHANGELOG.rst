@@ -1,8 +1,12 @@
 CHANGELOG
 =========
 
-0.5.8dev
+0.5.9dev
 --------
+
+0.5.8 (2022-04-16)
+------------------
+* Fixes an error in ``plot.grid_search`` when parameters grid has a single parameter
 
 0.5.7 (2021-10-17)
 ------------------
