@@ -85,8 +85,8 @@ def _sorted_map_iter(d, sort=True):
     if sort:
         try:
             ord_keys = sorted(d.keys())
-        except TypeError:
-            raise TypeError('Sorting not supported. Plase pass sort=False')
+        except TypeError as e:
+            raise TypeError('Sorting not supported. Please pass sort=False') from e
     else:
         ord_keys = d.keys()
     for k in ord_keys:
