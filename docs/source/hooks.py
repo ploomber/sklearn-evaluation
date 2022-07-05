@@ -38,7 +38,7 @@ def make_task(dag, rel_path_in, rel_path_out, base_path):
                    kernelspec_name='python3',
                    name=name,
                    local_execution=True,
-                   static_analysis=False)
+                   static_analysis='disable')
 
 
 def remove_with_tag(nb, tag):
