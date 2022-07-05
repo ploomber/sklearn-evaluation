@@ -81,8 +81,14 @@ def _get_params_value(params):
     return fn
 
 
-def _sorted_map_iter(d):
-    ord_keys = sorted(d.keys())
+def _sorted_map_iter(d, sort=True):
+    if sort:
+        try:
+            ord_keys = sorted(d.keys())
+        except TypeError as e:
+            raise TypeError('Sorting not supported. Please pass sort=False') from e
+    else:
+        ord_keys = d.keys()
     for k in ord_keys:
         yield (k, d[k])
 

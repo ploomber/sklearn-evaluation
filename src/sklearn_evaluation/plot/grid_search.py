@@ -2,7 +2,6 @@
 Functions for visualizing grid search results
 """
 import collections
-from functools import reduce
 
 import matplotlib.pyplot as plt
 import numpy as np
@@ -18,7 +17,9 @@ def grid_search(cv_results_,
                 subset=None,
                 kind='line',
                 cmap=None,
-                ax=None):
+                ax=None,
+                sort=True,
+    ):
     """
     Plot results from a sklearn grid search by changing two parameters at most.
 
@@ -42,6 +43,8 @@ def grid_search(cv_results_,
         colormap.
     ax: matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
+    sort: bool
+        If True sorts the results in alphabetical order.
 
     Returns
     -------
@@ -78,14 +81,14 @@ def grid_search(cv_results_,
     ]
 
     if isinstance(change, string_types) or len(change) == 1:
-        return _grid_search_single(grid_scores, change, subset, kind, ax)
+        return _grid_search_single(grid_scores, change, subset, kind, ax, sort)
     elif len(change) == 2:
-        return _grid_search_double(grid_scores, change, subset, cmap, ax)
+        return _grid_search_double(grid_scores, change, subset, cmap, ax, sort)
     else:
         raise ValueError('change must have length 1 or 2 or be a string')
 
 
-def _grid_search_single(grid_scores, change, subset, kind, ax):
+def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
     # the logic of this function is to group the grid scores acording
     # to certain rules and subsequently remove the elements that we are
     # not interested in, until we have only the elements that the user
@@ -109,7 +112,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
         # in subset
         groups = _group_by(grid_scores, _get_params_value(subset.keys()))
         keys = _mapping_to_tuple_pairs(subset)
-        groups = {k: v for k, v in _sorted_map_iter(groups) if k in keys}
+        groups = {k: v for k, v in _sorted_map_iter(groups, sort) if k in keys}
         grid_scores = _flatten_list(groups.values())
         groups = _group_by(grid_scores, _get_params_value(params))
         if not groups:
@@ -129,7 +132,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
                                  g_size=len(groups),
                                  ax=ax)
 
-    for params_kv, group in _sorted_map_iter(groups):
+    for params_kv, group in _sorted_map_iter(groups, sort):
         # get the x and y values for each grid_score on this group
         # also calculate the std
         x = [element.parameters[change] for element in group]
@@ -139,7 +142,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
         # take (param, value) and convert them to 'param: value'
         label = ['{}: {}'.format(*t) for t in params_kv]
         # now convert it to one string
-        label = reduce(lambda x, y: x + ', ' + y, label, '')
+        label = ', '.join(label)
 
         if kind == 'bar':
             bar_shifter(y, yerr=stds, label=label)
@@ -162,7 +165,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax):
     return ax
 
 
-def _grid_search_double(grid_scores, change, subset, cmap, ax):
+def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
     # check that the two different parameters were passed
     if len(set(change)) == 1:
         raise ValueError('You need to pass two different parameters')
@@ -171,7 +174,7 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax):
     if subset is not None:
         groups = _group_by(grid_scores, _get_params_value(subset.keys()))
         keys = _mapping_to_tuple_pairs(subset)
-        groups = {k: v for k, v in _sorted_map_iter(groups) if k in keys}
+        groups = {k: v for k, v in _sorted_map_iter(groups, sort) if k in keys}
         grid_scores = _flatten_list(groups.values())
         if not groups:
             raise ValueError(('Your subset didn\'t match any data'
