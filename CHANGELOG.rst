@@ -3,6 +3,7 @@ CHANGELOG
 
 0.5.9dev
 --------
+* Adds ``sort`` argument to ``plot.grid_search`` (#45)
 
 0.5.8 (2022-04-16)
 ------------------
