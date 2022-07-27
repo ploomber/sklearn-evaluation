@@ -10,7 +10,7 @@ dependencies:
   - pip
   - pip:
     # Binder docs say setup.py is automatically installed but it's not working
-    - git+https://github.com/edublancas/sklearn-evaluation
+    - git+https://github.com/ploomber/sklearn-evaluation
     # NotebookCollection example
     - jupytext
     - papermill

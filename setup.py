@@ -12,7 +12,7 @@ with open('src/sklearn_evaluation/__init__.py', 'rb') as f:
         ast.literal_eval(
             _version_re.search(f.read().decode('utf-8')).group(1)))
 
-DOWNLOAD_URL = ('https://github.com/edublancas/sklearn-evaluation/tarball/{}'.
+DOWNLOAD_URL = ('https://github.com/ploomber/sklearn-evaluation/tarball/{}'.
                 format(VERSION))
 
 DOCS = [
