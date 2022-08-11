@@ -74,6 +74,9 @@ def config_init(app, config):
     make_task(dag, 'nbs/SQLiteTracker.md', 'user_guide/SQLiteTracker.ipynb',
               base_path)
 
+    make_task(dag, 'nbs/NotebookDatabase.md',
+              'user_guide/NotebookDatabase.ipynb', base_path)
+
     make_task(dag, 'nbs/NotebookCollection.py',
               'user_guide/NotebookCollection.ipynb', base_path)
 
