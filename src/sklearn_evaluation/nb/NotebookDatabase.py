@@ -28,21 +28,23 @@ class NotebookDatabase:
         """)
         cur.close()
 
-    def index(self):
+    def index(self, verbose=True):
         """Index notebooks
         """
         for path in iglob(self._pattern):
             try:
                 nb = NotebookIntrospector(path)
             except Exception as e:
-                print(f'Error loading {path}: {e}')
+                if verbose:
+                    print(f'Error loading {path}: {e}')
                 continue
 
             metadata = nb.nb.metadata.get('sklearn-evaluation',
                                           dict(indexed=False))
 
             if not metadata['indexed']:
-                print(f'Indexing {path}')
+                if verbose:
+                    print(f'Indexing {path}')
                 nb.nb.metadata['sklearn-evaluation'] = dict(indexed=True)
                 nbformat.write(nb.nb, path)
 
@@ -61,7 +63,7 @@ class NotebookDatabase:
                 cur.close()
 
                 self._conn.commit()
-            else:
+            elif verbose:
                 print(f'{path} already indexed. Skipping...')
 
     def query(self, query):
