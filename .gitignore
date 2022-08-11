@@ -1,5 +1,7 @@
 .nox
 *.ipynb
+*.metadata
+*.db
 .vscode
 .DS_Store
 .coverage*

@@ -4,7 +4,7 @@ import papermill as pm
 import pytest
 
 
-def save_notebook(nb_str, path, execute=True):
+def save_notebook(nb_str, path, execute=True, parameters=None):
     nb = jupytext.reads(nb_str, fmt='py:light')
     nb.metadata['kernelspec'] = {
         'name': 'python3',
@@ -15,7 +15,7 @@ def save_notebook(nb_str, path, execute=True):
     nbformat.write(nb, path)
 
     if execute:
-        pm.execute_notebook(str(path), str(path))
+        pm.execute_notebook(str(path), str(path), parameters=parameters or {})
 
     return str(path)
 

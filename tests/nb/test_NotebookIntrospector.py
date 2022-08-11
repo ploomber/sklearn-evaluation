@@ -77,3 +77,11 @@ def test_get_injected_parameters_multiple_lines(
             'b': 2
         }
     }
+
+
+def test_ignores_standard_error():
+    raise NotImplementedError
+
+
+def test_strips_whitespace():
+    raise NotImplementedError
