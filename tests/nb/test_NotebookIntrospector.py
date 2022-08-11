@@ -79,10 +79,16 @@ def test_get_injected_parameters_multiple_lines(
     }
 
 
-def test_ignores_standard_error():
-    raise NotImplementedError
+def test_ignores_standard_error(tmp_directory, nb_stderr):
+    d = NotebookIntrospector('nb.ipynb')
+    assert d['str'] == 'something'
 
 
 def test_strips_whitespace(tmp_directory, nb_str):
     d = NotebookIntrospector('nb.ipynb')
     assert d['str'] == 'something'
+
+
+def test_many_str(tmp_directory, nb_many_str):
+    d = NotebookIntrospector('nb.ipynb')
+    assert d['str'] == 'a\nb\nc'

@@ -56,9 +56,17 @@ def _process_output(output):
                                   'implemented'.format(out_type))
 
 
-def _filter_and_process_outputs(outputs):
+def _allowed_output(output):
     allowed = {'stream', 'display_data', 'execute_result'}
-    outputs = [o for o in outputs if o['output_type'] in allowed]
+
+    if output['output_type'] in allowed:
+        return output.get('name') != 'stderr'
+    else:
+        return False
+
+
+def _filter_and_process_outputs(outputs):
+    outputs = [o for o in outputs if _allowed_output(o)]
     # just return the latest output if any
     return None if not outputs else _process_output(outputs[-1])
 

@@ -143,3 +143,26 @@ def nb_str():
 print('something')
 """
     return save_notebook(content, 'nb.ipynb')
+
+
+@pytest.fixture
+def nb_many_str():
+    content = """
+# + tags=["str"]
+print('a')
+print('b')
+print('c')
+"""
+    return save_notebook(content, 'nb.ipynb')
+
+
+@pytest.fixture
+def nb_stderr():
+    content = """
+import sys
+
+# + tags=["str"]
+print('this should not appear', file=sys.stderr)
+print('something')
+"""
+    return save_notebook(content, 'nb.ipynb')
