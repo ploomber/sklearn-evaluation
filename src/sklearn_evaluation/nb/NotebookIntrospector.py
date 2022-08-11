@@ -23,7 +23,7 @@ def _safe_literal_eval(source, to_df=False, none_if_error=False):
         return result
 
     except (SyntaxError, ValueError):
-        return None if none_if_error else source
+        return None if none_if_error else source.strip()
 
 
 def _do_nothing(source):

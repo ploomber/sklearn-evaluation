@@ -134,3 +134,12 @@ z = {'a': 1,
      'b': 2}
 """
     return save_notebook(content, 'nb.ipynb', execute=False)
+
+
+@pytest.fixture
+def nb_str():
+    content = """
+# + tags=["str"]
+print('something')
+"""
+    return save_notebook(content, 'nb.ipynb')

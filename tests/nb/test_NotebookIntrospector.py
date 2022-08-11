@@ -83,5 +83,6 @@ def test_ignores_standard_error():
     raise NotImplementedError
 
 
-def test_strips_whitespace():
-    raise NotImplementedError
+def test_strips_whitespace(tmp_directory, nb_str):
+    d = NotebookIntrospector('nb.ipynb')
+    assert d['str'] == 'something'
