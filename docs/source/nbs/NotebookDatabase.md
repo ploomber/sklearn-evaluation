@@ -60,6 +60,8 @@ dag = DAG(executor=Parallel())
 experiments = {
     'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),
     'sklearn.linear_model.Lasso': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])),
+    'sklearn.linear_model.Ridge':ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
+    'sklearn.linear_model.ElasticNet': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
 }
 
 # generate one task per set of parameter
@@ -73,19 +75,19 @@ for model, grid in experiments.items():
 ```
 
 ```python
-# print summary table
-dag.status()
+# total experiments to run
+len(dag)
 ```
 
 ```python
-# run notebooks in parallel!
-dag.build(force=True)
+# run experiments in parallel!
+dag.build()
 ```
 
 ```python
 # initialize db with notebooks in the outputs directory
 db = NotebookDatabase('nb.db', 'outputs/*.ipynb')
-db.index()
+db.index(verbose=False)
 ```
 
 Let's find the notebooks with the lowest error:
@@ -94,6 +96,8 @@ Let's find the notebooks with the lowest error:
 # load jupysql magic
 %load_ext sql
 ```
+
+Find best performing models:
 
 ```sql magic_args="sqlite:///nb.db"
 SELECT
@@ -105,7 +109,7 @@ ORDER BY 3 ASC
 LIMIT 3
 ```
 
-Average error of DecisionTree and Lasso:
+Average error by model type:
 
 ```sql
 SELECT
@@ -126,7 +130,7 @@ SELECT
     json_extract(c, '$.params.criterion') AS criterion,
     json_extract(c, '$.params.splitter') AS splitter
 FROM nbs
-WHERE json_extract(c, '$.model') LIKE '%sklearn.tree.DecisionTreeRegressor%'
+WHERE json_extract(c, '$.model') = 'sklearn.tree.DecisionTreeRegressor'
 ORDER BY mse ASC
 ```
 
