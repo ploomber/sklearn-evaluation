@@ -9,8 +9,8 @@ def setup(c, version=None):
     """
     Setup dev environment, requires conda
     """
-    version = version or '3.8'
-    suffix = '' if version == '3.8' else version.replace('.', '')
+    version = version or '3.10'
+    suffix = '' if version == '3.10' else version.replace('.', '')
     env_name = f'sk-eval{suffix}'
 
     c.run(f'conda create --name {env_name} python={version} --yes')
