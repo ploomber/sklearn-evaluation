@@ -33,4 +33,5 @@ pip install sklearn-evaluation
 * [Evaluate grid search results](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/grid_search.html)
 * [Track experiments using a local SQLite database](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/SQLiteTracker.html)
 * [Analyze notebooks output](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/NotebookCollection.html)
+* [Query notebooks with SQL](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/nbdb.html)
 
