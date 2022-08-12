@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.5.10dev
----------
+0.6 (2022-08-11)
+----------------
 * Query notebooks with SQL using ``NotebookDatabase``
 * Stripping output string in ``NotebookIntrospector``
 * Ignoring standard error output in ``NotebookIntrospector``
