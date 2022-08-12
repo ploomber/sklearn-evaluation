@@ -23,7 +23,9 @@ DOCS = [
     'seaborn',
     # to display progress bar when executing notebooks using papermill
     # in NotebookCollection.py example
-    'ipywidgets'
+    'ipywidgets',
+    # notebook database example
+    'jupysql',
 ]
 
 TEST = [
