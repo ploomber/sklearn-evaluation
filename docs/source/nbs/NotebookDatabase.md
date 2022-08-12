@@ -1,4 +1,6 @@
 ```python
+from pathlib import Path
+
 # to execute notebooks in parallel
 from ploomber import DAG
 from ploomber.tasks import NotebookRunner
@@ -13,20 +15,37 @@ from sklearn_evaluation import NotebookDatabase
 ```
 
 ```python
-nb = """
+data = """
 # %% tags=["parameters"]
-model = None
-params = None
+upstream = None
+product = None
 
 # %%
-import importlib
 from sklearn import datasets
-from sklearn.model_selection import train_test_split
-from sklearn.metrics import mean_squared_error
 
 # %%
 ca_housing = datasets.fetch_california_housing(as_frame=True)
 df = ca_housing['frame']
+df.to_csv(product['data'], index=False)
+"""
+Path('data.py').write_text(data)
+
+model = """
+# %% tags=["parameters"]
+model = None
+params = None
+upstream = None
+product = None
+
+# %%
+import importlib
+
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_squared_error
+
+# %%
+df = pd.read_csv(upstream['data']['data'])
 
 # %%
 X = df.drop('MedHouseVal', axis='columns')
@@ -51,11 +70,13 @@ print(reg.get_params())
 y_pred = reg.predict(X_test)
 mean_squared_error(y_test, y_pred)
 """
+Path('model.py').write_text(model)
 ```
 
 ```python
 # create DAG, use the Parallel executor
 dag = DAG(executor=Parallel())
+# dag = DAG()
 
 experiments = {
     'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),
@@ -64,14 +85,18 @@ experiments = {
     'sklearn.linear_model.ElasticNet': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
 }
 
+task_data = NotebookRunner(Path('data.py'), {'nb': File('output/data.html'), 'data': File('output/data.csv')},
+               dag=dag)
+
 # generate one task per set of parameter
 for model, grid in experiments.items():
     for i, params in enumerate(grid):
         name = f'{model}-{i}'
-        NotebookRunner(nb, File(f'outputs/{name}.ipynb'), dag=dag, ext_in='py', name=name,
+        task = NotebookRunner(Path('model.py'), File(f'output/models/{name}.ipynb'), dag=dag, name=name,
                        # the embedded engine is more reliable
                        papermill_params=dict(engine_name='embedded'),
                        params=dict(model=model, params=params))
+        task_data >> task
 ```
 
 ```python
@@ -86,7 +111,7 @@ dag.build()
 
 ```python
 # initialize db with notebooks in the outputs directory
-db = NotebookDatabase('nb.db', 'outputs/*.ipynb')
+db = NotebookDatabase('nb.db', 'output/models/*.ipynb')
 db.index(verbose=False)
 ```
 
