@@ -1,7 +1,12 @@
+# Querying notebooks with SQL
+
+
+`NotebookDatabase` indexes outputs from a collection of notebooks in a SQLite database so you can query them. Any tagged cells will be captured and indexed by the database.
+
 ```python
 from pathlib import Path
 
-# to execute notebooks in parallel
+# to train models in parallel
 from ploomber import DAG
 from ploomber.tasks import NotebookRunner
 from ploomber.products import File
@@ -14,7 +19,10 @@ from sklearn.model_selection import ParameterGrid
 from sklearn_evaluation import NotebookDatabase
 ```
 
+## Scripts
+
 ```python
+# data loading script
 data = """
 # %% tags=["parameters"]
 upstream = None
@@ -30,6 +38,7 @@ df.to_csv(product['data'], index=False)
 """
 Path('data.py').write_text(data)
 
+# model fitting script
 model = """
 # %% tags=["parameters"]
 model = None
@@ -73,10 +82,11 @@ mean_squared_error(y_test, y_pred)
 Path('model.py').write_text(model)
 ```
 
+## Pipeline declaration
+
 ```python
 # create DAG, use the Parallel executor
 dag = DAG(executor=Parallel())
-# dag = DAG()
 
 experiments = {
     'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),
@@ -85,19 +95,23 @@ experiments = {
     'sklearn.linear_model.ElasticNet': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
 }
 
+papermill_params=dict(engine_name='embedded', progress_bar=False)
+
+# the embedded engine is more reliable
 task_data = NotebookRunner(Path('data.py'), {'nb': File('output/data.html'), 'data': File('output/data.csv')},
-               dag=dag)
+               dag=dag, papermill_params=papermill_params)
 
 # generate one task per set of parameter
 for model, grid in experiments.items():
     for i, params in enumerate(grid):
         name = f'{model}-{i}'
         task = NotebookRunner(Path('model.py'), File(f'output/models/{name}.ipynb'), dag=dag, name=name,
-                       # the embedded engine is more reliable
-                       papermill_params=dict(engine_name='embedded'),
+                       papermill_params=papermill_params,
                        params=dict(model=model, params=params))
         task_data >> task
 ```
+
+## Pipeline execution
 
 ```python
 # total experiments to run
@@ -106,8 +120,10 @@ len(dag)
 
 ```python
 # run experiments in parallel!
-dag.build()
+dag.build(force=True)
 ```
+
+## Indexing notebooks
 
 ```python
 # initialize db with notebooks in the outputs directory
@@ -117,12 +133,15 @@ db.index(verbose=False)
 
 Let's find the notebooks with the lowest error:
 
+
+## Querying notebooks
+
 ```python
 # load jupysql magic
 %load_ext sql
 ```
 
-Find best performing models:
+### Best performing models
 
 ```sql magic_args="sqlite:///nb.db"
 SELECT
@@ -134,7 +153,7 @@ ORDER BY 3 ASC
 LIMIT 3
 ```
 
-Average error by model type:
+### Average error by model type
 
 ```sql
 SELECT
@@ -145,7 +164,7 @@ GROUP BY 1
 ORDER BY 2 ASC
 ```
 
-DecisionTree by performance:
+### DecisionTree by performance
 
 ```sql
 SELECT
@@ -157,8 +176,4 @@ SELECT
 FROM nbs
 WHERE json_extract(c, '$.model') = 'sklearn.tree.DecisionTreeRegressor'
 ORDER BY mse ASC
-```
-
-```python
-
 ```
