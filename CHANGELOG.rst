@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.6.1dev
+--------
+
 0.6 (2022-08-11)
 ----------------
 * Query notebooks with SQL using ``NotebookDatabase``
