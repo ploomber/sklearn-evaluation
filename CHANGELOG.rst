@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.6.2dev
+--------
+
 0.6.1 (2022-08-13)
 ------------------
 * Adds anonymous telemetry
