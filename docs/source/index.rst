@@ -24,6 +24,7 @@ Table of contents
 
     user_guide
     api
+    community
 
 License
 *******
