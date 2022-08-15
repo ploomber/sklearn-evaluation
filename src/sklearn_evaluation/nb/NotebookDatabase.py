@@ -1,7 +1,6 @@
 import json
 import sqlite3
 from glob import iglob
-import nbformat
 
 from .NotebookIntrospector import NotebookIntrospector
 

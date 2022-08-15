@@ -1,7 +1,17 @@
 # Querying notebooks with SQL
 
+*Added in sklearn-evaluation version `0.6`*. Questions? [Join our community!](https://ploomber.io/community)
 
+<!-- #region -->
 `NotebookDatabase` indexes outputs from a collection of notebooks in a SQLite database so you can query them. Any tagged cells will be captured and indexed by the database.
+
+Requirements:
+
+```sh
+pip install scikit-learn sklearn-evaluation ploomber jupysql
+```
+
+<!-- #endregion -->
 
 ```python
 from pathlib import Path
@@ -10,7 +20,7 @@ from pathlib import Path
 from ploomber import DAG
 from ploomber.tasks import NotebookRunner
 from ploomber.products import File
-from ploomber.executors import Parallel
+from ploomber.executors import Parallel, Serial
 
 # to produce parameter grid
 from sklearn.model_selection import ParameterGrid
@@ -19,7 +29,9 @@ from sklearn.model_selection import ParameterGrid
 from sklearn_evaluation import NotebookDatabase
 ```
 
-## Scripts
+## Code
+
+`NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`), but the same concept applies for notebooks (`.ipynb`), [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
 
 ```python
 # data loading script
@@ -64,7 +76,7 @@ y = df.MedHouseVal
 X_train, X_test, y_train, y_test = train_test_split(X,
                                                     y,
                                                     test_size=0.33,
-                                                    random_state=42)
+                                                    random_state=0)
 
 # %% tags=["model"]
 mod, _, attr = model.rpartition('.')
@@ -84,9 +96,23 @@ Path('model.py').write_text(model)
 
 ## Pipeline declaration
 
+Create a pipeline using [Ploomber](https://docs.ploomber.io/en/latest/) and execute it in parallel.
+
+Note that if your models don't take long to run, using the `Serial` executor might be faster, since spinning up a new subprocess is expensive.
+
+Each experiment will create an output `.ipynb` file.
+
 ```python
-# create DAG, use the Parallel executor
-dag = DAG(executor=Parallel())
+parallel = True
+
+if parallel:
+    executor = Parallel()
+else:
+    executor = Serial(build_in_subprocess=False)
+
+
+dag = DAG(executor=executor)
+
 
 experiments = {
     'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),
@@ -119,7 +145,7 @@ len(dag)
 ```
 
 ```python
-# run experiments in parallel!
+# run experiments
 dag.build(force=True)
 ```
 
@@ -128,13 +154,18 @@ dag.build(force=True)
 ```python
 # initialize db with notebooks in the outputs directory
 db = NotebookDatabase('nb.db', 'output/models/*.ipynb')
-db.index(verbose=False)
+
+# Note: pass update=True if you want to update the database if
+# the output notebook changes
+db.index(verbose=True, update=False)
 ```
 
-Let's find the notebooks with the lowest error:
+*Note: the `update` argument in `index()` was added in sklearn-evaluation version `0.7`*
 
 
 ## Querying notebooks
+
+`NotebookDatabase` uses SQLite. Here we use [JupySQL](https://jupysql.readthedocs.io/en/latest/intro.html) to query our experiments.
 
 ```python
 # load jupysql magic
@@ -152,6 +183,22 @@ FROM nbs
 ORDER BY 3 ASC
 LIMIT 3
 ```
+
+<!-- #region -->
+*Note:* If using SQLite 3.38.0 (which ships with Python >=3.10) or higher, you can use the shorter `->>` operator:
+
+```sql
+SELECT
+    path,
+    c ->> '$.model' AS model,
+    c ->> '$.mse' AS mse
+FROM nbs
+ORDER BY 3 ASC
+LIMIT 3
+```
+
+See SQLite's [documentation](https://www.sqlite.org/json1.html#jptr) for details.
+<!-- #endregion -->
 
 ### Average error by model type
 
@@ -176,4 +223,5 @@ SELECT
 FROM nbs
 WHERE json_extract(c, '$.model') = 'sklearn.tree.DecisionTreeRegressor'
 ORDER BY mse ASC
+LIMIT 5
 ```
