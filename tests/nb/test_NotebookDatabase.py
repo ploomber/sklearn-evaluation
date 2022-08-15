@@ -175,3 +175,73 @@ FROM nbs
             0: 'another.ipynb'
         },
     }
+
+
+def test_get_paths(tmp_directory):
+    nb = """
+# + tags=["number"]
+print(42)
+"""
+    save_notebook(nb, 'nb.ipynb', execute=False)
+    save_notebook(nb, 'path/to/nb2.ipynb', execute=False)
+
+    db = NotebookDatabase('nb.db', '**/*.ipynb')
+    db.index()
+
+    assert db._get_paths() == {'nb.ipynb', 'path/to/nb2.ipynb'}
+
+
+def test_notebook_database_update_false(tmp_directory):
+    nb = """
+# + tags=["number"]
+print(42)
+"""
+    save_notebook(nb, 'nb.ipynb')
+
+    db = NotebookDatabase('nb.db', '*.ipynb')
+    db.index()
+
+    nb = """
+# + tags=["number"]
+print(43)
+"""
+    save_notebook(nb, 'nb.ipynb')
+
+    db.index()
+
+    out = db.query("""
+SELECT
+    path,
+    json_extract(c, '$.number') AS number
+FROM nbs
+""")
+
+    assert out.to_dict() == {'number': {0: 42}, 'path': {0: 'nb.ipynb'}}
+
+
+def test_notebook_database_update_true(tmp_directory):
+    nb = """
+# + tags=["number"]
+print(42)
+"""
+    save_notebook(nb, 'nb.ipynb')
+
+    db = NotebookDatabase('nb.db', '*.ipynb')
+    db.index()
+
+    nb = """
+# + tags=["number"]
+print(43)
+"""
+    save_notebook(nb, 'nb.ipynb')
+
+    db.index(update=True)
+
+    out = db.query("""
+SELECT
+    path,
+    json_extract(c, '$.number') AS number
+FROM nbs
+""")
+
+    assert out.to_dict() == {'number': {0: 43}, 'path': {0: 'nb.ipynb'}}

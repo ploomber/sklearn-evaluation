@@ -1,3 +1,5 @@
+from pathlib import Path
+
 import jupytext
 import nbformat
 import papermill as pm
@@ -11,6 +13,8 @@ def save_notebook(nb_str, path, execute=True, parameters=None):
         'language': 'python',
         'display_name': 'Python 3'
     }
+
+    Path(path).parent.mkdir(exist_ok=True, parents=True)
 
     nbformat.write(nb, path)
 
