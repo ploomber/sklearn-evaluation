@@ -3,6 +3,9 @@ CHANGELOG
 
 0.6.2dev
 --------
+* ``NotebookDatabase``:  makes ``path`` the primary key
+* ``NotebookDatabase``: ``.index()`` uses path to see if the notebook has been indexed
+* ``NotebookDatabase``: adds ``update`` to ``.index()``
 
 0.6.1 (2022-08-13)
 ------------------
