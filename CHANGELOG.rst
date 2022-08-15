@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.7.1dev
+--------
+
 0.7 (2022-08-15)
 ----------------
 * ``NotebookDatabase``:  makes ``path`` the primary key
