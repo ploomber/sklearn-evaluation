@@ -1,6 +1,6 @@
 # Querying notebooks with SQL
 
-*Added in sklearn-evaluation version `0.6`*. Questions? [Join our community!](https://ploomber.io/community)
+*Added in sklearn-evaluation version 0.6*. Questions? [Join our community!](https://ploomber.io/community)
 
 <!-- #region -->
 `NotebookDatabase` indexes outputs from a collection of notebooks in a SQLite database so you can query them. Any tagged cells will be captured and indexed by the database.
