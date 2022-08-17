@@ -12,7 +12,7 @@ from ploomber.constants import TaskStatus
 
 def binder_badge(path):
     _binder_badge = """
-[![Binder](https://mybinder.org/badge_logo.svg)](https://mybinder.org/v2/gh/edublancas/sklearn-evaluation/master?filepath={})
+[![open-in-jupyterlab](https://raw.githubusercontent.com/ploomber/ploomber/master/_static/open-in-jupyterlab.svg)](https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?filepath={})
 """
     return _binder_badge.format(urllib.parse.quote_plus(f'docs/source/{path}'))
 
