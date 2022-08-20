@@ -21,13 +21,6 @@ class Plot:
 
 
 def _confusion_matrix_add(first, second, ax, target_names):
-    """
-    Examples
-    --------
-    >>> a = np.array([[1, 15], [3, 4]])
-    >>> b = np.array([[4, 5], [12, 1]])
-    >>> _confusion_matrix_add(a, b, ax=plt.gca())
-    """
     # Adapted from: https://stackoverflow.com/a/63531813/709975
 
     # TODO: validate first and second have the same shape
@@ -60,9 +53,9 @@ def _confusion_matrix_add(first, second, ax, target_names):
 
     tick_marks = np.arange(len(target_names))
     ax.set_xticks(tick_marks)
-    ax.set_xticklabels(target_names, fontsize=14)
+    ax.set_xticklabels(target_names)
     ax.set_yticks(tick_marks)
-    ax.set_yticklabels(target_names, fontsize=14)
+    ax.set_yticklabels(target_names)
 
     for pad, arr in ((-1 / 5, first), (1 / 5, second)):
         for (y, x), v in np.ndenumerate(arr):
@@ -75,11 +68,13 @@ def _confusion_matrix_add(first, second, ax, target_names):
                     y + pad,
                     label,
                     horizontalalignment='center',
-                    verticalalignment='center',
-                    fontsize=16)
+                    verticalalignment='center')
 
-    ax.set_ylabel('True label', fontsize=14)
-    ax.set_xlabel('Predicted label', fontsize=14)
+    title = 'Confusion matrix (compare)'
+    ax.set_title(title)
+
+    ax.set_ylabel('True label')
+    ax.set_xlabel('Predicted label')
 
 
 class ConfusionMatrixSub(Plot):

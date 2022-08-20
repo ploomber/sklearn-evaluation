@@ -18,8 +18,8 @@ from sklearn_evaluation import plot
 ```
 
 ```python
-matplotlib.rcParams['figure.figsize'] = (6, 6)
-matplotlib.rcParams['font.size'] = 18
+matplotlib.rcParams['figure.figsize'] = (7, 7)
+matplotlib.rcParams['font.size'] = 20
 ```
 
 ```python
@@ -27,7 +27,7 @@ matplotlib.rcParams['font.size'] = 18
 ```
 
 ```python
-data = datasets.make_classification(1000, 20, n_informative=10, class_sep=0.80, n_classes=2)
+data = datasets.make_classification(1000, 20, n_informative=10, class_sep=0.80, n_classes=3)
 X = data[0]
 y = data[1]
 
