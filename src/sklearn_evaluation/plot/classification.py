@@ -3,12 +3,135 @@ Plotting functions for classifier models
 """
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.figure import Figure
+from matplotlib.tri import Triangulation
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
-from sklearn_evaluation.plot.matplotlib import bar
+from ..plot.matplotlib import bar
 from ..metrics import precision_at
 from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
+from ..report.serialize import figure2html
+
+
+class Plot:
+
+    def _repr_html_(self):
+        return figure2html(self.figure)
+
+
+def _confusion_matrix_add(first, second, ax, target_names):
+    """
+    Examples
+    --------
+    >>> a = np.array([[1, 15], [3, 4]])
+    >>> b = np.array([[4, 5], [12, 1]])
+    >>> _confusion_matrix_add(a, b, ax=plt.gca())
+    """
+    # Adapted from: https://stackoverflow.com/a/63531813/709975
+
+    # TODO: validate first and second have the same shape
+    M, N = first.shape
+    x = np.arange(M + 1)
+    y = np.arange(N + 1)
+
+    xs, ys = np.meshgrid(x, y)
+
+    zs = (xs * ys) % 10
+    zs = zs[:-1, :-1].ravel()
+
+    max_ = np.max([first.max(), second.max()])
+
+    triangles1 = [(i + j * (M + 1), i + 1 + j * (M + 1), i + (j + 1) * (M + 1))
+                  for j in range(N) for i in range(M)]
+    triangles2 = [(i + 1 + j * (M + 1), i + 1 + (j + 1) * (M + 1),
+                   i + (j + 1) * (M + 1)) for j in range(N) for i in range(M)]
+    triang1 = Triangulation(xs.ravel() - 0.5, ys.ravel() - 0.5, triangles1)
+    triang2 = Triangulation(xs.ravel() - 0.5, ys.ravel() - 0.5, triangles2)
+
+    cmap = default_heatmap()
+
+    img1 = ax.tripcolor(triang1, first.ravel(), cmap=cmap, vmax=max_)
+    _ = ax.tripcolor(triang2, second.ravel(), cmap=cmap, vmax=max_)
+    # ax.figure.colorbar(img1)
+
+    ax.set_xlim(x[0] - 0.5, x[-1] - 0.5)
+    ax.set_ylim(y[-1] - 0.5, y[0] - 0.5)
+
+    tick_marks = np.arange(len(target_names))
+    ax.set_xticks(tick_marks)
+    ax.set_xticklabels(target_names, fontsize=14)
+    ax.set_yticks(tick_marks)
+    ax.set_yticklabels(target_names, fontsize=14)
+
+    for pad, arr in ((-1 / 5, first), (1 / 5, second)):
+        for (y, x), v in np.ndenumerate(arr):
+            try:
+                label = '{:.2}'.format(v)
+            except Exception:
+                label = v
+
+            ax.text(x + pad,
+                    y + pad,
+                    label,
+                    horizontalalignment='center',
+                    verticalalignment='center',
+                    fontsize=16)
+
+    ax.set_ylabel('True label', fontsize=14)
+    ax.set_xlabel('Predicted label', fontsize=14)
+
+
+class ConfusionMatrixSub(Plot):
+
+    def __init__(self, cm, target_names) -> None:
+        self.figure = Figure()
+        ax = self.figure.add_subplot()
+        _plot_cm(cm,
+                 cmap=default_heatmap(),
+                 ax=ax,
+                 target_names=target_names,
+                 normalize=False)
+
+
+class ConfusionMatrixAdd(Plot):
+
+    def __init__(self, a, b, target_names) -> None:
+        self.figure = Figure()
+        ax = self.figure.add_subplot()
+        _confusion_matrix_add(a, b, ax=ax, target_names=target_names)
+
+
+class ConfusionMatrix(Plot):
+
+    def __init__(self, y_true, y_pred, target_names=None, normalize=False):
+        self.cm = _confusion_matrix(y_true, y_pred, normalize)
+        self.figure = Figure()
+        ax = self.figure.add_subplot()
+
+        self.target_names, cmap, ax = _confusion_matrix_validate(y_true,
+                                                                 y_pred,
+                                                                 target_names,
+                                                                 cmap=None,
+                                                                 ax=ax)
+        cm = _confusion_matrix(y_true, y_pred, normalize)
+        _plot_cm(cm, cmap, ax, self.target_names, normalize)
+
+    def __sub__(self, other):
+        cm = self.cm - other.cm
+        return ConfusionMatrixSub(cm, self.target_names)
+
+    def __add__(self, other):
+        return ConfusionMatrixAdd(self.cm, other.cm, self.target_names)
+
+
+def _confusion_matrix(y_true, y_pred, normalize):
+    cm = sk_confusion_matrix(y_true, y_pred)
+
+    if normalize:
+        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
+
+    return cm
 
 
 def confusion_matrix(y_true,
@@ -52,6 +175,13 @@ def confusion_matrix(y_true,
     .. plot:: ../../examples/confusion_matrix.py
 
     """
+    target_names, cmap, ax = _confusion_matrix_validate(
+        y_true, y_pred, target_names, cmap, ax)
+    cm = _confusion_matrix(y_true, y_pred, normalize)
+    return _plot_cm(cm, cmap, ax, target_names, normalize)
+
+
+def _confusion_matrix_validate(y_true, y_pred, target_names, cmap, ax):
     if any((val is None for val in (y_true, y_pred))):
         raise ValueError("y_true and y_pred are needed to plot confusion "
                          "matrix")
@@ -72,16 +202,18 @@ def confusion_matrix(y_true,
         values.sort()
         target_names = ['Class {}'.format(v) for v in values]
 
-    cm = sk_confusion_matrix(y_true, y_pred)
-
-    if normalize:
-        cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
-
     np.set_printoptions(precision=2)
 
     if ax is None:
         ax = plt.gca()
 
+    if cmap is None:
+        cmap = default_heatmap()
+
+    return target_names, cmap, ax
+
+
+def _plot_cm(cm, cmap, ax, target_names, normalize):
     # this (y, x) may sound counterintuitive. The reason is that
     # in a matrix cell (i, j) is in row=i and col=j, translating that
     # to an x, y plane (which matplotlib uses to plot), we need to use
@@ -98,11 +230,8 @@ def confusion_matrix(y_true,
                 horizontalalignment='center',
                 verticalalignment='center')
 
-    if cmap is None:
-        cmap = default_heatmap()
-
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
-    plt.colorbar(im, ax=ax)
+    ax.figure.colorbar(im)
     tick_marks = np.arange(len(target_names))
     ax.set_xticks(tick_marks)
     ax.set_xticklabels(target_names)
@@ -110,8 +239,10 @@ def confusion_matrix(y_true,
     ax.set_yticklabels(target_names)
 
     title = 'Confusion matrix'
+
     if normalize:
         title += ' (normalized)'
+
     ax.set_title(title)
 
     ax.set_ylabel('True label')
