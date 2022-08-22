@@ -4,14 +4,18 @@ from pathlib import Path
 try:
     import mistune
 except ModuleNotFoundError:
-    raise ImportError('You need to install mistune to generate reports')
+    mistune = None
 
-# import mistune
 from sklearn_evaluation.report.util import jinja_env
 
 
 class Report:
+
     def __init__(self, evaluator, template=None):
+        if mistune is None:
+            raise ModuleNotFoundError(
+                'You need to install mistune to generate reports')
+
         self.evaluator = evaluator
 
         if template is None:
@@ -22,7 +26,12 @@ class Report:
             template = Template(template)
 
         rendered = template.render(e=evaluator)
-        md = mistune.Markdown()
+
+        if mistune.__version__[0] == '2':
+            md = mistune.create_markdown()
+        else:
+            md = mistune.Markdown()
+
         self.rendered = md(rendered)
 
     def _repr_html_(self):
