@@ -8,7 +8,6 @@ at a time this also gives us a way to keep it organized. Furthermore, the Classi
 from our model results.
 
 .. ipython:: python
-    :suppress:
 
     import matplotlib.pyplot as plt
     from sklearn.ensemble import RandomForestClassifier

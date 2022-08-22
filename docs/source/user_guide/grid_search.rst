@@ -12,7 +12,6 @@ sklearn-evaluation includes a plotting function to evaluate grid search results,
 hyperparameter(s) by keeping the rest constant.
 
 .. ipython:: python
-    :suppress:
 
     import matplotlib.pyplot as plt
     from sklearn.ensemble import RandomForestClassifier
