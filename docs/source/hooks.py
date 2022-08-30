@@ -15,7 +15,7 @@ def binder_badge(p):
     _binder_badge = f"""
 [![open-in-jupyterlab](https://raw.githubusercontent.com/ploomber/ploomber/master/_static/open-in-jupyterlab.svg)](https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?filepath={p})
 
-Or try locally: `pip install k2s && k2s get ploomber/sklearn-evaluation/master/{p}`
+Or try locally: `pip install k2s -U && k2s get ploomber/sklearn-evaluation/master/{p}`
 """
     return _binder_badge.format(p=urllib.parse.quote_plus(f'docs/source/{p}'))
 
