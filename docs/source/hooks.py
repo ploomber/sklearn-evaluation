@@ -11,6 +11,7 @@ from ploomber.constants import TaskStatus
 
 
 def binder_badge(p):
+    p = f'docs/source/{p}'
     _binder_badge = f"""
 [![open-in-jupyterlab](https://raw.githubusercontent.com/ploomber/ploomber/master/_static/open-in-jupyterlab.svg)](https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?filepath={p})
 
