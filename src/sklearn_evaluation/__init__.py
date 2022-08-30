@@ -1,4 +1,4 @@
-__version__ = '0.7.1dev'
+__version__ = '0.7.1'
 
 from ploomber_core.telemetry.telemetry import Telemetry
 
