@@ -21,6 +21,8 @@ docs/source/savefig/
 docs/build/
 # Do not include examples produced using ..plot::
 docs/examples/
+# no outputs from sample nbs
+docs/source/nbs/output
 
 # Do not include images generated from running tests
 result_images/

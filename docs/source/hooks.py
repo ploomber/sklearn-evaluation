@@ -10,11 +10,13 @@ from ploomber.products import File
 from ploomber.constants import TaskStatus
 
 
-def binder_badge(path):
-    _binder_badge = """
-[![open-in-jupyterlab](https://raw.githubusercontent.com/ploomber/ploomber/master/_static/open-in-jupyterlab.svg)](https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?filepath={})
+def binder_badge(p):
+    _binder_badge = f"""
+[![open-in-jupyterlab](https://raw.githubusercontent.com/ploomber/ploomber/master/_static/open-in-jupyterlab.svg)](https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?filepath={p})
+
+Or try locally: `pip install k2s && k2s get ploomber/sklearn-evaluation/master/{p}`
 """
-    return _binder_badge.format(urllib.parse.quote_plus(f'docs/source/{path}'))
+    return _binder_badge.format(p=urllib.parse.quote_plus(f'docs/source/{p}'))
 
 
 def make_task(dag, rel_path_in, rel_path_out, base_path):
@@ -71,13 +73,15 @@ def config_init(app, config):
 
     dag = DAG()
 
-    make_task(dag, 'nbs/SQLiteTracker.md', 'user_guide/SQLiteTracker.ipynb',
-              base_path)
+    examples = [
+        'nbs/SQLiteTracker.ipynb',
+        'nbs/nbdb.ipynb',
+        'nbs/NotebookCollection.ipynb',
+    ]
 
-    make_task(dag, 'nbs/nbdb.md', 'user_guide/nbdb.ipynb', base_path)
-
-    make_task(dag, 'nbs/NotebookCollection.py',
-              'user_guide/NotebookCollection.ipynb', base_path)
+    for example in examples:
+        target = Path('user_guide', Path(example).name)
+        make_task(dag, example, target, base_path)
 
     dag.build()
 
