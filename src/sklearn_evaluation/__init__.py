@@ -17,7 +17,7 @@ __all__ = [
 ]
 
 telemetry = Telemetry(
-    api_key="phc_3Of87HTxtAH0GnqU5ApdJnUWUcDhaR11LuEHtVCV41Z",
+    api_key="phc_P9SpSeypyPwxrMdFn2edOOEooQioF2axppyEeDwtMSP",
     package_name="sklearn-evaluation",
     version=__version__,
 )

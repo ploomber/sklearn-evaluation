@@ -3,6 +3,7 @@ CHANGELOG
 
 0.7.1dev
 --------
+* Updates telemetry key
 
 0.7 (2022-08-15)
 ----------------
