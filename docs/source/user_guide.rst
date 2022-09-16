@@ -6,6 +6,7 @@ User Guide
 
     user_guide/classifier
     user_guide/report
+    user_guide/compare
     user_guide/func_vs_oop
     user_guide/grid_search
     user_guide/matplotlib
