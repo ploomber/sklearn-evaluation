@@ -78,6 +78,7 @@ def config_init(app, config):
         'nbs/SQLiteTracker.ipynb',
         'nbs/nbdb.ipynb',
         'nbs/NotebookCollection.ipynb',
+        'nbs/compare.ipynb',
     ]
 
     for example in examples:
