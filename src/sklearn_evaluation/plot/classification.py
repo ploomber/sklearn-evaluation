@@ -7,6 +7,7 @@ from matplotlib.figure import Figure
 from matplotlib.tri import Triangulation
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
+from ..telemetry import telemetry
 from ..plot.matplotlib import bar
 from ..metrics import precision_at
 from .. import compute
@@ -99,6 +100,7 @@ class ConfusionMatrixAdd(Plot):
 
 class ConfusionMatrix(Plot):
 
+    @telemetry.log_call('sklearn-evaluation-ConfusionMatrix')
     def __init__(self, y_true, y_pred, target_names=None, normalize=False):
         self.cm = _confusion_matrix(y_true, y_pred, normalize)
         self.figure = Figure()

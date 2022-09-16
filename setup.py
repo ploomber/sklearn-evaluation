@@ -85,6 +85,7 @@ setup(
         'black',
         # extracting injected parameters from notebooks
         'parso',
+        'importlib-metadata;python_version<"3.8"',
     ],
     extras_require={
         'all': ALL,

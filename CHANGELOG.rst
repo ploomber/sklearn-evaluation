@@ -3,6 +3,7 @@ CHANGELOG
 
 0.7.2dev
 --------
+* Adds `plot.ConfusionMatrix`
 
 0.7.1 (2022-08-30)
 ------------------
