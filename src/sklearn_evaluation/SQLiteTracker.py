@@ -4,6 +4,7 @@ import json
 
 import pandas as pd
 from sklearn_evaluation.table import Table
+from .telemetry import SKLearnEvaluationLogger
 
 
 class SQLiteTracker:
@@ -64,6 +65,7 @@ class SQLiteTracker:
 
         return df
 
+    @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
     def query(self, code):
         """Query the database, returns a pandas.DataFrame
 
@@ -80,6 +82,7 @@ class SQLiteTracker:
             df = df.set_index('uuid')
         return df
 
+    @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
     def new(self):
         """Create a new experiment, returns a uuid
         """
@@ -94,6 +97,7 @@ class SQLiteTracker:
         self.conn.commit()
         return uuid
 
+    @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
     def update(self, uuid, parameters):
         """Update the parameters of an empty experiment given its uuid
         """
@@ -109,6 +113,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
+    @SKLearnEvaluationLogger.log('SQLiteTracker')
     def insert(self, uuid, parameters):
         """Insert a new experiment
         """
@@ -121,6 +126,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
+    @SKLearnEvaluationLogger.log('SQLiteTracker')
     def comment(self, uuid, comment):
         """Add a comment to an experiment given its uuid
         """

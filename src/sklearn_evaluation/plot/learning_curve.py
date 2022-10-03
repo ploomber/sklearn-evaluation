@@ -1,7 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from ..telemetry import SKLearnEvaluationLogger
 
 
+@SKLearnEvaluationLogger.log(feature='plot')
 def learning_curve(train_scores, test_scores, train_sizes, ax=None):
     """Plot a learning curve
 

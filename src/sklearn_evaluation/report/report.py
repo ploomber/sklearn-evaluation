@@ -1,5 +1,6 @@
 from jinja2 import Template
 from pathlib import Path
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 try:
     import mistune
@@ -37,5 +38,6 @@ class Report:
     def _repr_html_(self):
         return self.rendered
 
+    @SKLearnEvaluationLogger.log(feature='report', action='save')
     def save(self, path):
         Path(path).write_text(self.rendered)

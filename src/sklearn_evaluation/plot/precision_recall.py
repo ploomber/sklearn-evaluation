@@ -2,11 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_curve, average_precision_score
 from sklearn.preprocessing import label_binarize
-
+from ..telemetry import SKLearnEvaluationLogger
 from ..util import is_column_vector, is_row_vector
 
 
-def precision_recall(y_true, y_score, ax=None):
+@SKLearnEvaluationLogger.log(feature='plot')
+def precision_recall(y_true, y_score, ax=None, **kwargs):
     """
     Plot precision-recall curve.
 

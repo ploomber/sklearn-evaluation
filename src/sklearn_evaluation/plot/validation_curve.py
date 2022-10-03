@@ -1,7 +1,9 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from ..telemetry import SKLearnEvaluationLogger
 
 
+@SKLearnEvaluationLogger.log(feature='plot')
 def validation_curve(train_scores, test_scores, param_range, param_name=None,
                      semilogx=False, ax=None):
     """Plot a validation curve

@@ -7,7 +7,7 @@ from matplotlib.figure import Figure
 from matplotlib.tri import Triangulation
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
-from ..telemetry import telemetry
+from ..telemetry import SKLearnEvaluationLogger, telemetry
 from ..plot.matplotlib import bar
 from ..metrics import precision_at
 from .. import compute
@@ -131,12 +131,15 @@ def _confusion_matrix(y_true, y_pred, normalize):
     return cm
 
 
-def confusion_matrix(y_true,
-                     y_pred,
-                     target_names=None,
-                     normalize=False,
-                     cmap=None,
-                     ax=None):
+@SKLearnEvaluationLogger.log(feature='plot')
+def confusion_matrix(
+        y_true,
+        y_pred,
+        target_names=None,
+        normalize=False,
+        cmap=None,
+        ax=None,
+        **kwargs):
     """
     Plot confusion matrix.
 
@@ -252,11 +255,13 @@ def _plot_cm(cm, cmap, ax, target_names, normalize):
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
+@SKLearnEvaluationLogger.log(feature='plot')
 def feature_importances(data,
                         top_n=None,
                         feature_names=None,
                         orientation='horizontal',
-                        ax=None):
+                        ax=None,
+                        **kwargs):
     """
     Get and order feature importances from a scikit-learn model
     or from an array-like structure. If data is a scikit-learn model with
@@ -302,7 +307,8 @@ def feature_importances(data,
     return ax
 
 
-def precision_at_proportions(y_true, y_score, ax=None):
+@SKLearnEvaluationLogger.log(feature='plot')
+def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
     """
     Plot precision values at different proportions.
 
