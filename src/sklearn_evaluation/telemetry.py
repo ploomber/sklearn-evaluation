@@ -71,6 +71,7 @@ class SKLearnEvaluationLogger():
         _arguments = self._parse_arguments(self, arguments)
 
         metadata = {
+            'action': _action,
             'feature': feature,
             'function_arguments': _arguments['function_args'],
         }
@@ -78,7 +79,7 @@ class SKLearnEvaluationLogger():
         if len(_arguments['flags']) > 0:
             metadata['flags'] = _arguments['flags']
 
-        telemetry.log_api(_action, metadata=metadata)
+        telemetry.log_api('sklearn-evaluation', metadata=metadata)
 
     def _is_flag(self, key):
         flags = self.flags()

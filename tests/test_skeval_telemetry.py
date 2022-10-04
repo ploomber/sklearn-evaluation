@@ -37,6 +37,7 @@ def test_logger(mock_telemetry, action, feature, x, y, kwargs):
             'y': str(y)
         }
     )
+    _action = action or 'my_function'
 
     @SKLearnEvaluationLogger.log(feature=feature, action=action)
     def my_function(x=None, y=None, **kwargs):
@@ -53,15 +54,14 @@ def test_logger(mock_telemetry, action, feature, x, y, kwargs):
 
     expected_metadata = dict({
         'feature': feature,
+        'action': _action,
         'function_arguments': function_arguments
     })
 
     if len(flags) > 0:
         expected_metadata['flags'] = flags
 
-    _action = action or 'my_function'
-
     mock_telemetry.assert_has_calls([
-        call(_action,
+        call('sklearn-evaluation',
              metadata=expected_metadata)
     ])
