@@ -1,4 +1,5 @@
 from functools import wraps
+import inspect
 from inspect import signature
 
 try:
@@ -21,65 +22,68 @@ class SKLearnEvaluationLogger():
 
     @classmethod
     def log(self, func=None, action=None, feature=None):
-        if callable(func):
+        def wrapper(func):
             @wraps(func)
             def inner(*args, **kwargs):
                 self._log_api(self, func, action, feature, *args, **kwargs)
                 return func(*args, **kwargs)
-
             return inner
-        else:
-            def wrapper(func):
-                @wraps(func)
-                def inner(*args, **kwargs):
-                    self._log_api(self, func, action, feature, *args, **kwargs)
-                    return func(*args, **kwargs)
-                return inner
-            return wrapper
+        return wrapper
 
-    def _get_func_arguments(func, *args, **kwargs):
+    def _get_func_arguments_to_log(self, func, *args, **kwargs):
+        args_to_log = dict()
+        flags = dict({})
+
         sig = signature(func)
         bound = sig.bind(*args, **kwargs)
         bound.apply_defaults()
         arguments = bound.arguments
+        args_with_default_values = []
 
-        return arguments
+        for tupple in sig.parameters.items():
+            param_name = tupple[0]
+            param_value = tupple[1]
+            if param_value.default is not inspect._empty:
+                args_with_default_values.append(param_name)
 
-    def _parse_arguments(self, arguments):
-        parsed_function_arguments = dict()
-        flags = dict()
-
-        kwargs = arguments.pop('kwargs', {})
-
+        # extract only args with default values
         for key, value in arguments.items():
-            parsed_function_arguments[key] = str(value)
+            if key in args_with_default_values:
+                args_to_log[key] = value
 
+            elif key == 'kwargs':
+                flags = self._extract_flags(self, **value)
+
+        return args_to_log, flags
+
+    def _extract_flags(self, **kwargs):
+        flags = dict({})
         for key, value in kwargs.items():
             if self._is_flag(self, key):
                 flags[key] = value
-            else:
-                parsed_function_arguments[key] = str(value)
 
-        return dict({
-            'function_args': parsed_function_arguments,
-            'flags': flags
-        })
+        return flags
 
     def _log_api(self, func, action, feature, *args, **kwargs):
         _action = action or func.__name__
-        arguments = self._get_func_arguments(func, *args, **kwargs)
-        _arguments = self._parse_arguments(self, arguments)
+        _args, _flags = self._get_func_arguments_to_log(
+            self, func, *args, **kwargs)
 
         metadata = {
             'action': _action,
-            'feature': feature,
-            'function_arguments': _arguments['function_args'],
+            'feature': feature
         }
 
-        if len(_arguments['flags']) > 0:
-            metadata['flags'] = _arguments['flags']
+        if len(_args) > 0:
+            metadata['args'] = _args
 
-        telemetry.log_api('sklearn-evaluation', metadata=metadata)
+        if len(_flags) > 0:
+            metadata['flags'] = _flags
+
+        try:
+            telemetry.log_api('sklearn-evaluation', metadata=metadata)
+        except Exception:
+            pass
 
     def _is_flag(self, key):
         flags = self.flags()
