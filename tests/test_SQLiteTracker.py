@@ -1,5 +1,5 @@
 from uuid import uuid4
-
+import time
 import pytest
 from sklearn_evaluation.SQLiteTracker import SQLiteTracker
 
@@ -63,7 +63,6 @@ def test_update():
 
 def test_reprs():
     tracker = SQLiteTracker(':memory:')
-
     assert 'SQLiteTracker' in repr(tracker)
     assert 'SQLiteTracker' in tracker._repr_html_()
     assert '(No experiments saved yet)' in repr(tracker)
@@ -73,8 +72,12 @@ def test_reprs():
 
     for i, uuid in enumerate(uuids):
         tracker.insert(uuid, {'a': i})
+        if i == 0:
+            # create a delay so the timestamp for the 1st value
+            # would be different from others
+            time.sleep(3)
 
-    expected = [True, True, True, True, True, False]
+    expected = [False, True, True, True, True, True]
 
     assert [uuid in repr(tracker) for uuid in uuids] == expected
     assert [uuid in tracker._repr_html_() for uuid in uuids] == expected
