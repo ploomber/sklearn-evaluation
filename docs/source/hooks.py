@@ -13,7 +13,7 @@ from ploomber.constants import TaskStatus
 def binder_badge(p):
     p = f'docs/source/{p}'
     _binder_badge = f"""
-[![open-in-jupyterlab](https://raw.githubusercontent.com/ploomber/ploomber/master/_static/open-in-jupyterlab.svg)](https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?filepath={p})
+[![open-in-jupyterlab](https://raw.githubusercontent.com/ploomber/ploomber/master/_static/open-in-jupyterlab.svg)](https://binder.ploomber.io/v2/gh/ploomber/binder-env/main?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fploomber%252Fsklearn-evaluation%26urlpath%3Dlab%252Ftree%252Fsklearn-evaluation%252F{p}%26branch%3Dmaster)
 
 Or try locally: `pip install k2s -U && k2s get ploomber/sklearn-evaluation/master/{p}`
 """
