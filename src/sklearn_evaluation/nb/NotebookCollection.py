@@ -15,7 +15,7 @@ from jinja2 import Environment, PackageLoader
 from .NotebookIntrospector import NotebookIntrospector
 from .sets import differences
 from ..table import Table
-
+from ..telemetry import SKLearnEvaluationLogger
 _env = Environment(loader=PackageLoader('sklearn_evaluation', 'assets/nb'))
 _fm = black.FileMode(string_normalization=False, line_length=40)
 _htmldiff = HtmlDiff()
@@ -39,6 +39,9 @@ class NotebookCollection(Mapping):
         if 'filenames', the file name is extracted from each path and used
         as identifier (ignores extension)
     """
+    @SKLearnEvaluationLogger.log(
+        feature='NotebookCollection',
+        action='init-NotebookCollection')
     def __init__(self, paths, ids=None, scores=False):
         if ids is None:
             ids = paths
@@ -76,6 +79,7 @@ class NotebookCollection(Mapping):
 class HTMLMapping(Mapping):
     """A mapping that has an HTML representation
     """
+
     def __init__(self, mapping, html):
         self._mapping = mapping
         self._html = html
