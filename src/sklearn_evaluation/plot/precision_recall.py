@@ -7,7 +7,7 @@ from ..util import is_column_vector, is_row_vector
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def precision_recall(y_true, y_score, ax=None, **kwargs):
+def precision_recall(y_true, y_score, ax=None):
     """
     Plot precision-recall curve.
 

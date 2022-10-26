@@ -20,8 +20,7 @@ def grid_search(cv_results_,
                 kind='line',
                 cmap=None,
                 ax=None,
-                sort=True,
-                **kwargs
+                sort=True
                 ):
     """
     Plot results from a sklearn grid search by changing two parameters at most.

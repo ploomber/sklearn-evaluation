@@ -7,7 +7,7 @@ from ..util import is_column_vector, is_row_vector
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def roc(y_true, y_score, ax=None, **kwargs):
+def roc(y_true, y_score, ax=None):
     """
     Plot ROC curve.
 

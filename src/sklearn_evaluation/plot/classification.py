@@ -259,8 +259,7 @@ def feature_importances(data,
                         top_n=None,
                         feature_names=None,
                         orientation='horizontal',
-                        ax=None,
-                        **kwargs):
+                        ax=None):
     """
     Get and order feature importances from a scikit-learn model
     or from an array-like structure. If data is a scikit-learn model with
@@ -307,7 +306,7 @@ def feature_importances(data,
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def precision_at_proportions(y_true, y_score, ax=None, **kwargs):
+def precision_at_proportions(y_true, y_score, ax=None):
     """
     Plot precision values at different proportions.
 
