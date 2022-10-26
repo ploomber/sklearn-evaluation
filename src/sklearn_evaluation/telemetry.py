@@ -25,8 +25,19 @@ class SKLearnEvaluationLogger():
         def wrapper(func):
             @wraps(func)
             def inner(*args, **kwargs):
-                self._log_api(self, func, action, feature, *args, **kwargs)
-                return func(*args, **kwargs)
+                metadata = self._prepare_metadata(
+                    self, func, action, feature, *args, **kwargs)
+                telemetry.log_api('sklearn-evaluation', metadata=metadata)
+
+                try:
+                    result = func(*args, **kwargs)
+                except Exception as e:
+                    metadata['exception'] = str(e)
+                    telemetry.log_api(
+                        'sklearn-evaluation-error', metadata=metadata)
+                    raise e
+
+                return result
             return inner
         return wrapper
 
@@ -64,7 +75,11 @@ class SKLearnEvaluationLogger():
 
         return flags
 
-    def _log_api(self, func, action, feature, *args, **kwargs):
+    def _is_flag(self, key):
+        flags = self.flags()
+        return key in flags
+
+    def _prepare_metadata(self, func, action, feature, *args, **kwargs):
         _action = action or func.__name__
         _args, _flags = self._get_func_arguments_to_log(
             self, func, *args, **kwargs)
@@ -80,11 +95,4 @@ class SKLearnEvaluationLogger():
         if len(_flags) > 0:
             metadata['flags'] = _flags
 
-        try:
-            telemetry.log_api('sklearn-evaluation', metadata=metadata)
-        except Exception:
-            pass
-
-    def _is_flag(self, key):
-        flags = self.flags()
-        return key in flags
+        return metadata

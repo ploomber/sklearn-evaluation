@@ -63,3 +63,52 @@ def test_logger(mock_telemetry, action, feature, x, y, kwargs):
         call('sklearn-evaluation',
              metadata=expected_metadata)
     ])
+
+
+@pytest.mark.parametrize('action', ['some_action', None])
+@pytest.mark.parametrize('feature', ['report', None])
+@pytest.mark.parametrize('x', [1, None])
+@pytest.mark.parametrize('y', [2, None])
+@pytest.mark.parametrize('kwargs', [{'is_report': True, 'not-a-flag': True},
+                                    {'not-a-flag': 'random-value'},
+                                    {'is_report': True},
+                                    {}])
+def test_logger_with_errors(mock_telemetry, action, feature, x, y, kwargs):
+    _exception = 'Failed to run function'
+    flags = dict()
+    function_arguments = dict(
+        {
+            'x': x,
+            'y': y
+        }
+    )
+    _action = action or 'my_function'
+
+    @SKLearnEvaluationLogger.log(feature=feature, action=action)
+    def my_function(a, b, x=None, y=None, **kwargs):
+        raise Exception(_exception)
+
+    try:
+        my_function(1, 2, x=x, y=y, **kwargs)
+    except Exception:
+        pass
+
+    if len(kwargs) > 0:
+        for key, value in kwargs.items():
+            if key in SKLearnEvaluationLogger.flags():
+                flags[key] = value
+
+    expected_metadata = dict({
+        'action': _action,
+        'feature': feature,
+        'args': function_arguments,
+        'exception': _exception
+    })
+
+    if len(flags) > 0:
+        expected_metadata['flags'] = flags
+
+    mock_telemetry.assert_has_calls([
+        call('sklearn-evaluation-error',
+             metadata=expected_metadata)
+    ])

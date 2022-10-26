@@ -105,24 +105,21 @@ class ClassifierEvaluator(object):
         """Confusion matrix plot
         """
         return plot.confusion_matrix(self.y_true, self.y_pred,
-                                     self.target_names, ax=_gen_ax(),
-                                     is_report=True
+                                     self.target_names, ax=_gen_ax()
                                      )
 
     @requires_properties(('y_true', 'y_score'))
     def roc(self):
         """ROC plot
         """
-        return plot.roc(self.y_true, self.y_score, ax=_gen_ax(),
-                        is_report=True
+        return plot.roc(self.y_true, self.y_score, ax=_gen_ax()
                         )
 
     @requires_properties(('y_true', 'y_score'))
     def precision_recall(self):
         """Precision-recall plot
         """
-        return plot.precision_recall(self.y_true, self.y_score, ax=_gen_ax(),
-                                     is_report=True
+        return plot.precision_recall(self.y_true, self.y_score, ax=_gen_ax()
                                      )
 
     @requires_properties(('estimator',))
@@ -131,8 +128,7 @@ class ClassifierEvaluator(object):
         """
         return plot.feature_importances(self.estimator,
                                         feature_names=self.feature_names,
-                                        ax=_gen_ax(),
-                                        is_report=True
+                                        ax=_gen_ax()
                                         )
 
     @requires_properties(('estimator',))
@@ -149,8 +145,7 @@ class ClassifierEvaluator(object):
         """Precision at proportions plot
         """
         return plot.precision_at_proportions(self.y_true, self.y_score,
-                                             ax=_gen_ax(),
-                                             is_report=True
+                                             ax=_gen_ax()
                                              )
 
     def html_serializable(self):

@@ -138,8 +138,7 @@ def confusion_matrix(
         target_names=None,
         normalize=False,
         cmap=None,
-        ax=None,
-        **kwargs):
+        ax=None):
     """
     Plot confusion matrix.
 
