@@ -29,7 +29,7 @@ First, let's load some data.
     X = data[0]
     y = data[1]
 
-Now, we need to define which hyperparameter sets we wan to include in the
+Now, we need to define which hyperparameter sets we want to include in the
 grid search, we do so by defining a dictionary with hyperparameter-values pairs
 and scikit-learn will automatically generate all possible combinations. For the
 dictionary below, we can generate 16 combinations (4*2*2).
