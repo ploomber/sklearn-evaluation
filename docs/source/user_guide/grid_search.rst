@@ -5,7 +5,7 @@ A common practice in Machine Learning is to train several models with different
 hyperparameters and compare the performance across hyperparameter sets.
 scikit-learn provides a tool to do it: :class:`sklearn.grid_search.GridSearchCV`, which trains the same model
 with different parameters. When doing grid search, it is tempting to just take
-the 'best model' and carry on, but analizing the results can give us some
+the 'best model' and carry on, but analyzing the results can give us some
 interesting information, so it's worth taking a look at the results.
 
 sklearn-evaluation includes a plotting function to evaluate grid search results, this way we can see how the model performs when changing one (or two)
