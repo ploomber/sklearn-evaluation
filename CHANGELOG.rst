@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.7.5dev
---------
+0.7.5 (2022-10-28)
+------------------
 * Renames ``cluster_ranges`` to ``n_clusters`` in ``plot.elbow_curve``
 * Adds ``plot.elbow_curve_from_results``
 
