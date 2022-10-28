@@ -3,6 +3,7 @@ CHANGELOG
 
 0.7.4dev
 --------
+* Adds `plot.elbow_curve`
 
 0.7.3 (2022-10-26)
 ------------------
