@@ -11,7 +11,7 @@ from .grid_search import grid_search
 from .validation_curve import validation_curve
 from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
-from .clustering import elbow_curve
+from .clustering import elbow_curve, elbow_curve_from_results
 
 __all__ = [
     'confusion_matrix',
@@ -25,4 +25,5 @@ __all__ = [
     'metrics_at_thresholds',
     'ConfusionMatrix',
     'elbow_curve',
+    'elbow_curve_from_results',
 ]

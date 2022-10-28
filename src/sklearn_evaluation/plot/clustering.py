@@ -40,7 +40,7 @@ from ..telemetry import SKLearnEvaluationLogger
 @SKLearnEvaluationLogger.log(feature='plot')
 def elbow_curve(X,
                 clf,
-                cluster_ranges=None,
+                n_clusters=None,
                 n_jobs=1,
                 show_cluster_time=True,
                 ax=None):
@@ -57,7 +57,7 @@ def elbow_curve(X,
         ``score`` methods, and an ``n_clusters`` hyperparameter.
         e.g. :class:`sklearn.cluster.KMeans` instance
 
-    cluster_ranges : None or :obj:`list` of int, optional
+    n_clusters : None or :obj:`list` of int, optional
         List of n_clusters for which to plot the explained variances.
         Defaults to ``[1, 3, 5, 7, 9, 11]``.
 
@@ -81,32 +81,51 @@ def elbow_curve(X,
     .. plot:: ../../examples/elbow_curve.py
 
     """
-    if cluster_ranges is None:
-        cluster_ranges = range(1, 10, 2)
+    if n_clusters is None:
+        n_clusters = range(1, 10, 2)
     else:
-        cluster_ranges = sorted(cluster_ranges)
+        n_clusters = sorted(n_clusters)
 
     if not hasattr(clf, 'n_clusters'):
         raise TypeError('"n_clusters" attribute not in classifier. '
                         'Cannot plot elbow method.')
 
     tuples = Parallel(n_jobs=n_jobs)(
-        delayed(_clone_and_score_clusterer)(clf, X, i) for i in cluster_ranges)
+        delayed(_clone_and_score_clusterer)(clf, X, i) for i in n_clusters)
     clfs, times = zip(*tuples)
+    sum_of_squares = np.absolute(clfs)
+
+    return elbow_curve_from_results(n_clusters,
+                                    sum_of_squares,
+                                    times if show_cluster_time else None,
+                                    ax=ax)
+
+
+def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
+    """
+    Same as `elbow_curve`, but it takes the number of clusters and sum of
+    squares as inputs. Useful if you want to train the models yourself.
+    """
+    # TODO: unit test this
+    # TODO: also test with unsorted input
+    idx = np.argsort(n_clusters)
+    n_clusters = np.array(n_clusters)[idx]
+    sum_of_squares = np.array(sum_of_squares)[idx]
 
     if ax is None:
         ax = plt.gca()
 
     ax.set_title('Elbow Plot')
-    ax.plot(cluster_ranges, np.absolute(clfs), 'b*-')
+    ax.plot(n_clusters, sum_of_squares, 'b*-')
     ax.grid(True)
     ax.set_xlabel('Number of clusters')
     ax.set_ylabel('Sum of Squared Errors')
 
-    if show_cluster_time:
+    if times is not None:
+        times = np.array(times)[idx]
         ax2_color = 'green'
         ax2 = ax.twinx()
-        ax2.plot(cluster_ranges, times, ':', alpha=0.75, color=ax2_color)
+        ax2.plot(n_clusters, times, ':', alpha=0.75, color=ax2_color)
         ax2.set_ylabel('Clustering duration (seconds)',
                        color=ax2_color,
                        alpha=0.75)
