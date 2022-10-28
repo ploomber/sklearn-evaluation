@@ -132,3 +132,6 @@ def test_validation_curve():
     train_size = np.arange(100, 1000, step=100)
 
     plot.validation_curve(acc_train, acc_val, train_size)
+
+def test_residual():
+    plot.residual(y_test, y_pred)

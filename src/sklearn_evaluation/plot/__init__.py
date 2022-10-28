@@ -23,4 +23,5 @@ __all__ = [
     'learning_curve',
     'metrics_at_thresholds',
     'ConfusionMatrix',
+    'residual'
 ]
