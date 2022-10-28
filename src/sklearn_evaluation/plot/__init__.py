@@ -12,6 +12,7 @@ from .validation_curve import validation_curve
 from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
 from .clustering import elbow_curve, elbow_curve_from_results
+from .calibration import calibration_curve
 
 __all__ = [
     'confusion_matrix',
@@ -26,4 +27,5 @@ __all__ = [
     'ConfusionMatrix',
     'elbow_curve',
     'elbow_curve_from_results',
+    'calibration_curve',
 ]
