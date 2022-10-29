@@ -11,6 +11,7 @@ from .grid_search import grid_search
 from .validation_curve import validation_curve
 from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
+from .regression import (residual, prediction_error)
 
 __all__ = [
     'confusion_matrix',
@@ -23,5 +24,6 @@ __all__ = [
     'learning_curve',
     'metrics_at_thresholds',
     'ConfusionMatrix',
-    'residual'
+    'residual',
+    'prediction_error'
 ]
