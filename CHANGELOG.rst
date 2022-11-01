@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.7.8dev
+--------
+
 0.7.7 (2022-11-01)
 ------------------
 * ``plot.calibration_curve`` allows plotting curves with different sample sizes
