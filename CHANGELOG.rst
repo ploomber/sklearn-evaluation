@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.7.7dev
+--------
+
 0.7.6 (2022-11-01)
 ------------------
 * Adds ``plot.calibration_curve``
