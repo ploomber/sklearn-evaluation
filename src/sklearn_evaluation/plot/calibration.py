@@ -29,6 +29,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.calibration import calibration_curve as sk_calibration_curve
 
+from sklearn_evaluation.util import isiterofiter
+
 
 # TODO: add unit tests
 def calibration_curve(y_true,
@@ -47,8 +49,11 @@ def calibration_curve(y_true,
 
     Parameters
     ----------
-    y_true : array-like, shape = [n_samples]:
-        Ground truth (correct) target values.
+    y_true : array-like, shape = [n_samples] or list with array-like:
+        Ground truth (correct) target values. If passed a single array-
+        object, it assumes all the `probabilities` have the same shape as
+        `y_true`. If passed a list, it expects `y_true[i]` to have the same
+        size as `probabilities[i]`
 
     probabilities : list of array-like, shape (n_samples, 2) or (n_samples,)
         A list containing the outputs of binary classifiers'
@@ -79,13 +84,24 @@ def calibration_curve(y_true,
     Examples
     --------
     .. plot:: ../../examples/calibration_curve.py
-    """
-    y_true = np.asarray(y_true)
 
+    .. plot:: ../../examples/calibration_curve_diff_sample_size.py
+    """
     if not isinstance(probabilities, list):
         raise ValueError('`probabilities` does not contain a list.')
 
-    classes = np.unique(y_true)
+    if isiterofiter(y_true):
+        # check len of y_true and probabilities
+        if len(y_true) != len(probabilities):
+            raise ValueError(
+                'y_true and probabilities should have the '
+                'same size when y_true is an iterator of array-like objects')
+
+        classes = np.unique(y_true[0])
+
+    else:
+        y_true = len(probabilities) * [y_true]
+        classes = np.unique(y_true)
 
     if len(classes) > 2:
         raise ValueError('plot_calibration_curve only '
@@ -106,7 +122,7 @@ def calibration_curve(y_true,
 
     ax.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
 
-    for i, probas in enumerate(probabilities):
+    for i, (probas, y_true_) in enumerate(zip(probabilities, y_true)):
         probas = np.asarray(probas)
         if probas.ndim > 2:
             raise ValueError('Index {} in probabilities has invalid '
@@ -114,14 +130,14 @@ def calibration_curve(y_true,
         if probas.ndim == 2:
             probas = probas[:, 1]
 
-        if probas.shape != y_true.shape:
+        if probas.shape != y_true_.shape:
             raise ValueError('Index {} in probabilities has invalid '
                              'shape {}'.format(i, probas.shape))
 
         probas = (probas - probas.min()) / (probas.max() - probas.min())
 
         (fraction_of_positives,
-         mean_predicted_value) = sk_calibration_curve(y_true,
+         mean_predicted_value) = sk_calibration_curve(y_true_,
                                                       probas,
                                                       n_bins=n_bins)
 
