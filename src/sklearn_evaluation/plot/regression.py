@@ -3,8 +3,10 @@ Plotting functions for regression plots.
 """
 
 import matplotlib.pyplot as plt
+import numpy as np
 
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn.linear_model import LinearRegression
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
@@ -15,7 +17,7 @@ def residual(y_true, y_pred, ax=None):
     if ax is None:
         ax = plt.gca()
 
-    # a line for residual=0
+    # horizontal line for residual=0
     ax.axhline(y=0)
 
     ax.scatter(y_pred, y_true-y_pred)
@@ -29,8 +31,26 @@ def prediction_error(y_true, y_pred, ax=None):
     if ax is None:
         ax = plt.gca()
 
-    ax.scatter(y_pred, y_true)
+    # x = y_true.reshape(-1,1);
+    # best fit line
+    model = LinearRegression()
+    model.fit(y_true.reshape((-1, 1)), y_pred)
+    x = np.linspace(80,230,100)
+    y = model.intercept_ + model.coef_ * x
+    ax.plot(x,y, "-b", label="best fit")
+
+    # identity line
+    ax.plot(x,x, "--k", label="identity")
+
+    # scatter plot
+    ax.scatter(y_true, y_pred)
+
+    # R2
+    r2 = model.score(y_true.reshape((-1, 1)), y_pred)
+    plt.plot([], [], ' ', label=f"R2 = {round(r2,5)}")
+
     _set_ax_settings(ax, 'y_measured', 'y_predicted')
+    ax.legend(loc="upper left")
     return ax
 
 
