@@ -48,7 +48,10 @@ def residual(y_true, y_pred, ax=None):
     return ax
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def prediction_error(y_true, y_pred, model=LinearRegression(), ax=None):
+def prediction_error(y_true,
+                     y_pred,
+                     model=LinearRegression(),
+                     ax=None):
     """
     Plot the scatter plot of measured values v. predicted values, with
     an identity line and a best fitted line to show the prediction
@@ -61,7 +64,7 @@ def prediction_error(y_true, y_pred, model=LinearRegression(), ax=None):
     y_pred : array-like, shape = [n_samples]
         Predicted target values.
     model : Regression instance that implements ``fit``,``predict``, and
-        ``score`` methods, and ``intercept_`` and ``coef_`` attributes.
+        ``score`` methods and ``fit_intercept`` attribute.
         e.g. :class:`sklearn.linear_model.LinearRegression` instance
         If not specified, use the LinearRegression model.
     ax : matplotlib Axes
@@ -82,8 +85,8 @@ def prediction_error(y_true, y_pred, model=LinearRegression(), ax=None):
     if ax is None:
         ax = plt.gca()
 
-    if not hasattr(model, 'coef_'):
-        raise TypeError('"coef_" attribute not in model. '
+    if not hasattr(model, 'fit_intercept'):
+        raise TypeError('"fit_intercept" attribute not in model. '
                         'Cannot plot prediction error.')
     # best fit line
     model.fit(y_true.reshape((-1, 1)), y_pred)
