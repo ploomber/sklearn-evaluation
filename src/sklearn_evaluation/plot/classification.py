@@ -4,7 +4,6 @@ Plotting functions for classifier models
 import numpy as np
 import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
-from matplotlib.tri import Triangulation
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from ..telemetry import SKLearnEvaluationLogger, telemetry
@@ -12,64 +11,18 @@ from ..plot.matplotlib import bar
 from ..metrics import precision_at
 from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
-from ..report.serialize import figure2html
-
-
-class Plot:
-
-    def _repr_html_(self):
-        return figure2html(self.figure)
+from ..plot.plot import Plot
+from ..plot import _matrix
 
 
 def _confusion_matrix_add(first, second, ax, target_names):
-    # Adapted from: https://stackoverflow.com/a/63531813/709975
-
-    # TODO: validate first and second have the same shape
-    M, N = first.shape
-    x = np.arange(M + 1)
-    y = np.arange(N + 1)
-
-    xs, ys = np.meshgrid(x, y)
-
-    zs = (xs * ys) % 10
-    zs = zs[:-1, :-1].ravel()
-
-    max_ = np.max([first.max(), second.max()])
-
-    triangles1 = [(i + j * (M + 1), i + 1 + j * (M + 1), i + (j + 1) * (M + 1))
-                  for j in range(N) for i in range(M)]
-    triangles2 = [(i + 1 + j * (M + 1), i + 1 + (j + 1) * (M + 1),
-                   i + (j + 1) * (M + 1)) for j in range(N) for i in range(M)]
-    triang1 = Triangulation(xs.ravel() - 0.5, ys.ravel() - 0.5, triangles1)
-    triang2 = Triangulation(xs.ravel() - 0.5, ys.ravel() - 0.5, triangles2)
-
-    cmap = default_heatmap()
-
-    img1 = ax.tripcolor(triang1, first.ravel(), cmap=cmap, vmax=max_)
-    _ = ax.tripcolor(triang2, second.ravel(), cmap=cmap, vmax=max_)
-    # ax.figure.colorbar(img1)
-
-    ax.set_xlim(x[0] - 0.5, x[-1] - 0.5)
-    ax.set_ylim(y[-1] - 0.5, y[0] - 0.5)
+    _matrix.add(first, second, ax, invert_axis=True)
 
     tick_marks = np.arange(len(target_names))
     ax.set_xticks(tick_marks)
     ax.set_xticklabels(target_names)
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(target_names)
-
-    for pad, arr in ((-1 / 5, first), (1 / 5, second)):
-        for (y, x), v in np.ndenumerate(arr):
-            try:
-                label = '{:.2}'.format(v)
-            except Exception:
-                label = v
-
-            ax.text(x + pad,
-                    y + pad,
-                    label,
-                    horizontalalignment='center',
-                    verticalalignment='center')
 
     title = 'Confusion matrix (compare)'
     ax.set_title(title)
@@ -132,13 +85,12 @@ def _confusion_matrix(y_true, y_pred, normalize):
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def confusion_matrix(
-        y_true,
-        y_pred,
-        target_names=None,
-        normalize=False,
-        cmap=None,
-        ax=None):
+def confusion_matrix(y_true,
+                     y_pred,
+                     target_names=None,
+                     normalize=False,
+                     cmap=None,
+                     ax=None):
     """
     Plot confusion matrix.
 
@@ -212,13 +164,13 @@ def _confusion_matrix_validate(y_true, y_pred, target_names, cmap, ax):
     return target_names, cmap, ax
 
 
-def _plot_cm(cm, cmap, ax, target_names, normalize):
+def _add_values_to_matrix(m, ax):
     # this (y, x) may sound counterintuitive. The reason is that
     # in a matrix cell (i, j) is in row=i and col=j, translating that
     # to an x, y plane (which matplotlib uses to plot), we need to use
     # i as the y coordinate (how many steps down) and j as the x coordinate
     # how many steps to the right.
-    for (y, x), v in np.ndenumerate(cm):
+    for (y, x), v in np.ndenumerate(m):
         try:
             label = '{:.2}'.format(v)
         except Exception:
@@ -228,6 +180,10 @@ def _plot_cm(cm, cmap, ax, target_names, normalize):
                 label,
                 horizontalalignment='center',
                 verticalalignment='center')
+
+
+def _plot_cm(cm, cmap, ax, target_names, normalize):
+    _add_values_to_matrix(cm, ax)
 
     im = ax.imshow(cm, interpolation='nearest', cmap=cmap)
     ax.figure.colorbar(im)
