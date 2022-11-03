@@ -16,6 +16,10 @@ def isiter(obj):
         return True
 
 
+def isiterofiter(obj):
+    return isiter(obj) and isiter(obj[0])
+
+
 def estimator_type(model):
     s = str(type(model))
     model_name = re.search(".*'(.+?)'.*", s).group(1).split(".")[-1]
@@ -86,7 +90,8 @@ def _sorted_map_iter(d, sort=True):
         try:
             ord_keys = sorted(d.keys())
         except TypeError as e:
-            raise TypeError('Sorting not supported. Please pass sort=False') from e
+            raise TypeError(
+                'Sorting not supported. Please pass sort=False') from e
     else:
         ord_keys = d.keys()
     for k in ord_keys:

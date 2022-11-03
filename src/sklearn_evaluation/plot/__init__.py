@@ -11,7 +11,9 @@ from .grid_search import grid_search
 from .validation_curve import validation_curve
 from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
-from .regression import (residual, prediction_error, intercluster_distance)
+from .regression import (residual, prediction_error)
+from .clustering import elbow_curve, elbow_curve_from_results
+from .calibration import calibration_curve
 
 __all__ = [
     'confusion_matrix',
@@ -26,5 +28,7 @@ __all__ = [
     'ConfusionMatrix',
     'residual',
     'prediction_error',
-    'intercluster_distance'
+    'elbow_curve',
+    'elbow_curve_from_results',
+    'calibration_curve',
 ]

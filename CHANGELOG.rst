@@ -1,8 +1,25 @@
 CHANGELOG
 =========
 
-0.7.4dev
+0.7.8dev
 --------
+
+0.7.7 (2022-11-01)
+------------------
+* ``plot.calibration_curve`` allows plotting curves with different sample sizes
+
+0.7.6 (2022-11-01)
+------------------
+* Adds ``plot.calibration_curve``
+
+0.7.5 (2022-10-28)
+------------------
+* Renames ``cluster_ranges`` to ``n_clusters`` in ``plot.elbow_curve``
+* Adds ``plot.elbow_curve_from_results``
+
+0.7.4 (2022-10-27)
+------------------
+* Adds ``plot.elbow_curve``
 
 0.7.3 (2022-10-26)
 ------------------
