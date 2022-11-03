@@ -1,9 +1,10 @@
 # Building docs
 
-Install requirements:
-
+Install requirements (this requires conda):
+cd to sklearn-evaluation directory, then run
 ```
-pip install -r requirements.txt
+pip install invoke
+invoke setup
 ```
 
 Build docs:
