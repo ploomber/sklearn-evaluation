@@ -28,6 +28,7 @@ SOFTWARE.
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.calibration import calibration_curve as sk_calibration_curve
+from sklearn.utils import column_or_1d
 
 from sklearn_evaluation.util import isiterofiter
 
@@ -155,5 +156,47 @@ def calibration_curve(y_true,
 
     ax.set_ylim([-0.05, 1.05])
     ax.legend(loc='lower right')
+
+    return ax
+
+
+def scores_distribution(y_scores, n_bins=5, ax=None):
+    """Generate a histogram from model's predictions
+
+    Parameters
+    ----------
+    y_scores : array-like, shape=(n_samples, )
+        Scores produced by a trained model for a single class
+
+    n_bins : int, default=5
+        Number of histogram bins
+
+    ax: matplotlib Axes, default=None
+        Axes object to draw the plot onto, otherwise uses current Axes
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    Examples
+    --------
+    .. plot:: ../../examples/scores_distribution.py
+    """
+    if ax is None:
+        ax = plt.gca()
+
+    y_scores = column_or_1d(y_scores)
+
+    # this is how the calibration curve computes the bins, we do it the same
+    # way so it matches
+    # https://github.com/scikit-learn/scikit-learn/blob/f3f51f9b611bf873bd5836748647221480071a87/sklearn/calibration.py#L989
+    bins = np.linspace(0.0, 1.0, n_bins + 1)
+
+    ax.hist(y_scores, range=(0, 1), bins=bins)
+
+    ax.set(title="Predictions distribution",
+           xlabel="Mean predicted probability",
+           ylabel="Count")
 
     return ax
