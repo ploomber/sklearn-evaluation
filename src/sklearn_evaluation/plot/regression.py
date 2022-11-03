@@ -51,7 +51,9 @@ def residual(y_true, y_pred, ax=None):
 @SKLearnEvaluationLogger.log(feature='plot')
 def prediction_error(y_true, y_pred, ax=None):
     """
-    Plot the residuals between measured and predicted values.
+    Plot the scatter plot of measured values v. predicted values, with
+    an identity line and a best fitted line to show the prediction
+    difference.
 
     Parameters
     ----------
