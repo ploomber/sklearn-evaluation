@@ -49,7 +49,7 @@ def residual(y_true, y_pred, ax=None):
     return ax
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def prediction_error(y_true, y_pred, ax=None):
+def prediction_error(y_true, y_pred, model=LinearRegression(), ax=None):
     """
     Plot the scatter plot of measured values v. predicted values, with
     an identity line and a best fitted line to show the prediction
@@ -81,7 +81,6 @@ def prediction_error(y_true, y_pred, ax=None):
         ax = plt.gca()
 
     # best fit line
-    model = LinearRegression()
     model.fit(y_true.reshape((-1, 1)), y_pred)
     x = np.linspace(80,230,100)
     y = model.intercept_ + model.coef_ * x
