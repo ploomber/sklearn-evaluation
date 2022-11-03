@@ -20,7 +20,6 @@ def residual(y_true, y_pred, ax=None):
         Measured target values (ground truth).
     y_pred : array-like, shape = [n_samples]
         Predicted target values.
-
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
@@ -61,7 +60,8 @@ def prediction_error(y_true, y_pred, model=LinearRegression(), ax=None):
         Measured target values (ground truth).
     y_pred : array-like, shape = [n_samples]
         Predicted target values.
-
+    model : sk learn model
+        Model object used to fit the measured and predicted target values, otherwise uses the LinearRegression model.
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
