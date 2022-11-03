@@ -18,6 +18,3 @@ def test_residual():
                   remove_text=True)
 def test_prediction_error():
     plot.prediction_error(y_true, y_pred)
-
-def test_intercluster_distance():
-    plot.intercluster_distance(y_true, y_pred).figure.savefig('test.png')
