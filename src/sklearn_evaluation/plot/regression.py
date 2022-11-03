@@ -60,8 +60,10 @@ def prediction_error(y_true, y_pred, model=LinearRegression(), ax=None):
         Measured target values (ground truth).
     y_pred : array-like, shape = [n_samples]
         Predicted target values.
-    model : sk learn model
-        Model object used to fit the measured and predicted target values, otherwise uses the LinearRegression model.
+    model : Regression instance that implements ``fit``,``predict``, and
+        ``score`` methods, and ``intercept_`` and ``coef_`` attributes.
+        e.g. :class:`sklearn.linear_model.LinearRegression` instance
+        If not specified, use the LinearRegression model.
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
@@ -80,6 +82,9 @@ def prediction_error(y_true, y_pred, model=LinearRegression(), ax=None):
     if ax is None:
         ax = plt.gca()
 
+    if not hasattr(model, 'coef_'):
+        raise TypeError('"coef_" attribute not in model. '
+                        'Cannot plot prediction error.')
     # best fit line
     model.fit(y_true.reshape((-1, 1)), y_pred)
     x = np.linspace(80,230,100)
