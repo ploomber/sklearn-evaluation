@@ -135,8 +135,6 @@ def calibration_curve(y_true,
             raise ValueError('Index {} in probabilities has invalid '
                              'shape {}'.format(i, probas.shape))
 
-        probas = (probas - probas.min()) / (probas.max() - probas.min())
-
         (fraction_of_positives,
          mean_predicted_value) = sk_calibration_curve(y_true_,
                                                       probas,
