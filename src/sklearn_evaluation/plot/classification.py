@@ -53,7 +53,7 @@ class ConfusionMatrixAdd(Plot):
 
 class ConfusionMatrix(Plot):
 
-    @telemetry.log_call('sklearn-evaluation-ConfusionMatrix')
+    @SKLearnEvaluationLogger.log(feature='plot', action="confusion_matrix__init__")
     def __init__(self, y_true, y_pred, target_names=None, normalize=False):
         self.cm = _confusion_matrix(y_true, y_pred, normalize)
         self.figure = Figure()

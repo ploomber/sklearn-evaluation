@@ -33,7 +33,6 @@ def plot_something(y_true, y_score, ..., ax=None):
 
 See the [`precision_at_proportion`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/classification.py#L309) function for an example.
 
-
 In cases where the function doesn't take a true and predicted vector, the names should be descriptive enough:
 
 ```python
@@ -42,7 +41,6 @@ def plot_something(some_meaningful_name, ..., ax=None):
 ```
 
 See the [`learning_curve`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/learning_curve.py#L7) function for an example.
-
 
 ## The last argument in the function must be `ax=None`
 
@@ -54,7 +52,6 @@ def plot_something(a, b, ..., ax=None):
 ```
 
 See the [`roc`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/roc.py#L45) function for an example.
-
 
 ## Functions must return a `matplotlib.Axes` object
 
@@ -71,3 +68,55 @@ Each function must have a corresponding test. If the function has parameters tha
 The function must contain a docstring explaining what the function does and a description of each argument. [See this example.](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/classification.py#L143)
 
 Furthermore, a full example must be included in the examples section of the docstring. Such an example must be standalone so that copy-paste should work. [See this example.](https://sklearn-evaluation.readthedocs.io/en/latest/api/plot.html#sklearn_evaluation.plot.confusion_matrix)
+
+## Telemetry : Monitoring the state of `sklearn-evaluation`
+
+`SKLearnEvaluationLogger` decorator wraps `telemetry log_api` functionality and allows to generate logs as follows:
+
+```python
+@SKLearnEvaluationLogger.log(feature='plot')
+def confusion_matrix(
+        y_true,
+        y_pred,
+        target_names=None,
+        normalize=False,
+        cmap=None,
+        ax=None,
+        **kwargs):
+pass
+```
+
+this will generate the following log:
+
+```json
+        {
+          "metadata": {
+          "action": "confusion_matrix"
+          "feature": "plot",
+          "args": {
+                        "target_names": "None",
+                        "normalize": "False",
+                        "cmap": "None",
+                        "ax": "None"
+                    }
+          }
+        }
+```
+
+\*\* since `y_true` and `y_pred` are positional arguments without default values it won't log them
+
+### Parameters to modify
+
+`action` : The desired action or function to be logged (i.e: 'confusion_matrix', 'roc', etc...) if `action=None` it will log function name.
+
+`feature` : The main feature (i.e: 'plot', 'report', 'SQLiteTracker', 'NotebookCollection')
+
+### Queries
+
+1. Run queries and filter out `sklearn-evaluation` events by the event name: `sklearn-evaluation`
+2. Break these events by feature ('plot', 'report', 'SQLiteTracker', 'NotebookCollection')
+3. Break events by actions/func name (i.e: 'confusion_matrix', 'roc', etc...)
+
+### Errors
+
+Failing runnings will be named: `sklearn-evaluation-error`
