@@ -6,7 +6,6 @@ from matplotlib.figure import Figure
 from sklearn_evaluation.plot.classification import _add_values_to_matrix
 from sklearn_evaluation.util import default_heatmap
 from sklearn_evaluation.plot.plot import Plot
-from sklearn_evaluation.plot.classification import _confusion_matrix_add
 from sklearn_evaluation.plot import _matrix
 
 
