@@ -3,6 +3,9 @@ CHANGELOG
 
 0.7.8dev
 --------
+* Adds ``plot.scores_distribution``
+* Adds ``plot.classification_report``
+* Fixes ``plot.calibration_curve`` error that scaled probabilities before plotting
 
 0.7.7 (2022-11-01)
 ------------------
