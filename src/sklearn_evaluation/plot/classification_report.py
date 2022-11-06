@@ -32,6 +32,7 @@ class ClassificationReportSub(Plot):
         ax = self.figure.add_subplot()
         _classification_report_plot(matrix - matrix_another, keys,
                                     target_names, ax)
+        ax.set(title="Classification report (difference)")
 
 
 class ClassificationReportAdd(Plot):
