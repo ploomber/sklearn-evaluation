@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.7.9dev
+--------
+
 0.7.8 (2022-11-05)
 ------------------
 * Adds ``plot.scores_distribution``
