@@ -33,12 +33,9 @@ import numpy as np
 from sklearn.base import clone
 from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.preprocessing import LabelEncoder
-
-
 from joblib import Parallel, delayed
 
 from ..telemetry import SKLearnEvaluationLogger
-
 
 
 # TODO: add unit test
@@ -149,15 +146,14 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
 
 
 def silhouette_plot(X,
-                        clf,
-                        range_n_clusters=None,
-                        metric='euclidean',
-                        random_state=10,
-                        ax=None,
-                        figsize=None,
-                        cmap='nipy_spectral',
-                        text_fontsize="medium"
-                        ):
+                    clf,
+                    range_n_clusters=None,
+                    metric='euclidean',
+                    random_state=10,
+                    ax=None,
+                    figsize=None,
+                    cmap='nipy_spectral',
+                    text_fontsize="medium"):
     if range_n_clusters is None:
         range_n_clusters = [2, 3, 4, 5, 6]
     else:
@@ -175,15 +171,18 @@ def silhouette_plot(X,
         setattr(clf, 'random_state', random_state)
         cluster_labels = clf.fit_predict(X)
 
-        ax = silhouette_plot_from_results(X, cluster_labels,
-                    metric, ax, figsize, cmap, text_fontsize)
+        ax = silhouette_plot_from_results(X, cluster_labels, metric, ax,
+                                          figsize, cmap, text_fontsize)
     return ax
 
 
-def silhouette_plot_from_results(X, cluster_labels,
-                    metric='euclidean', ax=None, figsize=None,
-                    cmap='nipy_spectral',
-                    text_fontsize="medium"):
+def silhouette_plot_from_results(X,
+                                 cluster_labels,
+                                 metric='euclidean',
+                                 ax=None,
+                                 figsize=None,
+                                 cmap='nipy_spectral',
+                                 text_fontsize="medium"):
     """Plots silhouette analysis of clusters provided.
     Args:
         X (array-like, shape (n_samples, n_features)):
@@ -223,7 +222,8 @@ def silhouette_plot_from_results(X, cluster_labels,
 
     silhouette_avg = silhouette_score(X, cluster_labels, metric=metric)
 
-    sample_silhouette_values = silhouette_samples(X, cluster_labels,
+    sample_silhouette_values = silhouette_samples(X,
+                                                  cluster_labels,
                                                   metric=metric)
 
     if ax is None:
@@ -251,15 +251,22 @@ def silhouette_plot_from_results(X, cluster_labels,
         color = plt.cm.get_cmap(cmap)(float(i) / n_clusters)
 
         ax.fill_betweenx(np.arange(y_lower, y_upper),
-                         0, ith_cluster_silhouette_values,
-                         facecolor=color, edgecolor=color, alpha=0.7)
+                         0,
+                         ith_cluster_silhouette_values,
+                         facecolor=color,
+                         edgecolor=color,
+                         alpha=0.7)
 
-        ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(le.classes_[i]),
+        ax.text(-0.05,
+                y_lower + 0.5 * size_cluster_i,
+                str(le.classes_[i]),
                 fontsize=text_fontsize)
 
         y_lower = y_upper + 10
 
-    ax.axvline(x=silhouette_avg, color="red", linestyle="--",
+    ax.axvline(x=silhouette_avg,
+               color="red",
+               linestyle="--",
                label='Silhouette score: {0:0.3f}'.format(silhouette_avg))
 
     ax.set_yticks([])  # Clear the y-axis labels / ticks

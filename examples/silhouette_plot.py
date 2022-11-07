@@ -9,5 +9,3 @@ kmeans = KMeans(random_state=1)
 
 plot.silhouette_analysis(X, kmeans)
 plt.show()
-
-

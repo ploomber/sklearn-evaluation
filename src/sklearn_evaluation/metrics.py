@@ -30,8 +30,9 @@ def compute_at_thresholds(fn, y_true, y_score, n_thresholds=10, start=0.0):
         (thresholds,
          Y_pred) = binarize.scores_at_thresholds(y_score,
                                                  n_thresholds=n_thresholds)
-        metrics = [np.array([fn_(y_true, y_pred) for y_pred in Y_pred])
-                   for fn_ in fn]
+        metrics = [
+            np.array([fn_(y_true, y_pred) for y_pred in Y_pred]) for fn_ in fn
+        ]
         return thresholds, metrics
     else:
         (thresholds,
@@ -145,6 +146,17 @@ def labels_at(y_true, y_score, top_proportion, normalize=False):
     return values
 
 
-def silhouette_score(x, labels, *args, metric='euclidean', sample_size=None, random_state=None, **kwds):
-    return silhouette_score(x, labels, *args, metric='euclidean', sample_size=None, random_state=None, **kwds)
-
+def silhouette_score(x,
+                     labels,
+                     *args,
+                     metric='euclidean',
+                     sample_size=None,
+                     random_state=None,
+                     **kwds):
+    return silhouette_score(x,
+                            labels,
+                            *args,
+                            metric='euclidean',
+                            sample_size=None,
+                            random_state=None,
+                            **kwds)
