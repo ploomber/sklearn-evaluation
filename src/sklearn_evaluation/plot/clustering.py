@@ -32,7 +32,7 @@ import numpy as np
 
 from sklearn.base import clone
 from sklearn.metrics import silhouette_samples, silhouette_score
-import matplotlib.cm as cm
+from sklearn.preprocessing import LabelEncoder
 
 
 from joblib import Parallel, delayed
@@ -148,18 +148,15 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
     return clf.fit(X).score(X), time.time() - start
 
 
-def _clone_and_silhouette_analysis(clf, X, n_clusters):
-    """Clones and scores a clustering model using silhouette score
-    """
-    start = time.time()
-    clf = clone(clf)
-    setattr(clf, 'n_clusters', n_clusters)
-    return clf.fit(X).score(X), time.time() - start
-
-
-def silhouette_analysis(X,
+def silhouette_plot(X,
                         clf,
                         range_n_clusters=None,
+                        metric='euclidean',
+                        random_state=10,
+                        ax=None,
+                        figsize=None,
+                        cmap='nipy_spectral',
+                        text_fontsize="medium"
                         ):
     if range_n_clusters is None:
         range_n_clusters = [2, 3, 4, 5, 6]
@@ -169,111 +166,105 @@ def silhouette_analysis(X,
     if not hasattr(clf, 'n_clusters'):
         raise TypeError('"n_clusters" attribute not in classifier. '
                         'Cannot plot silhouette analysis .')
-    # tuples = Parallel(n_jobs=n_jobs)(
-    #     delayed(_clone_and_score_clusterer)(clf, X, i) for i in n_clusters)
 
     for n_clusters in range_n_clusters:
-        # Create a subplot with 1 row and 2 columns
-        fig, (ax1, ax2) = plt.subplots(1, 2)
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
         fig.set_size_inches(18, 7)
-
-        # The 1st subplot is the silhouette plot
-        # The silhouette coefficient can range from -1, 1 but in this example all
-        # lie within [-0.1, 1]
-        ax1.set_xlim([-0.1, 1])
-        # The (n_clusters+1)*10 is for inserting blank space between silhouette
-        # plots of individual clusters, to demarcate them clearly.
-        ax1.set_ylim([0, len(X) + (n_clusters + 1) * 10])
-
-        # Initialize the clusterer with n_clusters value and a random generator
-        # seed of 10 for reproducibility.
         clf = clone(clf)
         setattr(clf, 'n_clusters', n_clusters)
-        #clusterer = clf(n_clusters=n_clusters, random_state=10)
+        setattr(clf, 'random_state', random_state)
         cluster_labels = clf.fit_predict(X)
 
-        # The silhouette_score gives the average value for all the samples.
-        # This gives a perspective into the density and separation of the formed
-        # clusters
-        silhouette_avg = silhouette_score(X, cluster_labels)
-        # print(
-        #     "For n_clusters =",
-        #     n_clusters,
-        #     "The average silhouette_score is :",
-        #     silhouette_avg,
-        # )
+        ax = silhouette_plot_from_results(X, cluster_labels,
+                    metric, ax, figsize, cmap, text_fontsize)
+    return ax
 
-        # Compute the silhouette scores for each sample
-        sample_silhouette_values = silhouette_samples(X, cluster_labels)
-        y_lower = 10
-        for i in range(n_clusters):
-            # Aggregate the silhouette scores for samples belonging to
-            # cluster i, and sort them
-            ith_cluster_silhouette_values = sample_silhouette_values[cluster_labels == i]
 
-            ith_cluster_silhouette_values.sort()
+def silhouette_plot_from_results(X, cluster_labels,
+                    metric='euclidean', ax=None, figsize=None,
+                    cmap='nipy_spectral',
+                    text_fontsize="medium"):
+    """Plots silhouette analysis of clusters provided.
+    Args:
+        X (array-like, shape (n_samples, n_features)):
+            Data to cluster, where n_samples is the number of samples and
+            n_features is the number of features.
+        cluster_labels (array-like, shape (n_samples,)):
+            Cluster label for each sample.
+        metric (string or callable, optional): The metric to use when
+            calculating distance between instances in a feature array.
+            If metric is a string, it must be one of the options allowed by
+            sklearn.metrics.pairwise.pairwise_distances. If X is
+            the distance array itself, use "precomputed" as the metric.
+        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
+            plot the curve. If None, the plot is drawn on a new set of axes.
+        figsize (2-tuple, optional): Tuple denoting figure size of the plot
+            e.g. (6, 6). Defaults to ``None``.
+        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
+            Colormap used for plotting the projection. View Matplotlib Colormap
+            documentation for available options.
+            https://matplotlib.org/users/colormaps.html
+        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+            Use e.g. "small", "medium", "large" or integer-values. Defaults to
+            "medium".
+    Returns:
+        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
+            drawn.
+    Example:
+        .. plot:: ../../examples/silhouette_plot.py
+    """
 
-            size_cluster_i = ith_cluster_silhouette_values.shape[0]
-            y_upper = y_lower + size_cluster_i
+    cluster_labels = np.asarray(cluster_labels)
 
-            color = cm.nipy_spectral(float(i) / n_clusters)
-            ax1.fill_betweenx(
-                np.arange(y_lower, y_upper),
-                0,
-                ith_cluster_silhouette_values,
-                facecolor=color,
-                edgecolor=color,
-                alpha=0.7,
-            )
+    le = LabelEncoder()
+    cluster_labels_encoded = le.fit_transform(cluster_labels)
 
-            # Label the silhouette plots with their cluster numbers at the middle
-            ax1.text(-0.05, y_lower + 0.5 * size_cluster_i, str(i))
+    n_clusters = len(np.unique(cluster_labels))
 
-            # Compute the new y_lower for next plot
-            y_lower = y_upper + 10  # 10 for the 0 samples
+    silhouette_avg = silhouette_score(X, cluster_labels, metric=metric)
 
-        ax1.set_title("The silhouette plot for the various clusters.")
-        ax1.set_xlabel("The silhouette coefficient values")
-        ax1.set_ylabel("Cluster label")
+    sample_silhouette_values = silhouette_samples(X, cluster_labels,
+                                                  metric=metric)
 
-        # The vertical line for average silhouette score of all the values
-        ax1.axvline(x=silhouette_avg, color="red", linestyle="--")
+    if ax is None:
+        fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-        ax1.set_yticks([])  # Clear the yaxis labels / ticks
-        ax1.set_xticks([-0.1, 0, 0.2, 0.4, 0.6, 0.8, 1])
+    ax.set_title("Silhouette Analysis", fontsize="large")
+    ax.set_xlim([-0.1, 1])
 
-        # 2nd Plot showing the actual clusters formed
-        colors = cm.nipy_spectral(cluster_labels.astype(float) / n_clusters)
-        ax2.scatter(
-            X[:, 0], X[:, 1], marker=".", s=30, lw=0, alpha=0.7, c=colors, edgecolor="k"
-        )
+    ax.set_ylim([0, len(X) + (n_clusters + 1) * 10 + 10])
 
-        # Labeling the clusters
-        centers = clf.cluster_centers_
-        # Draw white circles at cluster centers
-        ax2.scatter(
-            centers[:, 0],
-            centers[:, 1],
-            marker="o",
-            c="white",
-            alpha=1,
-            s=200,
-            edgecolor="k",
-        )
+    ax.set_xlabel('Silhouette coefficient values', fontsize=text_fontsize)
+    ax.set_ylabel('Cluster label', fontsize=text_fontsize)
 
-        for i, c in enumerate(centers):
-            ax2.scatter(c[0], c[1], marker="$%d$" % i, alpha=1, s=50, edgecolor="k")
+    y_lower = 10
 
-        ax2.set_title("The visualization of the clustered data.")
-        ax2.set_xlabel("Feature space for the 1st feature")
-        ax2.set_ylabel("Feature space for the 2nd feature")
+    for i in range(n_clusters):
+        ith_cluster_silhouette_values = sample_silhouette_values[
+            cluster_labels_encoded == i]
 
-        plt.suptitle(
-            "Silhouette analysis for KMeans clustering on sample data with n_clusters = %d"
-            % n_clusters,
-            fontsize=14,
-            fontweight="bold",
-        )
+        ith_cluster_silhouette_values.sort()
 
-    plt.show()
+        size_cluster_i = ith_cluster_silhouette_values.shape[0]
+        y_upper = y_lower + size_cluster_i
 
+        color = plt.cm.get_cmap(cmap)(float(i) / n_clusters)
+
+        ax.fill_betweenx(np.arange(y_lower, y_upper),
+                         0, ith_cluster_silhouette_values,
+                         facecolor=color, edgecolor=color, alpha=0.7)
+
+        ax.text(-0.05, y_lower + 0.5 * size_cluster_i, str(le.classes_[i]),
+                fontsize=text_fontsize)
+
+        y_lower = y_upper + 10
+
+    ax.axvline(x=silhouette_avg, color="red", linestyle="--",
+               label='Silhouette score: {0:0.3f}'.format(silhouette_avg))
+
+    ax.set_yticks([])  # Clear the y-axis labels / ticks
+    ax.set_xticks(np.arange(-0.1, 1.0, 0.2))
+
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc='best', fontsize=text_fontsize)
+    return ax

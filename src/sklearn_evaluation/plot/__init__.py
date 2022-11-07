@@ -11,7 +11,7 @@ from .grid_search import grid_search
 from .validation_curve import validation_curve
 from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
-from .clustering import elbow_curve, elbow_curve_from_results, silhouette_analysis
+from .clustering import elbow_curve, elbow_curve_from_results, silhouette_plot, silhouette_plot_from_results
 from .calibration import calibration_curve
 
 __all__ = [
@@ -27,6 +27,6 @@ __all__ = [
     'ConfusionMatrix',
     'elbow_curve',
     'elbow_curve_from_results',
-    'silhouette_analysis',
+    'silhouette_plot',
     'calibration_curve',
 ]
