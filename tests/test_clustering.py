@@ -1,7 +1,7 @@
 """
 Test cases for silhouette score
 
-NOTE: this is largely based in the scikit-plot cluster module. License below.
+NOTE: this is largely based in the scikit-plot test module. License below.
 
 MIT License
 
