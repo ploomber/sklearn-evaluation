@@ -2,6 +2,7 @@
 
 import numpy as np
 from sklearn.metrics import precision_score
+from sklearn.metrics import silhouette_score
 
 from sklearn_evaluation.preprocessing import binarize
 from sklearn_evaluation import util
@@ -142,3 +143,8 @@ def labels_at(y_true, y_score, top_proportion, normalize=False):
         values = float(values) / (~np.isnan(y_true)).sum()
 
     return values
+
+
+def silhouette_score(x, labels, *args, metric='euclidean', sample_size=None, random_state=None, **kwds):
+    return silhouette_score(x, labels, *args, metric='euclidean', sample_size=None, random_state=None, **kwds)
+
