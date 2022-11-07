@@ -145,15 +145,46 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
     return clf.fit(X).score(X), time.time() - start
 
 
-def silhouette_plot(X,
-                    clf,
-                    range_n_clusters=None,
-                    metric='euclidean',
-                    random_state=10,
-                    ax=None,
-                    figsize=None,
-                    cmap='nipy_spectral',
-                    text_fontsize="medium"):
+def silhouette_plot(
+    X,
+    clf,
+    range_n_clusters=None,
+    metric='euclidean',
+    random_state=10,
+    figsize=None,
+    cmap='nipy_spectral',
+    text_fontsize="medium",
+    ax=None,
+):
+    """Plots silhouette analysis of clusters provided.
+        Args:
+            X (array-like, shape (n_samples, n_features)):
+                Data to cluster, where n_samples is the number of samples and
+                n_features is the number of features.
+            cluster_labels (array-like, shape (n_samples,)):
+                Cluster label for each sample.
+            metric (string or callable, optional): The metric to use when
+                calculating distance between instances in a feature array.
+                If metric is a string, it must be one of the options allowed by
+                sklearn.metrics.pairwise.pairwise_distances. If X is
+                the distance array itself, use "precomputed" as the metric.
+            figsize (2-tuple, optional): Tuple denoting figure size of the plot
+                e.g. (6, 6). Defaults to ``None``.
+            cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
+                Colormap used for plotting the projection. View Matplotlib Colormap
+                documentation for available options.
+                https://matplotlib.org/users/colormaps.html
+            text_fontsize (string or int, optional): Matplotlib-style fontsizes.
+                Use e.g. "small", "medium", "large" or integer-values. Defaults to
+                "medium".
+            ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
+                plot the curve. If None, the plot is drawn on a new set of axes.
+        Returns:
+            ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
+                drawn.
+        Example:
+            .. plot:: ../../examples/silhouette_plot.py
+        """
     if range_n_clusters is None:
         range_n_clusters = [2, 3, 4, 5, 6]
     else:
@@ -171,47 +202,20 @@ def silhouette_plot(X,
         setattr(clf, 'random_state', random_state)
         cluster_labels = clf.fit_predict(X)
 
-        ax = silhouette_plot_from_results(X, cluster_labels, metric, ax,
-                                          figsize, cmap, text_fontsize)
+        ax = silhouette_plot_from_results(X, cluster_labels, metric, figsize,
+                                          cmap, text_fontsize, ax)
     return ax
 
 
 def silhouette_plot_from_results(X,
                                  cluster_labels,
                                  metric='euclidean',
-                                 ax=None,
                                  figsize=None,
                                  cmap='nipy_spectral',
-                                 text_fontsize="medium"):
-    """Plots silhouette analysis of clusters provided.
-    Args:
-        X (array-like, shape (n_samples, n_features)):
-            Data to cluster, where n_samples is the number of samples and
-            n_features is the number of features.
-        cluster_labels (array-like, shape (n_samples,)):
-            Cluster label for each sample.
-        metric (string or callable, optional): The metric to use when
-            calculating distance between instances in a feature array.
-            If metric is a string, it must be one of the options allowed by
-            sklearn.metrics.pairwise.pairwise_distances. If X is
-            the distance array itself, use "precomputed" as the metric.
-        ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
-            plot the curve. If None, the plot is drawn on a new set of axes.
-        figsize (2-tuple, optional): Tuple denoting figure size of the plot
-            e.g. (6, 6). Defaults to ``None``.
-        cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
-            Colormap used for plotting the projection. View Matplotlib Colormap
-            documentation for available options.
-            https://matplotlib.org/users/colormaps.html
-        text_fontsize (string or int, optional): Matplotlib-style fontsizes.
-            Use e.g. "small", "medium", "large" or integer-values. Defaults to
-            "medium".
-    Returns:
-        ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
-            drawn.
-    Example:
-        .. plot:: ../../examples/silhouette_plot.py
-    """
+                                 text_fontsize="medium",
+                                 ax=None):
+    """Same as silhouette_plot but takes cluster_labels as input.
+    Useful if you want to train the model yourself"""
 
     cluster_labels = np.asarray(cluster_labels)
 
