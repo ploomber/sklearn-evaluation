@@ -209,7 +209,7 @@ def silhouette_plot(
         fig.set_size_inches(18, 7)
         clf = clone(clf)
         setattr(clf, 'n_clusters', n_clusters)
-        setattr(clf, 'random_state', random_state=10)
+        setattr(clf, 'random_state', 10)
         cluster_labels = clf.fit_predict(X)
 
         ax = silhouette_plot_from_results(X, cluster_labels, metric, figsize,
