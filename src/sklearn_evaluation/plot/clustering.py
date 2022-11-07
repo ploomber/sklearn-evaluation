@@ -150,7 +150,6 @@ def silhouette_plot(
     clf,
     range_n_clusters=None,
     metric='euclidean',
-    random_state=10,
     figsize=None,
     cmap='nipy_spectral',
     text_fontsize="medium",
@@ -161,22 +160,33 @@ def silhouette_plot(
             X (array-like, shape (n_samples, n_features)):
                 Data to cluster, where n_samples is the number of samples and
                 n_features is the number of features.
-            cluster_labels (array-like, shape (n_samples,)):
-                Cluster label for each sample.
+            clf
+            Clusterer instance that implements ``fit``,``fit_predict``, and
+            ``score`` methods, and an ``n_clusters`` hyperparameter.
+            e.g. :class:`sklearn.cluster.KMeans` instance
+
+            range_n_clusters : None or :obj:`list` of int, optional
+            List of n_clusters for which to plot the silhouette scores.
+            Defaults to ``[2, 3, 4, 5, 6]``.
+
             metric (string or callable, optional): The metric to use when
-                calculating distance between instances in a feature array.
-                If metric is a string, it must be one of the options allowed by
-                sklearn.metrics.pairwise.pairwise_distances. If X is
-                the distance array itself, use "precomputed" as the metric.
+            calculating distance between instances in a feature array.
+            If metric is a string, it must be one of the options allowed by
+            sklearn.metrics.pairwise.pairwise_distances. If X is
+            the distance array itself, use "precomputed" as the metric.
+
             figsize (2-tuple, optional): Tuple denoting figure size of the plot
-                e.g. (6, 6). Defaults to ``None``.
+            e.g. (6, 6). Defaults to ``None``.
+
             cmap (string or :class:`matplotlib.colors.Colormap` instance, optional):
-                Colormap used for plotting the projection. View Matplotlib Colormap
-                documentation for available options.
-                https://matplotlib.org/users/colormaps.html
+            Colormap used for plotting the projection. View Matplotlib Colormap
+            documentation for available options.
+            https://matplotlib.org/users/colormaps.html
+
             text_fontsize (string or int, optional): Matplotlib-style fontsizes.
                 Use e.g. "small", "medium", "large" or integer-values. Defaults to
                 "medium".
+
             ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
                 plot the curve. If None, the plot is drawn on a new set of axes.
         Returns:
@@ -199,7 +209,7 @@ def silhouette_plot(
         fig.set_size_inches(18, 7)
         clf = clone(clf)
         setattr(clf, 'n_clusters', n_clusters)
-        setattr(clf, 'random_state', random_state)
+        setattr(clf, 'random_state', random_state=10)
         cluster_labels = clf.fit_predict(X)
 
         ax = silhouette_plot_from_results(X, cluster_labels, metric, figsize,
