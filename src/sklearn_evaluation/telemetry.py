@@ -22,13 +22,13 @@ class SKLearnEvaluationLogger():
 
     @classmethod
     def log(self, action=None, feature=None):
-        """Wraps `telemetry.log_api` and generate logs
+        """Logs the function and then runs it
 
         Parameters
         ----------
         action : string, default=None
             The desired action to be logged (i.e: 'confusion_matrix', 'roc').
-            If `action=None` it will log function name.
+            If `action=None` it will log the function's name.
 
         feature: string, default=None
             The main feature (i.e: 'plot', 'report',

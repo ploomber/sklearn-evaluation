@@ -67,11 +67,58 @@ Each function must have a corresponding test. If the function has parameters tha
 
 The function must contain a docstring explaining what the function does and a description of each argument. [See this example.](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/classification.py#L143)
 
-Furthermore, a full example must be included in the examples section of the docstring. Such an example must be standalone so that copy-paste should work. [See this example.](https://sklearn-evaluation.readthedocs.io/en/latest/api/plot.html#sklearn_evaluation.plot.confusion_matrix)
+Furthermore, a full example (under the docstring's `Examples` section)must be included in the examples section of the docstring. Such an example must be standalone so that copy-paste should work. [See this example.](https://sklearn-evaluation.readthedocs.io/en/latest/api/plot.html#sklearn_evaluation.plot.confusion_matrix) Note that these examples are automatically tested by the CI.
+
+Here's a docstring template you can use:
+
+```python
+def my_plotting_function(y_true, y_pred, ax=None):
+    """Plot {plot name}
+
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_samples]
+        Correct target values (ground truth).
+
+    y_pred : array-like, shape = [n_samples]
+        Target predicted classes (estimator predictions).
+
+    ax: matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    Examples
+    --------
+    .. plot:: ../../examples/{example-name}.py
+    """
+    pass
+```
 
 ## Telemetry : Monitoring the state of `sklearn-evaluation`
 
-`SKLearnEvaluationLogger` decorator wraps `telemetry log_api` functionality and allows to generate logs as follows:
+Use `SKLearnEvaluationLogger` decorator to generate logs
+
+```python
+    def log(self, action=None, feature=None):
+        """Logs the function and then runs it
+
+        Parameters
+        ----------
+        action : string, default=None
+            The desired action to be logged (i.e: 'confusion_matrix', 'roc').
+            If `action=None` it will log the function's name.
+
+        feature: string, default=None
+            The main feature (i.e: 'plot', 'report',
+            'SQLiteTracker', 'NotebookCollection')
+        """
+```
+
+Example:
 
 ```python
 @SKLearnEvaluationLogger.log(feature='plot')
@@ -104,12 +151,6 @@ this will generate the following log:
 ```
 
 \*\* since `y_true` and `y_pred` are positional arguments without default values it won't log them
-
-### Parameters to modify
-
-`action` : The desired action or function to be logged (i.e: 'confusion_matrix', 'roc', etc...) if `action=None` it will log function name.
-
-`feature` : The main feature (i.e: 'plot', 'report', 'SQLiteTracker', 'NotebookCollection')
 
 ### Queries
 
