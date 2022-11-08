@@ -144,19 +144,3 @@ def labels_at(y_true, y_score, top_proportion, normalize=False):
         values = float(values) / (~np.isnan(y_true)).sum()
 
     return values
-
-
-def silhouette_score(x,
-                     labels,
-                     *args,
-                     metric='euclidean',
-                     sample_size=None,
-                     random_state=None,
-                     **kwds):
-    return silhouette_score(x,
-                            labels,
-                            *args,
-                            metric='euclidean',
-                            sample_size=None,
-                            random_state=None,
-                            **kwds)
