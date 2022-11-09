@@ -106,6 +106,16 @@ def test_array_like():
                                       convert_labels_into_string(y))
 
 
+def test_ax_params():
+    clf = KMeans()
+    cluster_labels = clf.fit_predict(X)
+    out_ax = plot.silhouette_plot_from_results(X,
+                                               cluster_labels,
+                                               text_fontsize="large")
+    assert out_ax.get_title() == 'Silhouette Analysis'
+    assert out_ax.get_ylim() == (0.0, 250.0)
+
+
 def test_invalid_clusterer():
     clf = DecisionTreeClassifier()
     with pytest.raises(TypeError):
