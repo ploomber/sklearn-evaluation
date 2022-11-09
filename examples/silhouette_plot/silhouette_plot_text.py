@@ -50,5 +50,5 @@ kmeans = KMeans(
 )
 
 
-plot.silhouette_plot(X_lsa, kmeans, range_n_clusters=[3])
+plot.silhouette_plot(X_lsa, kmeans, range_n_clusters=[3], metric='cosine')
 plt.show()
