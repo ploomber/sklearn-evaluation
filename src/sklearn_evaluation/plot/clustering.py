@@ -145,16 +145,14 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
     return clf.fit(X).score(X), time.time() - start
 
 
-def silhouette_plot(
-    X,
-    clf,
-    range_n_clusters=None,
-    metric='euclidean',
-    figsize=None,
-    cmap='nipy_spectral',
-    text_fontsize="medium",
-    ax=None,
-):
+def silhouette_plot(X,
+                    clf,
+                    range_n_clusters=None,
+                    metric='euclidean',
+                    figsize=None,
+                    cmap='nipy_spectral',
+                    text_fontsize="medium",
+                    ax=None):
     """Plots silhouette analysis of clusters provided.
         Args:
             X (array-like, shape (n_samples, n_features)):
