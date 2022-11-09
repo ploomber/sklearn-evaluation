@@ -13,6 +13,7 @@ from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
 from .clustering import elbow_curve, elbow_curve_from_results
 from .calibration import calibration_curve
+from .target_analysis import target_plot
 
 __all__ = [
     'confusion_matrix',
@@ -28,4 +29,5 @@ __all__ = [
     'elbow_curve',
     'elbow_curve_from_results',
     'calibration_curve',
+    'target_plot'
 ]
