@@ -244,7 +244,11 @@ def silhouette_plot_from_results(X,
     ax.set_title("Silhouette Analysis", fontsize="large")
     ax.set_xlim([-0.1, 1])
 
-    ax.set_ylim([0, len(X) + (n_clusters + 1) * 10 + 10])
+    if hasattr(X, 'shape'):
+        length = X.shape[0]
+    else:
+        length = len(X)
+    ax.set_ylim([0, length + (n_clusters + 1) * 10 + 10])
 
     ax.set_xlabel('Silhouette coefficient values', fontsize=text_fontsize)
     ax.set_ylabel('Cluster label', fontsize=text_fontsize)
