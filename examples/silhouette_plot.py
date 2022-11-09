@@ -14,7 +14,8 @@ X, y = make_blobs(
     random_state=1,
 )
 
-kmeans = KMeans(random_state=10)
 
-plot.silhouette_plot(X, kmeans)
-plt.show()
+kmeans = KMeans(random_state=10)
+plot.silhouette_plot(X, kmeans, range_n_clusters=[3])
+plt.savefig('silhouette_plot_three_clusters.png')
+#plt.show()
