@@ -26,8 +26,10 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from unittest.mock import patch
 import pytest
 import numpy as np
+from unittest.mock import Mock
 import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import image_comparison, cleanup
 
@@ -120,3 +122,17 @@ def test_invalid_clusterer():
     clf = DecisionTreeClassifier()
     with pytest.raises(TypeError):
         plot.silhouette_plot(X, clf)
+
+
+def get_out_ax():
+    fig, ax = plt.subplots(1, 1)
+    return ax
+
+
+@patch('sklearn_evaluation.plot.clustering.silhouette_plot_from_results')
+def test_from_results(mock):
+    clf = KMeans()
+    fig, ax = plt.subplots(1, 1)
+    ax = plot.silhouette_plot(X, clf, range_n_clusters=[2, 3], ax=ax)
+    assert mock.call_count == 2
+    assert mock.return_value == ax
