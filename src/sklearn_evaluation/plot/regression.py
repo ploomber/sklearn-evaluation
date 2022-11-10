@@ -44,7 +44,7 @@ def residual(y_true, y_pred, ax=None):
 
     ax.scatter(y_pred, y_true-y_pred)
 
-    _set_ax_settings(ax, 'Predicted Value', 'Residuals')
+    _set_ax_settings(ax, 'Predicted Value', 'Residuals', 'Residuals Plot')
     return ax
 
 @SKLearnEvaluationLogger.log(feature='plot')
@@ -104,12 +104,12 @@ def prediction_error(y_true,
     r2 = model.score(y_true.reshape((-1, 1)), y_pred)
     plt.plot([], [], ' ', label=f"R2 = {round(r2,5)}")
 
-    _set_ax_settings(ax, 'y_measured', 'y_predicted')
+    _set_ax_settings(ax, 'y_measured', 'y_predicted', 'Prediction Error')
     ax.legend(loc="upper left")
     return ax
 
-def _set_ax_settings(ax, xlabel, ylabel):
-    ax.set_title('Residuals Plot')
+def _set_ax_settings(ax, xlabel, ylabel, title):
+    ax.set_title(title)
     ax.set_xlabel(xlabel)
     ax.set_ylabel(ylabel)
 
