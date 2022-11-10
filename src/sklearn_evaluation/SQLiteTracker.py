@@ -4,6 +4,7 @@ import json
 
 import pandas as pd
 from sklearn_evaluation.table import Table
+from jinja2 import Template
 from .telemetry import SKLearnEvaluationLogger
 
 
@@ -18,6 +19,7 @@ class SQLiteTracker:
         Database location
 
     """
+
     def __init__(self, path: str):
         self.conn = sqlite3.connect(path)
 
@@ -66,8 +68,20 @@ class SQLiteTracker:
         return df
 
     @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
-    def query(self, code):
+    def query(self, code, as_frame=True):
         """Query the database, returns a pandas.DataFrame
+
+        Parameters
+        ----------
+        code : str
+            The SQL query to execute
+
+        as_frame : bool, default=True
+            If True, it'll return the results of your query in a
+            pandas.DataFrame, otherwise it'll return a Results object.
+            The Results object can render HTML stored in the database but
+            cannot be filtered or manipulated like a pandas.DataFrame
+
 
         Examples
         --------
@@ -77,10 +91,18 @@ class SQLiteTracker:
         >>> df = tracker.query(
         ... "SELECT uuid, json_extract(parameters, '$.a') FROM experiments")
         """
-        df = pd.read_sql(code, self.conn)
-        if 'uuid' in df:
-            df = df.set_index('uuid')
-        return df
+        if as_frame:
+            df = pd.read_sql(code, self.conn)
+
+            if 'uuid' in df:
+                df = df.set_index('uuid')
+
+            return df
+        else:
+            cursor = self.conn.execute(q)
+            columns = [d[0] for d in cursor.description]
+            rows = cursor.fetchall()
+            return Results(columns, rows)
 
     @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
     def new(self):
@@ -208,3 +230,30 @@ class SQLiteTracker:
 
     def __del__(self):
         self.conn.close()
+
+
+class Results:
+    """An object to generate an HTML table from a SQLite result
+    """
+
+    def __init__(self, columns, rows):
+        self.columns = columns
+        self.rows = rows
+
+    def _repr_html_(self):
+        return Template("""
+ <table>
+  <tr>
+    {% for name in columns %}
+    <th>{{name}}</th>
+    {% endfor %}
+  </tr>
+  {% for row in rows %}
+  <tr>
+    {% for field in row %}
+    <td>{{field}}</td>
+    {% endfor %}
+  </tr>
+  {% endfor %}
+</table>
+""").render(columns=self.columns, rows=self.rows)
