@@ -2,7 +2,6 @@
 
 import numpy as np
 from sklearn.metrics import precision_score
-from sklearn.metrics import silhouette_score
 
 from sklearn_evaluation.preprocessing import binarize
 from sklearn_evaluation import util
