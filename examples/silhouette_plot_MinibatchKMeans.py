@@ -1,4 +1,5 @@
-from sklearn.cluster import KMeans
+from sklearn.cluster import MiniBatchKMeans
+
 from sklearn.datasets import make_blobs
 import matplotlib.pyplot as plt
 
@@ -14,7 +15,10 @@ X, y = make_blobs(
     random_state=1,
 )
 
+kmeans = MiniBatchKMeans(n_clusters=2,
+                         random_state=0,
+                         batch_size=6,
+                         max_iter=10).fit(X)
 
-kmeans = KMeans(random_state=10)
-plot.silhouette_plot(X, kmeans, range_n_clusters=[3])
+plot.silhouette_plot(X, kmeans, range_n_clusters=[3, 4])
 plt.show()

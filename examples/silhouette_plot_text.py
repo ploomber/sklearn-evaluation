@@ -11,13 +11,8 @@ from sklearn.decomposition import TruncatedSVD
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
 
-from sklearn.cluster import MiniBatchKMeans
-
-
 categories = [
-    "comp.graphics",
-    "comp.windows.x",
-    "comp.sys.ibm.pc.hardware",
+    "comp.graphics", "comp.windows.x", "comp.sys.ibm.pc.hardware",
     "comp.sys.mac.hardware"
 ]
 
@@ -49,6 +44,8 @@ kmeans = KMeans(
     n_init=5,
 )
 
-
-plot.silhouette_plot(X_lsa, kmeans, range_n_clusters=[2,3,4,5,6], metric='cosine')
+plot.silhouette_plot(X_lsa,
+                     kmeans,
+                     range_n_clusters=[2, 3, 4, 5, 6],
+                     metric='cosine')
 plt.show()
