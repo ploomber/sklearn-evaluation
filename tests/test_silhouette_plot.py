@@ -1,7 +1,7 @@
 """
 Test cases for silhouette score
 
-NOTE: this is largely based in the scikit-plot test module. License below.
+NOTE: this has a few test cases from the scikit-plot test module. License below.
 
 MIT License
 
@@ -29,13 +29,11 @@ SOFTWARE.
 from unittest.mock import patch
 import pytest
 import numpy as np
-from unittest.mock import Mock
 import matplotlib.pyplot as plt
-from matplotlib.testing.decorators import image_comparison, cleanup
+from matplotlib.testing.decorators import image_comparison
 
-from unittest import TestCase
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.cluster import KMeans
+from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 
@@ -70,11 +68,15 @@ def test_plot_silhouette_with_cluster_range():
     plot.silhouette_plot(X, clf, range_n_clusters=[4, 5])
 
 
-def test_string_classes():
-    clf = KMeans()
-    cluster_labels = clf.fit_predict(X)
-    plot.silhouette_plot_from_results(
-        X, convert_labels_into_string(cluster_labels))
+@image_comparison(baseline_images=[
+    'silhouette_plot_four_clusters_minibatchkmeans',
+    'silhouette_plot_five_clusters_minibatchkmeans'
+],
+                  extensions=['png'],
+                  remove_text=False)
+def test_plot_silhouette_with_minibatchkmeans():
+    clf = MiniBatchKMeans(random_state=10)
+    plot.silhouette_plot(X, clf, range_n_clusters=[4, 5])
 
 
 @image_comparison(baseline_images=['silhouette_plot_spectral'],
@@ -85,10 +87,19 @@ def test_cmap():
     plot.silhouette_plot(X, clf, range_n_clusters=[2], cmap='Spectral')
 
 
+@image_comparison(baseline_images=['silhouette_plot_cosine'],
+                  extensions=['png'],
+                  remove_text=False)
 def test_metric():
     clf = KMeans()
+    plot.silhouette_plot(X, clf, range_n_clusters=[6], metric='cosine')
+
+
+def test_string_classes():
+    clf = KMeans()
     cluster_labels = clf.fit_predict(X)
-    plot.silhouette_plot_from_results(X, cluster_labels, metric='cosine')
+    plot.silhouette_plot_from_results(
+        X, convert_labels_into_string(cluster_labels))
 
 
 def test_ax():
@@ -122,11 +133,6 @@ def test_invalid_clusterer():
     clf = DecisionTreeClassifier()
     with pytest.raises(TypeError):
         plot.silhouette_plot(X, clf)
-
-
-def get_out_ax():
-    fig, ax = plt.subplots(1, 1)
-    return ax
 
 
 @patch('sklearn_evaluation.plot.clustering.silhouette_plot_from_results')

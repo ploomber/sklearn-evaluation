@@ -191,7 +191,9 @@ def silhouette_plot(X,
             ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
                 drawn.
         Example:
-            .. plot:: ../../examples/silhouette_plot.py
+            .. plot:: ../../examples/silhouette_plot_basic.py
+                      ../../examples/silhouette_plot_MinibatchKMeans.py
+                      ../../examples/silhouette_plot_text.py
         """
     if range_n_clusters is None:
         range_n_clusters = [2, 3, 4, 5, 6]
@@ -223,7 +225,11 @@ def silhouette_plot_from_results(X,
                                  text_fontsize="medium",
                                  ax=None):
     """Same as silhouette_plot but takes cluster_labels as input.
-    Useful if you want to train the model yourself"""
+    Useful if you want to train the model yourself
+
+    Example:
+            .. plot:: ../../examples/silhouette_plot_from_results.py
+    """
 
     cluster_labels = np.asarray(cluster_labels)
 
