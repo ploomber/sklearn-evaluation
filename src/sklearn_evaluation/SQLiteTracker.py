@@ -1,11 +1,17 @@
 from uuid import uuid4
 import sqlite3
 import json
+from collections.abc import Mapping
 
 import pandas as pd
-from sklearn_evaluation.table import Table
 from jinja2 import Template
-from .telemetry import SKLearnEvaluationLogger
+
+from sklearn_evaluation.table import Table
+from sklearn_evaluation.report.serialize import try_serialize_figures
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.nb.NotebookCollection import (add_compare_tab,
+                                                      tabs_html_from_content,
+                                                      HTMLMapping)
 
 
 class SQLiteTracker:
@@ -68,7 +74,7 @@ class SQLiteTracker:
         return df
 
     @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
-    def query(self, code, as_frame=True):
+    def query(self, code, as_frame=True, render_plots=False):
         """Query the database, returns a pandas.DataFrame
 
         Parameters
@@ -82,6 +88,9 @@ class SQLiteTracker:
             The Results object can render HTML stored in the database but
             cannot be filtered or manipulated like a pandas.DataFrame
 
+        render_plots: bool, default=False
+            Whether to render plots in the results or not. Only valid when
+            as_frame=False
 
         Examples
         --------
@@ -99,10 +108,10 @@ class SQLiteTracker:
 
             return df
         else:
-            cursor = self.conn.execute(q)
+            cursor = self.conn.execute(code)
             columns = [d[0] for d in cursor.description]
             rows = cursor.fetchall()
-            return Results(columns, rows)
+            return Results(columns, rows, render_plots=render_plots)
 
     @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
     def new(self):
@@ -139,6 +148,9 @@ class SQLiteTracker:
     def insert(self, uuid, parameters):
         """Insert a new experiment
         """
+        # serialize matplotlib.figure.Figure, if any
+        parameters = try_serialize_figures(parameters)
+
         cur = self.conn.cursor()
         cur.execute(
             """
@@ -232,13 +244,18 @@ class SQLiteTracker:
         self.conn.close()
 
 
+def is_str(obj):
+    return isinstance(obj, str)
+
+
 class Results:
     """An object to generate an HTML table from a SQLite result
     """
 
-    def __init__(self, columns, rows):
+    def __init__(self, columns, rows, render_plots):
         self.columns = columns
         self.rows = rows
+        self.render_plots = render_plots
 
     def _repr_html_(self):
         return Template("""
@@ -251,9 +268,48 @@ class Results:
   {% for row in rows %}
   <tr>
     {% for field in row %}
-    <td>{{field}}</td>
+        {% if is_str(field) and "<img src=" in field %}
+        <td>{{ "[Plot]" if not render_plots else field}}</td>
+        {% else %}
+        <td>{{field}}</td>
+        {% endif %}
     {% endfor %}
   </tr>
   {% endfor %}
 </table>
-""").render(columns=self.columns, rows=self.rows)
+""").render(columns=self.columns,
+            rows=self.rows,
+            render_plots=self.render_plots,
+            is_str=is_str)
+
+    def __getitem__(self, key):
+        if key not in self.columns:
+            raise KeyError(f'{key} does not appear in the results')
+
+        idx = self.columns.index(key)
+        rows = [[row[idx]] for row in self.rows]
+
+        return Results(columns=[key],
+                       rows=rows,
+                       render_plots=self.render_plots)
+
+    def get(self, key, index_by=None):
+        if key not in self.columns:
+            raise KeyError(f'{key} does not appear in the results')
+
+        if index_by is not None and index_by not in self.columns:
+            raise KeyError(f'{index_by} does not appear in the results')
+
+        if index_by is None:
+            idx_id = 0
+        else:
+            idx_id = self.columns.index(index_by)
+
+        idx = self.columns.index(key)
+        values = [row[idx] for row in self.rows]
+        ids = [str(row[idx_id]) for row in self.rows]
+
+        e, ids_out = add_compare_tab(elements=values, ids=ids, scores_arg=None)
+        mapping = {k: v for k, v in zip(ids_out, e)}
+        html = tabs_html_from_content(ids_out, e)
+        return HTMLMapping(mapping, html)
