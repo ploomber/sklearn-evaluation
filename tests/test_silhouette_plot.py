@@ -26,9 +26,9 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-from unittest.mock import patch
 import pytest
 import numpy as np
+from unittest.mock import Mock
 import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import image_comparison
 
@@ -36,6 +36,7 @@ from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
+import sklearn_evaluation.plot.clustering as cl
 
 
 def convert_labels_into_string(y_true):
@@ -135,8 +136,9 @@ def test_invalid_clusterer():
         plot.silhouette_plot(X, clf)
 
 
-@patch('sklearn_evaluation.plot.clustering.silhouette_plot_from_results')
-def test_from_results(mock):
+def test_from_results(monkeypatch):
+    mock = Mock()
+    monkeypatch.setattr(cl, 'silhouette_plot_from_results', mock)
     clf = KMeans()
     fig, ax = plt.subplots(1, 1)
     ax = plot.silhouette_plot(X, clf, range_n_clusters=[2, 3], ax=ax)

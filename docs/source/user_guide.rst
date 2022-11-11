@@ -13,3 +13,4 @@ User Guide
     user_guide/SQLiteTracker
     user_guide/NotebookCollection
     user_guide/nbdb
+    user_guide/clustering_evaluation
