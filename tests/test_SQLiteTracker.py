@@ -27,7 +27,7 @@ def test_comment():
     assert res.loc[uuid].comment == 'this is a comment'
 
 
-def test_get():
+def test_getitem():
     tracker = SQLiteTracker(':memory:')
     tracker.insert('some_uuid', {'a': 1})
     res = tracker['some_uuid']
@@ -59,6 +59,30 @@ def test_update():
     tracker.update(uuid, {})
     res = tracker[uuid]
     assert len(res) == 1
+
+
+def test_get():
+    tracker = SQLiteTracker(':memory:')
+    uuid = tracker.new()
+    tracker.update(uuid, dict(a=1, b=2))
+    assert tracker._get(uuid) == dict(a=1, b=2)
+
+
+def test_get_error():
+    tracker = SQLiteTracker(':memory:')
+
+    with pytest.raises(ValueError):
+        tracker._get('uuid')
+
+
+def test_upsert():
+    tracker = SQLiteTracker(':memory:')
+    uuid = tracker.new()
+    tracker.new()
+    tracker.update(uuid, dict(a=1, b=2))
+    tracker.upsert(uuid, dict(a=2, c=3))
+
+    assert tracker._get(uuid) == dict(a=2, b=2, c=3)
 
 
 def test_reprs():

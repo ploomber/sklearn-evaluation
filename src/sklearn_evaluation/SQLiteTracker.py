@@ -144,6 +144,22 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
+    def upsert(self, uuid, parameters):
+        existing = self._get(uuid)
+
+        cur = self.conn.cursor()
+        cur.execute(
+            """
+        UPDATE experiments
+        SET parameters = ?
+        WHERE uuid = ?
+        """, [json.dumps({
+                **existing,
+                **parameters
+            }), uuid])
+        cur.close()
+        self.conn.commit()
+
     @SKLearnEvaluationLogger.log('SQLiteTracker')
     def insert(self, uuid, parameters):
         """Insert a new experiment
@@ -233,6 +249,21 @@ class SQLiteTracker:
             raise ValueError('Cannot update experiment with '
                              'uuid "{}" because it does '
                              'not exist'.format(uuid))
+
+    def _get(self, uuid):
+        cur = self.conn.execute(
+            """
+        SELECT parameters
+        FROM experiments
+        WHERE uuid = ?
+        """, [uuid])
+
+        rows = cur.fetchone()
+
+        if rows:
+            return json.loads(rows[0])
+        else:
+            raise ValueError("No record with such uuid")
 
     def __repr__(self):
         return self._recent(fmt='plain')
