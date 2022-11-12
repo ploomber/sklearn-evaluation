@@ -61,6 +61,14 @@ def test_update():
     assert len(res) == 1
 
 
+def test_update_override():
+    tracker = SQLiteTracker(':memory:')
+    tracker.insert('uuid', dict(a=0, b=0))
+    tracker.update('uuid', dict(a=1, b=2), allow_overwrite=True)
+    res = tracker._get('uuid')
+    assert res == dict(a=1, b=2)
+
+
 def test_get():
     tracker = SQLiteTracker(':memory:')
     uuid = tracker.new()

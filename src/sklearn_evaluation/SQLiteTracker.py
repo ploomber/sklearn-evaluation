@@ -129,10 +129,11 @@ class SQLiteTracker:
         return uuid
 
     @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
-    def update(self, uuid, parameters):
-        """Update the parameters of an empty experiment given its uuid
+    def update(self, uuid, parameters, allow_overwrite=False):
+        """Update the parameters of a experiment given its uuid
         """
-        self._can_update(uuid)
+        if not allow_overwrite:
+            self._can_update(uuid)
 
         cur = self.conn.cursor()
         cur.execute(
