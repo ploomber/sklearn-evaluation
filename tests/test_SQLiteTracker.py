@@ -130,3 +130,45 @@ def test_recent():
 
     assert df.columns.tolist() == ['created', 'a', 'comment']
     assert df.index.name == 'uuid'
+
+
+def test_get_schema():
+    tracker = SQLiteTracker(':memory:')
+
+    to_insert = [
+        dict(a=1, b=2),
+        dict(x=1, y=2),
+        dict(z=3),
+    ]
+
+    for i, data in enumerate(to_insert):
+        tracker.insert(i, data)
+
+    assert tracker.get_parameters_keys() == ['a', 'b', 'x', 'y', 'z']
+
+
+def test_get_sample_query():
+    tracker = SQLiteTracker(':memory:')
+
+    to_insert = [
+        dict(a=1, b=2),
+        dict(x=1, y=2),
+        dict(z=3),
+    ]
+
+    for i, data in enumerate(to_insert):
+        tracker.insert(i, data)
+
+    expected = """\
+SELECT
+    uuid,
+    parameters ->> 'a' as a,
+    parameters ->> 'b' as b,
+    parameters ->> 'x' as x,
+    parameters ->> 'y' as y,
+    parameters ->> 'z' as z
+    FROM experiments
+LIMIT 10\
+"""
+
+    assert tracker.get_sample_query() == expected

@@ -1,7 +1,6 @@
 from uuid import uuid4
 import sqlite3
 import json
-from collections.abc import Mapping
 
 import pandas as pd
 from jinja2 import Template
@@ -250,6 +249,40 @@ class SQLiteTracker:
             raise ValueError('Cannot update experiment with '
                              'uuid "{}" because it does '
                              'not exist'.format(uuid))
+
+    def get_parameters_keys(self, limit=100):
+        """
+        Return the keys in the parameters column by randomly sampling records
+        and obtaining the keys of the JSON objects
+        """
+        keys = set()
+        cur = self.conn.execute(
+            """
+        SELECT parameters
+        FROM experiments
+        ORDER BY RANDOM()
+        LIMIT ?
+        """, [limit])
+
+        for record in cur:
+            obj = json.loads(record[0])
+            keys = keys | set(obj)
+
+        return sorted(keys)
+
+    def get_sample_query(self):
+        keys = self.get_parameters_keys()
+
+        template = Template("""\
+SELECT
+    uuid,
+    {% for k in keys -%}
+    parameters ->> '{{k}}' as {{k}}{% if not loop.last %},{% endif %}
+    {% endfor -%}
+FROM experiments
+LIMIT 10
+""")
+        return template.render(keys=keys)
 
     def _get(self, uuid):
         cur = self.conn.execute(

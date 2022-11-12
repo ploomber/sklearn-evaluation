@@ -3,6 +3,11 @@ CHANGELOG
 
 0.7.9dev
 --------
+* Adds ``as_frame`` argument to ``SQLiteTracker``
+* Adds ``SQLiteTracker.upsert``
+* Allow overwriting records in ``SQLiteTracker.update`` with ``allow_overwrite=True``
+* Adds ``SQliteTracker.get_sample_query``
+* Adds ``SQliteTracker.get_parameters_keys``
 
 0.7.8 (2022-11-05)
 ------------------
