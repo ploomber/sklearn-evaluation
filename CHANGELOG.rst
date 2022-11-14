@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.7.9dev
---------
+0.7.9 (2022-11-14)
+------------------
 * Adds ``as_frame`` argument to ``SQLiteTracker``
 * Adds ``SQLiteTracker.upsert``
 * Allow overwriting records in ``SQLiteTracker.update`` with ``allow_overwrite=True``
