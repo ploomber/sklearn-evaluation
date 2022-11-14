@@ -16,7 +16,7 @@ minor = sqlite3.sqlite_version.split('.')[1]
 
 # -> and ->> operators introduced in sqlite version 3.38.0
 # https://www.sqlite.org/json1.html#jptr
-ARROW_OPERATOR_SUPPORT = int(minor) >= 38
+ARROW_OPERATOR_SUPPORTED = int(minor) >= 38
 
 TEMPLATE_ARROW = """\
 SELECT
@@ -299,7 +299,7 @@ class SQLiteTracker:
     def get_sample_query(self, compatibility_mode=True):
         keys = self.get_parameters_keys()
 
-        if compatibility_mode or not ARROW_OPERATOR_SUPPORT:
+        if compatibility_mode or not ARROW_OPERATOR_SUPPORTED:
             TEMPLATE = TEMPLATE_JSON_EXTRACT
         else:
             TEMPLATE = TEMPLATE_ARROW

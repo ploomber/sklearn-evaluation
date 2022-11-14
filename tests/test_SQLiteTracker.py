@@ -1,7 +1,9 @@
 from uuid import uuid4
 import time
+
 import pytest
-from sklearn_evaluation.SQLiteTracker import SQLiteTracker
+from sklearn_evaluation.tracker import SQLiteTracker
+from sklearn_evaluation import tracker as tracker_module
 
 
 def test_insert():
@@ -147,19 +149,7 @@ def test_get_schema():
     assert tracker.get_parameters_keys() == ['a', 'b', 'x', 'y', 'z']
 
 
-def test_get_sample_query():
-    tracker = SQLiteTracker(':memory:')
-
-    to_insert = [
-        dict(a=1, b=2),
-        dict(x=1, y=2),
-        dict(z=3),
-    ]
-
-    for i, data in enumerate(to_insert):
-        tracker.insert(i, data)
-
-    expected = """\
+expected_arrow = """\
 SELECT
     uuid,
     parameters ->> 'a' as a,
@@ -171,4 +161,40 @@ SELECT
 LIMIT 10\
 """
 
-    assert tracker.get_sample_query() == expected
+expected_json_extract = """\
+SELECT
+    uuid,
+    json_extract(parameters, '$.a') as a,
+    json_extract(parameters, '$.b') as b,
+    json_extract(parameters, '$.x') as x,
+    json_extract(parameters, '$.y') as y,
+    json_extract(parameters, '$.z') as z
+    FROM experiments
+LIMIT 10\
+"""
+
+
+@pytest.mark.parametrize('arrow_operator_supported, expected', [
+    [False, expected_json_extract],
+    [True, expected_arrow],
+],
+                         ids=[
+                             'arrow-not-supported',
+                             'arrow-supported',
+                         ])
+def test_get_sample_query(arrow_operator_supported, expected, monkeypatch):
+    monkeypatch.setattr(tracker_module, 'ARROW_OPERATOR_SUPPORTED',
+                        arrow_operator_supported)
+
+    tracker = SQLiteTracker(':memory:')
+
+    to_insert = [
+        dict(a=1, b=2),
+        dict(x=1, y=2),
+        dict(z=3),
+    ]
+
+    for i, data in enumerate(to_insert):
+        tracker.insert(i, data)
+
+    assert tracker.get_sample_query(compatibility_mode=False) == expected
