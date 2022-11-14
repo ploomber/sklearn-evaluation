@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.7.10dev
+---------
+
 0.7.9 (2022-11-14)
 ------------------
 * Adds ``as_frame`` argument to ``SQLiteTracker``
