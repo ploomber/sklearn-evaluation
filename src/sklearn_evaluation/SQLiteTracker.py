@@ -12,6 +12,32 @@ from sklearn_evaluation.nb.NotebookCollection import (add_compare_tab,
                                                       tabs_html_from_content,
                                                       HTMLMapping)
 
+minor = sqlite3.sqlite_version.split('.')[1]
+
+# -> and ->> operators introduced in sqlite version 3.38.0
+# https://www.sqlite.org/json1.html#jptr
+ARROW_OPERATOR_SUPPORT = int(minor) >= 38
+
+TEMPLATE_ARROW = """\
+SELECT
+    uuid,
+    {% for k in keys -%}
+    parameters ->> '{{k}}' as {{k}}{% if not loop.last %},{% endif %}
+    {% endfor -%}
+FROM experiments
+LIMIT 10
+"""
+
+TEMPLATE_JSON_EXTRACT = """\
+SELECT
+    uuid,
+    {% for k in keys -%}
+    json_extract(parameters, '$.{{k}}') as {{k}}{% if not loop.last %},{% endif %}
+    {% endfor -%}
+FROM experiments
+LIMIT 10
+"""
+
 
 class SQLiteTracker:
     """A simple experiment tracker using SQLite
@@ -270,18 +296,15 @@ class SQLiteTracker:
 
         return sorted(keys)
 
-    def get_sample_query(self):
+    def get_sample_query(self, compatibility_mode=True):
         keys = self.get_parameters_keys()
 
-        template = Template("""\
-SELECT
-    uuid,
-    {% for k in keys -%}
-    parameters ->> '{{k}}' as {{k}}{% if not loop.last %},{% endif %}
-    {% endfor -%}
-FROM experiments
-LIMIT 10
-""")
+        if compatibility_mode or not ARROW_OPERATOR_SUPPORT:
+            TEMPLATE = TEMPLATE_JSON_EXTRACT
+        else:
+            TEMPLATE = TEMPLATE_ARROW
+
+        template = Template(TEMPLATE)
         return template.render(keys=keys)
 
     def _get(self, uuid):
