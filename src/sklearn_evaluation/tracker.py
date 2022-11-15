@@ -142,7 +142,7 @@ class SQLiteTracker:
     def new(self):
         """Create a new experiment, returns a uuid
         """
-        uuid = uuid4().hex
+        uuid = str(uuid4())[:8]
         cur = self.conn.cursor()
         cur.execute(
             """
@@ -336,6 +336,10 @@ def is_str(obj):
     return isinstance(obj, str)
 
 
+def is_float(obj):
+    return isinstance(obj, float)
+
+
 class Results:
     """An object to generate an HTML table from a SQLite result
     """
@@ -358,6 +362,8 @@ class Results:
     {% for field in row %}
         {% if is_str(field) and "<img src=" in field %}
         <td>{{ "[Plot]" if not render_plots else field}}</td>
+        {% elif is_float(field) %}
+        <td>{{ "%.6f"| format(field) }}</td>
         {% else %}
         <td>{{field}}</td>
         {% endif %}
@@ -368,7 +374,8 @@ class Results:
 """).render(columns=self.columns,
             rows=self.rows,
             render_plots=self.render_plots,
-            is_str=is_str)
+            is_str=is_str,
+            is_float=is_float)
 
     def __getitem__(self, key):
         if key not in self.columns:
@@ -395,9 +402,18 @@ class Results:
 
         idx = self.columns.index(key)
         values = [row[idx] for row in self.rows]
-        ids = [str(row[idx_id]) for row in self.rows]
+        ids = [format_id(row[idx_id]) for row in self.rows]
 
         e, ids_out = add_compare_tab(elements=values, ids=ids, scores_arg=None)
         mapping = {k: v for k, v in zip(ids_out, e)}
         html = tabs_html_from_content(ids_out, e)
         return HTMLMapping(mapping, html)
+
+
+def format_id(value):
+    if isinstance(value, str):
+        return value
+    elif isinstance(value, float):
+        return f'{value:.6f}'
+    else:
+        return value
