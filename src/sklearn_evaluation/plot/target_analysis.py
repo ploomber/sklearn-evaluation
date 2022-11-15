@@ -22,7 +22,6 @@ def _validate_target(y):
 def target_plot(y_train,
                 y_test=None,
                 labels=None,
-                mode='balance',
                 color=None,
                 colormap=None,
                 ax=None):
@@ -88,6 +87,7 @@ def target_plot(y_train,
 
     if ax is None:
         ax = plt.gca()
+    mode = 'balance' if y_test is None else 'compare'
     if mode == 'balance':
         support_ = np.array([(y_train == idx).sum() for idx in classes_])
         ax.bar(
@@ -132,7 +132,10 @@ def target_plot(y_train,
     ax.set_ylabel("support")
 
     # Remove the vertical grid
-    ax.grid(False, axis="x")
+    ax.set_axisbelow(True)
+    ax.yaxis.grid(True, color='#808080')
+    ax.autoscale(enable=True)
+
     if mode == 'compare':
         ax.legend(frameon=True)
 

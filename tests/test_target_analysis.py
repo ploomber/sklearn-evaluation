@@ -2,6 +2,8 @@ import pytest
 
 import numpy as np
 import matplotlib.pyplot as plt
+from matplotlib.testing.decorators import image_comparison
+
 from sklearn_evaluation import plot
 
 
@@ -36,7 +38,7 @@ def test_binary_balance(target_analysis_binary):
     """
 
     _, _, y_train, y_test = target_analysis_binary
-    plot.target_plot(y_train, y_test)
+    plot.target_plot(y_train)
     #plt.savefig('binary_balance.png')
 
 
@@ -44,16 +46,28 @@ def test_binary_compare(target_analysis_binary):
     """
     Test binary classification in compare mode
     """
+
     _, _, y_train, y_test = target_analysis_binary
-    plot.target_plot(y_train, y_test, mode='compare')
-    #plt.savefig('binary_compare.png')
+    plot.target_plot(y_train, y_test)
 
 
+def test_multiclass_balance(target_analysis_multiclass):
+    """
+    Test multiclass classification in compare mode
+    """
+    _, _, y_train, y_test = target_analysis_multiclass
+    plot.target_plot(y_train)
+    #plt.savefig('multilcass_balance.png')
+
+
+@image_comparison(baseline_images=['multiclass_compare'],
+                  extensions=['png'],
+                  remove_text=True)
 def test_multiclass_compare(target_analysis_multiclass):
     """
     Test multiclass classification in compare mode
     """
     _, _, y_train, y_test = target_analysis_multiclass
-    plot.target_plot(y_train, y_test, mode='compare')
-    plt.savefig('multilcass_compare.png')
+    plot.target_plot(y_train, y_test)
+    plt.savefig('multiclass_compare.png', bbox_inches='tight')
 

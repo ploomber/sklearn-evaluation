@@ -25,6 +25,5 @@ kwargs = {
 X, y = datasets.make_classification(**kwargs)
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=101)
-
-plot.target_plot(y_train, y_test, mode='compare')
-plt.show()
+plot.target_plot(y_train, y_test)
+plt.savefig('multiclass_compare.png')
