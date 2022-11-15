@@ -3,6 +3,10 @@ CHANGELOG
 
 0.7.10dev
 ---------
+* ``SQliteTracker.get_sample_query`` generates a query compatible with older SQLite versions that do not support the ``->`` operator
+* ``SQliteTracker`` creates shorter experiment IDs
+* Fixes whitespace in generated HTML when generating tab views and in ``SQLTracker`` results when ``as_frame=False``
+
 
 0.7.9 (2022-11-14)
 ------------------
