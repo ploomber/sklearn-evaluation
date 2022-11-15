@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.8.1dev
+--------
+
 0.8 (2022-11-15)
 ----------------
 * ``SQliteTracker.get_sample_query`` generates a query compatible with older SQLite versions that do not support the ``->`` operator
