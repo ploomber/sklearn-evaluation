@@ -351,26 +351,28 @@ class Results:
 
     def _repr_html_(self):
         return Template("""
- <table>
-  <tr>
-    {% for name in columns %}
-    <th>{{name}}</th>
-    {% endfor %}
-  </tr>
+<div>
+<table>
+  <thead>
+  <tr>{% for name in columns %}<th>{{name}}</th>{% endfor %}</tr>
+  </thead>
+  <tbody>
   {% for row in rows %}
   <tr>
-    {% for field in row %}
-        {% if is_str(field) and "<img src=" in field %}
-        <td>{{ "[Plot]" if not render_plots else field}}</td>
-        {% elif is_float(field) %}
+    {%- for field in row -%}
+        {%- if is_str(field) and "<img src=" in field -%}
+        <td>{{ "[Plot]" if not render_plots else field }}</td>
+        {%- elif is_float(field) -%}
         <td>{{ "%.6f"| format(field) }}</td>
-        {% else %}
+        {%- else -%}
         <td>{{field}}</td>
-        {% endif %}
-    {% endfor %}
+        {%- endif -%}
+    {%- endfor -%}
   </tr>
   {% endfor %}
+  </tbody>
 </table>
+</div>
 """).render(columns=self.columns,
             rows=self.rows,
             render_plots=self.render_plots,
