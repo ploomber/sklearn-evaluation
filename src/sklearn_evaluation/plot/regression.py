@@ -10,7 +10,7 @@ from sklearn.linear_model import LinearRegression
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def residual(y_true, y_pred, ax=None):
+def residuals(y_true, y_pred, ax=None, plot_name='Residuals Plot'):
     """
     Plot the residuals between measured and predicted values.
 
@@ -30,7 +30,7 @@ def residual(y_true, y_pred, ax=None):
 
     Examples
     --------
-    .. plot:: ../../examples/residual.py
+    .. plot:: ../../examples/residuals.py
 
     """
 
@@ -44,14 +44,15 @@ def residual(y_true, y_pred, ax=None):
 
     ax.scatter(y_pred, y_true-y_pred)
 
-    _set_ax_settings(ax, 'Predicted Value', 'Residuals', 'Residuals Plot')
+    _set_ax_settings(ax, 'Predicted Value', 'Residuals', plot_name)
     return ax
 
 @SKLearnEvaluationLogger.log(feature='plot')
 def prediction_error(y_true,
                      y_pred,
-                     model=LinearRegression(),
-                     ax=None):
+                     model=None,
+                     ax=None,
+                     plot_name='Prediction Error'):
     """
     Plot the scatter plot of measured values v. predicted values, with
     an identity line and a best fitted line to show the prediction
@@ -85,6 +86,7 @@ def prediction_error(y_true,
     if ax is None:
         ax = plt.gca()
 
+    model = model or LinearRegression()
     if not hasattr(model, 'fit_intercept'):
         raise TypeError('"fit_intercept" attribute not in model. '
                         'Cannot plot prediction error.')
@@ -104,7 +106,7 @@ def prediction_error(y_true,
     r2 = model.score(y_true.reshape((-1, 1)), y_pred)
     plt.plot([], [], ' ', label=f"R2 = {round(r2,5)}")
 
-    _set_ax_settings(ax, 'y_measured', 'y_predicted', 'Prediction Error')
+    _set_ax_settings(ax, 'y_true', 'y_pred', plot_name)
     ax.legend(loc="upper left")
     return ax
 
