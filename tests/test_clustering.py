@@ -50,6 +50,7 @@ X, y = load_data(return_X_y=True)
 def test_n_clusters_in_clf():
 
     class DummyClusterer:
+
         def __init__(self):
             pass
 
@@ -69,7 +70,8 @@ def test_cluster_ranges():
     plot.elbow_curve(X, clf, n_clusters=range(1, 10))
 
 
-@image_comparison(baseline_images=['elbow_curve_from_results'], extensions=['png'],
+@image_comparison(baseline_images=['elbow_curve_from_results'],
+                  extensions=['png'],
                   remove_text=False)
 def test_elbow_curve_from_results():
     n_clusters = range(1, 10, 2)
@@ -77,10 +79,11 @@ def test_elbow_curve_from_results():
     plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
 
 
-@image_comparison(baseline_images=['elbow_curve_from_results'], extensions=['png'],
+@image_comparison(baseline_images=['elbow_curve_from_results'],
+                  extensions=['png'],
                   remove_text=False)
 def test_elbow_curve_from_results_unsorted():
-    n_clusters = [5,3,9,1,7]
+    n_clusters = [5, 3, 9, 1, 7]
     sum_of_squares = np.array([389.9, 470.7, 305.5, 4572.2, 335.1])
     plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
 
@@ -146,9 +149,6 @@ def test_metric():
     plot.silhouette_plot(X, clf, range_n_clusters=[6], metric='cosine')
 
 
-@image_comparison(baseline_images=['silhouette_plot_string_classes'],
-                  extensions=['png'],
-                  remove_text=True)
 def test_string_classes():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
@@ -172,7 +172,6 @@ def test_array_like_string():
                                       convert_labels_into_string(y))
 
 
-
 def test_ax_silhouette():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
@@ -182,7 +181,6 @@ def test_ax_silhouette():
     assert ax is not out_ax
     out_ax = plot.silhouette_plot_from_results(X, cluster_labels, ax=ax)
     assert ax is out_ax
-
 
 
 def test_ax_params():
