@@ -64,11 +64,9 @@ def test_n_clusters_in_clf():
         plot.elbow_curve(X, clf)
 
 
-@image_comparison(baseline_images=['elbow_curve_range'], extensions=['png'],
-                  remove_text=False)
-def test_cluster_ranges_with_no_show_time():
+def test_cluster_ranges():
     clf = KMeans()
-    plot.elbow_curve(X, clf, n_clusters=range(1, 10), show_cluster_time=False)
+    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
 
 
 @image_comparison(baseline_images=['elbow_curve_from_results'], extensions=['png'],
