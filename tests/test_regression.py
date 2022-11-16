@@ -10,7 +10,7 @@ y_pred = np.array([108.19, 115.16, 122.13, 136.06, 136.06, 156.97, 163.94, 170.9
 @image_comparison(baseline_images=['residual'],
                   extensions=['png'],
                   remove_text=True)
-def test_residual():
+def test_residuals():
     plot.residuals(y_true, y_pred)
 
 @image_comparison(baseline_images=['prediction_error'],
