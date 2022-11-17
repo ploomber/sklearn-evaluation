@@ -27,7 +27,7 @@ __all__ = [
     'metrics_at_thresholds',
     'ConfusionMatrix',
     'residuals',
-    'prediction_error'
+    'prediction_error',
     'elbow_curve',
     'elbow_curve_from_results',
     'calibration_curve',
