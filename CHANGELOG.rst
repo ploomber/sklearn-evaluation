@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.8.1dev
---------
+0.8.1 (2022-11-16)
+------------------
 * Adds ``plot.residuals`` and ``plot.prediction_error`` for evaluating regression models
 
 0.8 (2022-11-15)
