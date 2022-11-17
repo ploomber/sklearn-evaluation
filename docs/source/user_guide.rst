@@ -9,6 +9,7 @@ User Guide
     user_guide/compare
     user_guide/func_vs_oop
     user_guide/grid_search
+    user_guide/RegressionPlots
     user_guide/matplotlib
     user_guide/SQLiteTracker
     user_guide/NotebookCollection
