@@ -53,6 +53,7 @@ def elbow_curve(X,
     X : array-like, shape = [n_samples, n_features]:
         Data to cluster, where n_samples is the number of samples and
         n_features is the number of features.
+        Refer https://numpy.org/doc/stable/glossary.html#term-array-like
 
     clf
         Clusterer instance that implements ``fit``,``fit_predict``, and
@@ -160,7 +161,7 @@ def silhouette_plot(X,
     X : array-like, shape = [n_samples, n_features]:
         Cluster data, where n_samples is the number of samples and
         n_features is the number of features.
-        (Refer https://numpy.org/doc/stable/glossary.html#term-array-like)
+        Refer https://numpy.org/doc/stable/glossary.html#term-array-like
 
     clf
         Clusterer instance that implements ``fit``,``fit_predict``, and
