@@ -49,18 +49,11 @@
 
 <!-- Tab links -->
 <div class="tab">
-    {% for name in names %}
-    <button class="{{prefix}}-tablinks" onclick="{{prefix}}_openTab(event, '{{name}}')"
-        id="{{prefix}}-{{name}}-button">{{name}}</button>
-    {% endfor %}
+    {% for name in names %}<button class="{{prefix}}-tablinks" onclick="{{prefix}}_openTab(event, '{{name}}')" id="{{prefix}}-{{name}}-button">{{name}}</button>{% endfor %}
 </div>
 
 <!-- Tab content -->
-{% for name, content in zip(names, contents) %}
-<div id="{{prefix}}-{{name}}" class="{{prefix}}-tabcontent">
-    {{content}}
-</div>
-{% endfor %}
+{% for name, content in zip(names, contents) %}<div id="{{prefix}}-{{name}}" class="{{prefix}}-tabcontent">{{content}}</div>{% endfor %}
 
 <script>
     function {{prefix}}_hideAll() {
