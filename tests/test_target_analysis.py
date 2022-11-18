@@ -62,12 +62,12 @@ def test_multiclass_balance(target_analysis_multiclass):
 
 @image_comparison(baseline_images=['multiclass_compare'],
                   extensions=['png'],
-                  remove_text=True)
+                  remove_text=False)
 def test_multiclass_compare(target_analysis_multiclass):
     """
     Test multiclass classification in compare mode
     """
     _, _, y_train, y_test = target_analysis_multiclass
-    plot.target_plot(y_train, y_test)
-    plt.savefig('multiclass_compare.png', bbox_inches='tight')
+    plot.target_plot(y_train, y_test, colors=['#0070FF','#FF9B00'])
+    #plt.savefig('multiclass_compare.png')
 

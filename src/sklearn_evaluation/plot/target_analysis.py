@@ -22,8 +22,7 @@ def _validate_target(y):
 def target_plot(y_train,
                 y_test=None,
                 labels=None,
-                color=None,
-                colormap=None,
+                colors=None,
                 ax=None):
     """Target analysis plot for visualising class imbalance.
 
@@ -93,7 +92,7 @@ def target_plot(y_train,
         ax.bar(
             np.arange(len(support_)),
             support_,
-            #colors=colors,
+            color=colors,
             align="center",
             width=0.5,
         )
@@ -111,7 +110,7 @@ def target_plot(y_train,
 
             ax.bar(
                 index, support, bar_width,
-                #color=colors[idx],
+                color=colors[idx],
                 label=legends[idx]
             )
 
