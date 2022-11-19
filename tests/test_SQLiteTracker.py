@@ -1,7 +1,9 @@
 from uuid import uuid4
 import time
+
 import pytest
-from sklearn_evaluation.SQLiteTracker import SQLiteTracker
+from sklearn_evaluation.tracker import SQLiteTracker
+from sklearn_evaluation import tracker as tracker_module
 
 
 def test_insert():
@@ -27,7 +29,7 @@ def test_comment():
     assert res.loc[uuid].comment == 'this is a comment'
 
 
-def test_get():
+def test_getitem():
     tracker = SQLiteTracker(':memory:')
     tracker.insert('some_uuid', {'a': 1})
     res = tracker['some_uuid']
@@ -59,6 +61,38 @@ def test_update():
     tracker.update(uuid, {})
     res = tracker[uuid]
     assert len(res) == 1
+
+
+def test_update_override():
+    tracker = SQLiteTracker(':memory:')
+    tracker.insert('uuid', dict(a=0, b=0))
+    tracker.update('uuid', dict(a=1, b=2), allow_overwrite=True)
+    res = tracker._get('uuid')
+    assert res == dict(a=1, b=2)
+
+
+def test_get():
+    tracker = SQLiteTracker(':memory:')
+    uuid = tracker.new()
+    tracker.update(uuid, dict(a=1, b=2))
+    assert tracker._get(uuid) == dict(a=1, b=2)
+
+
+def test_get_error():
+    tracker = SQLiteTracker(':memory:')
+
+    with pytest.raises(ValueError):
+        tracker._get('uuid')
+
+
+def test_upsert():
+    tracker = SQLiteTracker(':memory:')
+    uuid = tracker.new()
+    tracker.new()
+    tracker.update(uuid, dict(a=1, b=2))
+    tracker.upsert(uuid, dict(a=2, c=3))
+
+    assert tracker._get(uuid) == dict(a=2, b=2, c=3)
 
 
 def test_reprs():
@@ -98,3 +132,69 @@ def test_recent():
 
     assert df.columns.tolist() == ['created', 'a', 'comment']
     assert df.index.name == 'uuid'
+
+
+def test_get_schema():
+    tracker = SQLiteTracker(':memory:')
+
+    to_insert = [
+        dict(a=1, b=2),
+        dict(x=1, y=2),
+        dict(z=3),
+    ]
+
+    for i, data in enumerate(to_insert):
+        tracker.insert(i, data)
+
+    assert tracker.get_parameters_keys() == ['a', 'b', 'x', 'y', 'z']
+
+
+expected_arrow = """\
+SELECT
+    uuid,
+    parameters ->> 'a' as a,
+    parameters ->> 'b' as b,
+    parameters ->> 'x' as x,
+    parameters ->> 'y' as y,
+    parameters ->> 'z' as z
+    FROM experiments
+LIMIT 10\
+"""
+
+expected_json_extract = """\
+SELECT
+    uuid,
+    json_extract(parameters, '$.a') as a,
+    json_extract(parameters, '$.b') as b,
+    json_extract(parameters, '$.x') as x,
+    json_extract(parameters, '$.y') as y,
+    json_extract(parameters, '$.z') as z
+    FROM experiments
+LIMIT 10\
+"""
+
+
+@pytest.mark.parametrize('arrow_operator_supported, expected', [
+    [False, expected_json_extract],
+    [True, expected_arrow],
+],
+                         ids=[
+                             'arrow-not-supported',
+                             'arrow-supported',
+                         ])
+def test_get_sample_query(arrow_operator_supported, expected, monkeypatch):
+    monkeypatch.setattr(tracker_module, 'ARROW_OPERATOR_SUPPORTED',
+                        arrow_operator_supported)
+
+    tracker = SQLiteTracker(':memory:')
+
+    to_insert = [
+        dict(a=1, b=2),
+        dict(x=1, y=2),
+        dict(z=3),
+    ]
+
+    for i, data in enumerate(to_insert):
+        tracker.insert(i, data)
+
+    assert tracker.get_sample_query(compatibility_mode=False) == expected

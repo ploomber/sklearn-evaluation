@@ -16,6 +16,7 @@ from .NotebookIntrospector import NotebookIntrospector
 from .sets import differences
 from ..table import Table
 from ..telemetry import SKLearnEvaluationLogger
+
 _env = Environment(loader=PackageLoader('sklearn_evaluation', 'assets/nb'))
 _fm = black.FileMode(string_normalization=False, line_length=40)
 _htmldiff = HtmlDiff()
@@ -39,9 +40,9 @@ class NotebookCollection(Mapping):
         if 'filenames', the file name is extracted from each path and used
         as identifier (ignores extension)
     """
-    @SKLearnEvaluationLogger.log(
-        feature='NotebookCollection',
-        action='init-NotebookCollection')
+
+    @SKLearnEvaluationLogger.log(feature='NotebookCollection',
+                                 action='init-NotebookCollection')
     def __init__(self, paths, ids=None, scores=False):
         if ids is None:
             ids = paths
@@ -109,6 +110,24 @@ def _get_filename(path):
 def add_compare_tab(elements, ids, scores_arg):
     """
     Processes tab contents and ids, adding a "Compare" tab if possible
+
+    Parameters
+    ----------
+    elements
+        The elements to compare
+
+    ids : list
+        The IDs for each element
+
+    Returns
+    -------
+    out
+        A new set of element to display. It might contain one new element in
+        index 0 if we can provide a comparison view
+
+    out_ids
+        A new set of IDs. It might contain a new ID in index 0 if we can
+        provide a comparison view
     """
     out = copy.copy(elements)
     out_ids = copy.copy(ids)

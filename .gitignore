@@ -92,3 +92,4 @@ doc/build/
 # PyBuilder
 target/
 
+.idea/*
