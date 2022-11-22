@@ -132,3 +132,16 @@ def test_validation_curve():
     train_size = np.arange(100, 1000, step=100)
 
     plot.validation_curve(acc_train, acc_val, train_size)
+
+@image_comparison(baseline_images=['cooks_distance'],
+                  extensions=['png'],
+                  remove_text=True)
+def test_cooks_distance():
+    np.random.seed(42)
+    n_samples = 100
+    dim = 8
+    y_true = np.array([i / 100 for i in range(1, n_samples + 1)])
+    y_pred = y_true + (1. - np.random.rand(100)) / 10
+    X = np.random.rand(n_samples, dim)
+
+    plot.cooks_distance(X, y_true, y_pred)
