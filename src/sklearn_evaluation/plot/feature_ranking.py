@@ -1,3 +1,21 @@
+"""
+Plot for feature ranking
+
+NOTE: this is based on the yellowbricks feature module. License below.
+
+Copyright 2016-2020 The scikit-yb developers
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+"""
+
 import numpy as np
 import pandas as pd
 from scipy.stats import shapiro
@@ -132,8 +150,6 @@ def rank_one_dimensional(X,
     n_columns = X.shape[1]
 
     if features is not None:
-        # Use the user-specified features with some checking
-        # TODO: allow the user specified features to filter the dataset
         if len(features) != n_columns:
             raise ValueError(
                 ("number of supplied feature names does not match the number "
@@ -164,7 +180,7 @@ def rank_one_dimensional(X,
 
 
 def rank_one_dimensional_from_results(ranks,
-                                      features,
+                                      features=None,
                                       orientation='h',
                                       show_feature_names=True,
                                       figsize=(7, 7),
@@ -172,13 +188,15 @@ def rank_one_dimensional_from_results(ranks,
                                       title=None,
                                       ax=None):
     if features is None:
-        raise ValueError("Please provide feature labels")
+        features_ = np.arange(0, len(ranks))
+    else:
+        features_ = features
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax = _draw(ranks, features, color, orientation, show_feature_names, ax)
+    ax = _draw(ranks, features_, color, orientation, show_feature_names, ax)
     if title is None:
-        title = "Ranking of {} Features".format(len(features))
+        title = "Ranking of {} Features".format(len(features_))
     ax.set_title(title)
     return ax
