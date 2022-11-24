@@ -87,12 +87,13 @@ def test_get_error():
 
 def test_upsert():
     tracker = SQLiteTracker(":memory:")
+
     uuid = tracker.new()
-    tracker.new()
     tracker.update(uuid, dict(a=1, b=2))
     tracker.upsert(uuid, dict(a=2, c=3))
 
     assert tracker.get(uuid) == dict(a=2, b=2, c=3)
+    assert len(tracker) == 1
 
 
 def test_reprs():
@@ -204,6 +205,26 @@ def test_get_sample_query(arrow_operator_supported, expected, monkeypatch):
     assert tracker.get_sample_query(compatibility_mode=False) == expected
 
 
+def test_new_experiment():
+    tracker = SQLiteTracker(":memory:")
+    assert len(tracker) == 0
+
+    tracker.new_experiment()
+    assert len(tracker) == 1
+
+    tracker.new_experiment()
+    assert len(tracker) == 2
+
+
+def test_experiment_getitem():
+    tracker = SQLiteTracker(":memory:")
+    exp = tracker.new_experiment()
+    exp.log("key", "value")
+
+    retrieved = tracker.get(exp.uuid)
+    assert retrieved["key"] == "value"
+
+
 def test_experiment_log():
     tracker = SQLiteTracker(":memory:")
     experiment = tracker.new_experiment()
@@ -211,11 +232,13 @@ def test_experiment_log():
 
     retrieved = tracker.get(experiment.uuid)
 
-    assert retrieved == {"accuracy": 0.8}
+    assert retrieved._data == {"accuracy": 0.8}
+    assert len(tracker) == 1
 
 
 def test_experiment_log_dict():
     tracker = SQLiteTracker(":memory:")
+
     experiment = tracker.new_experiment()
     experiment.log("accuracy", 0.8)
     experiment.log_dict(
@@ -224,7 +247,8 @@ def test_experiment_log_dict():
 
     retrieved = tracker.get(experiment.uuid)
 
-    assert retrieved == {"accuracy": 0.8, "precision": 0.7, "recall": 0.6}
+    assert retrieved._data == {"accuracy": 0.8, "precision": 0.7, "recall": 0.6}
+    assert len(tracker) == 1
 
 
 def test_experiment_log_confusion_matrix():
@@ -235,6 +259,7 @@ def test_experiment_log_confusion_matrix():
     retrieved = tracker.get(experiment.uuid)
 
     assert retrieved["confusion_matrix"]
+    assert len(tracker) == 1
 
 
 def test_experiment_log_classification_report():
@@ -245,9 +270,10 @@ def test_experiment_log_classification_report():
     retrieved = tracker.get(experiment.uuid)
 
     assert retrieved["classification_report"]
+    assert len(tracker) == 1
 
 
-def test_experiment_ccomment():
+def test_experiment_comment():
     tracker = SQLiteTracker(":memory:")
     experiment = tracker.new_experiment()
     experiment.comment("some comment")
@@ -263,3 +289,4 @@ LIMIT 1
     )
 
     assert df.to_dict() == {"comment": {experiment.uuid: "some comment"}}
+    assert len(tracker) == 1
