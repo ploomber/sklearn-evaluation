@@ -61,7 +61,7 @@ class ConfusionMatrix(Plot):
     def __init__(self, y_true, y_pred, target_names=None, normalize=False, cm=None):
         if y_true is not None and cm is None:
             warn(
-                "ConfusionMatrix will change its signature in version 0.9"
+                "ConfusionMatrix will change its signature in version 0.10"
                 ", please use ConfusionMatrix.from_raw_data",
                 FutureWarning,
                 stacklevel=3,

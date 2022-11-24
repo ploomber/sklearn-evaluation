@@ -46,10 +46,14 @@ LIMIT 10
 class Experiment:
     """An experiment instance used to log values"""
 
-    def __init__(self, tracker, data=None) -> None:
+    def __init__(self, tracker, uuid, data) -> None:
         self._tracker = tracker
-        self._uuid = tracker.new()
+        self._uuid = uuid
         self._data = data
+
+    @classmethod
+    def new(cls, tracker):
+        return cls(tracker=tracker, uuid=tracker.new(), data=None)
 
     @property
     def uuid(self):
@@ -98,6 +102,15 @@ class Experiment:
         class_ = type(self).__name__
         data = self._data
         return f"{class_}({data!r})"
+
+    def __eq__(self, other: object) -> bool:
+        if isinstance(other, type(self)):
+            other = other._data
+
+        return self._data == other
+
+    def __getitem__(self, key):
+        return self._data[key]
 
 
 class SQLiteTracker:
@@ -254,7 +267,7 @@ class SQLiteTracker:
     @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
     def new_experiment(self):
         """Returns an experiment instance"""
-        return Experiment(self)
+        return Experiment.new(self)
 
     @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
     def update(self, uuid, parameters, allow_overwrite=False):
@@ -277,6 +290,7 @@ class SQLiteTracker:
     def upsert(self, uuid, parameters):
         """Modify the stored parameters of an existing experiment"""
         existing = self.get(uuid, unserialize_plots=False)._data
+        parameters_new = json.dumps({**existing, **parameters})
 
         cur = self.conn.cursor()
         cur.execute(
@@ -285,7 +299,7 @@ class SQLiteTracker:
         SET parameters = ?
         WHERE uuid = ?
         """,
-            [json.dumps({**existing, **parameters}), uuid],
+            [parameters_new, uuid],
         )
         cur.close()
         self.conn.commit()
@@ -459,7 +473,7 @@ class SQLiteTracker:
                     for k, v in obj.items()
                 }
             )
-            return Experiment(tracker=self, data=data)
+            return Experiment(tracker=self, uuid=uuid, data=data)
         else:
             raise ValueError("No record with such uuid")
 
@@ -471,6 +485,15 @@ class SQLiteTracker:
 
     def __del__(self):
         self.conn.close()
+
+    def __len__(self):
+        cur = self.conn.execute(
+            """
+        SELECT COUNT(*)
+        FROM experiments
+        """
+        )
+        return cur.fetchone()[0]
 
 
 def is_str(obj):

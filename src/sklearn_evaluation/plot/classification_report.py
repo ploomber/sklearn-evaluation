@@ -62,7 +62,7 @@ class ClassificationReport(Plot):
     ):
         if y_true is not None and matrix is None:
             warn(
-                "ClassificationReport will change its signature in version 0.9"
+                "ClassificationReport will change its signature in version 0.10"
                 ", please use ClassificationReport.from_raw_data",
                 FutureWarning,
                 stacklevel=2,
