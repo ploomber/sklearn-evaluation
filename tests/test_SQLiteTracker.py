@@ -1,3 +1,4 @@
+import json
 from uuid import uuid4
 import time
 
@@ -290,3 +291,48 @@ LIMIT 1
 
     assert df.to_dict() == {"comment": {experiment.uuid: "some comment"}}
     assert len(tracker) == 1
+
+
+def test_html_render_with_numeric_looking_uuid():
+    tracker = SQLiteTracker(":memory:")
+
+    # edge case: uuid.uuid4() might generate all numbers
+    tracker.insert("123", dict(a=1))
+
+    results = tracker.query(
+        """
+SELECT uuid
+FROM experiments
+""",
+        as_frame=False,
+        render_plots=True,
+    )
+
+    results._repr_html_()
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ["abcd", False],
+        ["1234", False],
+        [{"class": "something", "version": "something"}, True],
+    ],
+)
+def test_is_plot(value, expected):
+    assert tracker_module.is_plot(value) == expected
+
+
+obj = {"class": "something", "version": "something"}
+
+
+@pytest.mark.parametrize(
+    "value, expected",
+    [
+        ["abcd", False],
+        ["1234", False],
+        [json.dumps(obj), obj],
+    ],
+)
+def test_json_loads(value, expected):
+    assert tracker_module.json_loads(value) == expected

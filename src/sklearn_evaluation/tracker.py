@@ -7,7 +7,7 @@ import pandas as pd
 from jinja2 import Template
 
 from sklearn_evaluation.table import Table
-from sklearn_evaluation.report.serialize import try_serialize_figures
+from sklearn_evaluation.report.serialize import try_serialize_figures, figure2html
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.nb.NotebookCollection import (
     add_compare_tab,
@@ -94,6 +94,9 @@ class Experiment:
         """Log a dictionary with values"""
         self._tracker.upsert(self._uuid, obj)
         return obj
+
+    def log_figure(self, key, fig):
+        self._tracker.upsert(self._uuid, {key: figure2html(fig)})
 
     def comment(self, comment):
         self._tracker.comment(self._uuid, comment)
@@ -506,9 +509,15 @@ def is_float(obj):
 
 def json_loads(obj):
     try:
-        return json.loads(obj)
+        value = json.loads(obj)
     except Exception:
         return False
+
+    # strings like "123" are valid json objects but not in our context
+    if not isinstance(value, (list, dict)):
+        return False
+    else:
+        return value
 
 
 def is_plot(obj):
@@ -521,7 +530,7 @@ def is_plot(obj):
             obj_ = obj
 
         if obj_:
-            return obj_.get("class") and obj_.get("version")
+            return "class" in obj_ and "version" in obj_
         else:
             return False
     else:
@@ -542,9 +551,19 @@ def unserialize_plot(obj, return_instance=False):
     return instance if return_instance else instance._repr_html_()
 
 
+class GenericPlot:
+    def __init__(self, html):
+        self._html = html
+
+    def _repr_html_(self):
+        return self._html
+
+
 def unserialize_if_plot(obj, return_instance=False):
     if is_plot(obj):
         return unserialize_plot(obj, return_instance=return_instance)
+    elif is_str(obj) and obj.startswith("<img src="):
+        return GenericPlot(obj)
     else:
         return obj
 
