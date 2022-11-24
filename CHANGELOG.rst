@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.8.2dev
---------
+0.8.2 (2022-11-24)
+------------------
 * ``plot.ConfusionMatrix`` and ``plot.ClassifictionReport`` can be serialized/unserialized with ``.dump``/ ``.from_dump``
 * Adds ``Experiment`` class to easily create new experiments from ``SQLiteTracker`` using ``.new_experiment()``
 * Adds ``Experiment.log_classification_report``
