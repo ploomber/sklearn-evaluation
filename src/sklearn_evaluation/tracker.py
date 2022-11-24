@@ -48,6 +48,10 @@ class Experiment:
         self._tracker = tracker
         self._uuid = tracker.new()
 
+    @property
+    def uuid(self):
+        return self._uuid
+
     def log_confusion_matrix(self, y_true, y_pred, target_names=None, normalize=False):
         """Log a confusion matrix"""
         cm = plot.ConfusionMatrix.from_raw_data(
@@ -73,6 +77,11 @@ class Experiment:
         self._tracker.upsert(self._uuid, {"classification_report": cr._get_data()})
         return cr
 
+    def log(self, key, obj):
+        """Log a value. Any JSON-serializable object works"""
+        self._tracker.upsert(self._uuid, {key: obj})
+        return obj
+
     def log_figure(self, figure):
         """Log a generic matplotlib figure"""
         pass
@@ -87,6 +96,16 @@ class SQLiteTracker:
     ----------
     path
         Database location
+
+    Examples
+    --------
+    >>> from sklearn_evaluation import SQLiteTracker
+    >>> tracker = SQLiteTracker("experiments.db")
+    >>> experiment = tracker.new_experiment() # new experiment
+    >>> experiment.log("accuracy", 0.8) # log metric
+    0.8
+    >>> tracker.get(experiment.uuid) # retrieve it later with the uuid
+    {'accuracy': 0.8}
 
     """
 
@@ -222,7 +241,8 @@ class SQLiteTracker:
         self.conn.commit()
 
     def upsert(self, uuid, parameters):
-        existing = self._get(uuid, unserialize_plots=False)
+        """Modify the stored parameters of an existing experiment"""
+        existing = self.get(uuid, unserialize_plots=False)
 
         cur = self.conn.cursor()
         cur.execute(
@@ -366,7 +386,7 @@ class SQLiteTracker:
         template = Template(TEMPLATE)
         return template.render(keys=keys)
 
-    def _get(self, uuid, unserialize_plots=True):
+    def get(self, uuid, unserialize_plots=True):
         cur = self.conn.execute(
             """
         SELECT parameters
