@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.8.3dev
+--------
+
 0.8.2 (2022-11-24)
 ------------------
 * ``plot.ConfusionMatrix`` and ``plot.ClassifictionReport`` can be serialized/unserialized with ``.dump``/ ``.from_dump``
