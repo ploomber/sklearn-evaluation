@@ -59,6 +59,20 @@ class Experiment:
         self._tracker.upsert(self._uuid, {"confusion_matrix": cm._get_data()})
         return cm
 
+    def log_classification_report(
+        self, y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0
+    ):
+        cr = plot.ClassificationReport.from_raw_data(
+            y_true=y_true,
+            y_pred=y_pred,
+            target_names=target_names,
+            sample_weight=sample_weight,
+            zero_division=zero_division,
+        )
+
+        self._tracker.upsert(self._uuid, {"classification_report": cr._get_data()})
+        return cr
+
     def log_figure(self, figure):
         """Log a generic matplotlib figure"""
         pass
@@ -208,7 +222,7 @@ class SQLiteTracker:
         self.conn.commit()
 
     def upsert(self, uuid, parameters):
-        existing = self._get(uuid)
+        existing = self._get(uuid, unserialize_plots=False)
 
         cur = self.conn.cursor()
         cur.execute(
@@ -352,7 +366,7 @@ class SQLiteTracker:
         template = Template(TEMPLATE)
         return template.render(keys=keys)
 
-    def _get(self, uuid):
+    def _get(self, uuid, unserialize_plots=True):
         cur = self.conn.execute(
             """
         SELECT parameters
@@ -367,9 +381,14 @@ class SQLiteTracker:
         if rows:
             data = rows[0]
             obj = {} if not data else json.loads(data)
-            return {
-                k: unserialize_if_plot(v, return_instance=True) for k, v in obj.items()
-            }
+            return (
+                obj
+                if not unserialize_plots
+                else {
+                    k: unserialize_if_plot(v, return_instance=True)
+                    for k, v in obj.items()
+                }
+            )
         else:
             raise ValueError("No record with such uuid")
 
