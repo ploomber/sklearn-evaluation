@@ -10,6 +10,7 @@ import matplotlib.pyplot as plt
 from matplotlib.figure import Figure
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
+from sklearn_evaluation import __version__
 from ..telemetry import SKLearnEvaluationLogger, telemetry
 from ..plot.matplotlib import bar
 from ..metrics import precision_at
@@ -96,11 +97,8 @@ class ConfusionMatrix(Plot):
             "cm": self.cm.tolist(),
             "normalize": self.normalize,
             "target_names": self.target_names,
+            "version": __version__,
         }
-
-    def dump(self, path):
-        data = self._get_data()
-        Path(path).write_text(json.dumps(data), encoding="utf-8")
 
     @classmethod
     def from_dump(cls, path):
@@ -108,7 +106,7 @@ class ConfusionMatrix(Plot):
         cm = np.array(data["cm"])
         normalize = data["normalize"]
         target_names = data["target_names"]
-        return ConfusionMatrix(
+        return cls(
             y_true=None,
             y_pred=None,
             target_names=target_names,
@@ -119,7 +117,7 @@ class ConfusionMatrix(Plot):
     @classmethod
     def from_raw_data(cls, y_true, y_pred, target_names=None, normalize=False):
         # pass cm=False so we don't emit the future warning
-        return ConfusionMatrix(y_true, y_pred, target_names, normalize, cm=False)
+        return cls(y_true, y_pred, target_names, normalize, cm=False)
 
 
 def _confusion_matrix(y_true, y_pred, normalize):

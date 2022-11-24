@@ -1,6 +1,6 @@
 import pytest
 import numpy as np
-from sklearn_evaluation import plot
+from sklearn_evaluation import plot, __version__
 
 import warnings
 
@@ -12,7 +12,6 @@ def y():
     return y_true, y_pred
 
 
-# TODO: check target_names and normalize
 @pytest.mark.parametrize("normalize", [False, True])
 @pytest.mark.parametrize(
     "target_names, target_names_expected",
@@ -35,6 +34,7 @@ def test_from_raw_data(y, normalize, target_names, target_names_expected):
         "cm": [[value, value], [value, value]],
         "normalize": normalize,
         "target_names": target_names_expected,
+        "version": __version__,
     }
 
 
