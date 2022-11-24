@@ -140,11 +140,6 @@ class RankD:
                     "of ranks provided."))
             self.features_ = np.array(self.features)
 
-    def _set_title(self):
-        title = "{} Ranking of {} Features".format(self.algorithm.title(),
-                                                   len(self.features_))
-        self.ax.set_title(title)
-
     def plot_feature_ranks(self, X):
         """
         Parameters
@@ -158,7 +153,6 @@ class RankD:
             Axes containing the plot
         """
         self.derive_features_from_data(X)
-        self._set_title()
         self.ranks_ = self.rank(X)
         self.draw()
         return self.ax
@@ -178,8 +172,8 @@ class RankD:
             Axes containing the plot
         """
 
+        self.validate_rank(ranks)
         self.derive_features_from_ranks(ranks)
-        self._set_title()
         self.ranks_ = ranks
         self.draw()
         return self.ax
@@ -244,11 +238,19 @@ class Rank1D(RankD):
         self.color = color
         self.orientation_ = orient
 
+    @staticmethod
+    def validate_rank(ranks):
+        if ranks.ndim != 1:
+            raise ValueError("Ranks must be 1-dimensional")
+
     def draw(self):
         """
         Draws the bar plot of the ranking array of features.
         """
 
+        title = "{} Ranking of {} Features".format(self.algorithm.title(),
+                                                   len(self.features_))
+        self.ax.set_title(title)
         if self.orientation_ == "h":
             # Make the plot
             self.ax.barh(np.arange(len(self.ranks_)),
@@ -344,10 +346,20 @@ class Rank2D(RankD):
                          ax=ax)
         self.colormap = colormap
 
+    @staticmethod
+    def validate_rank(ranks):
+        if ranks.ndim != 2:
+            raise ValueError("Ranks must be 2-dimensional")
+
     def draw(self):
         """
         Draws the heatmap of the ranking matrix of variables.
         """
+
+        title = "{} Ranking of {} Features".format(self.algorithm.title(),
+                                                   len(self.features_))
+        self.ax.set_title(title)
+
         # Set the axes aspect to be equal
         self.ax.set_aspect("equal")
 

@@ -121,6 +121,14 @@ def test_1d_custom_ranks_incorrect_features():
                "of ranks provided." in str(e.value)
 
 
+def test_1d_custom_ranks_incorrect_dimension():
+    ranks = np.array([[1., -0.076], [-0.076, 1.]])
+    with pytest.raises(ValueError) as e:
+        Rank1D(features=['Feature1', 'Feature2'
+                         ], ).plot_feature_ranks_custom_algorithm(ranks)
+        assert "Ranks must be 1-dimensional" in str(e.value)
+
+
 @image_comparison(baseline_images=['shapiro_from_results_no_features'],
                   extensions=['png'],
                   remove_text=False)
@@ -221,6 +229,14 @@ def test_2d_custom_ranks():
                       [0.71, -0.18, 1., 0.80], [0.65, -0.15, 0.80, 1.]])
     Rank2D(features=['Feature1', 'Feature2', 'Feature3', 'Feature4'],
            figsize=(9, 12)).plot_feature_ranks_custom_algorithm(ranks)
+
+
+def test_2d_custom_ranks_incorrect_dimension():
+    ranks = np.array([1., -0.076, 0.71, 0.65])
+    with pytest.raises(ValueError) as e:
+        Rank2D(features=['Feature1', 'Feature2', 'Feature3', 'Feature4'],
+               figsize=(9, 12)).plot_feature_ranks_custom_algorithm(ranks)
+        assert "Ranks must be 2-dimensional" in str(e.value)
 
 
 @image_comparison(baseline_images=['custom_ranks_2d_no_features'],
