@@ -3,6 +3,17 @@ CHANGELOG
 
 0.8.2dev
 --------
+* ``plot.ConfusionMatrix`` and ``plot.ClassifictionReport`` can be serialized/unserialized with ``.dump``/ ``.from_dump``
+* Adds ``Experiment`` class to easily create new experiments from ``SQLiteTracker`` using ``.new_experiment()``
+* Adds ``Experiment.log_classification_report``
+* Adds ``Experiment.log_confusion_matrix``
+* Adds ``Experiment.log_figure``
+* Adds ``Experiment.log``
+* Adds ``Experiment.log_dict``
+* Adds ``SQLiteTracker.get``
+* Adds docstring examples to ``SQLiteTracker`` and ``Experiment``
+* Updates ``SQliteTracker`` tutorial
+* Fixes error when querying experiments using ``SQliteTracker`` whose UUID was all numbers (e.g., ``"1234"``)
 
 0.8.1 (2022-11-16)
 ------------------
