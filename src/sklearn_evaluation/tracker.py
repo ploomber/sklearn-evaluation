@@ -46,9 +46,10 @@ LIMIT 10
 class Experiment:
     """An experiment instance used to log values"""
 
-    def __init__(self, tracker) -> None:
+    def __init__(self, tracker, data=None) -> None:
         self._tracker = tracker
         self._uuid = tracker.new()
+        self._data = data
 
     @property
     def uuid(self):
@@ -85,6 +86,19 @@ class Experiment:
         self._tracker.upsert(self._uuid, {key: obj})
         return obj
 
+    def log_dict(self, obj):
+        """Log a dictionary with values"""
+        self._tracker.upsert(self._uuid, obj)
+        return obj
+
+    def comment(self, comment):
+        self._tracker.comment(self._uuid, comment)
+
+    def __repr__(self) -> str:
+        class_ = type(self).__name__
+        data = self._data
+        return f"{class_}({data!r})"
+
 
 class SQLiteTracker:
     """A experiment tracker backed by a SQLite database
@@ -104,7 +118,7 @@ class SQLiteTracker:
     >>> experiment.log("accuracy", 0.8) # log metric
     0.8
     >>> tracker.get(experiment.uuid) # retrieve it later with the uuid
-    {'accuracy': 0.8}
+    Experiment({'accuracy': 0.8})
     >>> experiment.log_confusion_matrix([1, 1, 0, 0], [1, 0, 1, 0]) # doctest: +SKIP
     >>> data = tracker.get(experiment.uuid)
     >>> data['confusion_matrix'] # doctest: +SKIP
@@ -262,7 +276,7 @@ class SQLiteTracker:
 
     def upsert(self, uuid, parameters):
         """Modify the stored parameters of an existing experiment"""
-        existing = self.get(uuid, unserialize_plots=False)
+        existing = self.get(uuid, unserialize_plots=False)._data
 
         cur = self.conn.cursor()
         cur.execute(
@@ -419,8 +433,10 @@ class SQLiteTracker:
         >>> experiment = tracker.new_experiment() # new experiment
         >>> experiment.log("accuracy", 0.8) # log metric
         0.8
-        >>> tracker.get(experiment.uuid) # retrieve it with the uuid
-        {'accuracy': 0.8}
+        >>> experiment = tracker.get(experiment.uuid) # retrieve it with the uuid
+        >>> experiment
+        Experiment({'accuracy': 0.8})
+        >>> experiment.comment("best model")
         """
         cur = self.conn.execute(
             """
@@ -434,9 +450,8 @@ class SQLiteTracker:
         rows = cur.fetchone()
 
         if rows:
-            data = rows[0]
-            obj = {} if not data else json.loads(data)
-            return (
+            obj = {} if not rows[0] else json.loads(rows[0])
+            data = (
                 obj
                 if not unserialize_plots
                 else {
@@ -444,6 +459,7 @@ class SQLiteTracker:
                     for k, v in obj.items()
                 }
             )
+            return Experiment(tracker=self, data=data)
         else:
             raise ValueError("No record with such uuid")
 
@@ -566,6 +582,26 @@ class Results:
         return Results(columns=[key], rows=rows, render_plots=self.render_plots)
 
     def get(self, key, index_by=None):
+        """Get a single column of the results
+
+        Examples
+        --------
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker("experiments.db")
+        >>> exp1 = tracker.new_experiment()
+        >>> exp1.log("accuracy", 0.8) # doctest: +SKIP
+        >>> exp1.log_confusion_matrix([1, 1, 0, 0], [1, 0, 1, 0]) # doctest: +SKIP
+        >>> exp2 = tracker.new_experiment()
+        >>> exp2.log("accuracy", 1.0) # doctest: +SKIP
+        >>> exp2.log_confusion_matrix([1, 1, 0, 0], [1, 1, 0, 0]) # doctest: +SKIP
+        >>> results = tracker.query('''
+        ... SELECT uuid,
+        ...        json_extract(parameters, '$.accuracy') AS accuracy,
+        ...        json_extract(parameters, '$.confusion_matrix') AS confusion_matrix
+        ... FROM experiments
+        ... ''', as_frame=False, render_plots=False)
+        >>> results.get("confusion_matrix") # doctest: +SKIP
+        """
         if key not in self.columns:
             raise KeyError(f"{key} does not appear in the results")
 
@@ -582,8 +618,10 @@ class Results:
         ids = [format_id(row[idx_id]) for row in self.rows]
 
         e, ids_out = add_compare_tab(elements=values, ids=ids, scores_arg=None)
+        e = [unserialize_if_plot(item, return_instance=False) for item in e]
         mapping = {k: v for k, v in zip(ids_out, e)}
         html = tabs_html_from_content(ids_out, e)
+
         return HTMLMapping(mapping, html)
 
 
