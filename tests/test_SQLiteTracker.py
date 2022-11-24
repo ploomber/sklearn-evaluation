@@ -212,3 +212,23 @@ def test_experiment_log():
     retrieved = tracker.get(experiment.uuid)
 
     assert retrieved == {"accuracy": 0.8}
+
+
+def test_experiment_log_confusion_matrix():
+    tracker = SQLiteTracker(":memory:")
+    experiment = tracker.new_experiment()
+    experiment.log_confusion_matrix([1, 1, 0, 0], [1, 0, 1, 0])
+
+    retrieved = tracker.get(experiment.uuid)
+
+    assert retrieved["confusion_matrix"]
+
+
+def test_experiment_log_classification_report():
+    tracker = SQLiteTracker(":memory:")
+    experiment = tracker.new_experiment()
+    experiment.log_classification_report([1, 1, 0, 0], [1, 0, 1, 0])
+
+    retrieved = tracker.get(experiment.uuid)
+
+    assert retrieved["classification_report"]

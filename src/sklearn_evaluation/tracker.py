@@ -44,6 +44,8 @@ LIMIT 10
 
 
 class Experiment:
+    """An experiment instance used to log values"""
+
     def __init__(self, tracker) -> None:
         self._tracker = tracker
         self._uuid = tracker.new()
@@ -66,6 +68,7 @@ class Experiment:
     def log_classification_report(
         self, y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0
     ):
+        """Log classification report"""
         cr = plot.ClassificationReport.from_raw_data(
             y_true=y_true,
             y_pred=y_pred,
@@ -82,13 +85,9 @@ class Experiment:
         self._tracker.upsert(self._uuid, {key: obj})
         return obj
 
-    def log_figure(self, figure):
-        """Log a generic matplotlib figure"""
-        pass
-
 
 class SQLiteTracker:
-    """A simple experiment tracker using SQLite
+    """A experiment tracker backed by a SQLite database
 
     :doc:`Click here <../user_guide/SQLiteTracker>` to see the user guide.
 
@@ -106,6 +105,9 @@ class SQLiteTracker:
     0.8
     >>> tracker.get(experiment.uuid) # retrieve it later with the uuid
     {'accuracy': 0.8}
+    >>> experiment.log_confusion_matrix([1, 1, 0, 0], [1, 0, 1, 0]) # doctest: +SKIP
+    >>> data = tracker.get(experiment.uuid)
+    >>> data['confusion_matrix'] # doctest: +SKIP
 
     """
 
@@ -163,7 +165,7 @@ class SQLiteTracker:
 
     @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
     def query(self, code, as_frame=True, render_plots=False):
-        """Query the database, returns a pandas.DataFrame
+        """Query the database
 
         Parameters
         ----------
@@ -183,10 +185,28 @@ class SQLiteTracker:
         Examples
         --------
         >>> from sklearn_evaluation import SQLiteTracker
-        >>> tracker = SQLiteTracker(':memory:') # example in-memory db
-        >>> tracker.insert('my_uuid', {'a': 1})
-        >>> df = tracker.query(
-        ... "SELECT uuid, json_extract(parameters, '$.a') FROM experiments")
+        >>> tracker = SQLiteTracker('experiments.db')
+        >>> exp1 = tracker.new_experiment()
+        >>> exp1.log("accuracy", 0.8) # doctest: +SKIP
+        >>> exp1.log_confusion_matrix([1, 1, 0, 0], [1, 0, 1, 0]) # doctest: +SKIP
+        >>> exp2 = tracker.new_experiment()
+        >>> exp2.log("accuracy", 1.0) # doctest: +SKIP
+        >>> exp2.log_confusion_matrix([1, 1, 0, 0], [1, 1, 0, 0]) # doctest: +SKIP
+
+        >>> df = tracker.query('''
+        ... SELECT uuid,
+        ...        json_extract(parameters, '$.accuracy') AS accuracy,
+        ...        json_extract(parameters, '$.confusion_matrix') AS cm
+        ... FROM experiments
+        ... ''', as_frame=True)
+
+
+        >>> results = tracker.query('''
+        ... SELECT uuid,
+        ...        json_extract(parameters, '$.accuracy') AS accuracy,
+        ...        json_extract(parameters, '$.confusion_matrix') AS cm
+        ... FROM experiments
+        ... ''', as_frame=False, render_plots=True)
         """
         if as_frame:
             df = pd.read_sql(code, self.conn)
@@ -352,6 +372,7 @@ class SQLiteTracker:
                 "not exist".format(uuid)
             )
 
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def get_parameters_keys(self, limit=100):
         """
         Return the keys in the parameters column by randomly sampling records
@@ -375,6 +396,7 @@ class SQLiteTracker:
 
         return sorted(keys)
 
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def get_sample_query(self, compatibility_mode=True):
         keys = self.get_parameters_keys()
 
@@ -386,7 +408,20 @@ class SQLiteTracker:
         template = Template(TEMPLATE)
         return template.render(keys=keys)
 
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def get(self, uuid, unserialize_plots=True):
+        """Get an experiment given its UUID
+
+        Examples
+        --------
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker("experiments.db")
+        >>> experiment = tracker.new_experiment() # new experiment
+        >>> experiment.log("accuracy", 0.8) # log metric
+        0.8
+        >>> tracker.get(experiment.uuid) # retrieve it with the uuid
+        {'accuracy': 0.8}
+        """
         cur = self.conn.execute(
             """
         SELECT parameters
