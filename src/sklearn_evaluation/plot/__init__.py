@@ -13,12 +13,12 @@ from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
 from .clustering import elbow_curve, elbow_curve_from_results
 from .calibration import calibration_curve
-from .feature_ranking import rank_one_dimensional, rank_one_dimensional_from_results
+from .feature_ranking import Rank1D, Rank2D
 
 __all__ = [
     'confusion_matrix', 'feature_importances', 'precision_recall', 'roc',
     'precision_at_proportions', 'grid_search', 'validation_curve',
     'learning_curve', 'metrics_at_thresholds', 'ConfusionMatrix',
     'elbow_curve', 'elbow_curve_from_results', 'calibration_curve',
-    'rank_one_dimensional', 'rank_one_dimensional_from_results'
+    'rank_one_dimensional', 'rank_one_dimensional_from_results', 'Rank2D'
 ]

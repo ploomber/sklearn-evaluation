@@ -1,5 +1,5 @@
 """
-Plot for feature ranking
+Plots for feature ranking
 
 NOTE: this is based on the yellowbricks feature module. License below.
 
@@ -19,184 +19,362 @@ limitations under the License.
 import numpy as np
 import pandas as pd
 from scipy.stats import shapiro
+from scipy.stats import spearmanr
+from scipy.stats import kendalltau as sp_kendalltau
 
 import matplotlib.pyplot as plt
 
-ranking_methods = {"shapiro": lambda X: np.array([shapiro(x)[0] for x in X.T])}
 
-
-def _rank(X, algorithm):
+def kendalltau(X):
     """
-    Returns the feature ranking.
+    Accepts a matrix X and returns a correlation matrix so that each column
+    is the variable and each row is the observations.
     Parameters
     ----------
     X : ndarray or DataFrame of shape n x m
         A matrix of n instances with m features
-    algorithm : str or None
-        The ranking mechanism to use, or None for the default
-    Returns
-    -------
-    ranks : ndarray
+    """
+    corrs = np.zeros((X.shape[1], X.shape[1]))
+    for idx, cola in enumerate(X.T):
+        for jdx, colb in enumerate(X.T):
+            corrs[idx, jdx] = sp_kendalltau(cola, colb)[0]
+    return corrs
+
+
+class RankD:
+    """
+    Base visualizer for Rank1D and Rank2D
+    Parameters
+    ----------
+    algorithm : string
+        The ranking algorithm to use; options and defaults vary by subclass
+
+    features : list
+        A list of feature names to use.
+        If a DataFrame is passed to fit and features is None, feature
+        names are selected as the columns of the DataFrame.
+
+    figsize : tuple, optional
+            (width, height) for specifying the size of the plot
+
+    ax : matplotlib Axes, default: None
+        The axis to plot the figure on. If None is passed in the current axes
+        will be used (or generated if required)
+
+    Attributes
+    ----------
+    ranks_ : ndarray
         An n-dimensional, symmetric array of rank scores, where n is the
         number of features. E.g. for 1D ranking, it is (n,), for a
         2D ranking it is (n,n) and so forth.
     """
 
-    algorithm = algorithm.lower()
+    ranking_methods = {}
 
-    if algorithm not in ranking_methods:
-        raise ValueError(
-            "'{}' is unrecognized ranking method".format(algorithm))
+    def __init__(self, algorithm=None, features=None, figsize=(7, 7), ax=None):
 
-    # Extract matrix from dataframe if necessary
-    if isinstance(X, pd.DataFrame):
-        X = X.values
+        self.algorithm = algorithm
+        self.features = features
 
-    return ranking_methods[algorithm](X)
-
-
-def _draw(ranks, features, color, orientation, show_feature_names, ax):
-    """
-    Draws the bar plot of the ranking array of features.
-    """
-    if orientation == "h":
-        # Make the plot
-        ax.barh(np.arange(len(ranks)), ranks, color=color)
-
-        # Add ticks and tick labels
-        ax.set_yticks(np.arange(len(ranks)))
-
-        if show_feature_names:
-            ax.set_yticklabels(features)
+        if ax is None:
+            self.fig, self.ax = plt.subplots(1, 1, figsize=figsize)
         else:
-            ax.set_yticklabels([])
+            self.ax = ax
 
-        # Order the features from top to bottom on the y axis
-        ax.invert_yaxis()
+    def rank(self, X):
+        """
+        Returns the feature ranking.
+        Parameters
+        ----------
+        X : ndarray or DataFrame of shape n x m
+            A matrix of n instances with m features
+        algorithm : str or None
+            The ranking mechanism to use, or None for the default
+        Returns
+        -------
+        ranks : ndarray
+            An n-dimensional, symmetric array of rank scores, where n is the
+            number of features. E.g. for 1D ranking, it is (n,), for a
+            2D ranking it is (n,n) and so forth.
+        """
 
-        # Turn off y grid lines
-        ax.set_axisbelow(True)
-        ax.xaxis.grid(True, color='#808080')
+        algorithm = self.algorithm.lower()
 
-    elif orientation == "v":
-        # Make the plot
-        ax.bar(np.arange(len(ranks)), ranks, color=color)
+        if algorithm not in self.ranking_methods:
+            raise ValueError(
+                "'{}' is unrecognized ranking method".format(algorithm))
 
-        # Add ticks and tick labels
-        ax.set_xticks(np.arange(len(ranks)))
-        if show_feature_names:
-            ax.set_xticklabels(features, rotation=90)
+        # Extract matrix from dataframe if necessary
+        if isinstance(X, pd.DataFrame):
+            X = X.values
+
+        return self.ranking_methods[algorithm](X)
+
+    def derive_features_from_data(self, X):
+        n_columns = X.shape[1]
+
+        if self.features is not None:
+            if len(self.features) != n_columns:
+                raise ValueError((
+                    "number of supplied feature names does not match the number "
+                    "of columns in the training data."))
+
+            self.features_ = np.array(self.features)
+
         else:
-            ax.set_xticklabels([])
+            # Attempt to determine the feature names from the input data
+            if isinstance(X, pd.DataFrame):
+                self.features_ = np.array(X.columns)
 
-        # Turn off x grid lines
-        ax.set_axisbelow(True)
-        ax.yaxis.grid(True, color='#808080')
+            # Otherwise create numeric labels for each column.
+            else:
+                self.features_ = np.arange(0, n_columns)
 
-    else:
-        raise ValueError("Orientation must be 'h' or 'v'")
-    return ax
+    def derive_features_from_ranks(self, ranks):
+        if self.features is None:
+            self.features_ = np.arange(0, len(ranks))
+        else:
+            if len(self.features) != len(ranks):
+                raise ValueError((
+                    "number of supplied feature names does not match the number "
+                    "of ranks provided."))
+            self.features_ = np.array(self.features)
+
+    def _set_title(self):
+        title = "{} Ranking of {} Features".format(self.algorithm.title(),
+                                                   len(self.features_))
+        self.ax.set_title(title)
+
+    def plot_feature_ranks(self, X):
+        """
+        Parameters
+        ----------
+        X : array-like, shape (n_samples, n_features)
+            Feature dataset to be ranked.
+
+        Returns
+        ------
+        ax: matplotlib Axes
+            Axes containing the plot
+        """
+        self.derive_features_from_data(X)
+        self._set_title()
+        self.ranks_ = self.rank(X)
+        self.draw()
+        return self.ax
+
+    def plot_feature_ranks_custom_algorithm(self, ranks):
+        """
+        Parameters
+        ----------
+        ranks : ndarray
+            An n-dimensional, symmetric array of rank scores, where n is the
+            number of features. E.g. for 1D ranking, it is (n,), for a
+            2D ranking it is (n,n).
+
+        Returns
+        ------
+        ax: matplotlib Axes
+            Axes containing the plot
+        """
+
+        self.derive_features_from_ranks(ranks)
+        self._set_title()
+        self.ranks_ = ranks
+        self.draw()
+        return self.ax
 
 
-def rank_one_dimensional(X,
-                         features=None,
-                         algorithm='shapiro',
-                         orientation='h',
-                         show_feature_names=True,
-                         figsize=(7, 7),
-                         color='g',
-                         ax=None):
+class Rank1D(RankD):
     """
+    Rank1D computes a score for each feature in the data set with a specific
+    metric or algorithm (e.g. Shapiro-Wilk) then returns the features ranked
+    as a bar plot.
+
     Parameters
     ----------
-    X : array-like, shape (n_samples, n_features)
-        Feature dataset to be transformed.
 
-    features : list of strings, optional
-               list of feature names to be passed if not
-               implicit from the input
+    algorithm : one of {'shapiro', }, default: 'shapiro'
+        The ranking algorithm to use, default is 'Shapiro-Wilk.
 
-    algorithm : string, optional
-            algorithm to use for ranking the features. Default
-                value is shapiro.
-
-    show_feature_names : boolean, optional
-            flag to show feature names on chart
+    features : list
+        A list of feature names to use.
+        If a DataFrame is passed to fit and features is None, feature
+        names are selected as the columns of the DataFrame.
 
     figsize : tuple, optional
-            tuple in the format (width, height) to set plot size
+            (width, height) for specifying the size of the plot
 
-    orientation : string 'h' or 'v'
-                orientation of the bars. h for horizontal, v for vertical
+    orient : 'h' or 'v', default='h'
+        Specifies a horizontal or vertical bar chart.
 
-    color : string, optional
-            Specify color of the bar chart
+    color: string
+        Specify color for barchart
 
-    ax : :class:`matplotlib.axes.Axes`, optional
-        The axes upon which to plot the curve. If None, the plot is drawn
-        on the current Axes
+    ax : matplotlib Axes, default: None
+        The axis to plot the figure on. If None is passed in the current axes
+        will be used (or generated if required).
 
-    Returns
-    -------
-    ax: matplotlib Axes
-        Axes containing the plot
+    Attributes
+    ----------
+    ranks_ : ndarray
+        An array of rank scores with shape (n,), where n is the
+        number of features.
 
     Examples
     --------
     .. plot:: ../../examples/feature_rank_1D.py
-
     """
 
-    n_columns = X.shape[1]
+    ranking_methods = {
+        "shapiro": lambda X: np.array([shapiro(x)[0] for x in X.T])
+    }
 
-    if features is not None:
-        if len(features) != n_columns:
-            raise ValueError(
-                ("number of supplied feature names does not match the number "
-                 "of columns in the training data."))
+    def __init__(self,
+                 algorithm="shapiro",
+                 features=None,
+                 figsize=(7, 7),
+                 orient="h",
+                 color='g',
+                 ax=None):
+        super().__init__(algorithm=algorithm,
+                         features=features,
+                         figsize=figsize,
+                         ax=ax)
+        self.color = color
+        self.orientation_ = orient
 
-        features_ = np.array(features)
+    def draw(self):
+        """
+        Draws the bar plot of the ranking array of features.
+        """
 
-    else:
-        # Attempt to determine the feature names from the input data
-        if isinstance(X, pd.DataFrame):
-            features_ = np.array(X.columns)
+        if self.orientation_ == "h":
+            # Make the plot
+            self.ax.barh(np.arange(len(self.ranks_)),
+                         self.ranks_,
+                         color=self.color)
 
-        # Otherwise create numeric labels for each column.
+            # Add ticks and tick labels
+            self.ax.set_yticks(np.arange(len(self.ranks_)))
+            self.ax.set_yticklabels(self.features_)
+            # Order the features from top to bottom on the y axis
+            self.ax.invert_yaxis()
+            # Turn off y grid lines
+            self.ax.set_axisbelow(True)
+            self.ax.xaxis.grid(True, color='#808080')
+
+        elif self.orientation_ == "v":
+            # Make the plot
+            self.ax.bar(np.arange(len(self.ranks_)),
+                        self.ranks_,
+                        color=self.color)
+
+            # Add ticks and tick labels
+            self.ax.set_xticks(np.arange(len(self.ranks_)))
+            self.ax.set_xticklabels(self.features_, rotation=90)
+
+            # Turn off x grid lines
+            self.ax.set_axisbelow(True)
+            self.ax.yaxis.grid(True, color='#808080')
+
         else:
-            features_ = np.arange(0, n_columns)
-    ranks_ = _rank(X, algorithm)
-    title = "{} Ranking of {} Features".format(algorithm.title(),
-                                               len(features_))
-    return rank_one_dimensional_from_results(
-        ranks_,
-        features_,
-        orientation=orientation,
-        show_feature_names=show_feature_names,
-        figsize=figsize,
-        color=color,
-        title=title,
-        ax=ax)
+            raise ValueError("Orientation must be 'h' or 'v'")
+        return self.ax
 
 
-def rank_one_dimensional_from_results(ranks,
-                                      features=None,
-                                      orientation='h',
-                                      show_feature_names=True,
-                                      figsize=(7, 7),
-                                      color='g',
-                                      title=None,
-                                      ax=None):
-    if features is None:
-        features_ = np.arange(0, len(ranks))
-    else:
-        features_ = features
+class Rank2D(RankD):
+    """
+    Rank2D performs pairwise comparisons of each feature in the data set with
+    a specific metric or algorithm (e.g. Pearson correlation) then returns
+    them ranked as a lower left triangle diagram.
 
-    if ax is None:
-        fig, ax = plt.subplots(1, 1, figsize=figsize)
+    Parameters
+    ----------
 
-    ax = _draw(ranks, features_, color, orientation, show_feature_names, ax)
-    if title is None:
-        title = "Ranking of {} Features".format(len(features_))
-    ax.set_title(title)
-    return ax
+    algorithm : str, default: 'pearson'
+        The ranking algorithm to use, one of: 'pearson', 'covariance', 'spearman',
+        or 'kendalltau'.
+
+    features : list
+        A list of feature names to use.
+        If a DataFrame is passed to fit and features is None, feature
+        names are selected as the columns of the DataFrame.
+
+    colormap : string or cmap, default: 'RdBu_r'
+        optional string or matplotlib cmap to colorize lines
+        Use either color to colorize the lines on a per class basis or colormap to
+        color them on a continuous scale.
+
+    figsize : tuple, optional
+            (width, height) for specifying the size of the plot
+
+    ax : matplotlib Axes, default: None
+        The axis to plot the figure on. If None is passed in the current axes
+        will be used (or generated if required).
+
+    Attributes
+    ----------
+    ranks_ : ndarray
+        An array of rank scores with shape (n,n), where n is the
+        number of features.
+
+    Examples
+    --------
+    .. plot:: ../../examples/feature_rank_2D.py
+    """
+
+    ranking_methods = {
+        "pearson": lambda X: np.corrcoef(X.transpose()),
+        "covariance": lambda X: np.cov(X.transpose()),
+        "spearman": lambda X: spearmanr(X, axis=0)[0],
+        "kendalltau": lambda X: kendalltau(X)
+    }
+
+    def __init__(self,
+                 algorithm="pearson",
+                 features=None,
+                 colormap="RdBu_r",
+                 figsize=(7, 7),
+                 ax=None):
+
+        super().__init__(algorithm=algorithm,
+                         features=features,
+                         figsize=figsize,
+                         ax=ax)
+        self.colormap = colormap
+
+    def draw(self):
+        """
+        Draws the heatmap of the ranking matrix of variables.
+        """
+        # Set the axes aspect to be equal
+        self.ax.set_aspect("equal")
+
+        # Generate a mask for the upper triangle
+        mask = np.zeros_like(self.ranks_, dtype=bool)
+        mask[np.triu_indices_from(mask)] = True
+
+        # Draw the heatmap
+        data = np.ma.masked_where(mask, self.ranks_)
+        mesh = self.ax.pcolormesh(data, cmap=self.colormap, vmin=-1, vmax=1)
+
+        # Set the Axis limits
+        self.ax.set(xlim=(0, data.shape[1]), ylim=(0, data.shape[0]))
+
+        # Add the colorbar
+        cb = self.ax.figure.colorbar(mesh,
+                                     None,
+                                     self.ax,
+                                     fraction=0.046,
+                                     pad=0.04)
+        cb.outline.set_linewidth(0)
+
+        # Reverse the rows to get the lower left triangle
+        self.ax.invert_yaxis()
+
+        # Add ticks and tick labels
+        self.ax.set_xticks(np.arange(len(self.ranks_)) + 0.5)
+        self.ax.set_yticks(np.arange(len(self.ranks_)) + 0.5)
+        self.ax.set_xticklabels(self.features_, rotation=90)
+        self.ax.set_yticklabels(self.features_)
