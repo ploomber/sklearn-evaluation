@@ -23,6 +23,7 @@ jobs:
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PLOOMBER_STATS_ENABLED: false
+        PYTHON_VERSION: ${{ matrix.python-version }}
       run: |
         eval "$(conda shell.bash hook)"
         pip install nox
