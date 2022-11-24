@@ -214,6 +214,19 @@ def test_experiment_log():
     assert retrieved == {"accuracy": 0.8}
 
 
+def test_experiment_log_dict():
+    tracker = SQLiteTracker(":memory:")
+    experiment = tracker.new_experiment()
+    experiment.log("accuracy", 0.8)
+    experiment.log_dict(
+        {"precision": 0.7, "recall": 0.6},
+    )
+
+    retrieved = tracker.get(experiment.uuid)
+
+    assert retrieved == {"accuracy": 0.8, "precision": 0.7, "recall": 0.6}
+
+
 def test_experiment_log_confusion_matrix():
     tracker = SQLiteTracker(":memory:")
     experiment = tracker.new_experiment()
@@ -232,3 +245,21 @@ def test_experiment_log_classification_report():
     retrieved = tracker.get(experiment.uuid)
 
     assert retrieved["classification_report"]
+
+
+def test_experiment_ccomment():
+    tracker = SQLiteTracker(":memory:")
+    experiment = tracker.new_experiment()
+    experiment.comment("some comment")
+
+    df = tracker.query(
+        """
+SELECT uuid,
+       comment
+FROM experiments
+WHERE comment IS NOT NULL
+LIMIT 1
+"""
+    )
+
+    assert df.to_dict() == {"comment": {experiment.uuid: "some comment"}}
