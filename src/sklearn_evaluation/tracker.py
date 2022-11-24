@@ -60,7 +60,17 @@ class Experiment:
         return self._uuid
 
     def log_confusion_matrix(self, y_true, y_pred, target_names=None, normalize=False):
-        """Log a confusion matrix"""
+        """Log a confusion matrix
+
+        Examples
+        --------
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker("experiments.db")
+        >>> exp = tracker.new_experiment()
+        >>> exp.log_confusion_matrix([1, 1, 0, 0], [1, 0, 1, 0]) # doctest: +SKIP
+        >>> data = tracker.get(exp.uuid)
+        >>> data['confusion_matrix'] # doctest: +SKIP
+        """
         cm = plot.ConfusionMatrix.from_raw_data(
             y_true=y_true,
             y_pred=y_pred,
@@ -73,7 +83,17 @@ class Experiment:
     def log_classification_report(
         self, y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0
     ):
-        """Log classification report"""
+        """Log classification report
+
+        Examples
+        --------
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker("experiments.db")
+        >>> exp = tracker.new_experiment()
+        >>> exp.log_classification_report([1, 1, 0, 0], [1, 0, 1, 0]) # doctest: +SKIP
+        >>> data = tracker.get(exp.uuid)
+        >>> data['classification_report'] # doctest: +SKIP
+        """
         cr = plot.ClassificationReport.from_raw_data(
             y_true=y_true,
             y_pred=y_pred,
@@ -86,19 +106,68 @@ class Experiment:
         return cr
 
     def log(self, key, obj):
-        """Log a value. Any JSON-serializable object works"""
+        """Log a value. Any JSON-serializable object works
+
+        Examples
+        --------
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker("experiments.db")
+        >>> exp = tracker.new_experiment()
+        >>> exp.log("accuracy", 0.8)
+        0.8
+        >>> data = tracker.get(exp.uuid)
+        >>> data['accuracy']
+        0.8
+        """
         self._tracker.upsert(self._uuid, {key: obj})
         return obj
 
     def log_dict(self, obj):
-        """Log a dictionary with values"""
+        """Log a dictionary with values
+
+        Examples
+        --------
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker("experiments.db")
+        >>> exp = tracker.new_experiment()
+        >>> exp.log_dict({"precision": 0.9, "recall": 0.7})
+        {'precision': 0.9, 'recall': 0.7}
+        >>> data = tracker.get(exp.uuid)
+        >>> data['precision']
+        0.9
+        >>> data['recall']
+        0.7
+        """
         self._tracker.upsert(self._uuid, obj)
         return obj
 
     def log_figure(self, key, fig):
+        """Log a matplotlib figure
+
+        >>> import matplotlib.pyplot as plt
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker("experiments.db")
+        >>> fig, ax = plt.subplots()
+        >>> ax.scatter([1, 2, 3], [1, 2, 3]) # doctest: +SKIP
+        >>> exp = tracker.new_experiment()
+        >>> exp.log_figure("scatter", fig)
+        >>> data = tracker.get(exp.uuid)
+        >>> data['scatter'] # doctest: +SKIP
+        """
         self._tracker.upsert(self._uuid, {key: figure2html(fig)})
 
     def comment(self, comment):
+        """Add a comment to an experiment
+
+        Examples
+        --------
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker("experiments.db")
+        >>> exp = tracker.new_experiment()
+        >>> exp.comment("some comment") # add comment at runtime
+        >>> retrieved = tracker.get(exp.uuid)
+        >>> retrieved.comment("another commment") # add comment after running the experiment
+        """
         self._tracker.comment(self._uuid, comment)
 
     def __repr__(self) -> str:
