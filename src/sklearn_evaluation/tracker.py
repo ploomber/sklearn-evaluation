@@ -1,6 +1,7 @@
 from uuid import uuid4
 import sqlite3
 import json
+import importlib
 
 import pandas as pd
 from jinja2 import Template
@@ -8,11 +9,14 @@ from jinja2 import Template
 from sklearn_evaluation.table import Table
 from sklearn_evaluation.report.serialize import try_serialize_figures
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
-from sklearn_evaluation.nb.NotebookCollection import (add_compare_tab,
-                                                      tabs_html_from_content,
-                                                      HTMLMapping)
+from sklearn_evaluation.nb.NotebookCollection import (
+    add_compare_tab,
+    tabs_html_from_content,
+    HTMLMapping,
+)
+from sklearn_evaluation import plot
 
-minor = sqlite3.sqlite_version.split('.')[1]
+minor = sqlite3.sqlite_version.split(".")[1]
 
 # -> and ->> operators introduced in sqlite version 3.38.0
 # https://www.sqlite.org/json1.html#jptr
@@ -39,6 +43,27 @@ LIMIT 10
 """
 
 
+class Experiment:
+    def __init__(self, tracker) -> None:
+        self._tracker = tracker
+        self._uuid = tracker.new()
+
+    def log_confusion_matrix(self, y_true, y_pred, target_names=None, normalize=False):
+        """Log a confusion matrix"""
+        cm = plot.ConfusionMatrix.from_raw_data(
+            y_true=y_true,
+            y_pred=y_pred,
+            target_names=target_names,
+            normalize=normalize,
+        )
+        self._tracker.upsert(self._uuid, {"confusion_matrix": cm._get_data()})
+        return cm
+
+    def log_figure(self, figure):
+        """Log a generic matplotlib figure"""
+        pass
+
+
 class SQLiteTracker:
     """A simple experiment tracker using SQLite
 
@@ -55,50 +80,55 @@ class SQLiteTracker:
         self.conn = sqlite3.connect(path)
 
         cur = self.conn.cursor()
-        cur.execute("""
+        cur.execute(
+            """
         CREATE TABLE IF NOT EXISTS experiments (
             uuid TEXT NOT NULL UNIQUE,
             created TIMESTAMP default current_timestamp,
             parameters TEXT,
             comment TEXT
         )
-        """)
+        """
+        )
         cur.close()
 
     def __getitem__(self, uuid):
-        """Get experiment with a given uuid
-        """
+        """Get experiment with a given uuid"""
         # TODO: make it work for a list of uuids
-        return pd.read_sql('SELECT * FROM experiments WHERE uuid = ?',
-                           self.conn,
-                           params=[uuid],
-                           index_col='uuid')
+        return pd.read_sql(
+            "SELECT * FROM experiments WHERE uuid = ?",
+            self.conn,
+            params=[uuid],
+            index_col="uuid",
+        )
 
     def recent(self, n=5, normalize=False):
-        """Get most recent experiments as a pandas.DataFrame
-        """
+        """Get most recent experiments as a pandas.DataFrame"""
         query = """
         SELECT uuid, created, parameters, comment
         FROM experiments
         ORDER BY created DESC
         LIMIT ?
         """
-        df = pd.read_sql(query, self.conn, params=[n], index_col='uuid')
+        df = pd.read_sql(query, self.conn, params=[n], index_col="uuid")
+
+        def _json_loads(s):
+            return {} if not s else json.loads(s)
 
         if normalize:
             # parse and normalize json
             parameters = pd.json_normalize(
-                df.pop('parameters').apply(lambda s: json.loads(s))).set_index(
-                    df.index)
+                df.pop("parameters").apply(_json_loads)
+            ).set_index(df.index)
             df = df.join(parameters)
 
             # re order columns to show "comment" at the end
-            comment = df.pop('comment')
-            df.insert(len(df.columns), 'comment', comment)
+            comment = df.pop("comment")
+            df.insert(len(df.columns), "comment", comment)
 
         return df
 
-    @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
+    @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
     def query(self, code, as_frame=True, render_plots=False):
         """Query the database, returns a pandas.DataFrame
 
@@ -128,8 +158,8 @@ class SQLiteTracker:
         if as_frame:
             df = pd.read_sql(code, self.conn)
 
-            if 'uuid' in df:
-                df = df.set_index('uuid')
+            if "uuid" in df:
+                df = df.set_index("uuid")
 
             return df
         else:
@@ -138,25 +168,30 @@ class SQLiteTracker:
             rows = cursor.fetchall()
             return Results(columns, rows, render_plots=render_plots)
 
-    @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
+    @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
     def new(self):
-        """Create a new experiment, returns a uuid
-        """
+        """Create a new experiment, returns a uuid"""
         uuid = str(uuid4())[:8]
         cur = self.conn.cursor()
         cur.execute(
             """
         INSERT INTO experiments (uuid)
         VALUES(?)
-        """, [uuid])
+        """,
+            [uuid],
+        )
         cur.close()
         self.conn.commit()
         return uuid
 
-    @SKLearnEvaluationLogger.log(feature='SQLiteTracker')
+    @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
+    def new_experiment(self):
+        """Returns an experiment instance"""
+        return Experiment(self)
+
+    @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
     def update(self, uuid, parameters, allow_overwrite=False):
-        """Update the parameters of a experiment given its uuid
-        """
+        """Update the parameters of a experiment given its uuid"""
         if not allow_overwrite:
             self._can_update(uuid)
 
@@ -166,7 +201,9 @@ class SQLiteTracker:
         UPDATE experiments
         SET parameters = ?
         WHERE uuid = ?
-        """, [json.dumps(parameters), uuid])
+        """,
+            [json.dumps(parameters), uuid],
+        )
         cur.close()
         self.conn.commit()
 
@@ -179,17 +216,15 @@ class SQLiteTracker:
         UPDATE experiments
         SET parameters = ?
         WHERE uuid = ?
-        """, [json.dumps({
-                **existing,
-                **parameters
-            }), uuid])
+        """,
+            [json.dumps({**existing, **parameters}), uuid],
+        )
         cur.close()
         self.conn.commit()
 
-    @SKLearnEvaluationLogger.log('SQLiteTracker')
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def insert(self, uuid, parameters):
-        """Insert a new experiment
-        """
+        """Insert a new experiment"""
         # serialize matplotlib.figure.Figure, if any
         parameters = try_serialize_figures(parameters)
 
@@ -198,14 +233,15 @@ class SQLiteTracker:
             """
         INSERT INTO experiments (uuid, parameters)
         VALUES(?, ?)
-        """, [uuid, json.dumps(parameters)])
+        """,
+            [uuid, json.dumps(parameters)],
+        )
         cur.close()
         self.conn.commit()
 
-    @SKLearnEvaluationLogger.log('SQLiteTracker')
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def comment(self, uuid, comment):
-        """Add a comment to an experiment given its uuid
-        """
+        """Add a comment to an experiment given its uuid"""
         # TODO: add overwrite (false by default) and append options
         cur = self.conn.cursor()
         cur.execute(
@@ -213,12 +249,14 @@ class SQLiteTracker:
         UPDATE experiments
         SET comment = ?
         WHERE uuid = ?
-        """, [comment, uuid])
+        """,
+            [comment, uuid],
+        )
         cur.close()
         self.conn.commit()
 
-    def _recent(self, n=5, fmt='html'):
-        if fmt not in {'html', 'plain'}:
+    def _recent(self, n=5, fmt="html"):
+        if fmt not in {"html", "plain"}:
             raise ValueError('fmt must be one "html" or "plain"')
 
         cur = self.conn.cursor()
@@ -228,30 +266,29 @@ class SQLiteTracker:
         FROM experiments
         ORDER BY created DESC
         LIMIT ?
-        """, [n])
+        """,
+            [n],
+        )
         res = cur.fetchall()
-        table = Table(res, header=['uuid', 'created', 'parameters', 'comment'])
+        table = Table(res, header=["uuid", "created", "parameters", "comment"])
 
-        title_template = '<h4> {} </h4>' if fmt == 'html' else '{}\n'
+        title_template = "<h4> {} </h4>" if fmt == "html" else "{}\n"
         title = title_template.format(type(self).__name__)
 
         if not len(table):
-            title += '(No experiments saved yet)'
-            if fmt == 'plain':
-                title += '\n'
+            title += "(No experiments saved yet)"
+            if fmt == "plain":
+                title += "\n"
 
         if len(table):
-            footer = (('<br>' if fmt == 'html' else '\n') +
-                      '(Most recent experiments)')
+            footer = ("<br>" if fmt == "html" else "\n") + "(Most recent experiments)"
         else:
-            footer = ''
+            footer = ""
 
-        return (title + (table.to_html() if fmt == 'html' else str(table)) +
-                footer)
+        return title + (table.to_html() if fmt == "html" else str(table)) + footer
 
     def _can_update(self, uuid):
-        """Check if an experiment with a given uuid can be updated
-        """
+        """Check if an experiment with a given uuid can be updated"""
         cur = self.conn.cursor()
 
         cur.execute(
@@ -259,7 +296,9 @@ class SQLiteTracker:
         SELECT parameters
         FROM experiments
         WHERE uuid = ?
-        """, [uuid])
+        """,
+            [uuid],
+        )
 
         row = cur.fetchone()
 
@@ -269,12 +308,15 @@ class SQLiteTracker:
             empty = row[0] is None
 
             if not empty:
-                raise ValueError('Cannot update non-empty experiment with '
-                                 'uuid "{}"'.format(uuid))
+                raise ValueError(
+                    "Cannot update non-empty experiment with " 'uuid "{}"'.format(uuid)
+                )
         else:
-            raise ValueError('Cannot update experiment with '
-                             'uuid "{}" because it does '
-                             'not exist'.format(uuid))
+            raise ValueError(
+                "Cannot update experiment with "
+                'uuid "{}" because it does '
+                "not exist".format(uuid)
+            )
 
     def get_parameters_keys(self, limit=100):
         """
@@ -288,10 +330,13 @@ class SQLiteTracker:
         FROM experiments
         ORDER BY RANDOM()
         LIMIT ?
-        """, [limit])
+        """,
+            [limit],
+        )
 
         for record in cur:
-            obj = json.loads(record[0])
+            data = record[0]
+            obj = {} if not data else json.loads(data)
             keys = keys | set(obj)
 
         return sorted(keys)
@@ -313,20 +358,26 @@ class SQLiteTracker:
         SELECT parameters
         FROM experiments
         WHERE uuid = ?
-        """, [uuid])
+        """,
+            [uuid],
+        )
 
         rows = cur.fetchone()
 
         if rows:
-            return json.loads(rows[0])
+            data = rows[0]
+            obj = {} if not data else json.loads(data)
+            return {
+                k: unserialize_if_plot(v, return_instance=True) for k, v in obj.items()
+            }
         else:
             raise ValueError("No record with such uuid")
 
     def __repr__(self):
-        return self._recent(fmt='plain')
+        return self._recent(fmt="plain")
 
     def _repr_html_(self):
-        return self._recent(fmt='html')
+        return self._recent(fmt="html")
 
     def __del__(self):
         self.conn.close()
@@ -340,9 +391,53 @@ def is_float(obj):
     return isinstance(obj, float)
 
 
+def json_loads(obj):
+    try:
+        return json.loads(obj)
+    except Exception:
+        return False
+
+
+def is_plot(obj):
+    is_str_ = is_str(obj)
+
+    if is_str_ or isinstance(obj, dict):
+        if is_str_:
+            obj_ = json_loads(obj)
+        else:
+            obj_ = obj
+
+        if obj_:
+            return obj_.get("class") and obj_.get("version")
+        else:
+            return False
+    else:
+        return False
+
+
+def unserialize_plot(obj, return_instance=False):
+    if is_str(obj):
+        obj = json.loads(obj)
+
+    class_name = obj.pop("class", None)
+    obj.pop("version", None)
+
+    mod, _, attribute = class_name.rpartition(".")
+    class_ = getattr(importlib.import_module(mod), attribute)
+    instance = class_._from_data(**obj)
+
+    return instance if return_instance else instance._repr_html_()
+
+
+def unserialize_if_plot(obj, return_instance=False):
+    if is_plot(obj):
+        return unserialize_plot(obj, return_instance=return_instance)
+    else:
+        return obj
+
+
 class Results:
-    """An object to generate an HTML table from a SQLite result
-    """
+    """An object to generate an HTML table from a SQLite result"""
 
     def __init__(self, columns, rows, render_plots):
         self.columns = columns
@@ -350,7 +445,8 @@ class Results:
         self.render_plots = render_plots
 
     def _repr_html_(self):
-        return Template("""
+        return Template(
+            """
 <div>
 <table>
   <thead>
@@ -364,6 +460,8 @@ class Results:
         <td>{{ "[Plot]" if not render_plots else field }}</td>
         {%- elif is_float(field) -%}
         <td>{{ "%.6f"| format(field) }}</td>
+        {%- elif is_plot(field) -%}
+        <td>{{ "[Plot]" if not render_plots else unserialize_plot(field) }}</td>
         {%- else -%}
         <td>{{field}}</td>
         {%- endif -%}
@@ -373,29 +471,32 @@ class Results:
   </tbody>
 </table>
 </div>
-""").render(columns=self.columns,
+"""
+        ).render(
+            columns=self.columns,
             rows=self.rows,
             render_plots=self.render_plots,
             is_str=is_str,
-            is_float=is_float)
+            is_float=is_float,
+            is_plot=is_plot,
+            unserialize_plot=unserialize_plot,
+        )
 
     def __getitem__(self, key):
         if key not in self.columns:
-            raise KeyError(f'{key} does not appear in the results')
+            raise KeyError(f"{key} does not appear in the results")
 
         idx = self.columns.index(key)
         rows = [[row[idx]] for row in self.rows]
 
-        return Results(columns=[key],
-                       rows=rows,
-                       render_plots=self.render_plots)
+        return Results(columns=[key], rows=rows, render_plots=self.render_plots)
 
     def get(self, key, index_by=None):
         if key not in self.columns:
-            raise KeyError(f'{key} does not appear in the results')
+            raise KeyError(f"{key} does not appear in the results")
 
         if index_by is not None and index_by not in self.columns:
-            raise KeyError(f'{index_by} does not appear in the results')
+            raise KeyError(f"{index_by} does not appear in the results")
 
         if index_by is None:
             idx_id = 0
@@ -416,6 +517,6 @@ def format_id(value):
     if isinstance(value, str):
         return value
     elif isinstance(value, float):
-        return f'{value:.6f}'
+        return f"{value:.6f}"
     else:
         return value

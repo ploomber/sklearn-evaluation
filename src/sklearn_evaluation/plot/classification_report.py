@@ -131,6 +131,16 @@ class ClassificationReport(Plot):
             keys=False,
         )
 
+    @classmethod
+    def _from_data(cls, target_names, matrix, keys):
+        return cls(
+            y_true=None,
+            y_pred=None,
+            target_names=target_names,
+            matrix=np.array(matrix),
+            keys=keys,
+        )
+
 
 def _classification_report(
     y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0

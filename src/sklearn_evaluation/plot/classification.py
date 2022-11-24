@@ -119,6 +119,16 @@ class ConfusionMatrix(Plot):
         # pass cm=False so we don't emit the future warning
         return cls(y_true, y_pred, target_names, normalize, cm=False)
 
+    @classmethod
+    def _from_data(cls, target_names, normalize, cm):
+        return cls(
+            y_true=None,
+            y_pred=None,
+            target_names=target_names,
+            normalize=normalize,
+            cm=np.array(cm),
+        )
+
 
 def _confusion_matrix(y_true, y_pred, normalize):
     cm = sk_confusion_matrix(y_true, y_pred)
