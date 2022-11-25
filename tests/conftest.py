@@ -21,7 +21,7 @@ from sklearn import datasets
 
 
 def _path_to_tests():
-    return Path(__file__).absolute().parent
+    return Path(__file__).resolve().parent
 
 
 @pytest.fixture(scope="session")
@@ -29,15 +29,16 @@ def path_to_tests():
     return _path_to_tests()
 
 
+@pytest.fixture(scope="session")
+def path_to_tests_static():
+    return _path_to_tests() / "static"
+
+
 @pytest.fixture()
-def tmp_directory():
+def tmp_directory(tmp_path):
     old = os.getcwd()
-    tmp = tempfile.mkdtemp()
-    os.chdir(str(tmp))
-
-    yield tmp
-
-    shutil.rmtree(str(tmp))
+    os.chdir(str(tmp_path))
+    yield str(Path(tmp_path).resolve())
     os.chdir(old)
 
 

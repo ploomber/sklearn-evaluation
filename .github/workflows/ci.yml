@@ -4,26 +4,29 @@ on: [push, pull_request]
 
 jobs:
   build:
-    runs-on: ubuntu-latest
     strategy:
       matrix:
-        python-version: [3.6, 3.7, 3.8, 3.9, '3.10']
+        python-version: [3.7, 3.8, 3.9, '3.10']
+        os: [ubuntu-latest, windows-latest, macos-latest]
+
+    runs-on: ${{ matrix.os }}
 
     steps:
     - uses: actions/checkout@v2
+
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: conda-incubator/setup-miniconda@v2
       with:
+        miniconda-version: latest
+        activate-environment: conda-env
         python-version: ${{ matrix.python-version }}
-    - name: Setup
-      run: |
-        conda create -q -n conda-env python=${{ matrix.python-version }}
 
     - name: Run tests
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PLOOMBER_STATS_ENABLED: false
         PYTHON_VERSION: ${{ matrix.python-version }}
+      shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
         pip install nox
