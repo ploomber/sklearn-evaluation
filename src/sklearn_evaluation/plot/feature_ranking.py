@@ -155,7 +155,7 @@ class RankD:
         """
         self.derive_features_from_data(X)
         self.ranks_ = self.rank(X)
-        self.draw()
+        self._draw()
         return self.ax
 
     def plot_feature_ranks_custom_algorithm(self, ranks):
@@ -173,10 +173,10 @@ class RankD:
             Axes containing the plot
         """
 
-        self.validate_rank(ranks)
+        self._validate_rank(ranks)
         self.derive_features_from_ranks(ranks)
         self.ranks_ = ranks
-        self.draw()
+        self._draw()
         return self.ax
 
 
@@ -216,8 +216,14 @@ class Rank1D(RankD):
         number of features.
 
     Examples
-    --------
-    .. plot:: ../../examples/feature_rank_1D.py
+    ---------
+    >>> import matplotlib.pyplot as plt
+    >>> from sklearn.datasets import make_classification
+    >>> from sklearn_evaluation.plot import Rank1D
+    >>> X, y = make_classification(n_samples=1000,n_features=6,n_classes=2,n_informative=4,class_sep=0.8)
+    >>> rank1d = Rank1D()
+    >>> rank1d.plot_feature_ranks(X)
+    >>> plt.show()
     """
 
     ranking_methods = {
@@ -239,11 +245,11 @@ class Rank1D(RankD):
         self.orientation_ = orient
 
     @staticmethod
-    def validate_rank(ranks):
+    def _validate_rank(ranks):
         if ranks.ndim != 1:
             raise ValueError("Ranks must be 1-dimensional")
 
-    def draw(self):
+    def _draw(self):
         """
         Draws the bar plot of the ranking array of features.
         """
@@ -322,8 +328,14 @@ class Rank2D(RankD):
         number of features.
 
     Examples
-    --------
-    .. plot:: ../../examples/feature_rank_2D.py
+    ----------
+    >>> import matplotlib.pyplot as plt
+    >>> from sklearn.datasets import make_classification
+    >>> from sklearn_evaluation.plot import Rank2D
+    >>> X, y = make_classification(n_samples=1000,n_features=6,n_classes=2,n_informative=4,class_sep=0.8)
+    >>> rank2d = Rank2D()
+    >>> rank2d.plot_feature_ranks(X)
+    >>> plt.show()
     """
 
     ranking_methods = {
@@ -347,11 +359,11 @@ class Rank2D(RankD):
         self.colormap = colormap
 
     @staticmethod
-    def validate_rank(ranks):
+    def _validate_rank(ranks):
         if ranks.ndim != 2:
             raise ValueError("Ranks must be 2-dimensional")
 
-    def draw(self):
+    def _draw(self):
         """
         Draws the heatmap of the ranking matrix of variables.
         """

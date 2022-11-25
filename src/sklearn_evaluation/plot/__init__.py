@@ -20,5 +20,5 @@ __all__ = [
     'precision_at_proportions', 'grid_search', 'validation_curve',
     'learning_curve', 'metrics_at_thresholds', 'ConfusionMatrix',
     'elbow_curve', 'elbow_curve_from_results', 'calibration_curve',
-    'rank_one_dimensional', 'rank_one_dimensional_from_results', 'Rank2D'
+    'Rank1D', 'Rank2D'
 ]
