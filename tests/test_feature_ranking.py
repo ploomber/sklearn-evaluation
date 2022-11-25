@@ -77,7 +77,7 @@ def test_1d_incorrect_features():
 def test_1d_numpy():
     X_numpy = X.to_numpy()
     assert isinstance(X_numpy, np.ndarray)
-    Rank1D(algorithm='shapiro', orient='h',
+    Rank1D(algorithm='SHAPIRO', orient='h',
            figsize=(13, 7)).plot_feature_ranks(X_numpy)
 
 
@@ -190,7 +190,7 @@ def test_2d_spearman():
                   extensions=['png'],
                   remove_text=False)
 def test_2d_kendalltau():
-    Rank2D(algorithm='kendalltau', features=features,
+    Rank2D(algorithm='KendallTau', features=features,
            figsize=(12, 12)).plot_feature_ranks(X)
 
 

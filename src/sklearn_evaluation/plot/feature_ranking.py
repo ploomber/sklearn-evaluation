@@ -51,11 +51,11 @@ class RankD:
 
     features : list
         A list of feature names to use.
-        If a DataFrame is passed to fit and features is None, feature
+        If a DataFrame is passed as input and features is None, feature
         names are selected as the columns of the DataFrame.
 
     figsize : tuple, optional
-            (width, height) for specifying the size of the plot
+            (width, height) for specifying the size of the plot.
 
     ax : matplotlib Axes, default: None
         The axis to plot the figure on. If None is passed in the current axes
@@ -146,6 +146,7 @@ class RankD:
         ----------
         X : array-like, shape (n_samples, n_features)
             Feature dataset to be ranked.
+            Refer https://numpy.org/doc/stable/glossary.html#term-array-like
 
         Returns
         ------
@@ -187,17 +188,16 @@ class Rank1D(RankD):
 
     Parameters
     ----------
-
     algorithm : one of {'shapiro', }, default: 'shapiro'
         The ranking algorithm to use, default is 'Shapiro-Wilk.
 
     features : list
         A list of feature names to use.
-        If a DataFrame is passed to fit and features is None, feature
+        If a DataFrame is passed features is None, feature
         names are selected as the columns of the DataFrame.
 
     figsize : tuple, optional
-            (width, height) for specifying the size of the plot
+            (width, height) for specifying the size of the plot.
 
     orient : 'h' or 'v', default='h'
         Specifies a horizontal or vertical bar chart.
@@ -300,7 +300,7 @@ class Rank2D(RankD):
 
     features : list
         A list of feature names to use.
-        If a DataFrame is passed to fit and features is None, feature
+        If a DataFrame is passed features is None, feature
         names are selected as the columns of the DataFrame.
 
     colormap : string or cmap, default: 'RdBu_r'
