@@ -9,6 +9,7 @@ class EvaluatorHTMLSerializer:
     Wraps ClassifierEvaluator so attributes and methods return an HTML
     serializable version of them
     """
+
     def __init__(self, evaluator):
         self.evaluator = evaluator
 
@@ -24,6 +25,7 @@ class EvaluatorHTMLSerializer:
 class HTMLSerializableCallable:
     """Wraps a method so that the results is serialized after it is run
     """
+
     def __init__(self, attr):
         self.attr = attr
 
@@ -72,3 +74,14 @@ def prettify_list(elements):
 
 def prettify_dict(d):
     return prettify_list([key + ': ' + str(d[key]) for key in d.keys()])
+
+
+def try_figure2html(obj):
+    if hasattr(obj, 'savefig'):
+        return figure2html(obj)
+    else:
+        return obj
+
+
+def try_serialize_figures(d):
+    return {key: try_figure2html(value) for key, value in d.items()}

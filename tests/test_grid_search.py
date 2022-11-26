@@ -1,83 +1,84 @@
+import sys
+from functools import partial
+
 import pytest
-from matplotlib.testing.decorators import image_comparison, cleanup
+from matplotlib.testing.decorators import (image_comparison as
+                                           _image_comparison, cleanup)
 from sklearn_evaluation import plot
 
+image_comparison = partial(_image_comparison,
+                           tol=0.6 if sys.version_info.minor == 6 else 0,
+                           remove_text=True,
+                           extensions=['png'])
 
-@image_comparison(baseline_images=['single_numeric_line'],
-                  extensions=['png'],
-                  remove_text=True)
+
+@image_comparison(baseline_images=['single_numeric_line'])
 def test_single_numeric_line(grid_search_3_params):
     change = 'n_estimators'
     plot.grid_search(grid_search_3_params.cv_results_, change, kind='line')
 
 
-@image_comparison(baseline_images=['single_numeric_line_unsorted'],
-                  extensions=['png'],
-                  remove_text=True)
-def test_single_numeric_line(grid_search_3_params):
+@image_comparison(baseline_images=['single_numeric_line_unsorted'])
+def test_single_numeric_line_no_sort(grid_search_3_params):
     change = 'n_estimators'
-    plot.grid_search(grid_search_3_params.cv_results_, change, kind='line', sort=False)
+    plot.grid_search(grid_search_3_params.cv_results_,
+                     change,
+                     kind='line',
+                     sort=False)
 
 
-@image_comparison(baseline_images=['single_numeric_line'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_numeric_line'])
 def test_single_numeric_line_with_tuple(grid_search_3_params):
     change = ('n_estimators')
     plot.grid_search(grid_search_3_params.cv_results_, change, kind='line')
 
 
-@image_comparison(baseline_images=['single_numeric_bar'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_numeric_bar'])
 def test_single_numeric_bar(grid_search_3_params):
     change = 'n_estimators'
     plot.grid_search(grid_search_3_params.cv_results_, change, kind='bar')
 
 
-@image_comparison(baseline_images=['single_numeric_bar_unsorted'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_numeric_bar_unsorted'])
 def test_single_numeric_bar(grid_search_3_params):
     change = 'n_estimators'
-    plot.grid_search(grid_search_3_params.cv_results_, change, kind='bar', sort=False)
+    plot.grid_search(grid_search_3_params.cv_results_,
+                     change,
+                     kind='bar',
+                     sort=False)
 
 
-@image_comparison(baseline_images=['single_categorical_line'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_categorical_line'])
 def test_single_categorial_line(grid_search_3_params):
     change = 'criterion'
     plot.grid_search(grid_search_3_params.cv_results_, change, kind='line')
 
 
-@image_comparison(baseline_images=['single_categorical_line_unsorted'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_categorical_line_unsorted'])
 def test_single_categorial_line(grid_search_3_params):
     change = 'criterion'
-    plot.grid_search(grid_search_3_params.cv_results_, change, kind='line', sort=False)
+    plot.grid_search(grid_search_3_params.cv_results_,
+                     change,
+                     kind='line',
+                     sort=False)
 
 
-@image_comparison(baseline_images=['single_categorical_bar'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_categorical_bar'])
 def test_single_categorial_bar(grid_search_3_params):
     change = 'criterion'
     plot.grid_search(grid_search_3_params.cv_results_, change, kind='bar')
 
 
-@image_comparison(baseline_images=['single_categorical_bar_unsorted'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_categorical_bar_unsorted'])
 def test_single_categorial_bar(grid_search_3_params):
     change = 'criterion'
-    plot.grid_search(grid_search_3_params.cv_results_, change, kind='bar', sort=False)
+    plot.grid_search(grid_search_3_params.cv_results_,
+                     change,
+                     kind='bar',
+                     sort=False)
 
 
-@image_comparison(baseline_images=['single_numeric_partially_restricted'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_numeric_partially_restricted'])
 def test_single_numeric_partially_restricted(grid_search_3_params):
     change = 'n_estimators'
     subset = {'max_features': 'sqrt'}
@@ -87,9 +88,10 @@ def test_single_numeric_partially_restricted(grid_search_3_params):
                      kind='bar')
 
 
-@image_comparison(baseline_images=['single_numeric_partially_restricted_unsorted'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(
+    baseline_images=['single_numeric_partially_restricted_unsorted'],
+    extensions=['png'],
+    remove_text=True)
 def test_single_numeric_partially_restricted(grid_search_3_params):
     change = 'n_estimators'
     subset = {'max_features': 'sqrt'}
@@ -100,9 +102,7 @@ def test_single_numeric_partially_restricted(grid_search_3_params):
                      sort=False)
 
 
-@image_comparison(baseline_images=['single_numeric_restricted_single'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_numeric_restricted_single'])
 def test_single_numeric_restricted_single(grid_search_3_params):
     change = 'n_estimators'
     subset = {'max_features': 'sqrt', 'criterion': 'gini'}
@@ -112,9 +112,7 @@ def test_single_numeric_restricted_single(grid_search_3_params):
                      kind='bar')
 
 
-@image_comparison(baseline_images=['single_numeric_restricted_multi'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_numeric_restricted_multi'])
 def test_single_numeric_restricted_multi(grid_search_3_params):
     change = 'n_estimators'
     subset = {'max_features': ['sqrt', 'log2'], 'criterion': 'gini'}
@@ -124,9 +122,7 @@ def test_single_numeric_restricted_multi(grid_search_3_params):
                      kind='bar')
 
 
-@image_comparison(baseline_images=['single_numeric_restricted_multi_unsorted'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['single_numeric_restricted_multi_unsorted'])
 def test_single_numeric_restricted_multi(grid_search_3_params):
     change = 'n_estimators'
     subset = {'max_features': ['sqrt', 'log2'], 'criterion': 'gini'}
@@ -137,9 +133,7 @@ def test_single_numeric_restricted_multi(grid_search_3_params):
                      sort=False)
 
 
-@image_comparison(baseline_images=['double'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['double'])
 def test_double_ignores_kind_line(grid_search_3_params):
     change = ('n_estimators', 'criterion')
     subset = {'max_features': 'sqrt'}
@@ -149,9 +143,7 @@ def test_double_ignores_kind_line(grid_search_3_params):
                      kind='line')
 
 
-@image_comparison(baseline_images=['double'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=['double'])
 def test_double_ignores_kind_bar(grid_search_3_params):
     change = ('n_estimators', 'criterion')
     subset = {'max_features': 'sqrt'}
@@ -216,11 +208,13 @@ def test_parameter_has_none_value_double(grid_search_param_with_none):
 
 
 @cleanup
-def test_raise_exception_when_parameter_has_none_value_single(grid_search_param_with_none):
+def test_raise_exception_when_parameter_has_none_value_single(
+        grid_search_param_with_none):
     with pytest.raises(TypeError):
         plot.grid_search(grid_search_param_with_none.cv_results_,
-                        change='criterion',
-                        subset=None)
+                         change='criterion',
+                         subset=None)
+
 
 @cleanup
 def test_parameter_has_none_value_single(grid_search_param_with_none):
@@ -294,8 +288,7 @@ def test_raise_exception_when_passing_repeated_parameters(
 
 
 @cleanup
-def test_none_parameter_wit(
-        grid_search_3_params):
+def test_none_parameter_wit(grid_search_3_params):
     with pytest.raises(ValueError):
         change = ['n_estimators', 'n_estimators']
         plot.grid_search(grid_search_3_params.cv_results_,
