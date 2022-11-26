@@ -223,7 +223,7 @@ class Rank1D(RankD):
     >>> X, y = make_classification(n_samples=1000,n_features=6,n_classes=2,n_informative=4,class_sep=0.8)
     >>> rank1d = Rank1D()
     >>> rank1d.plot_feature_ranks(X)
-    <AxesSubplot: title={'center': 'Shapiro Ranking of 6 Features'}>
+    <AxesSubplot:title={'center':'Shapiro Ranking of 6 Features'}>
     """
 
     ranking_methods = {
@@ -335,7 +335,7 @@ class Rank2D(RankD):
     >>> X, y = make_classification(n_samples=1000,n_features=6,n_classes=2,n_informative=4,class_sep=0.8)
     >>> rank2d = Rank2D()
     >>> rank2d.plot_feature_ranks(X)
-    <AxesSubplot: title={'center': 'Pearson Ranking of 6 Features'}>
+    <AxesSubplot:title={'center':'Pearson Ranking of 6 Features'}>
     """
 
     ranking_methods = {
