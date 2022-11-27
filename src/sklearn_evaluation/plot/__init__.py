@@ -34,7 +34,7 @@ __all__ = [
     'elbow_curve',
     'elbow_curve_from_results',
     'calibration_curve',
-    'target_plot'
+    'target_plot',
     'scores_distribution',
     'classification_report',
     'ClassificationReport',
