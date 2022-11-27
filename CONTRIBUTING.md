@@ -100,23 +100,7 @@ def my_plotting_function(y_true, y_pred, ax=None):
 
 ## Telemetry : Monitoring the state of `sklearn-evaluation`
 
-Use `SKLearnEvaluationLogger` decorator to generate logs
-
-```python
-    def log(self, action=None, feature=None):
-        """Logs the function and then runs it
-
-        Parameters
-        ----------
-        action : string, default=None
-            The desired action to be logged (i.e: 'confusion_matrix', 'roc').
-            If `action=None` it will log the function's name.
-
-        feature: string, default=None
-            The main feature (i.e: 'plot', 'report',
-            'SQLiteTracker', 'NotebookCollection')
-        """
-```
+Use [`SKLearnEvaluationLogger`](https://github.com/ploomber/sklearn-evaluation/blob/f32c15a43f4a9b4c2e588b3c0f71ba6dc5a71a7e/src/sklearn_evaluation/telemetry.py#L19) decorator to generate logs
 
 Example:
 
