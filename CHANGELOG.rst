@@ -1,8 +1,33 @@
 CHANGELOG
 =========
 
-0.7.8dev
+0.8.2dev
 --------
+
+0.8.1 (2022-11-16)
+------------------
+* Adds ``plot.residuals`` and ``plot.prediction_error`` for evaluating regression models
+
+0.8 (2022-11-15)
+----------------
+* ``SQliteTracker.get_sample_query`` generates a query compatible with older SQLite versions that do not support the ``->`` operator
+* ``SQliteTracker`` creates shorter experiment IDs
+* Fixes whitespace in generated HTML when generating tab views and in ``SQLTracker`` results when ``as_frame=False``
+
+
+0.7.9 (2022-11-14)
+------------------
+* Adds ``as_frame`` argument to ``SQLiteTracker``
+* Adds ``SQLiteTracker.upsert``
+* Allow overwriting records in ``SQLiteTracker.update`` with ``allow_overwrite=True``
+* Adds ``SQliteTracker.get_sample_query``
+* Adds ``SQliteTracker.get_parameters_keys``
+
+0.7.8 (2022-11-05)
+------------------
+* Adds ``plot.scores_distribution``
+* Adds ``plot.classification_report``
+* Fixes ``plot.calibration_curve`` error that scaled probabilities before plotting
 
 0.7.7 (2022-11-01)
 ------------------

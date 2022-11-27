@@ -70,4 +70,33 @@ Each function must have a corresponding test. If the function has parameters tha
 
 The function must contain a docstring explaining what the function does and a description of each argument. [See this example.](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/classification.py#L143)
 
-Furthermore, a full example must be included in the examples section of the docstring. Such an example must be standalone so that copy-paste should work. [See this example.](https://sklearn-evaluation.readthedocs.io/en/latest/api/plot.html#sklearn_evaluation.plot.confusion_matrix)
+Furthermore, a full example (under the docstring's `Examples` section)must be included in the examples section of the docstring. Such an example must be standalone so that copy-paste should work. [See this example.](https://sklearn-evaluation.readthedocs.io/en/latest/api/plot.html#sklearn_evaluation.plot.confusion_matrix) Note that these examples are automatically tested by the CI.
+
+Here's a docstring template you can use:
+
+```python
+def my_plotting_function(y_true, y_pred, ax=None):
+    """Plot {plot name}
+
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_samples]
+        Correct target values (ground truth).
+
+    y_pred : array-like, shape = [n_samples]
+        Target predicted classes (estimator predictions).
+
+    ax: matplotlib Axes
+        Axes object to draw the plot onto, otherwise uses current Axes
+
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
+
+    Examples
+    --------
+    .. plot:: ../../examples/{example-name}.py
+    """
+    pass
+```
