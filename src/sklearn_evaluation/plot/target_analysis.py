@@ -20,7 +20,7 @@ limitations under the License.
 
 import numpy as np
 import matplotlib.pyplot as plt
-
+from ..telemetry import SKLearnEvaluationLogger
 from sklearn.utils.multiclass import unique_labels, type_of_target
 
 
@@ -39,6 +39,7 @@ def _validate_target(y):
             format(y_type))
 
 
+@SKLearnEvaluationLogger.log(feature='plot')
 def target_plot(y_train, y_test=None, labels=None, colors=None, ax=None):
     """Target analysis plot for visualising class imbalance.
 
