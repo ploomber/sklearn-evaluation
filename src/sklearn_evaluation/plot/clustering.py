@@ -35,7 +35,7 @@ from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.preprocessing import LabelEncoder
 from joblib import Parallel, delayed
 
-from ..telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 # TODO: add unit test
