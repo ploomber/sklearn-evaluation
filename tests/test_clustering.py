@@ -154,7 +154,6 @@ def test_string_classes():
     cluster_labels = clf.fit_predict(X)
     plot.silhouette_plot_from_results(
         X, convert_labels_into_string(cluster_labels))
-    plt.savefig('silhouette_plot_string_classes.png')
 
 
 @image_comparison(baseline_images=['silhouette_plot_array_like'],

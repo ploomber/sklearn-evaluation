@@ -103,6 +103,7 @@ def elbow_curve(X,
                                     ax=ax)
 
 
+@SKLearnEvaluationLogger.log(feature='plot')
 def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     """
     Same as `elbow_curve`, but it takes the number of clusters and sum of
@@ -145,6 +146,7 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
     return clf.fit(X).score(X), time.time() - start
 
 
+@SKLearnEvaluationLogger.log(feature='plot')
 def silhouette_plot(X,
                     clf,
                     range_n_clusters=None,
@@ -230,6 +232,7 @@ def silhouette_plot(X,
     return ax
 
 
+@SKLearnEvaluationLogger.log(feature='plot')
 def silhouette_plot_from_results(X,
                                  cluster_labels,
                                  metric='euclidean',
