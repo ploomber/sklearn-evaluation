@@ -13,6 +13,7 @@ from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
 from .clustering import elbow_curve, elbow_curve_from_results
 from .calibration import calibration_curve
+from .ks_statistics import plot_ks_statistic
 
 __all__ = [
     'confusion_matrix',
