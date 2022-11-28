@@ -14,19 +14,12 @@ from .metrics import metrics_at_thresholds
 from .clustering import elbow_curve, elbow_curve_from_results
 from .calibration import calibration_curve
 from .ks_statistics import plot_ks_statistic
+from .cumulative_gain_lift_curve import plot_cumulative_gain, plot_lift_curve
 
 __all__ = [
-    'confusion_matrix',
-    'feature_importances',
-    'precision_recall',
-    'roc',
-    'precision_at_proportions',
-    'grid_search',
-    'validation_curve',
-    'learning_curve',
-    'metrics_at_thresholds',
-    'ConfusionMatrix',
-    'elbow_curve',
-    'elbow_curve_from_results',
-    'calibration_curve',
+    'confusion_matrix', 'feature_importances', 'precision_recall', 'roc',
+    'precision_at_proportions', 'grid_search', 'validation_curve',
+    'learning_curve', 'metrics_at_thresholds', 'ConfusionMatrix',
+    'elbow_curve', 'elbow_curve_from_results', 'calibration_curve',
+    'plot_cumulative_gain', 'plot_ks_statistic', 'plot_lift_curve'
 ]
