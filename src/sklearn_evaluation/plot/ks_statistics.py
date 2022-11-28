@@ -173,6 +173,10 @@ def plot_ks_statistic(y_true,
     ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
         drawn.
 
+    Examples
+    --------
+    .. plot:: ../../examples/ks_statistics.py
+
     """
     y_true = np.array(y_true)
     y_score = np.array(y_score)
