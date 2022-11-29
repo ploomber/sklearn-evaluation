@@ -26,17 +26,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import sys
 import pytest
 import numpy as np
+from functools import partial
 from unittest.mock import Mock
 import matplotlib.pyplot as plt
-from matplotlib.testing.decorators import image_comparison
+from matplotlib.testing.decorators import image_comparison as _image_comparison
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
+
+image_comparison = partial(_image_comparison,
+                           tol=0.6 if sys.version_info.minor == 6 else 0,
+                           remove_text=False,
+                           extensions=['png'])
 
 
 def convert_labels_into_string(y_true):
@@ -70,18 +77,14 @@ def test_cluster_ranges():
     plot.elbow_curve(X, clf, n_clusters=range(1, 10))
 
 
-@image_comparison(baseline_images=['elbow_curve_from_results'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(baseline_images=['elbow_curve_from_results'])
 def test_elbow_curve_from_results():
     n_clusters = range(1, 10, 2)
     sum_of_squares = np.array([4572.2, 470.7, 389.9, 335.1, 305.5])
     plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
 
 
-@image_comparison(baseline_images=['elbow_curve_from_results'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(baseline_images=['elbow_curve_from_results'])
 def test_elbow_curve_from_results_unsorted():
     n_clusters = [5, 3, 9, 1, 7]
     sum_of_squares = np.array([389.9, 470.7, 305.5, 4572.2, 335.1])
@@ -97,7 +100,7 @@ def test_ax_elbow():
 
 def test_n_jobs():
     clf = KMeans()
-    plot.elbow_curve(X, clf, n_jobs=2)
+    plot.elbow_curve(X, clf, n_jobs=2, show_cluster_time=False)
 
 
 @image_comparison(baseline_images=[
@@ -149,11 +152,13 @@ def test_metric():
     plot.silhouette_plot(X, clf, range_n_clusters=[6], metric='cosine')
 
 
+@image_comparison(baseline_images=['string_classes_silhouette'])
 def test_string_classes():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
     plot.silhouette_plot_from_results(
         X, convert_labels_into_string(cluster_labels))
+    plt.savefig('string_classes_silhouette.png')
 
 
 @image_comparison(baseline_images=['silhouette_plot_array_like'],
@@ -182,6 +187,7 @@ def test_ax_silhouette():
     assert ax is out_ax
 
 
+@image_comparison(baseline_images=['ax_params_silhouette'])
 def test_ax_params():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
@@ -190,12 +196,15 @@ def test_ax_params():
                                                text_fontsize="large")
     assert out_ax.get_title() == 'Silhouette Analysis'
     assert out_ax.get_ylim() == (0.0, 250.0)
+    plt.savefig('ax_params_silhouette.png')
 
 
 def test_invalid_clusterer():
     clf = DecisionTreeClassifier()
-    with pytest.raises(TypeError):
+    with pytest.raises(TypeError) as e:
         plot.silhouette_plot(X, clf)
+    assert "\"n_clusters\" attribute not in classifier. Cannot plot silhouette analysis" in str(
+        e.value)
 
 
 def test_from_results(monkeypatch):
