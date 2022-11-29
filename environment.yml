@@ -5,7 +5,7 @@ channels:
   - conda-forge
 
 dependencies:
-  - python=3.7
+  - python=3.8
   - lxml # for pandas.read_html, used in NotebookCollection
   - pip
   - pip:

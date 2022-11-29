@@ -17,7 +17,7 @@ from .sets import differences
 from ..table import Table
 from ..telemetry import SKLearnEvaluationLogger
 
-_env = Environment(loader=PackageLoader('sklearn_evaluation', 'assets/nb'))
+_env = Environment(loader=PackageLoader("sklearn_evaluation", "assets/nb"))
 _fm = black.FileMode(string_normalization=False, line_length=40)
 _htmldiff = HtmlDiff()
 
@@ -41,12 +41,13 @@ class NotebookCollection(Mapping):
         as identifier (ignores extension)
     """
 
-    @SKLearnEvaluationLogger.log(feature='NotebookCollection',
-                                 action='init-NotebookCollection')
+    @SKLearnEvaluationLogger.log(
+        feature="NotebookCollection", action="init-NotebookCollection"
+    )
     def __init__(self, paths, ids=None, scores=False):
         if ids is None:
             ids = paths
-        elif ids == 'filenames':
+        elif ids == "filenames":
             ids = [_get_filename(path) for path in paths]
 
         self.nbs = {
@@ -79,6 +80,14 @@ class NotebookCollection(Mapping):
 
 class HTMLMapping(Mapping):
     """A mapping that has an HTML representation
+
+    Parameters
+    ----------
+    mapping : dict
+        The mapping with the data
+
+    HTML : str
+        The HTML representation of the mapping
     """
 
     def __init__(self, mapping, html):
@@ -104,7 +113,7 @@ class HTMLMapping(Mapping):
 
 def _get_filename(path):
     path = Path(path)
-    return path.name.replace(path.suffix, '')
+    return path.name.replace(path.suffix, "")
 
 
 def add_compare_tab(elements, ids, scores_arg):
@@ -144,7 +153,7 @@ def add_compare_tab(elements, ids, scores_arg):
 
     if summary is not None:
         out.insert(0, summary)
-        out_ids.insert(0, 'Compare')
+        out_ids.insert(0, "Compare")
 
     return out, out_ids
 
@@ -154,13 +163,10 @@ def tabs_html_from_content(names, contents):
     Generate the tabs and content to display as an HTML string
     """
     # random prefix to prevent multiple tab outputs to clash with each other
-    prefix = ''.join(random.choice(string.ascii_lowercase) for i in range(3))
+    prefix = "".join(random.choice(string.ascii_lowercase) for i in range(3))
     contents_html = [to_html_str(content) for content in contents]
-    template = _env.get_template('template.html')
-    html = template.render(names=names,
-                           zip=zip,
-                           contents=contents_html,
-                           prefix=prefix)
+    template = _env.get_template("template.html")
+    html = template.render(names=names, zip=zip, contents=contents_html, prefix=prefix)
     return html
 
 
@@ -176,8 +182,10 @@ def to_df(obj):
     dfs = pd.read_html(obj.data)
 
     if len(dfs) > 1:
-        raise NotImplementedError('More than one table detected, only outputs'
-                                  ' with a single table are supported')
+        raise NotImplementedError(
+            "More than one table detected, only outputs"
+            " with a single table are supported"
+        )
 
     df = dfs[0]
     df.columns = process_columns(df.columns)
@@ -201,16 +209,16 @@ def process_multi_index_col(col):
     Helper function to parse column names from pandas.DataFrame objects
     with  multi indexes parsed from HTML tables
     """
-    names = [name for name in col if 'Unnamed:' not in name]
+    names = [name for name in col if "Unnamed:" not in name]
     return names[0]
 
 
 def color_neg_green(s):
-    return (s < 0).replace({True: 'color: green', False: 'color: red'})
+    return (s < 0).replace({True: "color: green", False: "color: red"})
 
 
 def color_neg_red(s):
-    return (s < 0).replace({True: 'color: red', False: 'color: green'})
+    return (s < 0).replace({True: "color: red", False: "color: green"})
 
 
 def color(s, which, color):
@@ -218,18 +226,18 @@ def color(s, which, color):
     pandas.DataFrame function to add color to cell's text
     """
     to_color = s == getattr(s[~s.isna()], which)()
-    return [f'color: {color}' if v else '' for v in to_color]
+    return [f"color: {color}" if v else "" for v in to_color]
 
 
 _color_map = {
-    'error': {
-        'max': partial(color, which='max', color='red'),
-        'min': partial(color, which='min', color='green'),
+    "error": {
+        "max": partial(color, which="max", color="red"),
+        "min": partial(color, which="min", color="green"),
     },
-    'score': {
-        'max': partial(color, which='max', color='green'),
-        'min': partial(color, which='min', color='red'),
-    }
+    "score": {
+        "max": partial(color, which="max", color="green"),
+        "min": partial(color, which="min", color="red"),
+    },
 }
 
 
@@ -289,7 +297,7 @@ def compare_sets(sets, ids):
     if len(sets) != 2:
         return None
 
-    header = ['Both'] + [f'Only in {id_}' for id_ in ids]
+    header = ["Both"] + [f"Only in {id_}" for id_ in ids]
 
     return Table.from_columns(content=differences(*sets), header=header)
 
@@ -309,30 +317,24 @@ def compare_df(tables, ids, scores_arg):
         out = pd.concat(dfs)
         out.index = ids
         out = out.T
-        errors, scores = split_errors_and_scores(out.index,
-                                                 scores_arg,
-                                                 axis_second=out.columns)
+        errors, scores = split_errors_and_scores(
+            out.index, scores_arg, axis_second=out.columns
+        )
 
         if len(tables) == 2:
             c1, c2 = out.columns
-            out['diff'] = out[c2] - out[c1]
-            out['diff_relative'] = (out[c2] - out[c1]) / out[c2]
-            out['ratio'] = out[c2] / out[c1]
+            out["diff"] = out[c2] - out[c1]
+            out["diff_relative"] = (out[c2] - out[c1]) / out[c2]
+            out["ratio"] = out[c2] / out[c1]
 
-        styled = out.style.apply(_color_map['error']['max'],
-                                 subset=errors,
-                                 axis='columns')
-        styled = styled.apply(_color_map['error']['min'],
-                              subset=errors,
-                              axis='columns')
-        styled = styled.apply(_color_map['score']['max'],
-                              subset=scores,
-                              axis='columns')
-        styled = styled.apply(_color_map['score']['min'],
-                              subset=scores,
-                              axis='columns')
+        styled = out.style.apply(
+            _color_map["error"]["max"], subset=errors, axis="columns"
+        )
+        styled = styled.apply(_color_map["error"]["min"], subset=errors, axis="columns")
+        styled = styled.apply(_color_map["score"]["max"], subset=scores, axis="columns")
+        styled = styled.apply(_color_map["score"]["min"], subset=scores, axis="columns")
 
-        styled = styled.format({'diff_relative': '{:.2%}'})
+        styled = styled.format({"diff_relative": "{:.2%}"})
 
     # Multiple rows, each metric is a vector
     else:
@@ -341,15 +343,12 @@ def compare_df(tables, ids, scores_arg):
             # TODO: generate "Compare diff", "Compare diff relative"
             # and "Compare ratio"
             out = dfs[1] - dfs[0]
-            errors, scores = split_errors_and_scores(out.columns,
-                                                     scores_arg,
-                                                     axis_second=out.index,
-                                                     transpose=True)
+            errors, scores = split_errors_and_scores(
+                out.columns, scores_arg, axis_second=out.index, transpose=True
+            )
 
-            styled = out.style.apply(color_neg_green,
-                                     subset=errors,
-                                     axis='rows')
-            styled = styled.apply(color_neg_red, subset=scores, axis='rows')
+            styled = out.style.apply(color_neg_green, subset=errors, axis="rows")
+            styled = styled.apply(color_neg_red, subset=scores, axis="rows")
         else:
             styled = None
 
@@ -357,24 +356,22 @@ def compare_df(tables, ids, scores_arg):
 
 
 def data2html_img(data):
-    """Converts a png image (bytes) to HTML str with the image in base64
-    """
-    img = base64.encodebytes(data).decode('utf-8')
+    """Converts a png image (bytes) to HTML str with the image in base64"""
+    img = base64.encodebytes(data).decode("utf-8")
     return '<img src="data:image/png;base64, {}"/>'.format(img)
 
 
 def to_html_str(content):
-    """Returns an HTML string representation of the content
-    """
+    """Returns an HTML string representation of the content"""
     if isinstance(content, Image):
         return data2html_img(content.data)
     elif isinstance(content, HTML):
         return content.data
-    elif hasattr(content, '_repr_html_'):
+    elif hasattr(content, "_repr_html_"):
         return content._repr_html_()
     elif isinstance(content, Mapping):
         c = black.format_str(str(content), mode=_fm)
         # add <pre></pre> to keep whitespace
-        return f'<pre>{c}</pre>'
+        return f"<pre>{c}</pre>"
     else:
         return str(content)
