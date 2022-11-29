@@ -1,3 +1,7 @@
+from warnings import warn
+from pathlib import Path
+import json
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report as sk_classification_report
@@ -7,6 +11,7 @@ from sklearn_evaluation.plot.classification import _add_values_to_matrix
 from sklearn_evaluation.util import default_heatmap
 from sklearn_evaluation.plot.plot import Plot
 from sklearn_evaluation.plot import _matrix
+from sklearn_evaluation import __version__
 
 
 def _classification_report_add(first, second, keys, target_names, ax):
@@ -19,28 +24,22 @@ def _classification_report_add(first, second, keys, target_names, ax):
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(target_names)
 
-    ax.set(title="Classification report (compare)",
-           xlabel="Metric",
-           ylabel="Class")
+    ax.set(title="Classification report (compare)", xlabel="Metric", ylabel="Class")
 
 
 class ClassificationReportSub(Plot):
-
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
         self.figure = Figure()
         ax = self.figure.add_subplot()
-        _classification_report_plot(matrix - matrix_another, keys,
-                                    target_names, ax)
+        _classification_report_plot(matrix - matrix_another, keys, target_names, ax)
         ax.set(title="Classification report (difference)")
 
 
 class ClassificationReportAdd(Plot):
-
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
         self.figure = Figure()
         self.ax = self.figure.add_subplot()
-        _classification_report_add(matrix, matrix_another, keys, target_names,
-                                   self.ax)
+        _classification_report_add(matrix, matrix_another, keys, target_names, self.ax)
 
 
 class ClassificationReport(Plot):
@@ -50,57 +49,113 @@ class ClassificationReport(Plot):
     --------
     """
 
-    def __init__(self,
-                 y_true,
-                 y_pred,
-                 *,
-                 target_names=None,
-                 sample_weight=None,
-                 zero_division=0):
+    def __init__(
+        self,
+        y_true,
+        y_pred,
+        *,
+        target_names=None,
+        sample_weight=None,
+        zero_division=0,
+        matrix=None,
+        keys=None
+    ):
+        if y_true is not None and matrix is None:
+            warn(
+                "ClassificationReport will change its signature in version 0.10"
+                ", please use ClassificationReport.from_raw_data",
+                FutureWarning,
+                stacklevel=2,
+            )
+
         self.figure = Figure()
         ax = self.figure.add_subplot()
 
-        self.matrix, self.keys, self.target_names = _classification_report(
+        if matrix is not None and matrix is not False:
+            self.matrix = matrix
+            self.keys = keys
+            self.target_names = target_names
+        else:
+            self.matrix, self.keys, self.target_names = _classification_report(
+                y_true,
+                y_pred,
+                target_names=target_names,
+                sample_weight=sample_weight,
+                zero_division=zero_division,
+            )
+
+        _classification_report_plot(self.matrix, self.keys, self.target_names, ax)
+
+    def __sub__(self, other):
+        return ClassificationReportSub(
+            self.matrix, other.matrix, self.keys, target_names=self.target_names
+        )
+
+    def __add__(self, other):
+        return ClassificationReportAdd(
+            self.matrix, other.matrix, keys=self.keys, target_names=self.target_names
+        )
+
+    def _get_data(self):
+        return {
+            "class": "sklearn_evaluation.plot.ClassificationReport",
+            "matrix": self.matrix.tolist(),
+            "keys": self.keys,
+            "target_names": self.target_names,
+            "version": __version__,
+        }
+
+    @classmethod
+    def from_dump(cls, path):
+        data = json.loads(Path(path).read_text(encoding="utf-8"))
+        return cls(
+            matrix=np.array(data["matrix"]),
+            keys=data["keys"],
+            target_names=data["target_names"],
+            y_true=None,
+            y_pred=None,
+        )
+
+    @classmethod
+    def from_raw_data(
+        cls, y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0
+    ):
+        # pass matrix=False so we don't emit the future warning
+        return cls(
             y_true,
             y_pred,
             target_names=target_names,
             sample_weight=sample_weight,
-            zero_division=zero_division)
+            zero_division=zero_division,
+            matrix=False,
+            keys=False,
+        )
 
-        _classification_report_plot(self.matrix, self.keys, self.target_names,
-                                    ax)
-
-    def __sub__(self, other):
-        return ClassificationReportSub(self.matrix,
-                                       other.matrix,
-                                       self.keys,
-                                       target_names=self.target_names)
-
-    def __add__(self, other):
-        return ClassificationReportAdd(self.matrix,
-                                       other.matrix,
-                                       keys=self.keys,
-                                       target_names=self.target_names)
+    @classmethod
+    def _from_data(cls, target_names, matrix, keys):
+        return cls(
+            y_true=None,
+            y_pred=None,
+            target_names=target_names,
+            matrix=np.array(matrix),
+            keys=keys,
+        )
 
 
-def _classification_report(y_true,
-                           y_pred,
-                           *,
-                           target_names=None,
-                           sample_weight=None,
-                           zero_division=0):
+def _classification_report(
+    y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0
+):
 
-    report = sk_classification_report(y_true,
-                                      y_pred,
-                                      target_names=target_names,
-                                      sample_weight=sample_weight,
-                                      zero_division=zero_division,
-                                      output_dict=True)
+    report = sk_classification_report(
+        y_true,
+        y_pred,
+        target_names=target_names,
+        sample_weight=sample_weight,
+        zero_division=zero_division,
+        output_dict=True,
+    )
 
-    report = {
-        k: v
-        for k, v in report.items() if 'avg' not in k and k != 'accuracy'
-    }
+    report = {k: v for k, v in report.items() if "avg" not in k and k != "accuracy"}
     n_classes = len(report.keys())
 
     target_names = target_names or [str(i) for i in range(n_classes)]
@@ -115,7 +170,7 @@ def _classification_report(y_true,
 def _classification_report_plot(matrix, keys, target_names, ax):
     _add_values_to_matrix(matrix, ax)
 
-    ax.imshow(matrix, interpolation='nearest', cmap=default_heatmap())
+    ax.imshow(matrix, interpolation="nearest", cmap=default_heatmap())
 
     ax.set_xticks(range(len(keys)))
     ax.set_xticklabels(keys)
@@ -130,13 +185,9 @@ def _classification_report_plot(matrix, keys, target_names, ax):
 
 
 # TODO: add unit test
-def classification_report(y_true,
-                          y_pred,
-                          *,
-                          target_names=None,
-                          sample_weight=None,
-                          zero_division=0,
-                          ax=None):
+def classification_report(
+    y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0, ax=None
+):
     """Classification report
 
     Parameters
@@ -181,6 +232,7 @@ def classification_report(y_true,
         y_pred,
         target_names=target_names,
         sample_weight=sample_weight,
-        zero_division=zero_division)
+        zero_division=zero_division,
+    )
 
     return _classification_report_plot(matrix, keys, target_names, ax)

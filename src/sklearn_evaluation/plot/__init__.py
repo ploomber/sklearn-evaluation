@@ -11,6 +11,7 @@ from .grid_search import grid_search
 from .validation_curve import validation_curve
 from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
+from .regression import residuals, prediction_error
 from .clustering import elbow_curve, elbow_curve_from_results
 from .calibration import calibration_curve, scores_distribution
 from .classification_report import classification_report, ClassificationReport
@@ -26,6 +27,8 @@ __all__ = [
     'learning_curve',
     'metrics_at_thresholds',
     'ConfusionMatrix',
+    'residuals',
+    'prediction_error',
     'elbow_curve',
     'elbow_curve_from_results',
     'calibration_curve',

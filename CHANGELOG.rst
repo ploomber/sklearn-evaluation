@@ -1,8 +1,41 @@
 CHANGELOG
 =========
 
-0.7.9dev
+0.8.3dev
 --------
+
+0.8.2 (2022-11-24)
+------------------
+* ``plot.ConfusionMatrix`` and ``plot.ClassifictionReport`` can be serialized/unserialized with ``.dump``/ ``.from_dump``
+* Adds ``Experiment`` class to easily create new experiments from ``SQLiteTracker`` using ``.new_experiment()``
+* Adds ``Experiment.log_classification_report``
+* Adds ``Experiment.log_confusion_matrix``
+* Adds ``Experiment.log_figure``
+* Adds ``Experiment.log``
+* Adds ``Experiment.log_dict``
+* Adds ``SQLiteTracker.get``
+* Adds docstring examples to ``SQLiteTracker`` and ``Experiment``
+* Updates ``SQliteTracker`` tutorial
+* Fixes error when querying experiments using ``SQliteTracker`` whose UUID was all numbers (e.g., ``"1234"``)
+
+0.8.1 (2022-11-16)
+------------------
+* Adds ``plot.residuals`` and ``plot.prediction_error`` for evaluating regression models
+
+0.8 (2022-11-15)
+----------------
+* ``SQliteTracker.get_sample_query`` generates a query compatible with older SQLite versions that do not support the ``->`` operator
+* ``SQliteTracker`` creates shorter experiment IDs
+* Fixes whitespace in generated HTML when generating tab views and in ``SQLTracker`` results when ``as_frame=False``
+
+
+0.7.9 (2022-11-14)
+------------------
+* Adds ``as_frame`` argument to ``SQLiteTracker``
+* Adds ``SQLiteTracker.upsert``
+* Allow overwriting records in ``SQLiteTracker.update`` with ``allow_overwrite=True``
+* Adds ``SQliteTracker.get_sample_query``
+* Adds ``SQliteTracker.get_parameters_keys``
 
 0.7.8 (2022-11-05)
 ------------------
