@@ -33,7 +33,6 @@ def plot_something(y_true, y_score, ..., ax=None):
 
 See the [`precision_at_proportion`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/classification.py#L309) function for an example.
 
-
 In cases where the function doesn't take a true and predicted vector, the names should be descriptive enough:
 
 ```python
@@ -42,7 +41,6 @@ def plot_something(some_meaningful_name, ..., ax=None):
 ```
 
 See the [`learning_curve`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/learning_curve.py#L7) function for an example.
-
 
 ## The last argument in the function must be `ax=None`
 
@@ -54,7 +52,6 @@ def plot_something(a, b, ..., ax=None):
 ```
 
 See the [`roc`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/roc.py#L45) function for an example.
-
 
 ## Functions must return a `matplotlib.Axes` object
 
@@ -100,3 +97,51 @@ def my_plotting_function(y_true, y_pred, ax=None):
     """
     pass
 ```
+
+## Telemetry : Monitoring the state of `sklearn-evaluation`
+
+Use [`SKLearnEvaluationLogger`](https://github.com/ploomber/sklearn-evaluation/blob/f32c15a43f4a9b4c2e588b3c0f71ba6dc5a71a7e/src/sklearn_evaluation/telemetry.py#L19) decorator to generate logs
+
+Example:
+
+```python
+@SKLearnEvaluationLogger.log(feature='plot')
+def confusion_matrix(
+        y_true,
+        y_pred,
+        target_names=None,
+        normalize=False,
+        cmap=None,
+        ax=None,
+        **kwargs):
+pass
+```
+
+this will generate the following log:
+
+```json
+        {
+          "metadata": {
+          "action": "confusion_matrix"
+          "feature": "plot",
+          "args": {
+                        "target_names": "None",
+                        "normalize": "False",
+                        "cmap": "None",
+                        "ax": "None"
+                    }
+          }
+        }
+```
+
+\*\* since `y_true` and `y_pred` are positional arguments without default values it won't log them
+
+### Queries
+
+1. Run queries and filter out `sklearn-evaluation` events by the event name: `sklearn-evaluation`
+2. Break these events by feature ('plot', 'report', 'SQLiteTracker', 'NotebookCollection')
+3. Break events by actions/func name (i.e: 'confusion_matrix', 'roc', etc...)
+
+### Errors
+
+Failing runnings will be named: `sklearn-evaluation-error`
