@@ -43,7 +43,7 @@ pip install sklearn-evaluation
 
 # Features
 
-* [Plotting](https://sklearn-evaluation.readthedocs.io/en/stable/_images/cm.png) (confusion matrix, feature importances, precision-recall, roc)
+* [Plotting](https://sklearn-evaluation.readthedocs.io/en/stable/_images/cm.png) (confusion matrix, feature importances, precision-recall, roc, elbow curve, silhouette plot)
 * Report generation ([example](https://htmlpreview.github.io/?https://github.com/ploomber/sklearn-evaluation/blob/master/examples/report.html))
 * [Evaluate grid search results](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/grid_search.html)
 * [Track experiments using a local SQLite database](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/SQLiteTracker.html)
