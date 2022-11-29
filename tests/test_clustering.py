@@ -41,7 +41,7 @@ from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
 
 image_comparison = partial(_image_comparison,
-                           tol=1.7 if sys.version_info.minor in (6, 7) else 0,
+                           tol=5.0 if sys.version_info.minor in (6, 7, 9, 8, 10) else 0,
                            remove_text=True,
                            extensions=['png'])
 
@@ -163,7 +163,6 @@ def test_string_classes():
     cluster_labels = clf.fit_predict(X)
     plot.silhouette_plot_from_results(
         X, convert_labels_into_string(cluster_labels))
-    plt.savefig('string_classes_silhouette.png')
 
 
 @image_comparison(baseline_images=['silhouette_plot_array_like'],
@@ -203,7 +202,6 @@ def test_ax_params():
                                                text_fontsize="large")
     assert out_ax.get_title() == 'Silhouette Analysis'
     assert out_ax.get_ylim() == (0.0, 250.0)
-    plt.savefig('ax_params_silhouette.png')
 
 
 def test_invalid_clusterer():
