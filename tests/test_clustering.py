@@ -26,13 +26,11 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys
 import pytest
 import numpy as np
-from functools import partial
 from unittest.mock import Mock
 import matplotlib.pyplot as plt
-from matplotlib.testing.decorators import image_comparison as _image_comparison
+from matplotlib.testing.decorators import image_comparison
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans, MiniBatchKMeans
@@ -40,16 +38,12 @@ from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
 
-image_comparison = partial(_image_comparison,
-                           tol=5.0 if sys.version_info.minor in (6, 7, 9, 8, 10) else 0,
-                           remove_text=True,
-                           extensions=['png'])
-
 
 def convert_labels_into_string(y_true):
     return ["A" if x == 0 else x for x in y_true]
 
 
+np.random.seed(0)
 X, y = load_data(return_X_y=True)
 
 
@@ -103,7 +97,7 @@ def test_ax_elbow():
 
 def test_n_jobs():
     clf = KMeans()
-    plot.elbow_curve(X, clf, n_jobs=2, show_cluster_time=False)
+    plot.elbow_curve(X, clf, n_jobs=2)
 
 
 @image_comparison(baseline_images=[
@@ -155,9 +149,6 @@ def test_metric():
     plot.silhouette_plot(X, clf, range_n_clusters=[6], metric='cosine')
 
 
-@image_comparison(baseline_images=['string_classes_silhouette'],
-                  extensions=['png'],
-                  remove_text=False)
 def test_string_classes():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
@@ -191,9 +182,6 @@ def test_ax_silhouette():
     assert ax is out_ax
 
 
-@image_comparison(baseline_images=['ax_params_silhouette'],
-                  extensions=['png'],
-                  remove_text=False)
 def test_ax_params():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
@@ -206,10 +194,8 @@ def test_ax_params():
 
 def test_invalid_clusterer():
     clf = DecisionTreeClassifier()
-    with pytest.raises(TypeError) as e:
+    with pytest.raises(TypeError):
         plot.silhouette_plot(X, clf)
-    assert "\"n_clusters\" attribute not in classifier. Cannot plot silhouette analysis" in str(
-        e.value)
 
 
 def test_from_results(monkeypatch):
