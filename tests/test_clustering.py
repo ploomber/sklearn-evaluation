@@ -26,17 +26,24 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import sys
 import pytest
 import numpy as np
+from functools import partial
 from unittest.mock import Mock
 import matplotlib.pyplot as plt
-from matplotlib.testing.decorators import image_comparison
+from matplotlib.testing.decorators import image_comparison as _image_comparison
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
+
+image_comparison = partial(_image_comparison,
+                           tol=1.7 if sys.version_info.minor in (6, 7) else 0,
+                           remove_text=True,
+                           extensions=['png'])
 
 
 def convert_labels_into_string(y_true):
