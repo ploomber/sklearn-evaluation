@@ -41,7 +41,7 @@ from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
 
 image_comparison = partial(_image_comparison,
-                           tol=0.8 if sys.version_info.minor in [6, 7, 8, 9] else 0,
+                           tol=0.8 if sys.version_info.minor in [6, 7, 8, 9, 10] else 0,
                            remove_text=False,
                            extensions=['png'])
 
