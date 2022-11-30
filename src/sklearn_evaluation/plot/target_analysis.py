@@ -40,7 +40,7 @@ def _validate_target(y):
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def target_plot(y_train, y_test=None, labels=None, colors=None, ax=None):
+def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
     """Target analysis plot for visualising class imbalance.
 
     There are two modes:
@@ -84,6 +84,10 @@ def target_plot(y_train, y_test=None, labels=None, colors=None, ax=None):
     Examples
     --------
     .. plot:: ../../examples/target_analysis.py
+
+    Notes
+    -----
+    .. versionadded:: 0.8.3
 
     """
 

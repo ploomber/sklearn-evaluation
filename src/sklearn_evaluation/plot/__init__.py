@@ -13,10 +13,9 @@ from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
 from .clustering import elbow_curve, elbow_curve_from_results, silhouette_plot, silhouette_plot_from_results
 from .regression import residuals, prediction_error
-from .target_analysis import target_plot
+from .target_analysis import target_analysis
 from .calibration import calibration_curve, scores_distribution
 from .classification_report import classification_report, ClassificationReport
-
 
 __all__ = [
     'confusion_matrix',
@@ -36,7 +35,7 @@ __all__ = [
     'silhouette_plot',
     'silhouette_plot_from_results',
     'calibration_curve',
-    'target_plot',
+    'target_analysis',
     'scores_distribution',
     'classification_report',
     'ClassificationReport',

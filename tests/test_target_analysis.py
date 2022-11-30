@@ -41,9 +41,9 @@ def test_invalid_target():
     y_valid = np.random.randint(2, size=100)
     y_invalid = np.random.uniform(size=100)
     with pytest.raises(TypeError):
-        plot.target_plot(y_invalid)
+        plot.target_analysis(y_invalid)
     with pytest.raises(TypeError):
-        plot.target_plot(y_valid, y_invalid)
+        plot.target_analysis(y_valid, y_invalid)
 
 
 def test_class_names_must_match(target_analysis_binary):
@@ -54,7 +54,7 @@ def test_class_names_must_match(target_analysis_binary):
     _, _, y_train, y_test = target_analysis_binary
 
     with pytest.raises(ValueError):
-        plot.target_plot(y_train, y_test=y_test, labels=["a", "b", "c"])
+        plot.target_analysis(y_train, y_test=y_test, labels=["a", "b", "c"])
 
 
 @image_comparison(baseline_images=['binary_balance'],
@@ -66,7 +66,7 @@ def test_binary_balance(target_analysis_binary):
     """
 
     _, _, y_train, y_test = target_analysis_binary
-    plot.target_plot(y_train)
+    plot.target_analysis(y_train)
 
 
 @image_comparison(baseline_images=['binary_compare'],
@@ -78,7 +78,7 @@ def test_binary_compare(target_analysis_binary):
     """
 
     _, _, y_train, y_test = target_analysis_binary
-    plot.target_plot(y_train, y_test)
+    plot.target_analysis(y_train, y_test)
 
 
 @image_comparison(baseline_images=['multiclass_balance'],
@@ -89,7 +89,7 @@ def test_multiclass_balance(target_analysis_multiclass):
     Test multiclass classification in balance mode
     """
     _, _, y_train, y_test = target_analysis_multiclass
-    plot.target_plot(y_train)
+    plot.target_analysis(y_train)
 
 
 @image_comparison(baseline_images=['multiclass_compare'],
@@ -100,7 +100,7 @@ def test_multiclass_compare(target_analysis_multiclass):
     Test multiclass classification in compare mode
     """
     _, _, y_train, y_test = target_analysis_multiclass
-    plot.target_plot(y_train, y_test)
+    plot.target_analysis(y_train, y_test)
 
 
 @image_comparison(baseline_images=['multiclass_compare_iris_pandas'],
@@ -113,7 +113,7 @@ def test_multiclass_compare_iris_pandas():
     df = pd.DataFrame(iris_data.data, columns=iris_data.feature_names)
     df['target'] = pd.Series(iris_data.target)
     train, test = train_test_split(df, test_size=0.3, random_state=42)
-    plot.target_plot(train.target, test.target)
+    plot.target_analysis(train.target, test.target)
 
 
 @image_comparison(baseline_images=['iris_labels_compare'],
@@ -126,9 +126,9 @@ def test_labels_iris():
                                              y,
                                              test_size=0.3,
                                              random_state=42)
-    plot.target_plot(y_train,
-                     y_test,
-                     labels=['Setosa', 'Versicolour', 'Virginica'])
+    plot.target_analysis(y_train,
+                         y_test,
+                         labels=['Setosa', 'Versicolour', 'Virginica'])
 
 
 @image_comparison(baseline_images=['bar_color'],
@@ -139,4 +139,4 @@ def test_bar_color(target_analysis_binary):
     Test multiclass classification in compare mode
     """
     _, _, y_train, y_test = target_analysis_binary
-    plot.target_plot(y_train, y_test, colors=['y', 'g'])
+    plot.target_analysis(y_train, y_test, colors=['y', 'g'])
