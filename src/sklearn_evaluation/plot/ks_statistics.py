@@ -137,19 +137,19 @@ def _binary_ks_curve(y_true, y_score):
 
 @SKLearnEvaluationLogger.log(feature='plot')
 def ks_statistic(y_true,
-                      y_score,
-                      figsize=None,
-                      title_fontsize="large",
-                      text_fontsize="medium",
-                      ax=None):
+                 y_score,
+                 figsize=None,
+                 title_fontsize="large",
+                 text_fontsize="medium",
+                 ax=None):
     """Generates the KS Statistic plot from labels and scores/probabilities
     Parameters
     ----------
-    y_true (array-like, shape (n_samples)):
+    y_true : array-like, shape (n_samples)):
         Ground truth (correct) target values.
         Refer: https://numpy.org/doc/stable/glossary.html#term-array-like
 
-    y_score (array-like, shape (n_samples, n_classes)):
+    y_score : array-like, shape (n_samples, n_classes)):
         Prediction probabilities for each class returned by a classifier.
         Refer: https://numpy.org/doc/stable/glossary.html#term-array-like
 
@@ -176,6 +176,10 @@ def ks_statistic(y_true,
     Examples
     --------
     .. plot:: ../../examples/ks_statistics.py
+
+    Notes
+    -----
+    .. versionadded:: 0.0.1
 
     """
     y_true = np.array(y_true)
