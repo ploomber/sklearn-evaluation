@@ -143,35 +143,37 @@ def ks_statistic(y_true,
                  text_fontsize="medium",
                  ax=None):
     """Generates the KS Statistic plot from labels and scores/probabilities
+
     Parameters
     ----------
-    y_true : array-like, shape (n_samples)):
-        Ground truth (correct) target values.
+
+    y_true : array-like, shape=[n_samples,]
+        Ground truth target values.
         Refer: https://numpy.org/doc/stable/glossary.html#term-array-like
 
-    y_score : array-like, shape (n_samples, n_classes)):
+    y_score : array-like, shape=[n_samples, n_classes]
         Prediction probabilities for each class returned by a classifier.
         Refer: https://numpy.org/doc/stable/glossary.html#term-array-like
 
-    figsize (2-tuple, optional): Tuple denoting figure size of the plot
-        e.g. (6, 6). Defaults to ``None``.
+    figsize : 2-tuple, optional
+        Tuple denoting figure size of the plot e.g. (6, 6). Defaults to ``None``.
 
-    title_fontsize (string or int, optional): Matplotlib-style fontsizes.
-        Use e.g. "small", "medium", "large" or integer-values. Defaults to
-        "large".
+    title_fontsize : string or int, optional
+        Matplotlib-style fontsizes. Use e.g. "small", "medium", "large"
+        or integer-values. Defaults to "large".
 
-    text_fontsize (string or int, optional): Matplotlib-style fontsizes.
-        Use e.g. "small", "medium", "large" or integer-values. Defaults to
+    text_fontsize : string or int, optional
+        Matplotlib-style fontsizes. Use e.g. "small", "medium", "large" or integer-values. Defaults to
         "medium".
 
-    ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
-        plot the learning curve. If None, the plot is drawn on a new set of
-        axes.
+    ax : :class:`matplotlib.axes.Axes`, optional
+         The axes upon which to plot the learning curve. If None, the
+          plot is drawn on a new set of axes.
 
     Returns
     -------
-    ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
-        drawn.
+    ax: matplotlib Axes
+        Axes containing the plot
 
     Examples
     --------
@@ -179,7 +181,7 @@ def ks_statistic(y_true,
 
     Notes
     -----
-    .. versionadded:: 0.0.1
+    .. versionadded:: 0.8.3
 
     """
     y_true = np.array(y_true)
