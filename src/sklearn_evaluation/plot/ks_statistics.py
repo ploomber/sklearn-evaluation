@@ -1,5 +1,5 @@
 """
-Plots for clustering models
+KS statistics plot
 
 NOTE: this is largely based in the scikit-plot metrics module. License below.
 

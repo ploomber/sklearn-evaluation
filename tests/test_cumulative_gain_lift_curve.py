@@ -73,9 +73,10 @@ def test_ax_cumulative_gain():
     assert ax is out_ax
 
 
-@image_comparison(baseline_images=['array_like_cumulative_gain_1',
-                                   'array_like_cumulative_gain_2',
-                                   'array_like_cumulative_gain_3'],
+@image_comparison(baseline_images=[
+    'array_like_cumulative_gain_1', 'array_like_cumulative_gain_2',
+    'array_like_cumulative_gain_3'
+],
                   extensions=['png'],
                   remove_text=False)
 def test_array_like_cumulative_gain():
@@ -116,7 +117,13 @@ def test_ax_lift_curve():
     assert ax is out_ax
 
 
+@image_comparison(baseline_images=[
+    'array_like_lift_curve_1', 'array_like_lift_curve_2',
+    'array_like_lift_curve_3'
+],
+                  extensions=['png'],
+                  remove_text=False)
 def test_array_like_lift_curve():
     plot_lift_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
-    #plot_lift_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
-    #plot_lift_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    plot_lift_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    plot_lift_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
