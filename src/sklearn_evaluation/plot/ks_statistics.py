@@ -166,7 +166,7 @@ def ks_statistic(y_true,
         Matplotlib-style fontsizes. Use e.g. "small", "medium", "large" or integer-values. Defaults to
         "medium".
 
-    ax : :class:`matplotlib.axes.Axes`, optional
+    ax : matplotlib Axes, optional
          The axes upon which to plot the learning curve. If None, the
           plot is drawn on a new set of axes.
 

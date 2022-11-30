@@ -89,11 +89,11 @@ def _cumulative_gain_curve(y_true, y_score, pos_label=None):
 
 
 def cumulative_gain(y_true,
-                         y_score,
-                         figsize=None,
-                         title_fontsize="large",
-                         text_fontsize="medium",
-                         ax=None):
+                    y_score,
+                    figsize=None,
+                    title_fontsize="large",
+                    text_fontsize="medium",
+                    ax=None):
     """
     Generates the Cumulative Gains Plot from labels and scores/probabilities
     The cumulative gains chart is used to determine the effectiveness of a
@@ -103,33 +103,33 @@ def cumulative_gain(y_true,
 
     Parameters
     ----------
-    y_true (array-like, shape (n_samples)):
+    y_true : array-like, shape=[n_samples,]
         Ground truth (correct) target values.
         Refer: https://numpy.org/doc/stable/glossary.html#term-array-like
 
-    y_score (array-like, shape (n_samples, n_classes)):
+    y_score : array-like, shape=[n_samples, n_classes]
         Prediction probabilities for each class returned by a classifier.
         Refer: https://numpy.org/doc/stable/glossary.html#term-array-like
 
-    figsize (2-tuple, optional): Tuple denoting figure size of the plot
-        e.g. (6, 6). Defaults to ``None``.
+    figsize :2-tuple, optional
+        Tuple denoting figure size of the plot e.g. (6, 6). Defaults to ``None``.
 
-    title_fontsize (string or int, optional): Matplotlib-style fontsizes.
-        Use e.g. "small", "medium", "large" or integer-values. Defaults to
-        "large".
+    title_fontsize : string or int, optional
+        Matplotlib-style fontsizes. Use e.g. "small", "medium", "large" or
+        integer-values. Defaults to "large".
 
-    text_fontsize (string or int, optional): Matplotlib-style fontsizes.
-        Use e.g. "small", "medium", "large" or integer-values. Defaults to
-        "medium".
+    text_fontsize : string or int, optional
+        Matplotlib-style fontsizes. Use e.g. "small", "medium",
+        "large" or integer-values. Defaults to "medium".
 
-    ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
-        plot the learning curve. If None, the plot is drawn on a new set of
-        axes.
+    ax : matplotlib Axes, optional
+         The axes upon which to plot the learning curve. If None, the
+          plot is drawn on a new set of axes.
 
     Returns
     -------
-    ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
-        drawn.
+    ax: matplotlib Axes
+        Axes containing the plot
 
     Examples
     --------
@@ -172,12 +172,12 @@ def cumulative_gain(y_true,
 
 
 def lift_curve(y_true,
-                    y_score,
-                    title='Lift Curve',
-                    ax=None,
-                    figsize=None,
-                    title_fontsize="large",
-                    text_fontsize="medium"):
+               y_score,
+               title='Lift Curve',
+               ax=None,
+               figsize=None,
+               title_fontsize="large",
+               text_fontsize="medium"):
     """Generates the Lift Curve from labels and scores/probabilities
     The lift curve is used to determine the effectiveness of a
     binary classifier. A detailed explanation can be found at
@@ -186,33 +186,33 @@ def lift_curve(y_true,
 
     Parameters
     ----------
-    y_true (array-like, shape (n_samples)):
+    y_true : array-like, shape=[n_samples,]
         Ground truth (correct) target values.
         Refer: https://numpy.org/doc/stable/glossary.html#term-array-like
 
-    y_score (array-like, shape (n_samples, n_classes)):
+    y_score : array-like, shape=[n_samples, n_classes]
         Prediction probabilities for each class returned by a classifier.
         Refer: https://numpy.org/doc/stable/glossary.html#term-array-like
 
-    figsize (2-tuple, optional): Tuple denoting figure size of the plot
-        e.g. (6, 6). Defaults to ``None``.
+    figsize :2-tuple, optional
+        Tuple denoting figure size of the plot e.g. (6, 6). Defaults to ``None``.
 
-    title_fontsize (string or int, optional): Matplotlib-style fontsizes.
-        Use e.g. "small", "medium", "large" or integer-values. Defaults to
-        "large".
+    title_fontsize : string or int, optional
+        Matplotlib-style fontsizes. Use e.g. "small", "medium", "large" or
+        integer-values. Defaults to "large".
 
-    text_fontsize (string or int, optional): Matplotlib-style fontsizes.
-        Use e.g. "small", "medium", "large" or integer-values. Defaults to
-        "medium".
+    text_fontsize : string or int, optional
+        Matplotlib-style fontsizes. Use e.g. "small", "medium",
+        "large" or integer-values. Defaults to "medium".
 
-    ax (:class:`matplotlib.axes.Axes`, optional): The axes upon which to
-        plot the learning curve. If None, the plot is drawn on a new set of
-        axes.
+    ax : matplotlib Axes, optional
+         The axes upon which to plot the learning curve. If None, the
+          plot is drawn on a new set of axes.
 
     Returns
     -------
-    ax (:class:`matplotlib.axes.Axes`): The axes on which the plot was
-        drawn.
+    ax: matplotlib Axes
+        Axes containing the plot
 
     Examples
     --------
