@@ -167,8 +167,7 @@ def ks_statistic(y_true,
         "medium".
 
     ax : matplotlib Axes, optional
-         The axes upon which to plot the learning curve. If None, the
-          plot is drawn on a new set of axes.
+        Axes object to draw the plot onto, otherwise uses current Axes
 
     Returns
     -------

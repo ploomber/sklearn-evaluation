@@ -125,8 +125,7 @@ def cumulative_gain(y_true,
         "large" or integer-values. Defaults to "medium".
 
     ax : matplotlib Axes, optional
-         The axes upon which to plot the learning curve. If None, the
-          plot is drawn on a new set of axes.
+        Axes object to draw the plot onto, otherwise uses current Axes
 
     Returns
     -------
@@ -212,8 +211,7 @@ def lift_curve(y_true,
         "large" or integer-values. Defaults to "medium".
 
     ax : matplotlib Axes, optional
-         The axes upon which to plot the learning curve. If None, the
-          plot is drawn on a new set of axes.
+        Axes object to draw the plot onto, otherwise uses current Axes
 
     Returns
     -------
