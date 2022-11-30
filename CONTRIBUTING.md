@@ -4,6 +4,15 @@
 
 To provide a consistent user experience, all the functions that produce plots follow a few conventions:
 
+## Function should not contain `plot` in its name
+
+Example:
+
+```python
+def precision_recall(y_true, y_score, ax=None):
+    pass
+```
+
 ## Every argument except the input data should have default values
 
 Example:
@@ -61,6 +70,26 @@ See the [`roc`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e
 The `ax` object must be returned at the end of the function.
 
 See the [`roc`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/roc.py#L45) function for an example.
+
+
+## Function docstring must include a `Notes` section
+
+The current dev version of sklearn-evaluation can be found in [`here`](https://github.com/ploomber/sklearn-evaluation/blob/master/src/sklearn_evaluation/__init__.py). 
+Each function's docstring should have a `Notes` section with a `.. versionadded::` to specify from which version this plot is available. So, if current `dev` version is 0.0.1dev, the version of the next release will be 0.0.1.
+
+Example:
+
+```python
+def plot_something(param1, param2,..., ax=None):
+    """
+    ........
+    ........
+    
+    Notes
+    -----
+    .. versionadded:: 0.0.1
+    """
+```
 
 ## Testing the implementation
 

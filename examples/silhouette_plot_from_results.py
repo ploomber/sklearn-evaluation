@@ -16,5 +16,5 @@ X, y = make_blobs(
 
 kmeans = KMeans(n_clusters=4, random_state=1)
 cluster_labels = kmeans.fit_predict(X)
-plot.silhouette_plot_from_results(X, cluster_labels)
+plot.silhouette_analysis_from_results(X, cluster_labels)
 plt.show()

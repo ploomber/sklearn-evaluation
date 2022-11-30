@@ -147,14 +147,14 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def silhouette_plot(X,
-                    clf,
-                    range_n_clusters=None,
-                    metric='euclidean',
-                    figsize=None,
-                    cmap='nipy_spectral',
-                    text_fontsize="medium",
-                    ax=None):
+def silhouette_analysis(X,
+                        clf,
+                        range_n_clusters=None,
+                        metric='euclidean',
+                        figsize=None,
+                        cmap='nipy_spectral',
+                        text_fontsize="medium",
+                        ax=None):
     """Plots silhouette analysis of clusters provided.
 
     Parameters
@@ -208,6 +208,10 @@ def silhouette_plot(X,
     --------
     .. plot:: ../../examples/silhouette_plot_basic.py
 
+    Notes
+    -----
+    .. versionadded:: 0.8.3
+
     """
 
     if range_n_clusters is None:
@@ -227,22 +231,26 @@ def silhouette_plot(X,
         setattr(clf, 'random_state', 10)
         cluster_labels = clf.fit_predict(X)
 
-        ax = silhouette_plot_from_results(X, cluster_labels, metric, figsize,
-                                          cmap, text_fontsize, ax)
+        ax = silhouette_analysis_from_results(X, cluster_labels, metric,
+                                              figsize, cmap, text_fontsize, ax)
     return ax
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def silhouette_plot_from_results(X,
-                                 cluster_labels,
-                                 metric='euclidean',
-                                 figsize=None,
-                                 cmap='nipy_spectral',
-                                 text_fontsize="medium",
-                                 ax=None):
+def silhouette_analysis_from_results(X,
+                                     cluster_labels,
+                                     metric='euclidean',
+                                     figsize=None,
+                                     cmap='nipy_spectral',
+                                     text_fontsize="medium",
+                                     ax=None):
     """
     Same as `silhouette_plot` but takes cluster_labels as input.
     Useful if you want to train the model yourself
+
+    Notes
+    -----
+    .. versionadded:: 0.8.3
     """
 
     cluster_labels = np.asarray(cluster_labels)
