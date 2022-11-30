@@ -28,6 +28,7 @@ SOFTWARE.
 
 import numpy as np
 import matplotlib.pyplot as plt
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 def _cumulative_gain_curve(y_true, y_score, pos_label=None):
@@ -88,6 +89,7 @@ def _cumulative_gain_curve(y_true, y_score, pos_label=None):
     return percentages, gains
 
 
+@SKLearnEvaluationLogger.log(feature='plot')
 def cumulative_gain(y_true,
                     y_score,
                     figsize=None,
@@ -134,6 +136,10 @@ def cumulative_gain(y_true,
     Examples
     --------
     .. plot:: ../../examples/cumulative_gain.py
+
+    Notes
+    -----
+    .. versionadded:: 0.8.3
     """
     y_true = np.array(y_true)
     y_score = np.array(y_score)
@@ -171,9 +177,9 @@ def cumulative_gain(y_true,
     return ax
 
 
+@SKLearnEvaluationLogger.log(feature='plot')
 def lift_curve(y_true,
                y_score,
-               title='Lift Curve',
                ax=None,
                figsize=None,
                title_fontsize="large",
@@ -218,6 +224,10 @@ def lift_curve(y_true,
     --------
     .. plot:: ../../examples/lift_curve.py
 
+    Notes
+    -----
+    .. versionadded:: 0.8.3
+
     """
     y_true = np.array(y_true)
     y_score = np.array(y_score)
@@ -243,7 +253,7 @@ def lift_curve(y_true,
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title(title, fontsize=title_fontsize)
+    ax.set_title("Lift Curve", fontsize=title_fontsize)
 
     ax.plot(percentages, gains1, lw=3, label='Class {}'.format(classes[0]))
     ax.plot(percentages, gains2, lw=3, label='Class {}'.format(classes[1]))
