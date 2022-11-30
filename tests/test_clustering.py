@@ -109,7 +109,7 @@ def test_n_jobs():
                   remove_text=False)
 def test_plot_silhouette():
     clf = KMeans()
-    plot.silhouette_plot(X, clf)
+    plot.silhouette_analysis(X, clf)
 
 
 @image_comparison(baseline_images=[
@@ -119,7 +119,7 @@ def test_plot_silhouette():
                   remove_text=False)
 def test_plot_silhouette_with_cluster_range():
     clf = KMeans(random_state=10)
-    plot.silhouette_plot(X, clf, range_n_clusters=[4, 5])
+    plot.silhouette_analysis(X, clf, range_n_clusters=[4, 5])
 
 
 @image_comparison(baseline_images=[
@@ -130,7 +130,7 @@ def test_plot_silhouette_with_cluster_range():
                   remove_text=False)
 def test_plot_silhouette_with_minibatchkmeans():
     clf = MiniBatchKMeans(random_state=10)
-    plot.silhouette_plot(X, clf, range_n_clusters=[4, 5])
+    plot.silhouette_analysis(X, clf, range_n_clusters=[4, 5])
 
 
 @image_comparison(baseline_images=['silhouette_plot_spectral'],
@@ -138,7 +138,7 @@ def test_plot_silhouette_with_minibatchkmeans():
                   remove_text=False)
 def test_cmap():
     clf = KMeans()
-    plot.silhouette_plot(X, clf, range_n_clusters=[2], cmap='Spectral')
+    plot.silhouette_analysis(X, clf, range_n_clusters=[2], cmap='Spectral')
 
 
 @image_comparison(baseline_images=['silhouette_plot_cosine'],
@@ -146,13 +146,13 @@ def test_cmap():
                   remove_text=False)
 def test_metric():
     clf = KMeans()
-    plot.silhouette_plot(X, clf, range_n_clusters=[6], metric='cosine')
+    plot.silhouette_analysis(X, clf, range_n_clusters=[6], metric='cosine')
 
 
 def test_string_classes():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
-    plot.silhouette_plot_from_results(
+    plot.silhouette_analysis_from_results(
         X, convert_labels_into_string(cluster_labels))
 
 
@@ -160,34 +160,34 @@ def test_string_classes():
                   extensions=['png'],
                   remove_text=False)
 def test_array_like():
-    plot.silhouette_plot_from_results(X.tolist(), y.tolist())
+    plot.silhouette_analysis_from_results(X.tolist(), y.tolist())
 
 
 @image_comparison(baseline_images=['silhouette_plot_array_like_string_label'],
                   extensions=['png'],
                   remove_text=False)
 def test_array_like_string():
-    plot.silhouette_plot_from_results(X.tolist(),
-                                      convert_labels_into_string(y))
+    plot.silhouette_analysis_from_results(X.tolist(),
+                                          convert_labels_into_string(y))
 
 
 def test_ax_silhouette():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
-    plot.silhouette_plot_from_results(X, cluster_labels)
+    plot.silhouette_analysis_from_results(X, cluster_labels)
     fig, ax = plt.subplots(1, 1)
-    out_ax = plot.silhouette_plot_from_results(X, cluster_labels)
+    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels)
     assert ax is not out_ax
-    out_ax = plot.silhouette_plot_from_results(X, cluster_labels, ax=ax)
+    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels, ax=ax)
     assert ax is out_ax
 
 
 def test_ax_params():
     clf = KMeans()
     cluster_labels = clf.fit_predict(X)
-    out_ax = plot.silhouette_plot_from_results(X,
-                                               cluster_labels,
-                                               text_fontsize="large")
+    out_ax = plot.silhouette_analysis_from_results(X,
+                                                   cluster_labels,
+                                                   text_fontsize="large")
     assert out_ax.get_title() == 'Silhouette Analysis'
     assert out_ax.get_ylim() == (0.0, 250.0)
 
@@ -195,14 +195,14 @@ def test_ax_params():
 def test_invalid_clusterer():
     clf = DecisionTreeClassifier()
     with pytest.raises(TypeError):
-        plot.silhouette_plot(X, clf)
+        plot.silhouette_analysis(X, clf)
 
 
-def test_from_results(monkeypatch):
+def test_from_results_call(monkeypatch):
     mock = Mock()
-    monkeypatch.setattr(cl, 'silhouette_plot_from_results', mock)
+    monkeypatch.setattr(cl, 'silhouette_analysis_from_results', mock)
     clf = KMeans()
     fig, ax = plt.subplots(1, 1)
-    ax = plot.silhouette_plot(X, clf, range_n_clusters=[2, 3], ax=ax)
+    ax = plot.silhouette_analysis(X, clf, range_n_clusters=[2, 3], ax=ax)
     assert mock.call_count == 2
     assert mock.return_value == ax
