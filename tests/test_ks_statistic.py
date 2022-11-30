@@ -26,13 +26,21 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import sys
 import numpy as np
 import pytest
+from functools import partial
 import matplotlib.pyplot as plt
-from matplotlib.testing.decorators import image_comparison
+from matplotlib.testing.decorators import image_comparison as _image_comparison
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer, load_iris
 from sklearn_evaluation.plot import ks_statistic
+
+# older versions of Python are not compatible with the latest version of
+# matplotlib, which leads to image differences. We increase the tolerance in
+# such cases
+image_comparison = partial(_image_comparison,
+                           tol=21 if sys.version_info.minor in (8) else 0)
 
 X, y = load_breast_cancer(return_X_y=True)
 
