@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import image_comparison
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer, load_iris
-from sklearn_evaluation.plot import plot_cumulative_gain, plot_lift_curve
+from sklearn_evaluation.plot import cumulative_gain, lift_curve
 
 X, y = load_breast_cancer(return_X_y=True)
 
@@ -48,7 +48,7 @@ def test_string_classes_cumulative_gain():
     clf = LogisticRegression()
     clf.fit(X, _convert_labels_into_string(y))
     probas = clf.predict_proba(X)
-    plot_cumulative_gain(_convert_labels_into_string(y), probas)
+    cumulative_gain(_convert_labels_into_string(y), probas)
 
 
 def test_two_classes_cumulative_gain():
@@ -57,7 +57,7 @@ def test_two_classes_cumulative_gain():
     clf.fit(X, y)
     probas = clf.predict_proba(X)
     with pytest.raises(ValueError) as e:
-        plot_cumulative_gain(y, probas)
+        cumulative_gain(y, probas)
     assert "Cannot calculate Cumulative Gains for data with 3 category/ies" in str(
         e.value)
 
@@ -67,9 +67,9 @@ def test_ax_cumulative_gain():
     clf.fit(X, y)
     probas = clf.predict_proba(X)
     fig, ax = plt.subplots(1, 1)
-    out_ax = plot_cumulative_gain(y, probas)
+    out_ax = cumulative_gain(y, probas)
     assert ax is not out_ax
-    out_ax = plot_cumulative_gain(y, probas, ax=ax)
+    out_ax = cumulative_gain(y, probas, ax=ax)
     assert ax is out_ax
 
 
@@ -80,9 +80,9 @@ def test_ax_cumulative_gain():
                   extensions=['png'],
                   remove_text=False)
 def test_array_like_cumulative_gain():
-    plot_cumulative_gain([0, 1], [[0.8, 0.2], [0.2, 0.8]])
-    plot_cumulative_gain([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
-    plot_cumulative_gain(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    cumulative_gain([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+    cumulative_gain([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    cumulative_gain(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
 
 
 @image_comparison(baseline_images=['string_classes_lift_curve'],
@@ -92,7 +92,7 @@ def test_string_classes_lift_curve():
     clf = LogisticRegression()
     clf.fit(X, _convert_labels_into_string(y))
     probas = clf.predict_proba(X)
-    plot_lift_curve(_convert_labels_into_string(y), probas)
+    lift_curve(_convert_labels_into_string(y), probas)
 
 
 def test_two_classes_lift_curve():
@@ -101,7 +101,7 @@ def test_two_classes_lift_curve():
     clf.fit(X, y)
     probas = clf.predict_proba(X)
     with pytest.raises(ValueError) as e:
-        plot_lift_curve(y, probas)
+        lift_curve(y, probas)
     assert "Cannot calculate Lift Curve for data with 3 category/ies" in str(
         e.value)
 
@@ -111,9 +111,9 @@ def test_ax_lift_curve():
     clf.fit(X, y)
     probas = clf.predict_proba(X)
     fig, ax = plt.subplots(1, 1)
-    out_ax = plot_lift_curve(y, probas)
+    out_ax = lift_curve(y, probas)
     assert ax is not out_ax
-    out_ax = plot_lift_curve(y, probas, ax=ax)
+    out_ax = lift_curve(y, probas, ax=ax)
     assert ax is out_ax
 
 
@@ -124,6 +124,6 @@ def test_ax_lift_curve():
                   extensions=['png'],
                   remove_text=False)
 def test_array_like_lift_curve():
-    plot_lift_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
-    plot_lift_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
-    plot_lift_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    lift_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+    lift_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    lift_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])

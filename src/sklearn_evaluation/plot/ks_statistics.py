@@ -136,7 +136,7 @@ def _binary_ks_curve(y_true, y_score):
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def plot_ks_statistic(y_true,
+def ks_statistic(y_true,
                       y_score,
                       figsize=None,
                       title_fontsize="large",

@@ -32,7 +32,7 @@ import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import image_comparison
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer, load_iris
-from sklearn_evaluation.plot import plot_ks_statistic
+from sklearn_evaluation.plot import ks_statistic
 
 X, y = load_breast_cancer(return_X_y=True)
 
@@ -48,7 +48,7 @@ def test_string_classes():
     clf = LogisticRegression(random_state=101)
     clf.fit(X, _convert_labels_into_string(y))
     probas = clf.predict_proba(X)
-    plot_ks_statistic(_convert_labels_into_string(y), probas)
+    ks_statistic(_convert_labels_into_string(y), probas)
 
 
 def test_two_classes():
@@ -58,7 +58,7 @@ def test_two_classes():
     clf.fit(X, y)
     probas = clf.predict_proba(X)
     with pytest.raises(ValueError) as e:
-        plot_ks_statistic(y, probas)
+        ks_statistic(y, probas)
     assert "Cannot calculate KS statistic for data with 3 category/ies" in str(
         e.value)
 
@@ -69,9 +69,9 @@ def test_ax():
     clf.fit(X, y)
     probas = clf.predict_proba(X)
     fig, ax = plt.subplots(1, 1)
-    out_ax = plot_ks_statistic(y, probas)
+    out_ax = ks_statistic(y, probas)
     assert ax is not out_ax
-    out_ax = plot_ks_statistic(y, probas, ax=ax)
+    out_ax = ks_statistic(y, probas, ax=ax)
     assert ax is out_ax
 
 
@@ -82,6 +82,6 @@ def test_ax():
                   extensions=['png'],
                   remove_text=False)
 def test_array_like():
-    plot_ks_statistic([0, 1], [[0.8, 0.2], [0.2, 0.8]])
-    plot_ks_statistic([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
-    plot_ks_statistic(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    ks_statistic([0, 1], [[0.8, 0.2], [0.2, 0.8]])
+    ks_statistic([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    ks_statistic(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])

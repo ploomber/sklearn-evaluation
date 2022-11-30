@@ -1,5 +1,5 @@
 """
-Plots for clustering models
+Plots for cumulative gain and lift curve
 
 NOTE: this is largely based in the scikit-plot metrics module. License below.
 
@@ -88,7 +88,7 @@ def _cumulative_gain_curve(y_true, y_score, pos_label=None):
     return percentages, gains
 
 
-def plot_cumulative_gain(y_true,
+def cumulative_gain(y_true,
                          y_score,
                          figsize=None,
                          title_fontsize="large",
@@ -171,7 +171,7 @@ def plot_cumulative_gain(y_true,
     return ax
 
 
-def plot_lift_curve(y_true,
+def lift_curve(y_true,
                     y_score,
                     title='Lift Curve',
                     ax=None,

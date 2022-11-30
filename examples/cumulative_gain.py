@@ -2,7 +2,7 @@ import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import make_classification
-from sklearn_evaluation.plot import plot_cumulative_gain
+from sklearn_evaluation.plot import cumulative_gain
 
 X, y = make_classification(n_samples=1000,
                            n_features=20,
@@ -18,5 +18,5 @@ model = LogisticRegression()
 
 model = model.fit(X_train, y_train)
 y_probas = model.predict_proba(X_test)
-plot_cumulative_gain(y_test, y_probas)
+cumulative_gain(y_test, y_probas)
 plt.show()
