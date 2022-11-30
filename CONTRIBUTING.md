@@ -108,7 +108,7 @@ def my_plotting_function(y_true, y_pred, ax=None):
     --------
     .. plot:: ../../examples/{example-name}.py
     
-     Notes
+    Notes
     -----
     .. versionadded:: 0.0.1
     """
