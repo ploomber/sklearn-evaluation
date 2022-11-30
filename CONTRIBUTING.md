@@ -72,25 +72,6 @@ The `ax` object must be returned at the end of the function.
 See the [`roc`](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/roc.py#L45) function for an example.
 
 
-## Function docstring must include a `Notes` section
-
-The current dev version of sklearn-evaluation can be found in [`here`](https://github.com/ploomber/sklearn-evaluation/blob/master/src/sklearn_evaluation/__init__.py). 
-Each function's docstring should have a `Notes` section with a `.. versionadded::` to specify from which version this plot is available. So, if current `dev` version is 0.0.1dev, the version of the next release will be 0.0.1.
-
-Example:
-
-```python
-def plot_something(param1, param2,..., ax=None):
-    """
-    ........
-    ........
-    
-    Notes
-    -----
-    .. versionadded:: 0.0.1
-    """
-```
-
 ## Testing the implementation
 
 Each function must have a corresponding test. If the function has parameters that alter the plot, they should be included as well as separate tests. See the [plot tests](https://github.com/ploomber/sklearn-evaluation/blob/master/tests/test_plot.py) here.
@@ -100,6 +81,9 @@ Each function must have a corresponding test. If the function has parameters tha
 The function must contain a docstring explaining what the function does and a description of each argument. [See this example.](https://github.com/ploomber/sklearn-evaluation/blob/8056bc31ec5e372102d0ee5ada988e380b077c4b/src/sklearn_evaluation/plot/classification.py#L143)
 
 Furthermore, a full example (under the docstring's `Examples` section)must be included in the examples section of the docstring. Such an example must be standalone so that copy-paste should work. [See this example.](https://sklearn-evaluation.readthedocs.io/en/latest/api/plot.html#sklearn_evaluation.plot.confusion_matrix) Note that these examples are automatically tested by the CI.
+
+Each function's docstring should also have a `Notes` section with a `.. versionadded::` to specify from which version this plot is available.
+The current dev version of sklearn-evaluation can be found in [`here`](https://github.com/ploomber/sklearn-evaluation/blob/master/src/sklearn_evaluation/__init__.py). So, if current `dev` version is 0.0.1dev, the version of the next release will be 0.0.1.
 
 Here's a docstring template you can use:
 
@@ -126,6 +110,10 @@ def my_plotting_function(y_true, y_pred, ax=None):
     Examples
     --------
     .. plot:: ../../examples/{example-name}.py
+    
+     Notes
+    -----
+    .. versionadded:: 0.0.1
     """
     pass
 ```
