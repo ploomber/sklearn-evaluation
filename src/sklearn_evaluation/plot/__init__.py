@@ -11,15 +11,37 @@ from .grid_search import grid_search
 from .validation_curve import validation_curve
 from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
-from .clustering import elbow_curve, elbow_curve_from_results
-from .calibration import calibration_curve
+from .clustering import elbow_curve, elbow_curve_from_results, silhouette_analysis, silhouette_analysis_from_results
+from .regression import residuals, prediction_error
+from .target_analysis import target_analysis
+from .calibration import calibration_curve, scores_distribution
+from .classification_report import classification_report, ClassificationReport
 from .ks_statistics import ks_statistic
 from .cumulative_gain_lift_curve import cumulative_gain, lift_curve
 
 __all__ = [
-    'confusion_matrix', 'feature_importances', 'precision_recall', 'roc',
-    'precision_at_proportions', 'grid_search', 'validation_curve',
-    'learning_curve', 'metrics_at_thresholds', 'ConfusionMatrix',
-    'elbow_curve', 'elbow_curve_from_results', 'calibration_curve',
-    'cumulative_gain', 'ks_statistic', 'lift_curve'
+    'confusion_matrix',
+    'feature_importances',
+    'precision_recall',
+    'roc',
+    'precision_at_proportions',
+    'grid_search',
+    'validation_curve',
+    'learning_curve',
+    'metrics_at_thresholds',
+    'ConfusionMatrix',
+    'residuals',
+    'prediction_error',
+    'elbow_curve',
+    'elbow_curve_from_results',
+    'silhouette_analysis',
+    'silhouette_analysis_from_results',
+    'calibration_curve',
+    'target_analysis',
+    'scores_distribution',
+    'classification_report',
+    'ClassificationReport',
+    'ks_statistic',
+    'cumulative_gain',
+    'lift_curve'
 ]

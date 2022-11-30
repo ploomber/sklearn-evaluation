@@ -1,23 +1,32 @@
 import os
+import platform
+
 import nox
 
 
-@nox.session(venv_backend='conda',
-             python=os.environ.get('TRAVIS_PYTHON_VERSION', '3.8'))
+# NOTE: adding
+# venv_params=["--channel", "conda-forge"]
+# is breaking the installation
+@nox.session(
+    venv_backend="conda",
+    python=os.environ.get("PYTHON_VERSION", "3.8"),
+)
 def tests(session):
+    session.install("pip", "--upgrade")
+
     # if we remove the --editable flag pytest throws an error, because there
     # are two copies of the pkg (src/ and site-packages/), this is a quick
     # way to fix it
     # https://github.com/pytest-dev/pytest/issues/7678
-    session.install('--editable', '.')
+    session.install("--editable", ".")
 
     # test vanilla installation is importable
-    session.run('python', '-c', 'import sklearn_evaluation')
+    session.run("python", "-c", "import sklearn_evaluation")
 
     # this is needed to run tests
-    session.conda_install('lxml')
+    session.conda_install("lxml")
     # install other test dependencies
-    session.install('--editable', '.[all]')
+    session.install("--editable", ".[all]")
 
     # run unit tests
     # docstrings
@@ -27,19 +36,25 @@ def tests(session):
     # first load any .py files, which are the examples, and then try to run
     # any doctests, there isn't any)
     session.run(
-        'pytest',
-        'tests/',
-        'src/',
-        'examples/',
-        '--cov=sklearn_evaluation',
-        '--doctest-modules',
+        "pytest",
+        "tests/",
+        "src/",
+        "examples/",
+        "--cov=sklearn_evaluation",
+        "--doctest-modules",
     )
-    session.run('coveralls')
+    session.run("coveralls")
 
-    if session.python == '3.8':
-        session._run('conda', 'env', 'update', '--prefix',
-                     session.virtualenv.location, '--file',
-                     'docs/environment.yml')
+    if session.python == "3.8" and platform.system() == "Linux":
+        session._run(
+            "conda",
+            "env",
+            "update",
+            "--prefix",
+            session.virtualenv.location,
+            "--file",
+            "docs/environment.yml",
+        )
 
         # build docs so we can detect build errors
-        session.run('make', '-C', 'docs/', 'html', external=True)
+        session.run("make", "-C", "docs/", "html", external=True)
