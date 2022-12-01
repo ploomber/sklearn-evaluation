@@ -43,7 +43,7 @@ def _convert_labels_into_string(y_true):
 
 @image_comparison(baseline_images=['string_classes_ks_statistics'],
                   extensions=['png'],
-                  remove_text=False)
+                  remove_text=True)
 def test_string_classes():
     clf = LogisticRegression(random_state=101)
     clf.fit(X, _convert_labels_into_string(y))
@@ -80,7 +80,7 @@ def test_ax():
     'array_like_ks_statistics_3'
 ],
                   extensions=['png'],
-                  remove_text=False)
+                  remove_text=True)
 def test_array_like():
     ks_statistic([0, 1], [[0.8, 0.2], [0.2, 0.8]])
     ks_statistic([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
