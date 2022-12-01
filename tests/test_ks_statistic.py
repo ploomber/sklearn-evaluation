@@ -26,10 +26,8 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
-import sys
 import numpy as np
 import pytest
-from functools import partial
 import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import image_comparison
 from sklearn.linear_model import LogisticRegression
@@ -38,11 +36,6 @@ from sklearn_evaluation.plot import ks_statistic
 
 X, y = load_breast_cancer(return_X_y=True)
 
-# image_comparison = partial(_image_comparison,
-#                            tol=15.0 if sys.version_info.minor in [6, 7, 8, 9, 10] else 0,
-#                            remove_text=False,
-#                            extensions=['png'])
-
 
 def _convert_labels_into_string(y_true):
     return ["A" if x == 0 else x for x in y_true]
@@ -50,7 +43,8 @@ def _convert_labels_into_string(y_true):
 
 @image_comparison(baseline_images=['string_classes_ks_statistics'],
                   extensions=['png'],
-                  remove_text=True)
+                  remove_text=True,
+                  tol=21.0)
 def test_string_classes():
     clf = LogisticRegression(random_state=101)
     clf.fit(X, _convert_labels_into_string(y))
