@@ -31,14 +31,14 @@ import numpy as np
 from functools import partial
 import pytest
 import matplotlib.pyplot as plt
-from matplotlib.testing.decorators import image_comparison as _image_comparison
+from matplotlib.testing.decorators import image_comparison
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer, load_iris
 from sklearn_evaluation.plot import cumulative_gain, lift_curve
 
 
-image_comparison = partial(_image_comparison,
-                           tol=7 if sys.version_info.minor in (6,7,8,9,10) else 0)
+# image_comparison = partial(_image_comparison,
+#                            tol=7 if sys.version_info.minor in (6,7,8,9,10) else 0)
 
 X, y = load_breast_cancer(return_X_y=True)
 
@@ -49,7 +49,7 @@ def _convert_labels_into_string(y_true):
 
 @image_comparison(baseline_images=['string_classes_cumulative_gain'],
                   extensions=['png'],
-                  remove_text=False)
+                  remove_text=True)
 def test_string_classes_cumulative_gain():
     clf = LogisticRegression()
     clf.fit(X, _convert_labels_into_string(y))
@@ -84,7 +84,7 @@ def test_ax_cumulative_gain():
     'array_like_cumulative_gain_3'
 ],
                   extensions=['png'],
-                  remove_text=False)
+                  remove_text=True)
 def test_array_like_cumulative_gain():
     cumulative_gain([0, 1], [[0.8, 0.2], [0.2, 0.8]])
     cumulative_gain([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
@@ -93,7 +93,7 @@ def test_array_like_cumulative_gain():
 
 @image_comparison(baseline_images=['string_classes_lift_curve'],
                   extensions=['png'],
-                  remove_text=False)
+                  remove_text=True)
 def test_string_classes_lift_curve():
     clf = LogisticRegression()
     clf.fit(X, _convert_labels_into_string(y))
@@ -128,7 +128,7 @@ def test_ax_lift_curve():
     'array_like_lift_curve_3'
 ],
                   extensions=['png'],
-                  remove_text=False)
+                  remove_text=True)
 def test_array_like_lift_curve():
     lift_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
     lift_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
