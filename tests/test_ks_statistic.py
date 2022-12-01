@@ -40,7 +40,7 @@ from sklearn_evaluation.plot import ks_statistic
 # matplotlib, which leads to image differences. We increase the tolerance in
 # such cases
 image_comparison = partial(_image_comparison,
-                           tol=21 if sys.version_info.minor in (6,7,8,9) else 0)
+                           tol=21 if sys.version_info.minor in (6,7,8,9,10) else 0)
 
 X, y = load_breast_cancer(return_X_y=True)
 
@@ -51,7 +51,7 @@ def _convert_labels_into_string(y_true):
 
 @image_comparison(baseline_images=['string_classes_ks_statistics'],
                   extensions=['png'],
-                  remove_text=False)
+                  remove_text=True)
 def test_string_classes():
     clf = LogisticRegression(random_state=101)
     clf.fit(X, _convert_labels_into_string(y))
@@ -88,7 +88,7 @@ def test_ax():
     'array_like_ks_statistics_3'
 ],
                   extensions=['png'],
-                  remove_text=False)
+                  remove_text=True)
 def test_array_like():
     ks_statistic([0, 1], [[0.8, 0.2], [0.2, 0.8]])
     ks_statistic([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])

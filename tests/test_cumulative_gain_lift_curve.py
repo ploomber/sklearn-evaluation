@@ -38,7 +38,7 @@ from sklearn_evaluation.plot import cumulative_gain, lift_curve
 
 
 image_comparison = partial(_image_comparison,
-                           tol=7 if sys.version_info.minor in (6,7,8,9) else 0)
+                           tol=7 if sys.version_info.minor in (6,7,8,9,10) else 0)
 
 X, y = load_breast_cancer(return_X_y=True)
 
