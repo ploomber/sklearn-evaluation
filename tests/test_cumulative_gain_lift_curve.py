@@ -42,7 +42,8 @@ def _convert_labels_into_string(y_true):
 
 @image_comparison(baseline_images=['string_classes_cumulative_gain'],
                   extensions=['png'],
-                  remove_text=True)
+                  remove_text=True,
+                  tol=6.0)
 def test_string_classes_cumulative_gain():
     clf = LogisticRegression()
     clf.fit(X, _convert_labels_into_string(y))
@@ -86,7 +87,8 @@ def test_array_like_cumulative_gain():
 
 @image_comparison(baseline_images=['string_classes_lift_curve'],
                   extensions=['png'],
-                  remove_text=True)
+                  remove_text=True,
+                  tol=7.0)
 def test_string_classes_lift_curve():
     clf = LogisticRegression()
     clf.fit(X, _convert_labels_into_string(y))
