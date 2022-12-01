@@ -18,7 +18,7 @@ def precision_recall(y_true, y_score, ax=None):
 Example:
 
 ```python
-def plot_something(y_true, y_pred, param=1, another=2, ax=None):
+def some_algorithm(y_true, y_pred, param=1, another=2, ax=None):
     pass
 ```
 
@@ -27,7 +27,7 @@ def plot_something(y_true, y_pred, param=1, another=2, ax=None):
 Many of the functions take a vector of real values (first argument) and a vector of predicted values (second argument), they should be named `y_true` and `y_pred` respectively.
 
 ```python
-def plot_something(y_true, y_pred, ..., ax=None):
+def some_algorithm(y_true, y_pred, ..., ax=None):
     pass
 ```
 
@@ -36,7 +36,7 @@ See the [`confusion_matrix`](https://github.com/ploomber/sklearn-evaluation/blob
 If the plotting function applies to classifiers (e.g., confusion matrix), and the raw scores from the models are the input (instead of the predicted class), the second argument should be named `y_score`:
 
 ```python
-def plot_something(y_true, y_score, ..., ax=None):
+def some_algorithm(y_true, y_score, ..., ax=None):
     pass
 ```
 
@@ -45,7 +45,7 @@ See the [`precision_at_proportion`](https://github.com/ploomber/sklearn-evaluati
 In cases where the function doesn't take a true and predicted vector, the names should be descriptive enough:
 
 ```python
-def plot_something(some_meaningful_name, ..., ax=None):
+def some_algorithm(some_meaningful_name, ..., ax=None):
     pass
 ```
 
@@ -56,7 +56,7 @@ See the [`learning_curve`](https://github.com/ploomber/sklearn-evaluation/blob/8
 The last argument should be `ax=None`. If the user passes a value (a `matplotlib.axes.Axes` object), the plot must be created there. If not, we should use the default axes with `ax = plt.gca()`.
 
 ```python
-def plot_something(a, b, ..., ax=None):
+def some_algorithm(a, b, ..., ax=None):
     pass
 ```
 
