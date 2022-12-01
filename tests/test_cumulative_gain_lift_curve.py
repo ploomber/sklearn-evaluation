@@ -26,13 +26,19 @@ OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+import sys
 import numpy as np
+from functools import partial
 import pytest
 import matplotlib.pyplot as plt
-from matplotlib.testing.decorators import image_comparison
+from matplotlib.testing.decorators import image_comparison as _image_comparison
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer, load_iris
 from sklearn_evaluation.plot import cumulative_gain, lift_curve
+
+
+image_comparison = partial(_image_comparison,
+                           tol=7 if sys.version_info.minor in (6,7,8,9) else 0)
 
 X, y = load_breast_cancer(return_X_y=True)
 

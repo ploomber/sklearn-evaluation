@@ -40,7 +40,7 @@ from sklearn_evaluation.plot import ks_statistic
 # matplotlib, which leads to image differences. We increase the tolerance in
 # such cases
 image_comparison = partial(_image_comparison,
-                           tol=21 if sys.version_info.minor==8 else 0)
+                           tol=21 if sys.version_info.minor in (6,7,8,9) else 0)
 
 X, y = load_breast_cancer(return_X_y=True)
 
