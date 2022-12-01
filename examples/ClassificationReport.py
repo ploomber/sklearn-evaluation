@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -18,7 +17,7 @@ cr_rf = plot.ClassificationReport.from_raw_data(
     y_test, y_pred_rf, target_names=target_names
 )
 cr_lr = plot.ClassificationReport.from_raw_data(
-    y_test, y_pred_rf, target_names=target_names
+    y_test, y_pred_lr, target_names=target_names
 )
 
 # display one of the classification reports
