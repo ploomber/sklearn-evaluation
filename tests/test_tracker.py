@@ -336,3 +336,19 @@ obj = {"class": "something", "version": "something"}
 )
 def test_json_loads(value, expected):
     assert tracker_module.json_loads(value) == expected
+
+
+def test_insert_many():
+    tracker = SQLiteTracker(":memory:")
+
+    experiments = [
+        dict(a=1, b=2),
+        dict(a=2, b=3),
+        dict(a=3, b=4),
+    ]
+
+    assert not len(tracker)
+
+    tracker.insert_many(experiments)
+
+    assert len(tracker) == 3

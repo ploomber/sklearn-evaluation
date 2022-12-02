@@ -394,6 +394,25 @@ class SQLiteTracker:
         self.conn.commit()
 
     @SKLearnEvaluationLogger.log("SQLiteTracker")
+    def insert_many(self, parameters_all):
+        """Insert many experiments at once"""
+        cur = self.conn.cursor()
+        cur.execute("BEGIN TRANSACTION")
+
+        for parameters in parameters_all:
+            uuid = str(uuid4())[:8]
+            cur.execute(
+                """
+        INSERT INTO experiments (uuid, parameters)
+        VALUES(?, ?)
+        """,
+                [uuid, json.dumps(parameters)],
+            )
+
+        cur.close()
+        self.conn.commit()
+
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def comment(self, uuid, comment):
         """Add a comment to an experiment given its uuid"""
         # TODO: add overwrite (false by default) and append options
