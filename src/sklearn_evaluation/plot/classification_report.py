@@ -47,6 +47,7 @@ class ClassificationReport(Plot):
 
     Examples
     --------
+    .. plot:: ../../examples/ClassificationReport.py
     """
 
     def __init__(

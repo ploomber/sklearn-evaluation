@@ -136,7 +136,19 @@ def test_recent():
     assert df.index.name == "uuid"
 
 
-def test_get_schema():
+@pytest.mark.parametrize(
+    "mapping, keys",
+    [
+        [dict(a=1, b=2), {("a",), ("b",)}],
+        [dict(a=1, b=dict(c=2)), {("a",), ("b", "c")}],
+        [dict(a=1, b=dict(c=dict(d=2))), {("a",), ("b", "c", "d")}],
+    ],
+)
+def test_extract_keys(mapping, keys):
+    assert tracker_module.extract_keys(mapping) == keys
+
+
+def test_get_parameters_keys():
     tracker = SQLiteTracker(":memory:")
 
     to_insert = [
@@ -149,6 +161,28 @@ def test_get_schema():
         tracker.insert(i, data)
 
     assert tracker.get_parameters_keys() == ["a", "b", "x", "y", "z"]
+
+
+def test_get_parameters_keys_nested():
+    tracker = SQLiteTracker(":memory:")
+
+    to_insert = [
+        dict(a=1, b=2),
+        dict(a=dict(b=1, c=2), b=dict(c=2, d=3)),
+        dict(a=dict(b=1, c=dict(d=2)), b=2),
+    ]
+
+    tracker.insert_many(to_insert)
+
+    assert tracker.get_parameters_keys() == [
+        "a",
+        ("a", "b"),
+        ("a", "c"),
+        ("a", "c", "d"),
+        "b",
+        ("b", "c"),
+        ("b", "d"),
+    ]
 
 
 expected_arrow = """\
@@ -175,33 +209,61 @@ SELECT
 LIMIT 10\
 """
 
+_to_insert = [
+    dict(a=1, b=2),
+    dict(x=1, y=2),
+    dict(z=3),
+]
+
+
+expected_arrow_nested = """\
+SELECT
+    uuid,
+    parameters ->> 'a.b.c' as c,
+    parameters ->> 'x' as x,
+    parameters ->> 'y' as y
+    FROM experiments
+LIMIT 10\
+"""
+
+expected_json_extract_nested = """\
+SELECT
+    uuid,
+    json_extract(parameters, '$.a.b.c') as c,
+    json_extract(parameters, '$.x') as x,
+    json_extract(parameters, '$.y') as y
+    FROM experiments
+LIMIT 10\
+"""
+
+_to_insert_nested = [
+    dict(a=dict(b=dict(c=1))),
+    dict(x=1, y=2),
+]
+
 
 @pytest.mark.parametrize(
-    "arrow_operator_supported, expected",
+    "arrow_operator_supported, expected, to_insert",
     [
-        [False, expected_json_extract],
-        [True, expected_arrow],
+        [False, expected_json_extract, _to_insert],
+        [True, expected_arrow, _to_insert],
+        [False, expected_json_extract_nested, _to_insert_nested],
+        [True, expected_arrow_nested, _to_insert_nested],
     ],
     ids=[
         "arrow-not-supported",
         "arrow-supported",
+        "arrow-not-supported-nested",
+        "arrow-supported-nested",
     ],
 )
-def test_get_sample_query(arrow_operator_supported, expected, monkeypatch):
+def test_get_sample_query(arrow_operator_supported, expected, to_insert, monkeypatch):
     monkeypatch.setattr(
         tracker_module, "ARROW_OPERATOR_SUPPORTED", arrow_operator_supported
     )
 
     tracker = SQLiteTracker(":memory:")
-
-    to_insert = [
-        dict(a=1, b=2),
-        dict(x=1, y=2),
-        dict(z=3),
-    ]
-
-    for i, data in enumerate(to_insert):
-        tracker.insert(i, data)
+    tracker.insert_many(to_insert)
 
     assert tracker.get_sample_query(compatibility_mode=False) == expected
 
@@ -336,3 +398,19 @@ obj = {"class": "something", "version": "something"}
 )
 def test_json_loads(value, expected):
     assert tracker_module.json_loads(value) == expected
+
+
+def test_insert_many():
+    tracker = SQLiteTracker(":memory:")
+
+    experiments = [
+        dict(a=1, b=2),
+        dict(a=2, b=3),
+        dict(a=3, b=4),
+    ]
+
+    assert not len(tracker)
+
+    tracker.insert_many(experiments)
+
+    assert len(tracker) == 3

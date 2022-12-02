@@ -1,3 +1,4 @@
+from collections.abc import Mapping
 from uuid import uuid4
 import sqlite3
 import json
@@ -25,8 +26,8 @@ ARROW_OPERATOR_SUPPORTED = int(minor) >= 38
 TEMPLATE_ARROW = """\
 SELECT
     uuid,
-    {% for k in keys -%}
-    parameters ->> '{{k}}' as {{k}}{% if not loop.last %},{% endif %}
+    {% for p, alias in keys -%}
+    parameters ->> '{{p}}' as {{alias}}{% if not loop.last %},{% endif %}
     {% endfor -%}
 FROM experiments
 LIMIT 10
@@ -35,8 +36,8 @@ LIMIT 10
 TEMPLATE_JSON_EXTRACT = """\
 SELECT
     uuid,
-    {% for k in keys -%}
-    json_extract(parameters, '$.{{k}}') as {{k}}{% if not loop.last %},{% endif %}
+    {% for p, alias in keys -%}
+    json_extract(parameters, '$.{{p}}') as {{alias}}{% if not loop.last %},{% endif %}
     {% endfor -%}
 FROM experiments
 LIMIT 10
@@ -394,6 +395,25 @@ class SQLiteTracker:
         self.conn.commit()
 
     @SKLearnEvaluationLogger.log("SQLiteTracker")
+    def insert_many(self, parameters_all):
+        """Insert many experiments at once"""
+        cur = self.conn.cursor()
+        cur.execute("BEGIN TRANSACTION")
+
+        for parameters in parameters_all:
+            uuid = str(uuid4())[:8]
+            cur.execute(
+                """
+        INSERT INTO experiments (uuid, parameters)
+        VALUES(?, ?)
+        """,
+                [uuid, json.dumps(parameters)],
+            )
+
+        cur.close()
+        self.conn.commit()
+
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def comment(self, uuid, comment):
         """Add a comment to an experiment given its uuid"""
         # TODO: add overwrite (false by default) and append options
@@ -492,9 +512,9 @@ class SQLiteTracker:
         for record in cur:
             data = record[0]
             obj = {} if not data else json.loads(data)
-            keys = keys | set(obj)
+            keys = keys | extract_keys(obj)
 
-        return sorted(keys)
+        return extract_if_length_one(sorted(keys))
 
     @SKLearnEvaluationLogger.log("SQLiteTracker")
     def get_sample_query(self, compatibility_mode=True):
@@ -506,7 +526,7 @@ class SQLiteTracker:
             TEMPLATE = TEMPLATE_ARROW
 
         template = Template(TEMPLATE)
-        return template.render(keys=keys)
+        return template.render(keys=collapse(keys))
 
     @SKLearnEvaluationLogger.log("SQLiteTracker")
     def get(self, uuid, unserialize_plots=True):
@@ -743,3 +763,44 @@ def format_id(value):
         return f"{value:.6f}"
     else:
         return value
+
+
+def extract_keys(d):
+    return set(tuple(keys) for keys in _extract_keys(d))
+
+
+def _extract_keys(d):
+    """ """
+    keys = []
+
+    for key, value in d.items():
+        if isinstance(value, Mapping):
+            keys.extend([key] + tail for tail in _extract_keys(value))
+        else:
+            keys.append([key])
+
+    return keys
+
+
+def extract_if_length_one(elements):
+    out = []
+
+    for e in elements:
+        if len(e) == 1:
+            out.append(e[0])
+        else:
+            out.append(e)
+
+    return out
+
+
+def collapse(elements):
+    out = []
+
+    for e in elements:
+        if isinstance(e, str):
+            out.append((e, e))
+        else:
+            out.append((".".join(e), e[-1]))
+
+    return out
