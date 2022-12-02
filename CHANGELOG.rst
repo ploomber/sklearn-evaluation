@@ -3,6 +3,11 @@ CHANGELOG
 
 0.8.3dev
 --------
+* Adds ``plot.silhoutte_analysis``
+* Adds clustering user guide
+* Adds ``plot.target_analysis``
+* Adds bulk insert to ``SQliteTracker`` via ``.insert_many``
+* ``SQliteTracker.{get_parameters_keys, get_sample_query}`` support extracting keys from nested JSON objects
 
 0.8.2 (2022-11-24)
 ------------------
