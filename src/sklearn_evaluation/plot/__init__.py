@@ -16,6 +16,8 @@ from .regression import residuals, prediction_error
 from .target_analysis import target_analysis
 from .calibration import calibration_curve, scores_distribution
 from .classification_report import classification_report, ClassificationReport
+from .ks_statistics import ks_statistic
+from .cumulative_gain_lift_curve import cumulative_gain, lift_curve
 
 __all__ = [
     'confusion_matrix',
@@ -39,4 +41,7 @@ __all__ = [
     'scores_distribution',
     'classification_report',
     'ClassificationReport',
+    'ks_statistic',
+    'cumulative_gain',
+    'lift_curve'
 ]

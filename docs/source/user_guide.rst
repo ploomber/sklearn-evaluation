@@ -5,6 +5,7 @@ User Guide
     :maxdepth: 1
 
     user_guide/classifier
+    user_guide/evaluating_binary_classifiers
     user_guide/report
     user_guide/compare
     user_guide/clustering_evaluation
