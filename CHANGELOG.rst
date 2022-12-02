@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.8.4dev
+--------
+
 0.8.3 (2022-12-02)
 ------------------
 * Adds ``plot.silhoutte_analysis``
