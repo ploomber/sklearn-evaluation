@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.8.3dev
---------
+0.8.3 (2022-12-02)
+------------------
 * Adds ``plot.silhoutte_analysis``
 * Adds clustering user guide
 * Adds ``plot.target_analysis``
