@@ -22,30 +22,12 @@ from .ks_statistics import ks_statistic
 from .cumulative_gain_lift_curve import cumulative_gain, lift_curve
 
 __all__ = [
-    'confusion_matrix',
-    'feature_importances',
-    'precision_recall',
-    'roc',
-    'precision_at_proportions',
-    'grid_search',
-    'validation_curve',
-    'learning_curve',
-    'metrics_at_thresholds',
-    'ConfusionMatrix',
-    'residuals',
-    'prediction_error',
-    'elbow_curve',
-    'elbow_curve_from_results',
-    'silhouette_analysis',
-    'silhouette_analysis_from_results',
-    'calibration_curve',
-    'target_analysis',
-    'scores_distribution',
-    'classification_report',
-    'ClassificationReport',
-    'Rank1D',
-    'Rank2D'
-    'ks_statistic',
-    'cumulative_gain',
-    'lift_curve'
+    'confusion_matrix', 'feature_importances', 'precision_recall', 'roc',
+    'precision_at_proportions', 'grid_search', 'validation_curve',
+    'learning_curve', 'metrics_at_thresholds', 'ConfusionMatrix', 'residuals',
+    'prediction_error', 'elbow_curve', 'elbow_curve_from_results',
+    'silhouette_analysis', 'silhouette_analysis_from_results',
+    'calibration_curve', 'target_analysis', 'scores_distribution',
+    'classification_report', 'ClassificationReport', 'Rank1D', 'Rank2D',
+    'ks_statistic', 'cumulative_gain', 'lift_curve'
 ]

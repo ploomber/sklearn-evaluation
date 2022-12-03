@@ -1,13 +1,22 @@
 import matplotlib.pyplot as plt
-from sklearn.datasets import make_classification
 from sklearn_evaluation.plot import Rank2D
 
-X, y = make_classification(n_samples=1000,
-                           n_features=6,
-                           n_classes=2,
-                           n_informative=4,
-                           class_sep=0.8)
+from sklearn.datasets import load_breast_cancer as load_data
 
-rank2d = Rank2D()
+X, y = load_data(return_X_y=True)
+
+features = [
+    'mean radius', 'mean texture', 'mean perimeter', 'mean area',
+    'mean smoothness', 'mean compactness', 'mean concavity',
+    'mean concave points', 'mean symmetry', 'mean fractal dimension',
+    'radius error', 'texture error', 'perimeter error', 'area error',
+    'smoothness error', 'compactness error', 'concavity error',
+    'concave points error', 'symmetry error', 'fractal dimension error',
+    'worst radius', 'worst texture', 'worst perimeter', 'worst area',
+    'worst smoothness', 'worst compactness', 'worst concavity',
+    'worst concave points', 'worst symmetry', 'worst fractal dimension'
+]
+
+rank2d = Rank2D(features=features, figsize=(14, 14))
 rank2d.plot_feature_ranks(X)
 plt.show()
