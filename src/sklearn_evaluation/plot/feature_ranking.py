@@ -71,7 +71,7 @@ class RankD:
 
     Notes
     -----
-    .. versionadded:: 0.8.3
+    .. versionadded:: 0.8.4
     """
 
     ranking_methods = {}
@@ -231,7 +231,7 @@ class Rank1D(RankD):
 
     Notes
     -----
-    .. versionadded:: 0.8.3
+    .. versionadded:: 0.8.4
     """
 
     ranking_methods = {
