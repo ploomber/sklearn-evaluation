@@ -18,5 +18,5 @@ features = [
 ]
 
 rank1d = Rank1D(features=features, figsize=(14, 7))
-rank1d.plot_feature_ranks(X)
+rank1d.feature_ranks(X)
 plt.show()

@@ -18,5 +18,5 @@ features = [
 ]
 
 rank2d = Rank2D(features=features, figsize=(14, 14))
-rank2d.plot_feature_ranks(X)
+rank2d.feature_ranks(X)
 plt.show()

@@ -21,6 +21,7 @@ import pandas as pd
 from scipy.stats import shapiro
 from scipy.stats import spearmanr
 from scipy.stats import kendalltau as sp_kendalltau
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 import matplotlib.pyplot as plt
 
@@ -67,12 +68,17 @@ class RankD:
         An n-dimensional, symmetric array of rank scores, where n is the
         number of features. E.g. for 1D ranking, it is (n,), for a
         2D ranking it is (n,n) and so forth.
+
+    Notes
+    -----
+    .. versionadded:: 0.8.3
     """
 
     ranking_methods = {}
 
     def __init__(self, algorithm=None, features=None, figsize=(7, 7), ax=None):
 
+        self.ranks_ = None
         self.algorithm = algorithm
         self.features = features
 
@@ -81,7 +87,7 @@ class RankD:
         else:
             self.ax = ax
 
-    def rank(self, X):
+    def _rank(self, X):
         """
         Returns the feature ranking.
         Parameters
@@ -110,7 +116,7 @@ class RankD:
 
         return self.ranking_methods[algorithm](X)
 
-    def derive_features_from_data(self, X):
+    def _derive_features_from_data(self, X):
         n_columns = X.shape[1]
 
         if self.features is not None:
@@ -130,7 +136,7 @@ class RankD:
             else:
                 self.features_ = np.arange(0, n_columns)
 
-    def derive_features_from_ranks(self, ranks):
+    def _derive_features_from_ranks(self, ranks):
         if self.features is None:
             self.features_ = np.arange(0, len(ranks))
         else:
@@ -140,7 +146,8 @@ class RankD:
                     "of ranks provided."))
             self.features_ = np.array(self.features)
 
-    def plot_feature_ranks(self, X):
+    @SKLearnEvaluationLogger.log(feature='plot')
+    def feature_ranks(self, X):
         """
         Parameters
         ----------
@@ -153,13 +160,16 @@ class RankD:
         ax: matplotlib Axes
             Axes containing the plot
         """
-        self.derive_features_from_data(X)
-        self.ranks_ = self.rank(X)
+        self._derive_features_from_data(X)
+        self.ranks_ = self._rank(X)
         self._draw()
         return self.ax
 
-    def plot_feature_ranks_custom_algorithm(self, ranks):
+    @SKLearnEvaluationLogger.log(feature='plot')
+    def feature_ranks_custom_algorithm(self, ranks):
         """
+        This method is useful if user wants to use custom algorithm for feature ranking.
+
         Parameters
         ----------
         ranks : ndarray
@@ -174,7 +184,7 @@ class RankD:
         """
 
         self._validate_rank(ranks)
-        self.derive_features_from_ranks(ranks)
+        self._derive_features_from_ranks(ranks)
         self.ranks_ = ranks
         self._draw()
         return self.ax
@@ -218,6 +228,10 @@ class Rank1D(RankD):
     Examples
     ---------
     .. plot:: ../../examples/feature_ranking_1D.py
+
+    Notes
+    -----
+    .. versionadded:: 0.8.3
     """
 
     ranking_methods = {
@@ -324,6 +338,10 @@ class Rank2D(RankD):
     Examples
     ----------
     .. plot:: ../../examples/feature_ranking_2D.py
+
+    Notes
+    -----
+    .. versionadded:: 0.8.3
     """
 
     ranking_methods = {
