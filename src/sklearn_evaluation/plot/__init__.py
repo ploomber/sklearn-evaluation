@@ -16,6 +16,7 @@ from .regression import residuals, prediction_error
 from .target_analysis import target_analysis
 from .calibration import calibration_curve, scores_distribution
 from .classification_report import classification_report, ClassificationReport
+from .cooks_distance import cooks_distance
 
 __all__ = [
     'confusion_matrix',
@@ -39,4 +40,5 @@ __all__ = [
     'scores_distribution',
     'classification_report',
     'ClassificationReport',
+    'cooks_distance'
 ]
