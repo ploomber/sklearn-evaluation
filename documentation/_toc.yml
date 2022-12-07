@@ -1,0 +1,15 @@
+format: jb-book
+root: intro.md
+parts:
+  - caption: User Guide
+    chapters:
+    - file: user_guide/clustering_evaluation
+    - file: user_guide/target_analysis
+    - file: user_guide/classifiers_intro
+      sections: 
+      - file: user_guide/compare
+      - file: user_guide/evaluating_binary_classifiers
+  - caption: API Reference
+    chapters:
+    - file: user_guide/RegressionPlots
+
