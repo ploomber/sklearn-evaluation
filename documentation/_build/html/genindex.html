@@ -5,7 +5,7 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Index &#8212; Sklearn-evaluation</title>
+    <title>Index &#8212; sklearn-evaluation</title>
     
   <!-- Loaded before other Sphinx assets -->
   <link href="_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
@@ -25,6 +25,7 @@
     <link rel="stylesheet" type="text/css" href="_static/copybutton.css" />
     <link rel="stylesheet" type="text/css" href="_static/mystnb.css" />
     <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="_static/plot_directive.css" />
     <link rel="stylesheet" type="text/css" href="_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
     
   <!-- Pre-loaded scripts that we'll load fully later -->
@@ -49,6 +50,8 @@ const thebe_selector_input = "pre"
 const thebe_selector_output = ".output, .cell_output"
 </script>
     <script async="async" src="_static/sphinx-thebe.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/require.js/2.3.4/require.min.js"></script>
+    <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="#" />
     <link rel="search" title="Search" href="search.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -94,7 +97,7 @@ const thebe_selector_output = ".output, .cell_output"
       <img src="_static/logo.png" class="logo" alt="logo">
       
       
-      <h1 class="site-logo" id="site-title">Sklearn-evaluation</h1>
+      <h1 class="site-logo" id="site-title">sklearn-evaluation</h1>
       
     </a>
 </div><form class="bd-search d-flex align-items-center" action="search.html" method="get">
@@ -156,8 +159,33 @@ const thebe_selector_output = ".output, .cell_output"
 </p>
 <ul class="nav bd-sidenav">
  <li class="toctree-l1">
-  <a class="reference internal" href="user_guide/RegressionPlots.html">
-   Evaluate Regression
+  <a class="reference internal" href="api/plot.html">
+   Plotting
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="api/table.html">
+   Tables
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="api/evaluator.html">
+   ClassifierEvaluator
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="api/training.html">
+   Training
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="api/SQLiteTracker.html">
+   Experiment tracking
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="api/nbs.html">
+   Notebooks
   </a>
  </li>
 </ul>
@@ -252,8 +280,324 @@ title="Fullscreen mode"
 <h1 id="index">Index</h1>
 
 <div class="genindex-jumpbox">
+ <a href="#C"><strong>C</strong></a>
+ | <a href="#D"><strong>D</strong></a>
+ | <a href="#E"><strong>E</strong></a>
+ | <a href="#F"><strong>F</strong></a>
+ | <a href="#G"><strong>G</strong></a>
+ | <a href="#H"><strong>H</strong></a>
+ | <a href="#I"><strong>I</strong></a>
+ | <a href="#K"><strong>K</strong></a>
+ | <a href="#L"><strong>L</strong></a>
+ | <a href="#M"><strong>M</strong></a>
+ | <a href="#N"><strong>N</strong></a>
+ | <a href="#P"><strong>P</strong></a>
+ | <a href="#Q"><strong>Q</strong></a>
+ | <a href="#R"><strong>R</strong></a>
+ | <a href="#S"><strong>S</strong></a>
+ | <a href="#T"><strong>T</strong></a>
+ | <a href="#U"><strong>U</strong></a>
+ | <a href="#V"><strong>V</strong></a>
  
 </div>
+<h2 id="C">C</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.calibration_curve">calibration_curve() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.classification_report">classification_report() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.ClassificationReport">ClassificationReport (class in sklearn_evaluation.plot)</a>
+</li>
+      <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator">ClassifierEvaluator (class in sklearn_evaluation)</a>
+</li>
+      <li><a href="api/training.html#sklearn_evaluation.training.selector.ColumnDrop">ColumnDrop (class in sklearn_evaluation.training.selector)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/training.html#sklearn_evaluation.training.selector.ColumnKeep">ColumnKeep (class in sklearn_evaluation.training.selector)</a>
+</li>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.comment">comment() (sklearn_evaluation.SQLiteTracker method)</a>
+
+      <ul>
+        <li><a href="api/SQLiteTracker.html#sklearn_evaluation.tracker.Experiment.comment">(sklearn_evaluation.tracker.Experiment method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.confusion_matrix">confusion_matrix() (in module sklearn_evaluation.plot)</a>
+
+      <ul>
+        <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.confusion_matrix">(sklearn_evaluation.ClassifierEvaluator method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.cumulative_gain">cumulative_gain() (in module sklearn_evaluation.plot)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="D">D</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/training.html#sklearn_evaluation.training.DataSelector">DataSelector (class in sklearn_evaluation.training)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="E">E</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.elbow_curve">elbow_curve() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.elbow_curve_from_results">elbow_curve_from_results() (in module sklearn_evaluation.plot)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.estimator_class">estimator_class (sklearn_evaluation.ClassifierEvaluator property)</a>
+</li>
+      <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.estimator_type">estimator_type (sklearn_evaluation.ClassifierEvaluator property)</a>
+</li>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.tracker.Experiment">Experiment (class in sklearn_evaluation.tracker)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="F">F</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.feature_importances">feature_importances() (in module sklearn_evaluation.plot)</a>
+
+      <ul>
+        <li><a href="api/table.html#sklearn_evaluation.table.feature_importances">(in module sklearn_evaluation.table)</a>
+</li>
+        <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.feature_importances">(sklearn_evaluation.ClassifierEvaluator method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.feature_importances_table">feature_importances_table() (sklearn_evaluation.ClassifierEvaluator method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="G">G</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.get">get() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.get_parameters_keys">get_parameters_keys() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.grid_search">grid_search() (in module sklearn_evaluation.plot)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="H">H</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.html_serializable">html_serializable() (sklearn_evaluation.ClassifierEvaluator method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="I">I</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.insert">insert() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.insert_many">insert_many() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="K">K</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.ks_statistic">ks_statistic() (in module sklearn_evaluation.plot)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="L">L</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.learning_curve">learning_curve() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.lift_curve">lift_curve() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.tracker.Experiment.log">log() (sklearn_evaluation.tracker.Experiment method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.tracker.Experiment.log_classification_report">log_classification_report() (sklearn_evaluation.tracker.Experiment method)</a>
+</li>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.tracker.Experiment.log_confusion_matrix">log_confusion_matrix() (sklearn_evaluation.tracker.Experiment method)</a>
+</li>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.tracker.Experiment.log_dict">log_dict() (sklearn_evaluation.tracker.Experiment method)</a>
+</li>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.tracker.Experiment.log_figure">log_figure() (sklearn_evaluation.tracker.Experiment method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="M">M</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.make_report">make_report() (sklearn_evaluation.ClassifierEvaluator method)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.metrics_at_thresholds">metrics_at_thresholds() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li>
+    module
+
+      <ul>
+        <li><a href="api/plot.html#module-sklearn_evaluation.plot">sklearn_evaluation.plot</a>
+</li>
+        <li><a href="api/table.html#module-sklearn_evaluation.table">sklearn_evaluation.table</a>
+</li>
+        <li><a href="api/training.html#module-sklearn_evaluation.training.selector">sklearn_evaluation.training.selector</a>
+</li>
+      </ul></li>
+  </ul></td>
+</tr></table>
+
+<h2 id="N">N</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.new">new() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.new_experiment">new_experiment() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/nbs.html#sklearn_evaluation.NotebookCollection">NotebookCollection (class in sklearn_evaluation)</a>
+</li>
+      <li><a href="api/nbs.html#sklearn_evaluation.NotebookIntrospector">NotebookIntrospector (class in sklearn_evaluation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="P">P</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.precision_at_proportions">precision_at_proportions() (in module sklearn_evaluation.plot)</a>
+
+      <ul>
+        <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.precision_at_proportions">(sklearn_evaluation.ClassifierEvaluator method)</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.precision_recall">precision_recall() (in module sklearn_evaluation.plot)</a>
+
+      <ul>
+        <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.precision_recall">(sklearn_evaluation.ClassifierEvaluator method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.prediction_error">prediction_error() (in module sklearn_evaluation.plot)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="Q">Q</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.query">query() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="R">R</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.recent">recent() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.residuals">residuals() (in module sklearn_evaluation.plot)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.roc">roc() (in module sklearn_evaluation.plot)</a>
+
+      <ul>
+        <li><a href="api/evaluator.html#sklearn_evaluation.ClassifierEvaluator.roc">(sklearn_evaluation.ClassifierEvaluator method)</a>
+</li>
+      </ul></li>
+      <li><a href="api/training.html#sklearn_evaluation.training.selector.RowDrop">RowDrop (class in sklearn_evaluation.training.selector)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="S">S</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.scores_distribution">scores_distribution() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.silhouette_analysis">silhouette_analysis() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.silhouette_analysis_from_results">silhouette_analysis_from_results() (in module sklearn_evaluation.plot)</a>
+</li>
+      <li>
+    sklearn_evaluation.plot
+
+      <ul>
+        <li><a href="api/plot.html#module-sklearn_evaluation.plot">module</a>
+</li>
+      </ul></li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li>
+    sklearn_evaluation.table
+
+      <ul>
+        <li><a href="api/table.html#module-sklearn_evaluation.table">module</a>
+</li>
+      </ul></li>
+      <li>
+    sklearn_evaluation.training.selector
+
+      <ul>
+        <li><a href="api/training.html#module-sklearn_evaluation.training.selector">module</a>
+</li>
+      </ul></li>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker">SQLiteTracker (class in sklearn_evaluation)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="T">T</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.target_analysis">target_analysis() (in module sklearn_evaluation.plot)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/training.html#sklearn_evaluation.training.DataSelector.transform">transform() (sklearn_evaluation.training.DataSelector method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="U">U</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.update">update() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+  </ul></td>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/SQLiteTracker.html#sklearn_evaluation.SQLiteTracker.upsert">upsert() (sklearn_evaluation.SQLiteTracker method)</a>
+</li>
+  </ul></td>
+</tr></table>
+
+<h2 id="V">V</h2>
+<table style="width: 100%" class="indextable genindextable"><tr>
+  <td style="width: 33%; vertical-align: top;"><ul>
+      <li><a href="api/plot.html#sklearn_evaluation.plot.validation_curve">validation_curve() (in module sklearn_evaluation.plot)</a>
+</li>
+  </ul></td>
+</tr></table>
+
 
 
               </div>

@@ -11,5 +11,10 @@ parts:
       - file: user_guide/evaluating_binary_classifiers
   - caption: API Reference
     chapters:
-    - file: user_guide/RegressionPlots
+    - file: api/plot.rst 
+    - file: api/table.rst
+    - file: api/evaluator.rst 
+    - file: api/training.rst 
+    - file: api/SQLiteTracker.rst 
+    - file: api/nbs.rst 
 

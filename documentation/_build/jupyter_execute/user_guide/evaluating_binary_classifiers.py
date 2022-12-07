@@ -20,14 +20,14 @@ from sklearn.linear_model import LogisticRegression
 from sklearn_evaluation.plot import ks_statistic, cumulative_gain, lift_curve
 
 
-# In[17]:
+# In[2]:
 
 
 matplotlib.rcParams["figure.figsize"] = (7, 7)
 matplotlib.rcParams["font.size"] = 18
 
 
-# In[23]:
+# In[3]:
 
 
 # Generate a dataset with low class_sep value
@@ -44,7 +44,7 @@ model = model.fit(X_train, y_train)
 
 # In the below plot we can see that since the generated dataset has poor separation among samples of the two classes, the KS Statistic is low , hence the classification task will be harder.
 
-# In[24]:
+# In[4]:
 
 
 y_probas = model.predict_proba(X_test)
@@ -52,7 +52,7 @@ ks_statistic(y_test, y_probas)
 plt.show()
 
 
-# In[25]:
+# In[5]:
 
 
 X, y = load_data(return_X_y=True)
@@ -68,7 +68,7 @@ y_probas = lr.predict_proba(X_test)
 
 # In the below plot the high KS Statistic value indicates a good separation between the two classes, hence classifier will predict class more accurately.
 
-# In[26]:
+# In[6]:
 
 
 ks_statistic(y_test, y_probas)
@@ -85,14 +85,14 @@ plt.show()
 # 
 # http://www2.cs.uregina.ca/~dbd/cs831/notes/lift_chart/lift_chart.html
 
-# In[30]:
+# In[7]:
 
 
 cumulative_gain(y_test, y_probas)
 plt.show()
 
 
-# In[34]:
+# In[8]:
 
 
 lift_curve(y_test, y_probas)

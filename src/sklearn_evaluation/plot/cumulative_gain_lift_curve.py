@@ -134,7 +134,7 @@ def cumulative_gain(y_true,
 
     Examples
     --------
-    .. plot:: ../../examples/cumulative_gain.py
+    .. plot:: ../examples/cumulative_gain.py
 
     Notes
     -----
@@ -220,7 +220,7 @@ def lift_curve(y_true,
 
     Examples
     --------
-    .. plot:: ../../examples/lift_curve.py
+    .. plot:: ../examples/lift_curve.py
 
     Notes
     -----

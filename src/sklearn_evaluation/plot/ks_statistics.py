@@ -176,7 +176,7 @@ def ks_statistic(y_true,
 
     Examples
     --------
-    .. plot:: ../../examples/ks_statistics.py
+    .. plot:: ../examples/ks_statistics.py
 
     Notes
     -----

@@ -106,7 +106,7 @@ def my_plotting_function(y_true, y_pred, ax=None):
 
     Examples
     --------
-    .. plot:: ../../examples/{example-name}.py
+    .. plot:: ../examples/{example-name}.py
     
     Notes
     -----

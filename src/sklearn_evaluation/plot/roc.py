@@ -36,7 +36,7 @@ def roc(y_true, y_score, ax=None):
 
     Examples
     --------
-    .. plot:: ../../examples/roc.py
+    .. plot:: ../examples/roc.py
 
     """
     if any((val is None for val in (y_true, y_score))):
