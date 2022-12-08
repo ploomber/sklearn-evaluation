@@ -55,7 +55,7 @@ const thebe_selector_output = ".output, .cell_output"
     <script src="https://unpkg.com/@jupyter-widgets/html-manager@^0.20.1/dist/embed-amd.js"></script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
-    <link rel="next" title="Clustering evaluation" href="user_guide/clustering_evaluation.html" />
+    <link rel="next" title="Classifier Evaluation" href="user_guide/classifiers_intro.html" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="docsearch:language" content="None">
     
@@ -96,7 +96,7 @@ const thebe_selector_output = ".output, .cell_output"
         
       
       
-      <img src="_static/logo.png" class="logo" alt="logo">
+      <img src="_static/logo.jpeg" class="logo" alt="logo">
       
       
       <h1 class="site-logo" id="site-title">sklearn-evaluation</h1>
@@ -121,16 +121,6 @@ const thebe_selector_output = ".output, .cell_output"
  </span>
 </p>
 <ul class="nav bd-sidenav">
- <li class="toctree-l1">
-  <a class="reference internal" href="user_guide/clustering_evaluation.html">
-   Clustering evaluation
-  </a>
- </li>
- <li class="toctree-l1">
-  <a class="reference internal" href="user_guide/target_analysis.html">
-   Target Analysis
-  </a>
- </li>
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="user_guide/classifiers_intro.html">
    Classifier Evaluation
@@ -142,6 +132,11 @@ const thebe_selector_output = ".output, .cell_output"
   </label>
   <ul>
    <li class="toctree-l2">
+    <a class="reference internal" href="user_guide/classifier.html">
+     Classifier evaluation
+    </a>
+   </li>
+   <li class="toctree-l2">
     <a class="reference internal" href="user_guide/compare.html">
      Comparing classifiers
     </a>
@@ -152,6 +147,46 @@ const thebe_selector_output = ".output, .cell_output"
     </a>
    </li>
   </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user_guide/clustering_evaluation.html">
+   Clustering evaluation
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user_guide/target_analysis.html">
+   Target Analysis
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user_guide/func_vs_oop.html">
+   Functional vs Object Oriented interface
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user_guide/grid_search.html">
+   Evaluating Grid Search Results
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user_guide/RegressionPlots.html">
+   Evaluate Regression
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user_guide/matplotlib.html">
+   Advanced usage using matplotlib
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user_guide/SQLiteTracker.html">
+   Experiment tracking
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="user_guide/NotebookCollection.html">
+   Analyzing results from notebooks
+  </a>
  </li>
 </ul>
 <p aria-level="2" class="caption" role="heading">
@@ -255,6 +290,51 @@ title="Fullscreen mode"
 
 </button>
 
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/ploomber/ploomber"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/ploomber/ploomber/issues/new?title=Issue%20on%20page%20%2Fintro.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
 <div class="menu-dropdown menu-dropdown-download-buttons">
   <button class="headerbtn menu-dropdown__trigger"
       aria-label="Download this page">
@@ -300,12 +380,41 @@ title="Print to PDF"
     </ul>
   </div>
 </div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
 
     </div>
 </div>
 
 <!-- Table of contents -->
 <div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installation">
+   Installation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#license">
+   License
+  </a>
+ </li>
+</ul>
+
+    </nav>
 </div>
     </div>
     <div class="article row">
@@ -317,6 +426,24 @@ title="Print to PDF"
                 <div id="print-main-content">
                     <div id="jb-print-toc">
                         
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#installation">
+   Installation
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#license">
+   License
+  </a>
+ </li>
+</ul>
+
+                        </nav>
                     </div>
                 </div>
             </div>
@@ -327,12 +454,24 @@ title="Print to PDF"
   <section class="tex2jax_ignore mathjax_ignore" id="sklearn-evaluation-documentation">
 <h1>Sklearn-evaluation documentation<a class="headerlink" href="#sklearn-evaluation-documentation" title="Permalink to this headline">#</a></h1>
 <p>Machine learning model evaluation made easy: plots, tables, HTML reports, experiment tracking, and Jupyter notebook analysis.</p>
+<section id="installation">
+<h2>Installation<a class="headerlink" href="#installation" title="Permalink to this headline">#</a></h2>
+<div class="highlight-bash notranslate"><div class="highlight"><pre><span></span>pip install sklearn-evaluation
+</pre></div>
+</div>
+</section>
 <div class="toctree-wrapper compound">
 <p aria-level="2" class="caption" role="heading"><span class="caption-text">User Guide</span></p>
 <ul>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/classifiers_intro.html">Classifier Evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide/clustering_evaluation.html">Clustering evaluation</a></li>
 <li class="toctree-l1"><a class="reference internal" href="user_guide/target_analysis.html">Target Analysis</a></li>
-<li class="toctree-l1"><a class="reference internal" href="user_guide/classifiers_intro.html">Classifier Evaluation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/func_vs_oop.html">Functional vs Object Oriented interface</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/grid_search.html">Evaluating Grid Search Results</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/RegressionPlots.html">Evaluate Regression</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/matplotlib.html">Advanced usage using matplotlib</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/SQLiteTracker.html">Experiment tracking</a></li>
+<li class="toctree-l1"><a class="reference internal" href="user_guide/NotebookCollection.html">Analyzing results from notebooks</a></li>
 </ul>
 </div>
 <div class="toctree-wrapper compound">
@@ -346,6 +485,26 @@ title="Print to PDF"
 <li class="toctree-l1"><a class="reference internal" href="api/nbs.html">Notebooks</a></li>
 </ul>
 </div>
+<section id="license">
+<h2>License<a class="headerlink" href="#license" title="Permalink to this headline">#</a></h2>
+<p>The MIT License (MIT)</p>
+<p>Copyright (c) 2016 Eduardo Blancas Reyes</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the “Software”), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED “AS IS”, WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.</p>
+</section>
 </section>
 
     <script type="text/x-thebe-config">
@@ -375,10 +534,10 @@ title="Print to PDF"
                 
     <!-- Previous / next buttons -->
 <div class='prev-next-area'>
-    <a class='right-next' id="next-link" href="user_guide/clustering_evaluation.html" title="next page">
+    <a class='right-next' id="next-link" href="user_guide/classifiers_intro.html" title="next page">
     <div class="prev-next-info">
         <p class="prev-next-subtitle">next</p>
-        <p class="prev-next-title">Clustering evaluation</p>
+        <p class="prev-next-title">Classifier Evaluation</p>
     </div>
     <i class="fas fa-angle-right"></i>
     </a>

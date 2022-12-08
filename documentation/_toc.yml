@@ -3,12 +3,21 @@ root: intro.md
 parts:
   - caption: User Guide
     chapters:
-    - file: user_guide/clustering_evaluation
-    - file: user_guide/target_analysis
     - file: user_guide/classifiers_intro
       sections: 
+      - file: user_guide/classifier
       - file: user_guide/compare
       - file: user_guide/evaluating_binary_classifiers
+    - file: report
+    - file: user_guide/clustering_evaluation
+    - file: user_guide/target_analysis
+    - file: user_guide/func_vs_oop
+    - file: user_guide/grid_search
+    - file: user_guide/RegressionPlots
+    - file: user_guide/matplotlib
+    - file: user_guide/SQLiteTracker
+    - file: user_guide/NotebookCollection
+    - file: user_guide/nbdB
   - caption: API Reference
     chapters:
     - file: api/plot.rst 
