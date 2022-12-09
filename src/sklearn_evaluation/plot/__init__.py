@@ -18,6 +18,7 @@ from .calibration import calibration_curve, scores_distribution
 from .classification_report import classification_report, ClassificationReport
 from .ks_statistics import ks_statistic
 from .cumulative_gain_lift_curve import cumulative_gain, lift_curve
+from .feature_ranking import Rank1D, Rank2D
 
 __all__ = [
     'confusion_matrix',
@@ -43,5 +44,7 @@ __all__ = [
     'ClassificationReport',
     'ks_statistic',
     'cumulative_gain',
-    'lift_curve'
-]
+    'lift_curve',
+    'Rank1D',
+    'Rank2D'
+    ]
