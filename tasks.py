@@ -18,6 +18,8 @@ def setup(c, version=None):
           f'&& conda activate {env_name} '
           '&& pip install --editable .[all] '
           '&& pip install invoke lxml'
+          '&& pip install jupyter-book'
+          '&& pip install ghp-import'
           )  # lxml needed for NotebookCollection.py example
 
     print(f'Done! Activate your environment with:\nconda activate {env_name}')
