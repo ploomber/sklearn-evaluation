@@ -1,6 +1,6 @@
-# Classifier Evaluation
+# Classifier
 
 This section contains all information related to classifier evaluation.
 
-```{contents}
+```{tableofcontents}
 ```

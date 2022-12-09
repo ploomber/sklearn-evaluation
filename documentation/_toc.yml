@@ -26,4 +26,7 @@ parts:
     - file: api/training.rst 
     - file: api/SQLiteTracker.rst 
     - file: api/nbs.rst 
+  - caption: Community
+    chapters:
+    - file: community/community.rst
 

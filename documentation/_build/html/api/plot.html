@@ -124,7 +124,7 @@ const thebe_selector_output = ".output, .cell_output"
 <ul class="nav bd-sidenav">
  <li class="toctree-l1 has-children">
   <a class="reference internal" href="../user_guide/classifiers_intro.html">
-   Classifier Evaluation
+   Classifier
   </a>
   <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
   <label for="toctree-checkbox-1">
@@ -224,6 +224,18 @@ const thebe_selector_output = ".output, .cell_output"
  <li class="toctree-l1">
   <a class="reference internal" href="nbs.html">
    Notebooks
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Community
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../community/community.html">
+   Community
   </a>
  </li>
 </ul>
@@ -438,7 +450,7 @@ classifier that produced the corresponding probability estimates in
 <cite>probabilities</cite>. If <code class="docutils literal notranslate"><span class="pre">None</span></code>, the names “Classifier 1”, “Classifier 2”,
 etc. will be used.</p></li>
 <li><p><strong>n_bins</strong> (<em>int</em><em>, </em><em>optional</em><em>, </em><em>default=10</em>) – Number of bins. A bigger number requires more data.</p></li>
-<li><p><strong>cmap</strong> (string or <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.colors.Colormap</span></code> instance, optional) – Colormap used for plotting the projection. View Matplotlib Colormap
+<li><p><strong>cmap</strong> (string or <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Colormap.html#matplotlib.colors.Colormap" title="(in Matplotlib v3.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.colors.Colormap</span></code></a> instance, optional) – Colormap used for plotting the projection. View Matplotlib Colormap
 documentation for available options.
 <a class="reference external" href="https://matplotlib.org/users/colormaps.html">https://matplotlib.org/users/colormaps.html</a></p></li>
 <li><p><strong>ax</strong> (<em>matplotlib Axes</em>) – Axes object to draw the plot onto, otherwise uses current Axes</p></li>
@@ -585,12 +597,12 @@ n_features is the number of features.
 Refer <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array-like">https://numpy.org/doc/stable/glossary.html#term-array-like</a></p></li>
 <li><p><strong>clf</strong> – Clusterer instance that implements <code class="docutils literal notranslate"><span class="pre">fit</span></code>,``fit_predict``, and
 <code class="docutils literal notranslate"><span class="pre">score</span></code> methods, and an <code class="docutils literal notranslate"><span class="pre">n_clusters</span></code> hyperparameter.
-e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.cluster.KMeans</span></code> instance</p></li>
+e.g. <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html#sklearn.cluster.KMeans" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.cluster.KMeans</span></code></a> instance</p></li>
 <li><p><strong>n_clusters</strong> (None or <code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of int, optional) – List of n_clusters for which to plot the explained variances.
 Defaults to <code class="docutils literal notranslate"><span class="pre">[1,</span> <span class="pre">3,</span> <span class="pre">5,</span> <span class="pre">7,</span> <span class="pre">9,</span> <span class="pre">11]</span></code>.</p></li>
 <li><p><strong>n_jobs</strong> (<em>int</em><em>, </em><em>optional</em>) – Number of jobs to run in parallel. Defaults to 1.</p></li>
 <li><p><strong>show_cluster_time</strong> (<em>bool</em><em>, </em><em>optional</em>) – Include plot of time it took to cluster for a particular K.</p></li>
-<li><p><strong>ax</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code>, optional) – The axes upon which to plot the curve. If None, the plot is drawn
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a>, optional) – The axes upon which to plot the curve. If None, the plot is drawn
 on the current Axes</p></li>
 </ul>
 </dd>
@@ -894,7 +906,7 @@ difference.</p>
 <li><p><strong>y_true</strong> (<em>array-like</em><em>, </em><em>shape =</em><em> [</em><em>n_samples</em><em>]</em>) – Measured target values (ground truth).</p></li>
 <li><p><strong>y_pred</strong> (<em>array-like</em><em>, </em><em>shape =</em><em> [</em><em>n_samples</em><em>]</em>) – Predicted target values.</p></li>
 <li><p><strong>model</strong> (Regression instance that implements <code class="docutils literal notranslate"><span class="pre">fit</span></code>,``predict``, and) – <code class="docutils literal notranslate"><span class="pre">score</span></code> methods and <code class="docutils literal notranslate"><span class="pre">fit_intercept</span></code> attribute.
-e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.LinearRegression</span></code> instance
+e.g. <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.LinearRegression.html#sklearn.linear_model.LinearRegression" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.linear_model.LinearRegression</span></code></a> instance
 If not specified, use the LinearRegression model.</p></li>
 <li><p><strong>ax</strong> (<em>matplotlib Axes</em>) – Axes object to draw the plot onto, otherwise uses current Axes</p></li>
 </ul>
@@ -1011,7 +1023,7 @@ n_features is the number of features.
 Refer <a class="reference external" href="https://numpy.org/doc/stable/glossary.html#term-array-like">https://numpy.org/doc/stable/glossary.html#term-array-like</a></p></li>
 <li><p><strong>clf</strong> – Clusterer instance that implements <code class="docutils literal notranslate"><span class="pre">fit</span></code>,``fit_predict``, and
 <code class="docutils literal notranslate"><span class="pre">score</span></code> methods, and an <code class="docutils literal notranslate"><span class="pre">n_clusters</span></code> hyperparameter.
-e.g. <code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.cluster.KMeans</span></code> instance</p></li>
+e.g. <a class="reference external" href="https://scikit-learn.org/stable/modules/generated/sklearn.cluster.KMeans.html#sklearn.cluster.KMeans" title="(in scikit-learn v1.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">sklearn.cluster.KMeans</span></code></a> instance</p></li>
 <li><p><strong>range_n_clusters</strong> (None or <code class="xref py py-obj docutils literal notranslate"><span class="pre">list</span></code> of int, optional) – List of n_clusters for which to plot the silhouette scores.
 Defaults to <code class="docutils literal notranslate"><span class="pre">[2,</span> <span class="pre">3,</span> <span class="pre">4,</span> <span class="pre">5,</span> <span class="pre">6]</span></code>.</p></li>
 <li><p><strong>metric</strong> (<em>string</em><em> or </em><em>callable</em><em>, </em><em>optional:</em>) – The metric to use when calculating distance between instances in
@@ -1020,13 +1032,13 @@ options allowed by sklearn.metrics.pairwise.pairwise_distances.
 If X is the distance array itself, use “precomputed” as the metric.</p></li>
 <li><p><strong>figsize</strong> (<em>2-tuple</em><em>, </em><em>optional:</em>) – Tuple denoting figure size of the plot
 e.g. (6, 6). Defaults to <code class="docutils literal notranslate"><span class="pre">None</span></code>.</p></li>
-<li><p><strong>cmap</strong> (string or <code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.colors.Colormap</span></code> instance, optional:) – Colormap used for plotting the projection. View Matplotlib Colormap
+<li><p><strong>cmap</strong> (string or <a class="reference external" href="https://matplotlib.org/stable/api/_as_gen/matplotlib.colors.Colormap.html#matplotlib.colors.Colormap" title="(in Matplotlib v3.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.colors.Colormap</span></code></a> instance, optional:) – Colormap used for plotting the projection. View Matplotlib Colormap
 documentation for available options.
 <a class="reference external" href="https://matplotlib.org/users/colormaps.html">https://matplotlib.org/users/colormaps.html</a></p></li>
 <li><p><strong>text_fontsize</strong> (<em>string</em><em> or </em><em>int</em><em>, </em><em>optional:</em>) – Matplotlib-style fontsizes.
 Use e.g. “small”, “medium”, “large” or integer-values. Defaults to
 “medium”.</p></li>
-<li><p><strong>ax</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code>, optional:) – The axes upon which to plot the curve. If None, the plot is drawn on
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a>, optional:) – The axes upon which to plot the curve. If None, the plot is drawn on
 a new set of axes.</p></li>
 </ul>
 </dd>
@@ -1085,7 +1097,7 @@ the values in the target. A common use case is to pass
 <code class="docutils literal notranslate"><span class="pre">LabelEncoder.classes_</span></code> as this parameter. If not specified, the labels
 in the data will be used.</p></li>
 <li><p><strong>colors</strong> (<em>list of strings</em>) – Specify colors for the barchart.</p></li>
-<li><p><strong>ax</strong> (<code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code>, optional) – The axes upon which to plot the curve. If None, the plot is drawn
+<li><p><strong>ax</strong> (<a class="reference external" href="https://matplotlib.org/stable/api/axes_api.html#matplotlib.axes.Axes" title="(in Matplotlib v3.6.2)"><code class="xref py py-class docutils literal notranslate"><span class="pre">matplotlib.axes.Axes</span></code></a>, optional) – The axes upon which to plot the curve. If None, the plot is drawn
 on the current Axes</p></li>
 </ul>
 </dd>
@@ -1191,9 +1203,8 @@ on the current Axes</p></li>
     <div class="footer-content row">
         <footer class="col footer"><p>
   
-    By Ploomber<br/>
+    By Eduardo Blancas Reyes<br/>
   
-      &copy; Copyright 2022.<br/>
 </p>
         </footer>
     </div>
