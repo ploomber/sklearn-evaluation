@@ -15,7 +15,7 @@
 # +
 import importlib
 
-from sklearn.datasets import load_boston
+from sklearn.datasets import fetch_california_housing
 from sklearn.model_selection import train_test_split
 from sklearn import metrics
 import seaborn as sns
@@ -31,7 +31,7 @@ params = {'min_samples_leaf': 1, 'n_estimators': 50}
 model
 # -
 
-d = load_boston()
+d = fetch_california_housing()
 X = d['data']
 y = d['target']
 
@@ -61,8 +61,8 @@ y_pred = model.predict(X_test)
 # + tags=["plot"]
 ax = plt.gca()
 sns.scatterplot(x=y_pred, y=y_test, ax=ax)
-ax.set_xlim(0, 50)
-ax.set_ylim(0, 50)
+ax.set_xlim(0, 6)
+ax.set_ylim(0, 6)
 ax.grid()
 # -
 
@@ -83,17 +83,16 @@ df['y_pred'] = y_pred
 df['error_abs'] = np.abs(y_test - y_pred)
 df['error_sq'] = np.square(y_test - y_pred)
 
-# + tags=["river"]
-# CHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
-error_river = df.groupby('CHAS')[['error_abs', 'error_sq']].mean()
-error_river.columns = ['mae', 'mse']
+# + tags=["houseage"]
+error_houseage = df.groupby('HouseAge')[['error_abs', 'error_sq']].mean()
+error_houseage.columns = ['mae', 'mse']
 
 
 def r2_score(df):
     return metrics.r2_score(df.y_true, df.y_pred)
 
 
-r2 = pd.DataFrame(df.groupby('CHAS').apply(r2_score))
+r2 = pd.DataFrame(df.groupby('HouseAge').apply(r2_score))
 r2.columns = ['r2']
 
-error_river.merge(r2, on='CHAS')
+error_houseage.merge(r2, on='HouseAge')
