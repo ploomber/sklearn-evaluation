@@ -84,8 +84,8 @@ df['error_abs'] = np.abs(y_test - y_pred)
 df['error_sq'] = np.square(y_test - y_pred)
 
 # + tags=["houseage"]
-error_river = df.groupby('HouseAge')[['error_abs', 'error_sq']].mean()
-error_river.columns = ['mae', 'mse']
+error_houseage = df.groupby('HouseAge')[['error_abs', 'error_sq']].mean()
+error_houseage.columns = ['mae', 'mse']
 
 
 def r2_score(df):
@@ -95,4 +95,4 @@ def r2_score(df):
 r2 = pd.DataFrame(df.groupby('HouseAge').apply(r2_score))
 r2.columns = ['r2']
 
-error_river.merge(r2, on='HouseAge')
+error_houseage.merge(r2, on='HouseAge')
