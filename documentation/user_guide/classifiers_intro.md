@@ -1,6 +1,6 @@
-# Classifier
+# Evaluating classifiers
 
-This section contains all information related to classifier evaluation.
+This chapter contains all information regarding evaluating classifiers.
 
 ```{tableofcontents}
 ```
