@@ -21,12 +21,3 @@ python:
       path: .
       extra_requirements:
         - all
-
-build:
-  os: ubuntu-22.04
-  tools:
-    python: "3.8"
-  jobs:
-    pre_build:
-      # Generate the Sphinx configuration for this Jupyter Book so it builds.
-      - "jupyter-book config sphinx documentation/"
