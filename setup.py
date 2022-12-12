@@ -28,7 +28,13 @@ DOCS = [
     'jupysql'
 ]
 
-JB = ['jupyter-book']
+JB = ['jupyter-sphinx==0.3.2',
+      'markdown_it_py==1.1.0',
+      'linkify_it_py==2.0.0',
+      'kiwisolver==1.4.4',
+      'keyring==23.11.0',
+      'matplotlib-inline==0.1.6',
+      'jupyter-book']
 
 TEST = [
     'jupytext',
@@ -49,7 +55,7 @@ DEV = [
     'pkgmt',
 ]
 
-ALL = DOCS + TEST + DEV
+ALL = DOCS + TEST + DEV + JB
 
 setup(
     name='sklearn-evaluation',
