@@ -17,7 +17,7 @@ DOWNLOAD_URL = ('https://github.com/ploomber/sklearn-evaluation/tarball/{}'.
 
 DOCS = [
     'sphinx',
-    'sphinx-rtd-theme',
+    #'sphinx-rtd-theme',
     'jupyter-book',
     'ploomber',
     'nbsphinx',

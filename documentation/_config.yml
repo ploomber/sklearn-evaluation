@@ -15,9 +15,9 @@ sphinx:
     - sphinx.ext.autosummary
     - sphinx.ext.intersphinx
     - sphinx.ext.napoleon
-    - sphinx_book_theme
+    #- sphinx_book_theme
   config:
-    html_theme: sphinx_book_theme
+    #html_theme: sphinx-book-theme
     html_show_copyright: false
     version: 0.8.3
     plot_include_source: True
