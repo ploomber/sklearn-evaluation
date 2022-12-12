@@ -16,10 +16,10 @@ DOWNLOAD_URL = ('https://github.com/ploomber/sklearn-evaluation/tarball/{}'.
                 format(VERSION))
 
 DOCS = [
-    #'sphinx',
-    #'sphinx-rtd-theme',
+    'sphinx',
+    'sphinx-rtd-theme',
     'ploomber',
-    #'nbsphinx',
+    'nbsphinx',
     'seaborn',
     # to display progress bar when executing notebooks using papermill
     # in NotebookCollection.py example
