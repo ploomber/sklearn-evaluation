@@ -7,17 +7,19 @@ pip install invoke
 invoke setup
 ```
 
-Install `pandoc`
-```
-pip install pandoc
-```
-Build docs:
+Build docs locally:
 
 ```
-cd docs
-make <format>
+jupyter-book build documentation/
 ```
 
-For available formats run `make help`
+To ensure a clean build:
 
-If changes are made to docs, run `pip install ".[dev]"` before `make` to preview latest changes.
+``` 
+jupyter-book clean documentation --all
+jupyter-book build documentation/
+```
+
+Follow this [guide](https://jupyterbook.org/en/stable/publish/gh-pages.html#use-a-custom-domain-with-github-pages) for publishing the doc online.
+
+If changes are made to docs, run `pip install ".[dev]"` before `build` to preview latest changes.

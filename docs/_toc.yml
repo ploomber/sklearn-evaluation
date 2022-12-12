@@ -1,0 +1,33 @@
+format: jb-book
+root: intro.md
+parts:
+  - caption: User Guide
+    chapters:
+    - file: user_guide/classifiers_intro
+      sections: 
+      - file: user_guide/classifier
+      - file: nbs/evaluating_binary_classifiers
+      - file: user_guide/report
+      - file: nbs/compare
+    - file: nbs/clustering_evaluation
+    - file: nbs/target_analysis
+    - file: nbs/feature_ranking
+    - file: user_guide/func_vs_oop
+    - file: user_guide/grid_search
+    - file: nbs/RegressionPlots
+    - file: user_guide/matplotlib
+    - file: nbs/SQLiteTracker
+    - file: nbs/NotebookCollection
+    - file: nbs/nbdb
+  - caption: API Reference
+    chapters:
+    - file: api/plot.rst 
+    - file: api/table.rst
+    - file: api/evaluator.rst 
+    - file: api/training.rst 
+    - file: api/SQLiteTracker.rst 
+    - file: api/nbs.rst 
+  - caption: Community
+    chapters:
+    - file: community/community.rst
+
