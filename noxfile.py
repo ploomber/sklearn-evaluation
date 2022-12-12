@@ -45,16 +45,16 @@ def tests(session):
     )
     session.run("coveralls")
 
-    if session.python == "3.8" and platform.system() == "Linux":
-        session._run(
-            "conda",
-            "env",
-            "update",
-            "--prefix",
-            session.virtualenv.location,
-            "--file",
-            "docs/environment.yml",
-        )
+    # if session.python == "3.8" and platform.system() == "Linux":
+    #     session._run(
+    #         "conda",
+    #         "env",
+    #         "update",
+    #         "--prefix",
+    #         session.virtualenv.location,
+    #         "--file",
+    #         "docs/environment.yml",
+    #     )
 
         # build docs so we can detect build errors
-        session.run("make", "-C", "docs/", "html", external=True)
+        #session.run("make", "-C", "docs/", "html", external=True)
