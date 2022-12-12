@@ -55,7 +55,7 @@ DEV = [
     'pkgmt',
 ]
 
-ALL = DOCS + TEST + DEV + JB
+ALL = DOCS + TEST + DEV
 
 setup(
     name='sklearn-evaluation',
@@ -83,7 +83,7 @@ setup(
         'decorator',
         # metric tables
         'tabulate',
-        'jinja2<3.1',
+        'jinja2',
         # reports
         'mistune',
         'pandas',
