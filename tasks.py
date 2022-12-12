@@ -11,19 +11,15 @@ def setup(c, version=None):
     """
     version = version or '3.10'
     suffix = '' if version == '3.10' else version.replace('.', '')
-    env_name = f'sk-eval{suffix}'
+    env_name = f'sk-eval-test-dep{suffix}'
 
     c.run(f'conda create --name {env_name} python={version} --yes')
     c.run('eval "$(conda shell.bash hook)" '
           f'&& conda activate {env_name} '
           '&& pip install --editable .[all] '
+          '&& conda install scikit-learn'
           '&& pip install invoke lxml'
-          '&& pip install jupyter-book'
-          '&& pip install ghp-import'
           )  # lxml needed for NotebookCollection.py example
-    # jupyter-book and ghp-import added here since it
-    # takes too long to resolve dependencies when added
-    # in setup.py
 
     print(f'Done! Activate your environment with:\nconda activate {env_name}')
 
