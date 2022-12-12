@@ -11,7 +11,7 @@ def setup(c, version=None):
     """
     version = version or '3.10'
     suffix = '' if version == '3.10' else version.replace('.', '')
-    env_name = f'sk-eval-test-dep{suffix}'
+    env_name = f'sk-eval{suffix}'
 
     c.run(f'conda create --name {env_name} python={version} --yes')
     c.run('eval "$(conda shell.bash hook)" '
