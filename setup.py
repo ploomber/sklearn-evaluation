@@ -18,7 +18,6 @@ DOWNLOAD_URL = ('https://github.com/ploomber/sklearn-evaluation/tarball/{}'.
 DOCS = [
     'sphinx',
     #'sphinx-rtd-theme',
-    'jupyter-book',
     'ploomber',
     'nbsphinx',
     'seaborn',
@@ -26,7 +25,8 @@ DOCS = [
     # in NotebookCollection.py example
     'ipywidgets',
     # notebook database example
-    'jupysql'
+    'jupysql',
+    'jupyter-book'
 ]
 
 TEST = [
