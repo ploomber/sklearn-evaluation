@@ -17,7 +17,6 @@ def setup(c, version=None):
     c.run('eval "$(conda shell.bash hook)" '
           f'&& conda activate {env_name} '
           '&& pip install --editable .[all] '
-          '&& conda install scikit-learn'
           '&& pip install invoke lxml'
           )  # lxml needed for NotebookCollection.py example
 
