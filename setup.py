@@ -70,7 +70,7 @@ setup(
     install_requires=[
         'ploomber-core>=0.0.4',
         # compute metrics
-        #'scikit-learn',
+        'scikit-learn',
         # plotting
         'matplotlib',
         # misc
