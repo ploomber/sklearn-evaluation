@@ -83,7 +83,7 @@ setup(
         'decorator',
         # metric tables
         'tabulate',
-        'jinja2',
+        'jinja2<3.1',
         # reports
         'mistune',
         'pandas',
