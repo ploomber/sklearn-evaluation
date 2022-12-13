@@ -15,6 +15,7 @@ python:
       path: .
       extra_requirements:
       - sphinx
+      - jupyter-book
 
 sphinx:
   builder: html
