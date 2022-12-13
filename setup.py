@@ -52,7 +52,7 @@ DEV = [
     'pkgmt',
 ]
 
-ALL = DOCS + TEST + DEV
+ALL = DOCS + TEST + DEV + JB
 
 setup(
     name='sklearn-evaluation',
