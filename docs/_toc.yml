@@ -1,5 +1,5 @@
 format: jb-book
-root: intro.md
+root: index.md
 parts:
   - caption: User Guide
     chapters:
