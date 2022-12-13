@@ -30,7 +30,7 @@ DOCS = [
 
 JB = ['markdown-it-py==1.1.0',
       'linkify-it-py==1.0.3',
-      'myst-nb==0.13.2'
+      'myst-nb==0.13.2',
       'jupyter-book']
 
 TEST = [
