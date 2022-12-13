@@ -227,7 +227,7 @@ class Rank1D(RankD):
 
     Examples
     ---------
-    .. plot:: ../../examples/feature_ranking_1D.py
+    .. plot:: ../examples/feature_ranking_1D.py
 
     Notes
     -----
@@ -337,7 +337,7 @@ class Rank2D(RankD):
 
     Examples
     ----------
-    .. plot:: ../../examples/feature_ranking_2D.py
+    .. plot:: ../examples/feature_ranking_2D.py
 
     Notes
     -----
