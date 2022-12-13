@@ -7,6 +7,7 @@ build:
   jobs:
     pre_build:
       # Generate the Sphinx configuration for this Jupyter Book so it builds.
+      - "pip install jupyter-book"
       - "jupyter-book config sphinx docs/"
 
 python:
