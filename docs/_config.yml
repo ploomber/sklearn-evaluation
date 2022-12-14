@@ -33,6 +33,8 @@ sphinx:
         - null
     execution_allow_errors: True
     execution_timeout: 1000
+    suppress_warnings: ['myst.domains', 'myst.header']
+    exclude_patterns: ['README.md']
 
 
 # Define the name of the latex output file for PDF builds
