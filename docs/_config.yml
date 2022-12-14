@@ -31,6 +31,8 @@ sphinx:
       matplotlib:
         - "http://matplotlib.org/"
         - null
+    execution_allow_errors: True
+    execution_timeout: 1000
 
 
 # Define the name of the latex output file for PDF builds
