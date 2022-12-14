@@ -28,7 +28,7 @@ class NotebookCollection(Mapping):
     To access output, notebooks must tag the cells (one tag per cell). For
     instructions on tagging cells, `see this <https://papermill.readthedocs.io/en/latest/usage-parameterize.html>`_.
 
-    :doc:`Click here <../user_guide/NotebookCollection>` to see the user guide.
+    :doc:`Click here <../nbs/NotebookCollection>` to see the user guide.
 
     Parameters
     ----------
