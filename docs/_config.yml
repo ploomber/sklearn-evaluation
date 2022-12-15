@@ -17,9 +17,9 @@ sphinx:
   config:
     #html_theme: sphinx-book-theme
     html_theme_options: {
-      "repository_url": "https://github.com/ploomber/ploomber",
-      "repository_branch": "master",
-      "path_to_docs" : "docs",
+      #"repository_url": "https://github.com/ploomber/ploomber",
+      #"repository_branch": "master",
+      #"path_to_docs" : "docs",
       "launch_buttons": {
           "binderhub_url": "https://mybinder.org/v2/gh/ploomber/binder-env/main?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fneelasha23%252Fsklearn-evaluation%26urlpath%3Dlab%252Ftree%252Fsklearn-evaluation%252F%26branch%3Djupyter_books"
     }
