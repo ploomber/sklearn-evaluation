@@ -1,4 +1,0 @@
-jupytext
-papermill
-seaborn
-ploomber
