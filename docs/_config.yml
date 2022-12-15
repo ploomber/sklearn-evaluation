@@ -1,11 +1,9 @@
 title: sklearn-evaluation
-author: Eduardo Blancas Reyes
-copyright: 'Copyright 2016, Eduardo Blancas Reyes.'
+author: Ploomber
+copyright: 'Ploomber'
 logo: logo.jpeg
 execute:
   execute_notebooks: force
-launch_buttons:
-  binderhub_url: https://mybinder.org
 sphinx:
   extra_extensions:
     - matplotlib.sphinxext.plot_directive
@@ -18,12 +16,18 @@ sphinx:
     #- sphinx_book_theme
   config:
     #html_theme: sphinx-book-theme
-    html_show_copyright: false
-    version: 0.8.3
+    html_theme_options: {
+      "repository_url": "https://github.com/ploomber/ploomber",
+      "repository_branch": "master",
+      "path_to_docs" : "docs",
+      "launch_buttons": {
+          "binderhub_url": "https://mybinder.org/v2/gh/ploomber/binder-env/main?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fneelasha23%252Fsklearn-evaluation%26urlpath%3Dlab%252Ftree%252Fsklearn-evaluation%252F%26branch%3Djupyter_books"
+    }
+    }
+    html_show_copyright: True
     plot_include_source: True
     plot_html_show_formats: False
     plot_html_show_source_link: False
-    htmlhelp_basename: sklearn-evaluationdoc
     intersphinx_mapping:
       sklearn:
         - "http://scikit-learn.org/stable"
@@ -49,8 +53,8 @@ sphinx:
 
 repository:
   url: https://github.com/ploomber/ploomber
-  #path_to_book: docs  # Optional path to your book, relative to the repository root
-  #branch: master  # Which branch of the repository should be used when creating links (optional)
+  path_to_book: docs  # Optional path to your book, relative to the repository root
+  branch: master  # Which branch of the repository should be used when creating links (optional)
 
 
 html:

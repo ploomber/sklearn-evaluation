@@ -10,13 +10,16 @@ build:
       - "pip install jupyter-book"
       - "jupyter-book config sphinx docs/"
 
+# create conda env from that file
+conda:
+  environment: docs/environment.yml
+
 python:
   install:
     - method: pip
       path: .
       extra_requirements:
       - sphinx
-      - jupyter-book
 
 sphinx:
   builder: html
