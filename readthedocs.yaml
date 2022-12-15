@@ -8,6 +8,7 @@ build:
     pre_build:
       # Generate the Sphinx configuration for this Jupyter Book so it builds.
       - "pip install jupyter-book"
+      - "pip install papermill"
       - "jupyter-book config sphinx docs/"
 
 python:
@@ -19,4 +20,3 @@ python:
 
 sphinx:
   builder: html
-  fail_on_warning: true
