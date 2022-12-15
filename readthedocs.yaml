@@ -7,12 +7,13 @@ build:
   jobs:
     pre_build:
       # Generate the Sphinx configuration for this Jupyter Book so it builds.
-      - "pip install jupyter-book"
-      - "pip install papermill"
-      - "pip install jupytext"
-      - "pip install ploomber"
-      - "pip install seaborn"
-      - "pip install jupysql"
+      #- "pip install jupyter-book"
+      #- "pip install papermill"
+      #- "pip install jupytext"
+      #- "pip install ploomber"
+      #- "pip install seaborn"
+      #- "pip install jupysql"
+      - "pip install -r docs/requirements.txt"
       - "jupyter-book config sphinx docs/"
 
 python:
