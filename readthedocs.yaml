@@ -11,6 +11,8 @@ build:
       - "pip install papermill"
       - "pip install jupytext"
       - "pip install ploomber"
+      - "pip install seaborn"
+      - "pip install jupysql"
       - "jupyter-book config sphinx docs/"
 
 python:
