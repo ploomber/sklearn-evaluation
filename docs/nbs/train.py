@@ -61,8 +61,8 @@ y_pred = model.predict(X_test)
 # + tags=["plot"]
 ax = plt.gca()
 sns.scatterplot(x=y_pred, y=y_test, ax=ax)
-ax.set_xlim(0, 20)
-ax.set_ylim(0, 20)
+ax.set_xlim(0, 6)
+ax.set_ylim(0, 6)
 ax.grid()
 # -
 
