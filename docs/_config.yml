@@ -16,14 +16,6 @@ sphinx:
     #- sphinx_book_theme
   config:
     #html_theme: sphinx-book-theme
-    html_theme_options: {
-      "repository_url": "https://github.com/ploomber/ploomber",
-      "repository_branch": "master",
-      "path_to_docs" : "docs",
-      "launch_buttons": {
-          "binderhub_url": "https://hub.gke2.mybinder.org/user/ploomber-binder-env-lzr9f7kc/lab/tree/sklearn-evaluation"
-    }
-    }
     html_show_copyright: True
     plot_include_source: True
     plot_html_show_formats: False
@@ -52,7 +44,7 @@ sphinx:
 
 
 repository:
-  url: https://github.com/ploomber/ploomber
+  url: https://github.com/ploomber/sklearn-evaluation
   path_to_book: docs  # Optional path to your book, relative to the repository root
   branch: master  # Which branch of the repository should be used when creating links (optional)
 
