@@ -20,6 +20,4 @@ jupyter-book clean docs/ --all
 jupyter-book build docs/
 ```
 
-Follow this [guide](https://jupyterbook.org/en/stable/publish/gh-pages.html#use-a-custom-domain-with-github-pages) for publishing the doc online.
-
 If changes are made to docs, run `pip install ".[dev]"` before `build` to preview latest changes.

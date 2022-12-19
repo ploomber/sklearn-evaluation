@@ -7,13 +7,13 @@ parts:
       sections: 
       - file: nbs/classifier
       - file: nbs/evaluating_binary_classifiers
-      - file: user_guide/report
+      - file: nbs/report
       - file: nbs/compare
     - file: nbs/clustering_evaluation
     - file: nbs/target_analysis
     - file: nbs/feature_ranking
     - file: user_guide/func_vs_oop
-    - file: user_guide/grid_search
+    - file: nbs/grid_search
     - file: nbs/RegressionPlots
     - file: nbs/matplotlib
     - file: nbs/SQLiteTracker
