@@ -8,10 +8,12 @@ ClassificationReport
 Rank1D
 ------
 .. autoclass:: sklearn_evaluation.plot.Rank1D
+    :members: feature_ranks, feature_ranks_custom_algorithm
 
 Rank2D
 ------
 .. autoclass:: sklearn_evaluation.plot.Rank2D
+    :members: feature_ranks, feature_ranks_custom_algorithm
 
 calibration_curve
 -----------------
