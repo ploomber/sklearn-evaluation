@@ -8,6 +8,7 @@ User Guide
     user_guide/evaluating_binary_classifiers
     user_guide/report
     user_guide/compare
+    user_guide/feature_ranking
     user_guide/clustering_evaluation
     user_guide/target_analysis
     user_guide/func_vs_oop
