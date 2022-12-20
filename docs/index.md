@@ -11,6 +11,8 @@ Installation
    pip install sklearn-evaluation
 ```
 
+Table of contents
+*****************
 ```{tableofcontents}
 ```
 
