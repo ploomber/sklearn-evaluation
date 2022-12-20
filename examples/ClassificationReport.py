@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -12,10 +11,17 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 y_pred_rf = RandomForestClassifier().fit(X_train, y_train).predict(X_test)
 y_pred_lr = LogisticRegression().fit(X_train, y_train).predict(X_test)
 
-target_names = ['Not spam', 'Spam']
+target_names = ["Not spam", "Spam"]
 
-cr_rf = plot.ClassificationReport(y_test, y_pred_rf, target_names=target_names)
-cr_lr = plot.ClassificationReport(y_test, y_pred_rf, target_names=target_names)
+cr_rf = plot.ClassificationReport.from_raw_data(
+    y_test, y_pred_rf, target_names=target_names
+)
+cr_lr = plot.ClassificationReport.from_raw_data(
+    y_test, y_pred_lr, target_names=target_names
+)
+
+# display one of the classification reports
+cr_rf
 
 # how better it is the random forest?
 cr_rf - cr_lr
