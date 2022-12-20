@@ -1,5 +1,7 @@
 # Contributing to sklearn-evaluation
 
+For general guidelines, see [Ploombers' documentation framework.](https://github.com/ploomber/contributing/blob/main/documentation/README.md)
+
 ## Adding a new plot
 
 To provide a consistent user experience, all the functions that produce plots follow a few conventions:
