@@ -3,12 +3,10 @@ root: index.md
 parts:
   - caption: User Guide
     chapters:
-    - file: user_guide/classifiers_intro
-      sections: 
-      - file: nbs/classifier
-      - file: nbs/evaluating_binary_classifiers
-      - file: nbs/report
-      - file: nbs/compare
+    - file: nbs/classifier
+    - file: nbs/evaluating_binary_classifiers
+    - file: nbs/report
+    - file: nbs/compare
     - file: nbs/clustering_evaluation
     - file: nbs/target_analysis
     - file: nbs/feature_ranking
