@@ -8,32 +8,36 @@ from ..plot.plot import Plot
 from sklearn_evaluation import __version__
 import json
 from pathlib import Path
-from warnings import warn
+from warnings import warn  # noqa
 
 
 def roc(y_true, y_score, ax=None):
+    # Support old api
     """
     Plot ROC curve
     Parameters
     ----------
     y_true : array-like, shape = [n_samples]
         Correct target values (ground truth).
+
     y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
         classification or [n_samples, n_classes] for multiclass
         Target scores (estimator predictions).
+
     ax: matplotlib Axes, default: None
         Axes object to draw the plot onto, otherwise uses current Axes
+
     Notes
     -----
     It is assumed that the y_score parameter columns are in order.
     For example, if ``y_true = [2, 2, 1, 0, 0, 1, 2]``, then the
     first column in y_score must contain the scores for class 0,
     second column for class 1 and so on.
+
     Examples
     --------
     .. plot:: ../../examples/roc.py
     """
-    # Support old api
     r = ROC(y_true, y_score, ax=ax)
     return r.ax
 
@@ -62,9 +66,11 @@ def _plot_roc(fpr, tpr, ax, curve_label="ROC curve", line_color=None):
     fpr : ndarray of shape (>2,)
         Increasing false positive rates such that element i is the false
         positive rate of predictions with score >= `thresholds[i]`
+
     tpr : ndarray of shape (>2,)
         Increasing true positive rates such that element `i` is the true
         positive rate of predictions with score >= `thresholds[i]`
+
     ax: matplotlib Axes
         Axes object to draw the plot onto
 
@@ -73,6 +79,9 @@ def _plot_roc(fpr, tpr, ax, curve_label="ROC curve", line_color=None):
     ax: matplotlib Axes
         Axes containing the plot
 
+    Notes
+    -----
+    .. versionadded:: 0.8.4
     """
     roc_auc = auc(fpr, tpr)
 
@@ -111,6 +120,9 @@ def _plot_roc_multi_classification(avg_fpr, avg_tpr, roc_rates_n_classes, ax,
     ax: matplotlib Axes
         Axes containing the plot
 
+    Notes
+    -----
+    .. versionadded:: 0.8.4
     """
     _plot_roc(avg_fpr, avg_tpr, ax, curve_label=f'micro-average {curve_label}')
     for d in roc_rates_n_classes:
@@ -136,7 +148,7 @@ class ROCAdd(Plot):
 
     Notes
     -----
-    .. versionadded:: 0.8.4    
+    .. versionadded:: 0.8.4
     """
 
     def __init__(self, a, b):
@@ -166,29 +178,36 @@ class ROC(Plot):
     ----------
     y_true : array-like, shape = [n_samples]
         Correct target values (ground truth).
+
     y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
         classification or [n_samples, n_classes] for multiclass
         Target scores (estimator predictions).
+
     fpr : ndarray of shape (>2,), default: None
         Increasing false positive rates such that element i is the false
         positive rate of predictions with score >= `thresholds[i]`. If
         None, it will be calculated based on y_true and y_score.
+
     tpr : ndarray of shape (>2,), default: None
         Increasing true positive rates such that element `i` is the true
         positive rate of predictions with score >= `thresholds[i]`. If
         None, it will be calculated based on y_true and y_score.
+
     ax: matplotlib Axes, default: None
         Axes object to draw the plot onto, otherwise uses current Axes
+
     Notes
     -----
     It is assumed that the y_score parameter columns are in order.
     For example, if ``y_true = [2, 2, 1, 0, 0, 1, 2]``, then the
     first column in y_score must contain the scores for class 0,
     second column for class 1 and so on.
+
     Examples
     --------
     .. plot:: ../../examples/roc_new_api.py
     .. plot:: ../../examples/roc_add.py
+
     Notes
     -----
     .. versionadded:: 0.8.4
@@ -197,16 +216,18 @@ class ROC(Plot):
     def __init__(self, y_true, y_score,
                  fpr=None, tpr=None, ax=None):
 
-        if y_true is not None and y_score is not None:
-            warn(
-                "ROC will change its signature in version 0.10"
-                ", please use ROC.from_raw_data",
-                FutureWarning,
-                stacklevel=2,
-            )
+        # TODO: Sphinx build fails due to this warning
+        # if y_true is not None and y_score is not None:
+        #     warn(
+        #         "ROC will change its signature in version 0.10"
+        #         ", please use ROC.from_raw_data",
+        #         FutureWarning,
+        #         stacklevel=2,
+        #     )
 
-        self.figure = plt.figure()
-        ax = self.figure.add_subplot()
+        if ax is None:
+            self.figure = plt.figure()
+            ax = self.figure.add_subplot()
 
         # check data shape?
         if tpr is None or fpr is None:
