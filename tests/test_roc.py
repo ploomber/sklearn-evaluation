@@ -60,13 +60,13 @@ def test_roc_dump_multi(tmp_directory, roc_multi_classification_values):
     assert roc._get_data() == roc2._get_data()
 
 
-# def test_roc_warning(y):
-#     y_test, y_score = y
+def test_roc_warning(y):
+    y_test, y_score = y
 
-#     with pytest.warns(
-#         FutureWarning, match="ROC will change its signature"
-#     ):
-#         plot.ROC(y_test, y_score)
+    with pytest.warns(
+        FutureWarning, match="ROC will change its signature"
+    ):
+        plot.ROC(y_test, y_score)
 
 
 def test_roc_sub_not_implemented_error(y):

@@ -65,6 +65,7 @@ like {{e.confusion_matrix()}} or any other attribute/method. If
 None, a default template is used
 
 .. ipython:: python
+    :okwarning:
 
     report = ce.make_report()
 
