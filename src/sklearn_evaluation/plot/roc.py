@@ -12,6 +12,27 @@ from warnings import warn
 
 
 def roc(y_true, y_score, ax=None):
+    """
+    Plot ROC curve
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_samples]
+        Correct target values (ground truth).
+    y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
+        classification or [n_samples, n_classes] for multiclass
+        Target scores (estimator predictions).
+    ax: matplotlib Axes, default: None
+        Axes object to draw the plot onto, otherwise uses current Axes
+    Notes
+    -----
+    It is assumed that the y_score parameter columns are in order.
+    For example, if ``y_true = [2, 2, 1, 0, 0, 1, 2]``, then the
+    first column in y_score must contain the scores for class 0,
+    second column for class 1 and so on.
+    Examples
+    --------
+    .. plot:: ../../examples/roc.py
+    """
     # Support old api
     r = ROC(y_true, y_score, ax=ax)
     return r.ax
@@ -27,7 +48,7 @@ def _set_ax_settings(ax):
     ax.legend(loc="best")
 
 
-def roc_curve_multi(y_true, y_score):
+def _roc_curve_multi(y_true, y_score):
     # Compute micro-average ROC curve
     return roc_curve(y_true.ravel(), y_score.ravel())
 
@@ -101,13 +122,21 @@ def _plot_roc_multi_classification(avg_fpr, avg_tpr, roc_rates_n_classes, ax,
 
 class ROCAdd(Plot):
     """
-    Generate a new plot with overlapping ROC curves (roc1, roc2).
+    Generate a new plot with overlapping ROC curves (roc1 + roc2)
 
     Parameters
     ----------
     a : ROC plot
 
     b : ROC plot
+
+    Examples
+    --------
+    .. plot:: ../../examples/roc_add.py
+
+    Notes
+    -----
+    .. versionadded:: 0.8.4    
     """
 
     def __init__(self, a, b):
@@ -131,46 +160,42 @@ class ROCAdd(Plot):
 
 
 class ROC(Plot):
+    """
+    Plot ROC curve
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_samples]
+        Correct target values (ground truth).
+    y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
+        classification or [n_samples, n_classes] for multiclass
+        Target scores (estimator predictions).
+    fpr : ndarray of shape (>2,), default: None
+        Increasing false positive rates such that element i is the false
+        positive rate of predictions with score >= `thresholds[i]`. If
+        None, it will be calculated based on y_true and y_score.
+    tpr : ndarray of shape (>2,), default: None
+        Increasing true positive rates such that element `i` is the true
+        positive rate of predictions with score >= `thresholds[i]`. If
+        None, it will be calculated based on y_true and y_score.
+    ax: matplotlib Axes, default: None
+        Axes object to draw the plot onto, otherwise uses current Axes
+    Notes
+    -----
+    It is assumed that the y_score parameter columns are in order.
+    For example, if ``y_true = [2, 2, 1, 0, 0, 1, 2]``, then the
+    first column in y_score must contain the scores for class 0,
+    second column for class 1 and so on.
+    Examples
+    --------
+    .. plot:: ../../examples/roc_new_api.py
+    .. plot:: ../../examples/roc_add.py
+    Notes
+    -----
+    .. versionadded:: 0.8.4
+    """
     @SKLearnEvaluationLogger.log(feature='plot')
     def __init__(self, y_true, y_score,
                  fpr=None, tpr=None, ax=None):
-        """
-        Plot ROC curve.
-
-        Parameters
-        ----------
-        y_true : array-like, shape = [n_samples]
-            Correct target values (ground truth).
-
-        y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
-            classification or [n_samples, n_classes] for multiclass
-            Target scores (estimator predictions).
-
-        fpr : ndarray of shape (>2,)
-            Increasing false positive rates such that element i is the false
-            positive rate of predictions with score >= `thresholds[i]`. If
-            None, it will be calculated based on y_true and y_score.
-
-        tpr : ndarray of shape (>2,)
-            Increasing true positive rates such that element `i` is the true
-            positive rate of predictions with score >= `thresholds[i]`. If
-            None, it will be calculated based on y_true and y_score.
-
-        ax: matplotlib Axes
-            Axes object to draw the plot onto, otherwise uses current Axes
-
-        Notes
-        -----
-        It is assumed that the y_score parameter columns are in order.
-        For example, if ``y_true = [2, 2, 1, 0, 0, 1, 2]``, then the
-        first column in y_score must contain the scores for class 0,
-        second column for class 1 and so on.
-
-        Examples
-        --------
-        .. plot:: ../../examples/roc.py
-
-        """
 
         if y_true is not None and y_score is not None:
             warn(
@@ -179,6 +204,7 @@ class ROC(Plot):
                 FutureWarning,
                 stacklevel=2,
             )
+
         self.figure = plt.figure()
         ax = self.figure.add_subplot()
 
@@ -200,7 +226,7 @@ class ROC(Plot):
                 # convert y_true to binary format
                 y_true_bin = label_binarize(y_true, classes=np.unique(y_true))
 
-                fpr, tpr, _ = roc_curve_multi(y_true_bin, y_score)
+                fpr, tpr, _ = _roc_curve_multi(y_true_bin, y_score)
                 self.roc_rates_n_classes = []
                 for i in range(n_classes):
                     fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])

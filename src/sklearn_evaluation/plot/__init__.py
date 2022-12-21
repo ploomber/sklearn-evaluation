@@ -24,7 +24,7 @@ __all__ = [
     'confusion_matrix',
     'feature_importances',
     'precision_recall',
-    'roc',
+    'ROC',
     'precision_at_proportions',
     'grid_search',
     'validation_curve',
@@ -45,7 +45,6 @@ __all__ = [
     'ks_statistic',
     'cumulative_gain',
     'lift_curve',
-    'ROC',
     'Rank1D',
     'Rank2D'
-    ]
+]

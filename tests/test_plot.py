@@ -71,7 +71,7 @@ def test_roc_add_to_roc():
 
     roc1 = plot.ROC(y_test, y_score)
     roc2 = plot.ROC(y_test_roc2, y_score_roc2)
-    roc1.__add__(roc2)
+    roc1 + roc2
 
 
 @image_comparison(baseline_images=['roc', 'roc'])
@@ -86,7 +86,7 @@ def test_roc_add_to_multi(roc_multi_classification_values):
 
     roc1 = plot.ROC(y_test, y_score)
     roc2 = plot.ROC(y_test_roc2, y_score_roc2)
-    roc1.__add__(roc2)
+    roc1 + roc2
 
 
 @image_comparison(baseline_images=['roc_multi', 'roc', 'multi_add_roc'])
@@ -95,7 +95,7 @@ def test_roc_multi_add_to_roc(roc_multi_classification_values):
 
     roc1 = plot.ROC(y_test_roc1, y_score_roc1)
     roc2 = plot.ROC(y_test, y_score)
-    roc1.__add__(roc2)
+    roc1 + roc2
 
 
 @image_comparison(baseline_images=['roc_multi', 'roc_multi_set2',
@@ -107,7 +107,7 @@ def test_roc_multi_add_to_multi(roc_multi_classification_values,
 
     roc1 = plot.ROC(y_test, y_score)
     roc2 = plot.ROC(y_test_roc2, y_score_roc2)
-    roc1.__add__(roc2)
+    roc1 + roc2
 
 
 @image_comparison(baseline_images=['precision_recall'])
