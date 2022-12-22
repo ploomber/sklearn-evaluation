@@ -45,6 +45,71 @@ def test_roc_y_score_vector():
     plot.roc(y_test, y_score_vector)
 
 
+@image_comparison(baseline_images=['roc'])
+def test_roc_new_api():
+    plot.ROC(y_test, y_score)
+
+
+@image_comparison(baseline_images=['roc'])
+def test_roc_y_score_vector_new_api():
+    plot.ROC(y_test, y_score_vector)
+
+
+@image_comparison(baseline_images=['roc_multi'])
+def test_roc_multi(roc_multi_classification_values):
+    y_test, y_score = roc_multi_classification_values
+
+    plot.ROC(y_test, y_score)
+
+
+@image_comparison(baseline_images=['roc', 'roc2', 'roc_add_roc'])
+def test_roc_add_to_roc():
+    y_test_roc2 = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
+    y_score_roc2 = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                             [0.3, 0.6, 0.7, 0.8, 0.9, 0.9,
+                             0.8, 0.2, 0.3, 0.5]]).T
+
+    roc1 = plot.ROC(y_test, y_score)
+    roc2 = plot.ROC(y_test_roc2, y_score_roc2)
+    roc1 + roc2
+
+
+@image_comparison(baseline_images=['roc', 'roc'])
+def test_roc_plot_with_fpr_and_tpr():
+    roc = plot.ROC(y_test, y_score)
+    roc = plot.ROC(None, None, tpr=roc.tpr, fpr=roc.fpr)
+
+
+@image_comparison(baseline_images=['roc', 'roc_multi', 'roc_add_multi'])
+def test_roc_add_to_multi(roc_multi_classification_values):
+    y_test_roc2, y_score_roc2 = roc_multi_classification_values
+
+    roc1 = plot.ROC(y_test, y_score)
+    roc2 = plot.ROC(y_test_roc2, y_score_roc2)
+    roc1 + roc2
+
+
+@image_comparison(baseline_images=['roc_multi', 'roc', 'multi_add_roc'])
+def test_roc_multi_add_to_roc(roc_multi_classification_values):
+    y_test_roc1, y_score_roc1 = roc_multi_classification_values
+
+    roc1 = plot.ROC(y_test_roc1, y_score_roc1)
+    roc2 = plot.ROC(y_test, y_score)
+    roc1 + roc2
+
+
+@image_comparison(baseline_images=['roc_multi', 'roc_multi_set2',
+                                   'roc_multi_add_multi'])
+def test_roc_multi_add_to_multi(roc_multi_classification_values,
+                                roc_multi_classification_values_set2):
+    y_test, y_score = roc_multi_classification_values
+    y_test_roc2, y_score_roc2 = roc_multi_classification_values_set2
+
+    roc1 = plot.ROC(y_test, y_score)
+    roc2 = plot.ROC(y_test_roc2, y_score_roc2)
+    roc1 + roc2
+
+
 @image_comparison(baseline_images=['precision_recall'])
 def test_precision_recall():
     plot.precision_recall(y_test, y_score)
