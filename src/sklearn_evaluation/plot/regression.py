@@ -187,4 +187,8 @@ def cooks_distance(
         c=baseline.get_color(),
         lw=baseline.get_linewidth(),
     )
+    ax.set_title("Cook's Distance Outlier Detection")
+    ax.set_xlabel("instance index")
+    ax.set_ylabel("influence (I)")
+    ax.legend(loc="best", frameon=True)
     return ax
