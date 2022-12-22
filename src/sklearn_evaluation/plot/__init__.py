@@ -12,11 +12,10 @@ from .validation_curve import validation_curve
 from .learning_curve import learning_curve
 from .metrics import metrics_at_thresholds
 from .clustering import elbow_curve, elbow_curve_from_results, silhouette_analysis, silhouette_analysis_from_results
-from .regression import residuals, prediction_error
+from .regression import residuals, prediction_error, cooks_distance
 from .target_analysis import target_analysis
 from .calibration import calibration_curve, scores_distribution
 from .classification_report import classification_report, ClassificationReport
-from .cooks_distance import cooks_distance
 
 __all__ = [
     'confusion_matrix',
