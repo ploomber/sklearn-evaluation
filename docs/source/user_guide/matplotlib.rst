@@ -52,7 +52,8 @@ The change the style using
 Let's see how a ROC curve looks with the new style:
 
 .. ipython:: python
-    
+    :okwarning:
+
     @savefig roc_ggplot.png
     plot.roc(y_true, y_score)
 
@@ -65,6 +66,7 @@ Saving plots
 ************
 
 .. ipython:: python
+    :okwarning:
 
     ax = plot.roc(y_true, y_score)
     fig = ax.get_figure()
@@ -80,6 +82,7 @@ Comparing several models with one plot
 **************************************
 
 .. ipython:: python
+    :okwarning:
 
     fig, ax = plt.subplots()
     plot.roc(y_true, y_score, ax=ax)
@@ -92,6 +95,7 @@ Grid plots
 **********
 
 .. ipython:: python
+    :okwarning:
 
     fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
     plot.roc(y_true, y_score, ax=ax1)
@@ -105,6 +109,7 @@ Customizing plots
 *****************
 
 .. ipython:: python
+    :okwarning:
 
     ax = plot.roc(y_true, y_score)
     ax.set_title('This is a custom title')

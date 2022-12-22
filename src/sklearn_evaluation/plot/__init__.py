@@ -5,7 +5,7 @@ Plotting functions
 from .classification import (confusion_matrix, feature_importances,
                              precision_at_proportions, ConfusionMatrix)
 
-from .roc import roc
+from .roc import roc, ROC
 from .precision_recall import precision_recall
 from .grid_search import grid_search
 from .validation_curve import validation_curve
@@ -24,7 +24,7 @@ __all__ = [
     'confusion_matrix',
     'feature_importances',
     'precision_recall',
-    'roc',
+    'ROC',
     'precision_at_proportions',
     'grid_search',
     'validation_curve',
@@ -47,4 +47,4 @@ __all__ = [
     'lift_curve',
     'Rank1D',
     'Rank2D'
-    ]
+]
