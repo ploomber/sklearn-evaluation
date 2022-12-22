@@ -127,7 +127,7 @@ def prediction_error(y_true, y_pred, model=None, ax=None):
 def cooks_distance(
     X,
     y,
-    ax=None,
+    ax=None
 ):
     """Plots cooks distance.
 
