@@ -57,17 +57,14 @@ def residuals(y_true, y_pred, ax=None):
     # horizontal line for residual=0
     ax.axhline(y=0)
 
-    ax.scatter(y_pred, y_true-y_pred)
+    ax.scatter(y_pred, y_true - y_pred)
 
     _set_ax_settings(ax, 'Predicted Value', 'Residuals', 'Residuals Plot')
     return ax
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def prediction_error(y_true,
-                     y_pred,
-                     model=None,
-                     ax=None):
+def prediction_error(y_true, y_pred, model=None, ax=None):
     """
     Plot the scatter plot of measured values v. predicted values, with
     an identity line and a best fitted line to show the prediction
@@ -107,12 +104,12 @@ def prediction_error(y_true,
                         'Cannot plot prediction error.')
     # best fit line
     model.fit(y_true.reshape((-1, 1)), y_pred)
-    x = np.linspace(80,230,100)
+    x = np.linspace(80, 230, 100)
     y = model.intercept_ + model.coef_ * x
-    ax.plot(x,y, "-b", label="best fit")
+    ax.plot(x, y, "-b", label="best fit")
 
     # identity line
-    ax.plot(x,x, "--k", label="identity")
+    ax.plot(x, x, "--k", label="identity")
 
     # scatter plot
     ax.scatter(y_true, y_pred)
@@ -127,10 +124,36 @@ def prediction_error(y_true,
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def cooks_distance( X,
+def cooks_distance(
+    X,
     y,
     ax=None,
-    ):
+):
+    """Plots cooks distance.
+
+        Parameters
+        ----------
+        X : array-like, 2D
+            Training data
+            Refer https://numpy.org/doc/stable/glossary.html#term-array-like
+
+        y : array-like, 1D
+            Target data
+            Refer https://numpy.org/doc/stable/glossary.html#term-array-like
+
+        Returns
+        -------
+        ax: matplotlib Axes
+            Axes containing the plot
+
+        Examples
+        --------
+        .. plot:: ../../examples/cooks_distance.py
+
+        Notes
+        -----
+        .. versionadded:: 0.8.4
+    """
 
     model = LinearRegression()
     model.fit(X, y)
@@ -140,26 +163,23 @@ def cooks_distance( X,
     residuals = y - model.predict(X)
     mse = np.dot(residuals, residuals) / df
     residuals_studentized = residuals / np.sqrt(mse) / np.sqrt(1 - leverage)
-    distance_ = residuals_studentized ** 2 / X.shape[1]
+    distance_ = residuals_studentized**2 / X.shape[1]
     distance_ *= leverage / (1 - leverage)
     influence_threshold_ = 4 / X.shape[0]
-    outlier_percentage_ = (
-            sum(distance_ > influence_threshold_) / X.shape[0]
-    )
+    outlier_percentage_ = (sum(distance_ > influence_threshold_) / X.shape[0])
     outlier_percentage_ *= 100.0
 
     if ax is None:
         ax = plt.gca()
-    _, _, baseline = ax.stem(
-        distance_, linefmt="C0-", markerfmt=",",
-        use_line_collection=True
-    )
+    _, _, baseline = ax.stem(distance_,
+                             linefmt="C0-",
+                             markerfmt=",",
+                             use_line_collection=True)
 
     ax.set_xlim(0, len(distance_))
 
     label = r"{:0.2f}% > $I_t$ ($I_t=\frac {{4}} {{n}}$)".format(
-        outlier_percentage_
-    )
+        outlier_percentage_)
     ax.axhline(
         influence_threshold_,
         ls="--",
@@ -168,6 +188,3 @@ def cooks_distance( X,
         lw=baseline.get_linewidth(),
     )
     return ax
-
-
-

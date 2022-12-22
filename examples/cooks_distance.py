@@ -1,15 +1,16 @@
 import matplotlib.pyplot as plt
-from sklearn.datasets import fetch_california_housing
-from sklearn.linear_model import LinearRegression
-
+from sklearn.datasets import make_regression
 from sklearn_evaluation import plot
 
+X, y = make_regression(
+    n_samples=100,
+    n_features=14,
+    n_informative=6,
+    bias=1.2,
+    noise=49.8,
+    tail_strength=0.6,
+    random_state=637,
+)
 
-X, y_true = fetch_california_housing(return_X_y=True)
-
-reg = LinearRegression().fit(X, y_true)
-
-y_pred = reg.predict(X)
-
-plot.cooks_distance(X, y_true, y_pred)
+plot.cooks_distance(X, y)
 plt.show()
