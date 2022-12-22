@@ -1,5 +1,6 @@
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 from matplotlib.testing.decorators import image_comparison
 from sklearn.datasets import make_regression
 
@@ -20,6 +21,17 @@ X, y = make_regression(
     tail_strength=0.6,
     random_state=637,
 )
+
+
+X, y = make_regression(
+        n_samples=100,
+        n_features=14,
+        n_informative=6,
+        bias=1.2,
+        noise=49.8,
+        tail_strength=0.6,
+        random_state=637,
+    )
 
 
 @image_comparison(baseline_images=['residual'],
