@@ -84,10 +84,12 @@ class ConfusionMatrix(Plot):
 
         _plot_cm(self.cm, cmap, ax, self.target_names, self.normalize)
 
+    @SKLearnEvaluationLogger.log(feature='plot', action='confusion-matrix-sub')
     def __sub__(self, other):
         cm = self.cm - other.cm
         return ConfusionMatrixSub(cm, self.target_names)
 
+    @SKLearnEvaluationLogger.log(feature='plot', action='confusion-matrix-add')
     def __add__(self, other):
         return ConfusionMatrixAdd(self.cm, other.cm, self.target_names)
 
@@ -187,7 +189,8 @@ def confusion_matrix(
 
 def _confusion_matrix_validate_predictions(y_true, y_pred, target_names):
     if any((val is None for val in (y_true, y_pred))):
-        raise ValueError("y_true and y_pred are needed to plot confusion " "matrix")
+        raise ValueError(
+            "y_true and y_pred are needed to plot confusion " "matrix")
 
     # calculate how many names you expect
     values = set(y_true).union(set(y_pred))
@@ -197,7 +200,8 @@ def _confusion_matrix_validate_predictions(y_true, y_pred, target_names):
         raise ValueError(
             (
                 "Data cointains {} different values, but target"
-                " names contains {} values.".format(expected_len, len(target_names))
+                " names contains {} values.".format(
+                    expected_len, len(target_names))
             )
         )
 
@@ -223,7 +227,8 @@ def _confusion_matrix_init_defaults(cmap, ax):
 
 
 def _confusion_matrix_validate(y_true, y_pred, target_names, cmap, ax):
-    target_names = _confusion_matrix_validate_predictions(y_true, y_pred, target_names)
+    target_names = _confusion_matrix_validate_predictions(
+        y_true, y_pred, target_names)
     cmap, ax = _confusion_matrix_init_defaults(cmap, ax)
     return target_names, cmap, ax
 
@@ -239,7 +244,8 @@ def _add_values_to_matrix(m, ax):
             label = "{:.2}".format(v)
         except Exception:
             label = v
-        ax.text(x, y, label, horizontalalignment="center", verticalalignment="center")
+        ax.text(x, y, label, horizontalalignment="center",
+                verticalalignment="center")
 
 
 def _plot_cm(cm, cmap, ax, target_names, normalize):

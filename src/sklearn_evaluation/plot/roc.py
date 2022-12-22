@@ -212,7 +212,7 @@ class ROC(Plot):
     -----
     .. versionadded:: 0.8.4
     """
-    @SKLearnEvaluationLogger.log(feature='plot')
+    @SKLearnEvaluationLogger.log(feature='plot', action='roc-init')
     def __init__(self, y_true, y_score,
                  fpr=None, tpr=None, ax=None):
 
@@ -273,7 +273,7 @@ class ROC(Plot):
     def __sub__(self):
         raise NotImplementedError("Not applicable for ROC")
 
-    @SKLearnEvaluationLogger.log(feature='plot')
+    @SKLearnEvaluationLogger.log(feature='plot', action='roc-add')
     def __add__(self, other):
         return ROCAdd(self, other)
 
