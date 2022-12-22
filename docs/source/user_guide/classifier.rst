@@ -76,6 +76,7 @@ classifiers: Precision-Recall and ROC.
 
 
 .. ipython:: python
+    :okwarning:
 
     @savefig roc.png
     plot.roc(y_true, y_score)
