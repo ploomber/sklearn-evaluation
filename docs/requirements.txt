@@ -1,0 +1,6 @@
+jupyter-book
+jupytext
+papermill
+seaborn
+ploomber
+jupysql

@@ -11,7 +11,7 @@ from matplotlib.figure import Figure
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from sklearn_evaluation import __version__
-from ..telemetry import SKLearnEvaluationLogger, telemetry
+from ..telemetry import SKLearnEvaluationLogger
 from ..plot.matplotlib import bar
 from ..metrics import precision_at
 from .. import compute
@@ -57,7 +57,7 @@ class ConfusionMatrixAdd(Plot):
 
 
 class ConfusionMatrix(Plot):
-    @SKLearnEvaluationLogger.log(feature='plot', action='confusion-matrix-init')
+    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
     def __init__(self, y_true, y_pred, target_names=None, normalize=False, cm=None):
         if y_true is not None and cm is None:
             warn(
@@ -84,10 +84,12 @@ class ConfusionMatrix(Plot):
 
         _plot_cm(self.cm, cmap, ax, self.target_names, self.normalize)
 
+    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-sub")
     def __sub__(self, other):
         cm = self.cm - other.cm
         return ConfusionMatrixSub(cm, self.target_names)
 
+    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-add")
     def __add__(self, other):
         return ConfusionMatrixAdd(self.cm, other.cm, self.target_names)
 
@@ -175,7 +177,7 @@ def confusion_matrix(
 
     Examples
     --------
-    .. plot:: ../../examples/confusion_matrix.py
+    .. plot:: ../examples/confusion_matrix.py
 
     """
     target_names, cmap, ax = _confusion_matrix_validate(
@@ -300,7 +302,7 @@ def feature_importances(
 
     Examples
     --------
-    .. plot:: ../../examples/feature_importances.py
+    .. plot:: ../examples/feature_importances.py
 
     """
     if data is None:

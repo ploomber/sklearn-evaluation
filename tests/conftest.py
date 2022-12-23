@@ -1,8 +1,6 @@
 from copy import copy
 import sys
 import os
-import shutil
-import tempfile
 from pathlib import Path
 import numpy as np
 from sklearn.linear_model import LogisticRegression
@@ -127,7 +125,7 @@ def grid_search_param_with_none():
     return clf
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def target_analysis_binary():
     kwargs = {
         "n_samples": 100,
@@ -142,11 +140,12 @@ def target_analysis_binary():
     X, y = datasets.make_classification(**kwargs)
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=101)
+        X, y, test_size=0.2, random_state=101
+    )
     return X_train, X_test, y_train, y_test
 
 
-@pytest.fixture(scope='session')
+@pytest.fixture(scope="session")
 def target_analysis_multiclass():
     kwargs = {
         "n_samples": 100,
@@ -161,7 +160,8 @@ def target_analysis_multiclass():
     X, y = datasets.make_classification(**kwargs)
 
     X_train, X_test, y_train, y_test = train_test_split(
-        X, y, test_size=0.2, random_state=101)
+        X, y, test_size=0.2, random_state=101
+    )
     return X_train, X_test, y_train, y_test
 
 
@@ -184,9 +184,8 @@ def roc_multi_classification_values_set2():
 
     random_state = np.random.RandomState(0)
     n_samples, n_features = X.shape
-    n_classes = len(np.unique(y))
-    X = np.concatenate([X, random_state.randn(
-        n_samples, 200 * n_features)], axis=1)
+
+    X = np.concatenate([X, random_state.randn(n_samples, 200 * n_features)], axis=1)
     (
         X_train,
         X_test,

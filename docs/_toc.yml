@@ -1,0 +1,47 @@
+format: jb-book
+root: intro.md
+
+parts:
+  - caption: Classification
+    chapters:
+    - file: classification/basic
+    - file: classification/compare
+    - file: classification/evaluate
+    - file: classification/imbalance
+
+  - caption: Regression
+    chapters:
+    - file: regression/RegressionPlots
+
+  - caption: Clustering
+    chapters:
+    - file: clustering/clustering_evaluation
+
+  - caption: Model comparison
+    chapters:
+    - file: comparison/SQLiteTracker
+    - file: comparison/NotebookCollection
+    - file: comparison/nbdb
+    - file: comparison/report
+
+  - caption: Model optimization
+    chapters:
+    - file: optimization/grid_search
+    - file: optimization/feature_ranking
+
+  - caption: API Reference
+    chapters:
+    - file: api/plot
+    - file: api/table
+    - file: api/evaluator
+    - file: api/training
+    - file: api/SQLiteTracker
+    - file: api/nbs
+
+  - caption: Reference
+    chapters:
+    - file: reference/func_vs_oop
+    - file: reference/matplotlib
+    - file: reference/projects
+    - file: reference/community
+

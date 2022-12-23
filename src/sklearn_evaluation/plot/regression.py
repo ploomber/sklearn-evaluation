@@ -140,11 +140,7 @@ def prediction_error(y_true, y_pred, model=None, ax=None):
 
 
 @SKLearnEvaluationLogger.log(feature='plot')
-def cooks_distance(
-    X,
-    y,
-    ax=None
-):
+def cooks_distance(X, y, ax=None):
     """Plots cooks distance.
 
         Parameters
@@ -164,7 +160,7 @@ def cooks_distance(
 
         Examples
         --------
-        .. plot:: ../../examples/cooks_distance.py
+        .. plot:: ../examples/cooks_distance.py
 
         Notes
         -----

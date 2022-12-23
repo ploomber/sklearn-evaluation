@@ -33,7 +33,7 @@ def validation_curve(train_scores, test_scores, param_range, param_name=None,
     Examples
     --------
 
-    .. plot:: ../../examples/validation_curve.py
+    .. plot:: ../examples/validation_curve.py
 
     """
 

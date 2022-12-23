@@ -56,7 +56,7 @@ def grid_search(cv_results_,
     Examples
     --------
 
-    .. plot:: ../../examples/grid_search.py
+    .. plot:: ../examples/grid_search.py
 
     """
     if change is None:

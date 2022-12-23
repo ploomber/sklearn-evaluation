@@ -167,7 +167,7 @@ class Experiment:
         >>> exp = tracker.new_experiment()
         >>> exp.comment("some comment") # add comment at runtime
         >>> retrieved = tracker.get(exp.uuid)
-        >>> retrieved.comment("another commment") # add comment after running the experiment
+        >>> retrieved.comment("another commment")
         """
         self._tracker.comment(self._uuid, comment)
 
@@ -189,7 +189,7 @@ class Experiment:
 class SQLiteTracker:
     """A experiment tracker backed by a SQLite database
 
-    :doc:`Click here <../user_guide/SQLiteTracker>` to see the user guide.
+    :doc:`Click here <../nbs/SQLiteTracker>` to see the user guide.
 
     Parameters
     ----------
