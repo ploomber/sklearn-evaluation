@@ -9,7 +9,7 @@ logo: logo.jpeg
 only_build_toc_files: true
 
 execute:
-  execute_notebooks: cache
+  execute_notebooks: auto
   timeout: 30
   # some notebooks download files, so we run them in a tmp directory to clean everything up
   run_in_temp: true
