@@ -108,23 +108,10 @@ Path('model.py').write_text(model)
 
 ## Pipeline declaration
 
-Create a pipeline using [Ploomber](https://docs.ploomber.io/en/latest/) and execute it in parallel.
-
-Note that if your models don't take long to run, using the `Serial` executor might be faster, since spinning up a new subprocess is expensive.
-
-Each experiment will create an output `.ipynb` file.
+Create a pipeline using [Ploomber](https://docs.ploomber.io/en/latest/). Each experiment will create an output `.ipynb` file.
 
 ```{code-cell} ipython3
-parallel = True
-
-if parallel:
-    executor = Parallel()
-else:
-    executor = Serial(build_in_subprocess=False)
-
-
-dag = DAG(executor=executor)
-
+dag = DAG()
 
 experiments = {
     'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),

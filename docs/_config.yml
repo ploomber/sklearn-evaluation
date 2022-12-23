@@ -10,9 +10,8 @@ only_build_toc_files: true
 
 execute:
   execute_notebooks: cache
-  timeout: 120
-  # some notebooks download files, so we run them in a tmp
-  # directory to clean everything up
+  timeout: 30
+  # some notebooks download files, so we run them in a tmp directory to clean everything up
   run_in_temp: true
 
 sphinx:
@@ -37,7 +36,6 @@ sphinx:
       matplotlib:
         - "http://matplotlib.org/"
         - null
-    execution_timeout: 1000
     suppress_warnings: ['myst.domains', 'myst.header']
     exclude_patterns: ['README.md']
 
