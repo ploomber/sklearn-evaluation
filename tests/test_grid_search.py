@@ -250,3 +250,4 @@ def test_none_parameter_wit(grid_search_3_params):
     with pytest.raises(ValueError):
         change = ["n_estimators", "n_estimators"]
         plot.grid_search(grid_search_3_params.cv_results_, change=change, subset=None)
+        
