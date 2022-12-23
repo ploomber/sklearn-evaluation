@@ -36,7 +36,8 @@ def roc(y_true, y_score, ax=None):
 
     Examples
     --------
-    .. plot:: ../../examples/roc.py
+    .. plot:: ../examples/roc.py
+
     """
     r = ROC(y_true, y_score, ax=ax)
     return r.ax

@@ -51,7 +51,7 @@ class ClassificationReport(Plot):
 
     Examples
     --------
-    .. plot:: ../../examples/ClassificationReport.py
+    .. plot:: ../examples/ClassificationReport.py
     """
     @SKLearnEvaluationLogger.log(feature='plot', action='classification-report-init')
     def __init__(
@@ -228,9 +228,9 @@ def classification_report(
 
     Examples
     --------
-    .. plot:: ../../examples/classification_report.py
+    .. plot:: ../examples/classification_report.py
 
-    .. plot:: ../../examples/classification_report_multiclass.py
+    .. plot:: ../examples/classification_report_multiclass.py
     """
 
     if ax is None:

@@ -81,7 +81,7 @@ def elbow_curve(X,
 
     Examples
     --------
-    .. plot:: ../../examples/elbow_curve.py
+    .. plot:: ../examples/elbow_curve.py
 
     """
     if n_clusters is None:
@@ -206,7 +206,7 @@ def silhouette_analysis(X,
 
     Examples
     --------
-    .. plot:: ../../examples/silhouette_plot_basic.py
+    .. plot:: ../examples/silhouette_plot_basic.py
 
     Notes
     -----

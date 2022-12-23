@@ -30,7 +30,7 @@ def residuals(y_true, y_pred, ax=None, plot_name='Residuals Plot'):
 
     Examples
     --------
-    .. plot:: ../../examples/residuals.py
+    .. plot:: ../examples/residuals.py
 
     """
 
@@ -78,7 +78,7 @@ def prediction_error(y_true,
 
     Examples
     --------
-    .. plot:: ../../examples/prediction_error.py
+    .. plot:: ../examples/prediction_error.py
 
     """
 

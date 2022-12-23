@@ -7,17 +7,17 @@ pip install invoke
 invoke setup
 ```
 
-Install `pandoc`
-```
-pip install pandoc
-```
-Build docs:
+Build docs locally:
 
 ```
-cd docs
-make <format>
+jupyter-book build docs/
 ```
 
-For available formats run `make help`
+To ensure a clean build:
 
-If changes are made to docs, run `pip install ".[dev]"` before `make` to preview latest changes.
+``` 
+jupyter-book clean docs/ --all
+jupyter-book build docs/
+```
+
+If changes are made to docs, run `pip install ".[dev]"` before `build` to preview latest changes.

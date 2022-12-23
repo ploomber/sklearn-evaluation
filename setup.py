@@ -25,8 +25,13 @@ DOCS = [
     # in NotebookCollection.py example
     'ipywidgets',
     # notebook database example
-    'jupysql',
+    'jupysql'
 ]
+
+JB = ['markdown-it-py==1.1.0',
+      'linkify-it-py==1.0.3',
+      'myst-nb==0.13.2',
+      'jupyter-book']
 
 TEST = [
     'jupytext',
@@ -47,7 +52,7 @@ DEV = [
     'pkgmt',
 ]
 
-ALL = DOCS + TEST + DEV
+ALL = DOCS + JB + TEST + DEV
 
 setup(
     name='sklearn-evaluation',

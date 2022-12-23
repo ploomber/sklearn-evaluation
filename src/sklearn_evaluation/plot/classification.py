@@ -177,7 +177,7 @@ def confusion_matrix(
 
     Examples
     --------
-    .. plot:: ../../examples/confusion_matrix.py
+    .. plot:: ../examples/confusion_matrix.py
 
     """
     target_names, cmap, ax = _confusion_matrix_validate(
@@ -306,7 +306,7 @@ def feature_importances(
 
     Examples
     --------
-    .. plot:: ../../examples/feature_importances.py
+    .. plot:: ../examples/feature_importances.py
 
     """
     if data is None:

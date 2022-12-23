@@ -36,7 +36,7 @@ def precision_recall(y_true, y_score, ax=None):
 
     Examples
     --------
-    .. plot:: ../../examples/precision_recall.py
+    .. plot:: ../examples/precision_recall.py
 
     """
     if any((val is None for val in (y_true, y_score))):

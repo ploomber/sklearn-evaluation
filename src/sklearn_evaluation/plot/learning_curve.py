@@ -29,7 +29,7 @@ def learning_curve(train_scores, test_scores, train_sizes, ax=None):
     Examples
     --------
 
-    .. plot:: ../../examples/learning_curve.py
+    .. plot:: ../examples/learning_curve.py
 
     """
     if ax is None:
