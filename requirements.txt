@@ -1,0 +1,7 @@
+# requirements for binder
+sklearn-evaluation
+scikit-learn
+matplotlib
+jupytext
+jupysql
+ipywidgets

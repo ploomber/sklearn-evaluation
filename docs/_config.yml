@@ -1,6 +1,6 @@
 title: sklearn-evaluation
 author: Ploomber
-copyright: 'Ploomber'
+copyright: Ploomber
 logo: logo.jpeg
 
 # https://jupyterbook.org/en/stable/structure/configure.html#disable-building-files-that-arent-in-the-table-of-contents
@@ -10,6 +10,10 @@ only_build_toc_files: true
 
 execute:
   execute_notebooks: cache
+  timeout: 120
+  # some notebooks download files, so we run them in a tmp
+  # directory to clean everything up
+  run_in_temp: true
 
 sphinx:
   extra_extensions:
@@ -48,7 +52,14 @@ repository:
   path_to_book: docs
   branch: master
 
+# Add GitHub buttons to your book
+# See https://jupyterbook.org/customize/config.html#add-a-link-to-your-repository
 html:
   use_issues_button: true
   use_repository_button: true
+  extra_navbar: Join us on <a href="https://ploomber.io/community/">Slack!</a>
+  announcement: To launch any tutorial in JupyterLab, click on the 🚀 button below!
 
+launch_buttons:
+  notebook_interface: "jupyterlab"
+  binderhub_url: "https://binder.ploomber.io"
