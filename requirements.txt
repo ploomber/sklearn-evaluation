@@ -5,3 +5,5 @@ matplotlib
 jupytext
 jupysql
 ipywidgets
+# to run nbdb demo
+papermill
