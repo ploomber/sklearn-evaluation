@@ -172,10 +172,6 @@ class ClassifierEvaluator(object):
             like {{e.confusion_matrix()}} or any other attribute/method. If
             None, a default template is used
 
-        style: str
-            Path to a css file to apply style to the report. If None, no
-            style will be applied
-
         Returns
         -------
         Report
