@@ -1,31 +1,46 @@
 format: jb-book
-root: index.md
+root: intro.md
+
 parts:
-  - caption: User Guide
+  - caption: Classification
     chapters:
-    - file: nbs/classifier
-    - file: nbs/evaluating_binary_classifiers
-    - file: nbs/report
-    - file: nbs/compare
-    - file: nbs/clustering_evaluation
-    - file: nbs/target_analysis
-    - file: nbs/feature_ranking
-    - file: user_guide/func_vs_oop
-    - file: nbs/grid_search
-    - file: nbs/RegressionPlots
-    - file: nbs/matplotlib
-    - file: nbs/SQLiteTracker
-    - file: nbs/NotebookCollection
-    - file: nbs/nbdb
+    - file: classification/basic
+    - file: classification/compare
+    - file: classification/evaluate
+    - file: classification/imbalance
+
+  - caption: Regression
+    chapters:
+    - file: regression/RegressionPlots
+
+  - caption: Clustering
+    chapters:
+    - file: clustering/clustering_evaluation
+
+  - caption: Model comparison
+    chapters:
+    - file: comparison/SQLiteTracker
+    - file: comparison/NotebookCollection
+    - file: comparison/nbdb
+    - file: comparison/report
+
+  - caption: Model optimization
+    chapters:
+    - file: optimization/grid_search
+    - file: optimization/feature_ranking
+
   - caption: API Reference
     chapters:
-    - file: api/plot.rst 
-    - file: api/table.rst
-    - file: api/evaluator.rst 
-    - file: api/training.rst 
-    - file: api/SQLiteTracker.rst 
-    - file: api/nbs.rst 
-  - caption: Community
+    - file: api/plot
+    - file: api/table
+    - file: api/evaluator
+    - file: api/training
+    - file: api/SQLiteTracker
+    - file: api/nbs
+
+  - caption: Reference
     chapters:
-    - file: community/community.rst
+    - file: reference/func_vs_oop
+    - file: reference/matplotlib
+    - file: reference/community
 

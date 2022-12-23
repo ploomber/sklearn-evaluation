@@ -1,5 +1,5 @@
-Plotting
-========
+``sklearn_evaluation.plot``
+===========================
 
 ClassificationReport
 --------------------

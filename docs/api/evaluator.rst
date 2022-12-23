@@ -1,5 +1,5 @@
-ClassifierEvaluator
-=========================
+``ClassifierEvaluator``
+=======================
 
 ClassifierEvaluator
 -------------------

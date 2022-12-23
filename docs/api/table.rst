@@ -1,5 +1,5 @@
-Tables
-======
+``sklearn_evaluation.table``
+============================
 
 feature_importances
 -------------------

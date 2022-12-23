@@ -1,5 +1,5 @@
-Functional vs Object Oriented interface
-=======================================
+Functional vs OOP
+=================
 
 Why having two different ways of doing the same? While the plot/table module
 can be accessed directly or via :class:`sklearn_evaluation.ClassifierEvaluator`, they serve slighly
