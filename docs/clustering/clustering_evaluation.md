@@ -43,7 +43,7 @@ X, y = datasets.make_blobs(
 )
 
 # Fit kMeans on the data
-kmeans = KMeans(random_state=10, n_init='auto')
+kmeans = KMeans(random_state=10, n_init=5)
 ```
 
 ##### Elbow curve
@@ -84,7 +84,7 @@ X, y = datasets.make_blobs(
     random_state=1,
 )
 
-kmeans = KMeans(n_clusters=4, random_state=1, n_init='auto')
+kmeans = KMeans(n_clusters=4, random_state=1, n_init=5)
 cluster_labels = kmeans.fit_predict(X)
 ```
 

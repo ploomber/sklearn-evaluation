@@ -15,10 +15,9 @@ X, y = make_blobs(
     random_state=1,
 )
 
-kmeans = MiniBatchKMeans(n_clusters=2,
-                         random_state=0,
-                         batch_size=6,
-                         max_iter=10).fit(X)
+kmeans = MiniBatchKMeans(
+    n_clusters=2, random_state=0, batch_size=6, max_iter=10, n_init=5
+).fit(X)
 
 plot.silhouette_analysis(X, kmeans, range_n_clusters=[3, 4])
 plt.show()

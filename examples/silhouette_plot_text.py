@@ -12,8 +12,10 @@ from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import Normalizer
 
 categories = [
-    "comp.graphics", "comp.windows.x", "comp.sys.ibm.pc.hardware",
-    "comp.sys.mac.hardware"
+    "comp.graphics",
+    "comp.windows.x",
+    "comp.sys.ibm.pc.hardware",
+    "comp.sys.mac.hardware",
 ]
 
 dataset = fetch_20newsgroups(
@@ -44,8 +46,7 @@ kmeans = KMeans(
     n_init=5,
 )
 
-plot.silhouette_analysis(X_lsa,
-                         kmeans,
-                         range_n_clusters=[2, 3, 4, 5, 6],
-                         metric='cosine')
+plot.silhouette_analysis(
+    X_lsa, kmeans, range_n_clusters=[2, 3, 4, 5, 6], metric="cosine"
+)
 plt.show()

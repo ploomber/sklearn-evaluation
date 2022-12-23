@@ -14,6 +14,6 @@ X, y = make_blobs(
     random_state=1,
 )
 
-kmeans = KMeans(random_state=10)
+kmeans = KMeans(random_state=1, n_init=5)
 plot.silhouette_analysis(X, kmeans, range_n_clusters=[3])
 plt.show()
