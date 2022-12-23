@@ -45,7 +45,7 @@ def test_single_numeric_bar_unsorted(grid_search_3_params):
 
 @image_comparison(baseline_images=["single_categorical_line"])
 def test_single_categorial_line(grid_search_3_params):
-    change = "criterion"
+    change = "n_estimators"
     plot.grid_search(grid_search_3_params.cv_results_, change, kind="line")
 
 
@@ -57,7 +57,7 @@ def test_single_categorial_line_unsorted(grid_search_3_params):
 
 @image_comparison(baseline_images=["single_categorical_bar"])
 def test_single_categorial_bar(grid_search_3_params):
-    change = "criterion"
+    change = "n_estimators"
     plot.grid_search(grid_search_3_params.cv_results_, change, kind="bar")
 
 
@@ -70,7 +70,7 @@ def test_single_categorial_bar_unsorted(grid_search_3_params):
 @image_comparison(baseline_images=["single_numeric_partially_restricted"])
 def test_single_numeric_partially_restricted(grid_search_3_params):
     change = "n_estimators"
-    subset = {"max_features": "sqrt"}
+    subset = {"max_features": ["sqrt"]}
     plot.grid_search(grid_search_3_params.cv_results_, change, subset, kind="bar")
 
 
