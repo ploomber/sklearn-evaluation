@@ -70,3 +70,27 @@ This plot has 2 lines: the identity line (where y_predicted=y_measured) and the 
 ```{code-cell} ipython3
 plot.prediction_error(y_true, y_pred)
 ```
+
+### Cooks Distance
+
++++
+
+Cooks distance is an effective tool to measure the influence of an outlier in the training dataset for a regression problem. Outliers are data points that vary significantly from the rest of the data points in the training set. The presence of outliers in the training phase can affect the parameters that the model learns. This implementation assumes the Ordinary Least Squares regression.
+
++++
+
+Create a dataset with strong outliers.
+
+```{code-cell} ipython3
+from sklearn.datasets import make_regression
+X, y = make_regression(n_samples=100, 
+                                 n_features=6, 
+                                 n_informative=5, 
+                                 n_targets=1, 
+                                 bias=100.0,
+                                 noise=30.0)
+```
+
+```{code-cell} ipython3
+plot.cooks_distance(X,y)
+```
