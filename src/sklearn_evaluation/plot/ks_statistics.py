@@ -71,8 +71,10 @@ def _binary_ks_curve(y_true, y_score):
     lb = LabelEncoder()
     encoded_labels = lb.fit_transform(y_true)
     if len(lb.classes_) != 2:
-        raise ValueError('Cannot calculate KS statistic for data with '
-                         '{} category/ies'.format(len(lb.classes_)))
+        raise ValueError(
+            "Cannot calculate KS statistic for data with "
+            "{} category/ies".format(len(lb.classes_))
+        )
     idx = encoded_labels == 0
     data1 = np.sort(y_score[idx])
     data2 = np.sort(y_score[np.logical_not(idx)])
@@ -129,19 +131,23 @@ def _binary_ks_curve(y_true, y_score):
         pct2 = np.append(pct2, [1.0])
 
     differences = pct1 - pct2
-    ks_statistic, max_distance_at = (np.max(differences),
-                                     thresholds[np.argmax(differences)])
+    ks_statistic, max_distance_at = (
+        np.max(differences),
+        thresholds[np.argmax(differences)],
+    )
 
     return thresholds, pct1, pct2, ks_statistic, max_distance_at, lb.classes_
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
-def ks_statistic(y_true,
-                 y_score,
-                 figsize=None,
-                 title_fontsize="large",
-                 text_fontsize="medium",
-                 ax=None):
+@SKLearnEvaluationLogger.log(feature="plot")
+def ks_statistic(
+    y_true,
+    y_score,
+    figsize=None,
+    title_fontsize="large",
+    text_fontsize="medium",
+    ax=None,
+):
     """Generates the KS Statistic plot from labels and scores/probabilities
 
     Parameters
@@ -163,8 +169,8 @@ def ks_statistic(y_true,
         or integer-values. Defaults to "large".
 
     text_fontsize : string or int, optional
-        Matplotlib-style fontsizes. Use e.g. "small", "medium", "large" or integer-values. Defaults to
-        "medium".
+        Matplotlib-style fontsizes. Use e.g. "small", "medium", "large"
+        or integer-values. Defaults to "medium".
 
     ax : matplotlib Axes, optional
         Axes object to draw the plot onto, otherwise uses current Axes
@@ -188,37 +194,40 @@ def ks_statistic(y_true,
 
     classes = np.unique(y_true)
     if len(classes) != 2:
-        raise ValueError('Cannot calculate KS statistic for data with '
-                         '{} category/ies'.format(len(classes)))
+        raise ValueError(
+            "Cannot calculate KS statistic for data with "
+            "{} category/ies".format(len(classes))
+        )
     probas = y_score
 
     # Compute KS Statistic curves
-    thresholds, pct1, pct2, ks_statistic, \
-        max_distance_at, classes = _binary_ks_curve(y_true,
-                                                   probas[:, 1].ravel())
+    thresholds, pct1, pct2, ks_statistic, max_distance_at, classes = _binary_ks_curve(
+        y_true, probas[:, 1].ravel()
+    )
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     ax.set_title("KS Statistics Plot", fontsize=title_fontsize)
 
-    ax.plot(thresholds, pct1, lw=3, label='Class {}'.format(classes[0]))
-    ax.plot(thresholds, pct2, lw=3, label='Class {}'.format(classes[1]))
+    ax.plot(thresholds, pct1, lw=3, label="Class {}".format(classes[0]))
+    ax.plot(thresholds, pct2, lw=3, label="Class {}".format(classes[1]))
     idx = np.where(thresholds == max_distance_at)[0][0]
-    ax.axvline(max_distance_at,
-               *sorted([pct1[idx], pct2[idx]]),
-               label='KS Statistic: {:.3f} at {:.3f}'.format(
-                   ks_statistic, max_distance_at),
-               linestyle=':',
-               lw=3,
-               color='black')
+    ax.axvline(
+        max_distance_at,
+        *sorted([pct1[idx], pct2[idx]]),
+        label="KS Statistic: {:.3f} at {:.3f}".format(ks_statistic, max_distance_at),
+        linestyle=":",
+        lw=3,
+        color="black"
+    )
 
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.0])
 
-    ax.set_xlabel('Threshold', fontsize=text_fontsize)
-    ax.set_ylabel('Percentage below threshold', fontsize=text_fontsize)
+    ax.set_xlabel("Threshold", fontsize=text_fontsize)
+    ax.set_ylabel("Percentage below threshold", fontsize=text_fontsize)
     ax.tick_params(labelsize=text_fontsize)
-    ax.legend(loc='lower right', fontsize=text_fontsize)
+    ax.legend(loc="lower right", fontsize=text_fontsize)
 
     return ax

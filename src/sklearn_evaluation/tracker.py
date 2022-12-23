@@ -167,7 +167,7 @@ class Experiment:
         >>> exp = tracker.new_experiment()
         >>> exp.comment("some comment") # add comment at runtime
         >>> retrieved = tracker.get(exp.uuid)
-        >>> retrieved.comment("another commment") # add comment after running the experiment
+        >>> retrieved.comment("another commment")
         """
         self._tracker.comment(self._uuid, comment)
 

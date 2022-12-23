@@ -21,6 +21,11 @@ jobs:
         activate-environment: conda-env
         python-version: ${{ matrix.python-version }}
 
+    - name: Lint with flake8
+      run: |
+        pip install flake8
+        flake8
+
     - name: Run tests
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
