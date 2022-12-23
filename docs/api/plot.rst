@@ -112,3 +112,7 @@ target_analysis
 validation_curve
 ----------------
 .. autofunction:: sklearn_evaluation.plot.validation_curve
+
+cooks_distance
+--------------
+.. autofunction:: sklearn_evaluation.plot.cooks_distance
