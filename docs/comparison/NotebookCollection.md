@@ -16,6 +16,8 @@ kernelspec:
 The `.ipynb` format is capable of storing tables and charts in a standalone file. This makes it a great choice for model evaluation reports. `NotebookCollection` allows you to retrieve results from previously executed notebooks to compare them.
 
 ```{code-cell} ipython3
+import urllib.request
+
 import papermill as pm
 import jupytext
 
@@ -25,6 +27,10 @@ from sklearn_evaluation import NotebookCollection
 Let's first generate a few notebooks, we have a `train.py` script that trains a single model, let's convert it to a jupyter notebook:
 
 ```{code-cell} ipython3
+# download script
+urllib.request.urlretrieve('https://raw.githubusercontent.com/ploomber/sklearn-evaluation/master/docs-assets/nb-collection/train.py', filename='train.py')
+
+# convert
 nb = jupytext.read('train.py')
 jupytext.write(nb, 'train.ipynb')
 ```
