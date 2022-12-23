@@ -27,6 +27,10 @@ confusion_matrix
 ----------------
 .. autofunction:: sklearn_evaluation.plot.confusion_matrix
 
+ConfusionMatrix
+---------------
+.. autofunction:: sklearn_evaluation.plot.ConfusionMatrix
+
 cumulative_gain
 ---------------
 .. autofunction:: sklearn_evaluation.plot.cumulative_gain
@@ -82,6 +86,12 @@ residuals
 roc
 ---
 .. autofunction:: sklearn_evaluation.plot.roc
+
+
+ROC
+---
+.. autofunction:: sklearn_evaluation.plot.ROC
+
 
 scores_distribution
 -------------------
