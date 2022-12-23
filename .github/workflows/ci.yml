@@ -22,6 +22,7 @@ jobs:
         python-version: ${{ matrix.python-version }}
 
     - name: Lint with flake8
+      shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
         pip install flake8
