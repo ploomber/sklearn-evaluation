@@ -42,5 +42,6 @@ parts:
     chapters:
     - file: reference/func_vs_oop
     - file: reference/matplotlib
+    - file: reference/projects
     - file: reference/community
 
