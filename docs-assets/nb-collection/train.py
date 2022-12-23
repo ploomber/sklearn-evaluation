@@ -80,7 +80,6 @@ df["error_abs"] = np.abs(y_test - y_pred)
 df["error_sq"] = np.square(y_test - y_pred)
 
 # + tags=["houseage"]
-# CHAS: Charles River dummy variable (= 1 if tract bounds river; 0 otherwise)
 error_age = df.groupby("HouseAge")[["error_abs", "error_sq"]].mean()
 error_age.columns = ["mae", "mse"]
 
