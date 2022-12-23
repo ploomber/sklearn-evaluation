@@ -23,6 +23,7 @@ jobs:
 
     - name: Lint with flake8
       run: |
+        eval "$(conda shell.bash hook)"
         pip install flake8
         flake8
 
