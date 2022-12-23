@@ -151,7 +151,7 @@ class RankD:
                 )
             self.features_ = np.array(self.features)
 
-    @telemetry.log()
+    @telemetry.log_call()
     def feature_ranks(self, X):
         """
         Parameters
@@ -170,7 +170,7 @@ class RankD:
         self._draw()
         return self.ax
 
-    @telemetry.log()
+    @telemetry.log_call()
     def feature_ranks_custom_algorithm(self, ranks):
         """
         This method is useful if user wants to use custom algorithm for feature ranking.

@@ -55,7 +55,7 @@ class ClassificationReport(Plot):
     .. plot:: ../examples/ClassificationReport.py
     """
 
-    @tel_clf_report.log()
+    @tel_clf_report.log_call()
     def __init__(
         self,
         y_true,
@@ -93,13 +93,13 @@ class ClassificationReport(Plot):
 
         _classification_report_plot(self.matrix, self.keys, self.target_names, ax)
 
-    @tel_clf_report.log()
+    @tel_clf_report.log_call()
     def __sub__(self, other):
         return ClassificationReportSub(
             self.matrix, other.matrix, self.keys, target_names=self.target_names
         )
 
-    @tel_clf_report.log()
+    @tel_clf_report.log_call()
     def __add__(self, other):
         return ClassificationReportAdd(
             self.matrix, other.matrix, keys=self.keys, target_names=self.target_names
@@ -194,7 +194,7 @@ def _classification_report_plot(matrix, keys, target_names, ax):
 
 
 # TODO: add unit test
-@tel_clf_report.log()
+@tel_clf_report.log_call()
 def classification_report(
     y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0, ax=None
 ):

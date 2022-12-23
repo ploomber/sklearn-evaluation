@@ -347,7 +347,7 @@ class SQLiteTracker:
         """Returns an experiment instance"""
         return Experiment.new(self)
 
-    @tel_tracker.log_call(log_args=True, ignore_args={"parameters"})
+    @tel_tracker.log_call(log_args=True, ignore_args={"parameters", "uuid"})
     def update(self, uuid, parameters, allow_overwrite=False):
         """Update the parameters of a experiment given its uuid"""
         if not allow_overwrite:
@@ -382,7 +382,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
-    @tel_tracker.log_call(log_args=True, ignore_args={"parameters"})
+    @tel_tracker.log_call(log_args=True, ignore_args={"parameters", "uuid"})
     def insert(self, uuid, parameters):
         """Insert a new experiment"""
         # serialize matplotlib.figure.Figure, if any
