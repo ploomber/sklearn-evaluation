@@ -24,6 +24,7 @@ __all__ = [
     'confusion_matrix',
     'feature_importances',
     'precision_recall',
+    'roc',
     'ROC',
     'precision_at_proportions',
     'grid_search',
