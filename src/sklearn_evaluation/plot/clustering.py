@@ -41,7 +41,7 @@ tel_cluster = telemetry.create_group("clustering")
 
 
 # TODO: add unit test
-@tel_cluster.log_call()
+@tel_cluster.log_call(log_args=True, ignore_args={"X", "clf"})
 def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=None):
     """Plots elbow curve of different values of K of a clustering algorithm.
 

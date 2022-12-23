@@ -19,7 +19,7 @@ from sklearn_evaluation.util import (
 )
 
 
-@telemetry.log_call()
+@telemetry.log_call(log_args=True, ignore_args={"cv_results_", "subset", "cmap", "ax"})
 def grid_search(
     cv_results_, change, subset=None, kind="line", cmap=None, ax=None, sort=True
 ):

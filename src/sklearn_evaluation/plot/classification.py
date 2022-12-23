@@ -275,7 +275,7 @@ def _plot_cm(cm, cmap, ax, target_names, normalize):
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-@telemetry.log_call()
+@telemetry.log_call(log_args=True, ignore_args={"data"})
 def feature_importances(
     data, top_n=None, feature_names=None, orientation="horizontal", ax=None
 ):
