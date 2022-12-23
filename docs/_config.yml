@@ -36,7 +36,7 @@ sphinx:
       matplotlib:
         - "http://matplotlib.org/"
         - null
-    execution_allow_errors: True
+    execution_allow_errors: False
     execution_timeout: 1000
     suppress_warnings: ['myst.domains', 'myst.header']
     exclude_patterns: ['README.md']
