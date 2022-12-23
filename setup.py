@@ -76,7 +76,7 @@ setup(
     include_package_data=True,
     install_requires=[
         # the new telemetry module was introduced in this version
-        "ploomber-core>=0.0.12",
+        "ploomber-core>=0.0.13",
         # compute metrics
         "scikit-learn",
         # plotting
