@@ -144,6 +144,8 @@ len(dag)
 ```
 
 ```{code-cell} ipython3
+:tags: ["hide-output"]
+
 # run experiments
 dag.build(force=True)
 ```
@@ -151,6 +153,8 @@ dag.build(force=True)
 ## Indexing notebooks
 
 ```{code-cell} ipython3
+:tags: ["hide-output"]
+
 # initialize db with notebooks in the outputs directory
 db = NotebookDatabase('nb.db', 'output/models/*.ipynb')
 

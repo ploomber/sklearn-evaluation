@@ -113,6 +113,8 @@ We can see that the second random forest is performing the best in both metrics.
 `houseage` contains a multi-row table where with error metrics broken down by the `HouseAge` indicator feature. Multi-row tables *do not* display the "Compare" tab:
 
 ```{code-cell} ipython3
+:tags: ["hide-output"]
+
 nbs['houseage']
 ```
 
@@ -132,6 +134,8 @@ nbs_two['metrics']
 When comparing multi-row tables, the "Compare" tab appears, showing the difference between the tables:
 
 ```{code-cell} ipython3
+:tags: ["hide-output"]
+
 nbs_two['houseage']
 ```
 
