@@ -1,18 +1,21 @@
+import json
+from pathlib import Path
+from warnings import warn
+
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
-from ..telemetry import SKLearnEvaluationLogger
-from ..util import is_column_vector, is_row_vector
-from ..plot.plot import Plot
+
 from sklearn_evaluation import __version__
-import json
-from pathlib import Path
-from warnings import warn  # noqa
+from sklearn_evaluation.util import is_column_vector, is_row_vector
+from sklearn_evaluation.plot.plot import Plot
+from sklearn_evaluation.telemetry import telemetry
 
 
+# functional API
 def roc(y_true, y_score, ax=None):
-    # Support old api
     """
     Plot ROC curve
     Parameters
@@ -171,6 +174,9 @@ class ROCAdd(Plot):
             _plot_roc(b.fpr, b.tpr, ax=ax, curve_label=added_curve_label)
 
 
+tel_roc = telemetry.create_group("roc")
+
+
 class ROC(Plot):
     """
     Plot ROC curve
@@ -214,7 +220,7 @@ class ROC(Plot):
     .. versionadded:: 0.8.4
     """
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
+    @tel_roc.log_call()
     def __init__(self, y_true, y_score, fpr=None, tpr=None, ax=None):
 
         if y_true is not None and y_score is not None:
@@ -273,7 +279,7 @@ class ROC(Plot):
     def __sub__(self):
         raise NotImplementedError("Not applicable for ROC")
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="roc-add")
+    @tel_roc.log_call()
     def __add__(self, other):
         return ROCAdd(self, other)
 

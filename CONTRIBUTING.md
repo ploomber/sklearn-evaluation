@@ -117,50 +117,6 @@ def my_plotting_function(y_true, y_pred, ax=None):
     pass
 ```
 
-## Telemetry : Monitoring the state of `sklearn-evaluation`
+## Telemetry
 
-Use [`SKLearnEvaluationLogger`](https://github.com/ploomber/sklearn-evaluation/blob/f32c15a43f4a9b4c2e588b3c0f71ba6dc5a71a7e/src/sklearn_evaluation/telemetry.py#L19) decorator to generate logs
-
-Example:
-
-```python
-@SKLearnEvaluationLogger.log(feature='plot')
-def confusion_matrix(
-        y_true,
-        y_pred,
-        target_names=None,
-        normalize=False,
-        cmap=None,
-        ax=None,
-        **kwargs):
-pass
-```
-
-this will generate the following log:
-
-```json
-        {
-          "metadata": {
-          "action": "confusion_matrix"
-          "feature": "plot",
-          "args": {
-                        "target_names": "None",
-                        "normalize": "False",
-                        "cmap": "None",
-                        "ax": "None"
-                    }
-          }
-        }
-```
-
-\*\* since `y_true` and `y_pred` are positional arguments without default values it won't log them
-
-### Queries
-
-1. Run queries and filter out `sklearn-evaluation` events by the event name: `sklearn-evaluation`
-2. Break these events by feature ('plot', 'report', 'SQLiteTracker', 'NotebookCollection')
-3. Break events by actions/func name (i.e: 'confusion_matrix', 'roc', etc...)
-
-### Errors
-
-Failing runnings will be named: `sklearn-evaluation-error`
+See [ploomber-core telemetry guide.](https://ploomber-core.readthedocs.io/en/latest/telemetry.html)

@@ -6,13 +6,17 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report as sk_classification_report
 from matplotlib.figure import Figure
-from ..telemetry import SKLearnEvaluationLogger
 
+
+from sklearn_evaluation.telemetry import telemetry
 from sklearn_evaluation.plot.classification import _add_values_to_matrix
 from sklearn_evaluation.util import default_heatmap
 from sklearn_evaluation.plot.plot import Plot
 from sklearn_evaluation.plot import _matrix
 from sklearn_evaluation import __version__
+
+
+tel_clf_report = telemetry.create_group("classification-report")
 
 
 def _classification_report_add(first, second, keys, target_names, ax):
@@ -25,16 +29,14 @@ def _classification_report_add(first, second, keys, target_names, ax):
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(target_names)
 
-    ax.set(title="Classification report (compare)",
-           xlabel="Metric", ylabel="Class")
+    ax.set(title="Classification report (compare)", xlabel="Metric", ylabel="Class")
 
 
 class ClassificationReportSub(Plot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
         self.figure = Figure()
         ax = self.figure.add_subplot()
-        _classification_report_plot(
-            matrix - matrix_another, keys, target_names, ax)
+        _classification_report_plot(matrix - matrix_another, keys, target_names, ax)
         ax.set(title="Classification report (difference)")
 
 
@@ -42,8 +44,7 @@ class ClassificationReportAdd(Plot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
         self.figure = Figure()
         self.ax = self.figure.add_subplot()
-        _classification_report_add(
-            matrix, matrix_another, keys, target_names, self.ax)
+        _classification_report_add(matrix, matrix_another, keys, target_names, self.ax)
 
 
 class ClassificationReport(Plot):
@@ -53,7 +54,8 @@ class ClassificationReport(Plot):
     --------
     .. plot:: ../examples/ClassificationReport.py
     """
-    @SKLearnEvaluationLogger.log(feature='plot', action='classification-report-init')
+
+    @tel_clf_report.log()
     def __init__(
         self,
         y_true,
@@ -89,16 +91,15 @@ class ClassificationReport(Plot):
                 zero_division=zero_division,
             )
 
-        _classification_report_plot(
-            self.matrix, self.keys, self.target_names, ax)
+        _classification_report_plot(self.matrix, self.keys, self.target_names, ax)
 
-    @SKLearnEvaluationLogger.log(feature='plot', action='classification-report-sub')
+    @tel_clf_report.log()
     def __sub__(self, other):
         return ClassificationReportSub(
             self.matrix, other.matrix, self.keys, target_names=self.target_names
         )
 
-    @SKLearnEvaluationLogger.log(feature='plot', action='classification-report-add')
+    @tel_clf_report.log()
     def __add__(self, other):
         return ClassificationReportAdd(
             self.matrix, other.matrix, keys=self.keys, target_names=self.target_names
@@ -163,8 +164,7 @@ def _classification_report(
         output_dict=True,
     )
 
-    report = {k: v for k, v in report.items(
-    ) if "avg" not in k and k != "accuracy"}
+    report = {k: v for k, v in report.items() if "avg" not in k and k != "accuracy"}
     n_classes = len(report.keys())
 
     target_names = target_names or [str(i) for i in range(n_classes)]
@@ -194,6 +194,7 @@ def _classification_report_plot(matrix, keys, target_names, ax):
 
 
 # TODO: add unit test
+@tel_clf_report.log()
 def classification_report(
     y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0, ax=None
 ):

@@ -2,11 +2,11 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import precision_recall_curve, average_precision_score
 from sklearn.preprocessing import label_binarize
-from ..telemetry import SKLearnEvaluationLogger
-from ..util import is_column_vector, is_row_vector
+from sklearn_evaluation.telemetry import telemetry
+from sklearn_evaluation.util import is_column_vector, is_row_vector
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
+@telemetry.log_call()
 def precision_recall(y_true, y_score, ax=None):
     """
     Plot precision-recall curve.
@@ -40,8 +40,7 @@ def precision_recall(y_true, y_score, ax=None):
 
     """
     if any((val is None for val in (y_true, y_score))):
-        raise ValueError('y_true and y_score are needed to plot '
-                         'Precision-Recall')
+        raise ValueError("y_true and y_score are needed to plot " "Precision-Recall")
 
     if ax is None:
         ax = plt.gca()
@@ -96,8 +95,11 @@ def _precision_recall(y_true, y_score, ax=None):
     if ax is None:
         ax = plt.gca()
 
-    ax.plot(recall, precision, label=('Precision-Recall curve: AUC={0:0.2f}'
-                                      .format(average_precision)))
+    ax.plot(
+        recall,
+        precision,
+        label=("Precision-Recall curve: AUC={0:0.2f}".format(average_precision)),
+    )
     _set_ax_settings(ax)
     return ax
 
@@ -122,25 +124,28 @@ def _precision_recall_multi(y_true, y_score, ax=None):
 
     """
     # Compute micro-average ROC curve and ROC area
-    precision, recall, _ = precision_recall_curve(y_true.ravel(),
-                                                  y_score.ravel())
+    precision, recall, _ = precision_recall_curve(y_true.ravel(), y_score.ravel())
 
     avg_prec = average_precision_score(y_true, y_score, average="micro")
 
     if ax is None:
         ax = plt.gca()
 
-    ax.plot(recall, precision,
-            label=('micro-average Precision-recall curve (area = {0:0.2f})'
-                   .format(avg_prec)))
+    ax.plot(
+        recall,
+        precision,
+        label=(
+            "micro-average Precision-recall curve (area = {0:0.2f})".format(avg_prec)
+        ),
+    )
     _set_ax_settings(ax)
     return ax
 
 
 def _set_ax_settings(ax):
-    ax.set_title('Precision-Recall')
+    ax.set_title("Precision-Recall")
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
-    ax.set_xlabel('Recall')
-    ax.set_ylabel('Precision')
+    ax.set_xlabel("Recall")
+    ax.set_ylabel("Precision")
     ax.legend(loc="best")

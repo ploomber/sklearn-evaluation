@@ -3,9 +3,12 @@ import matplotlib.pyplot as plt
 from sklearn_evaluation.plot.util import requires_properties
 from sklearn_evaluation.report.serialize import EvaluatorHTMLSerializer
 from sklearn_evaluation.report.report import Report
-from .util import estimator_type, class_name
-from . import plot
-from .telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.util import estimator_type, class_name
+from sklearn_evaluation import plot
+from sklearn_evaluation.telemetry import telemetry
+
+
+tel_clf_eval = telemetry.create_group("classifier-evaluator")
 
 
 class ClassifierEvaluator(object):
@@ -32,11 +35,20 @@ class ClassifierEvaluator(object):
         Identifier for the model. This can be later used to identify the
         estimator when generating reports.
     """
-    TEMPLATE_NAME = 'classifier.md'
 
-    def __init__(self, estimator=None, y_true=None, y_pred=None, y_score=None,
-                 feature_names=None, target_names=None, estimator_name=None,
-                 X=None):
+    TEMPLATE_NAME = "classifier.md"
+
+    def __init__(
+        self,
+        estimator=None,
+        y_true=None,
+        y_pred=None,
+        y_score=None,
+        feature_names=None,
+        target_names=None,
+        estimator_name=None,
+        X=None,
+    ):
         self._estimator = estimator
         self._y_true = y_true
         self._y_pred = y_pred
@@ -50,14 +62,12 @@ class ClassifierEvaluator(object):
 
     @property
     def estimator_type(self):
-        """Estimator name (e.g. RandomForestClassifier)
-        """
+        """Estimator name (e.g. RandomForestClassifier)"""
         return estimator_type(self.estimator)
 
     @property
     def estimator_class(self):
-        """Estimator class (e.g. sklearn.ensemble.RandomForestClassifier)
-        """
+        """Estimator class (e.g. sklearn.ensemble.RandomForestClassifier)"""
         return class_name(self.estimator)
 
     @property
@@ -75,16 +85,14 @@ class ClassifierEvaluator(object):
     @property
     def y_pred(self):
         # get predictions if possible
-        if (self._y_pred is None and self.estimator is not None
-                and self.X is not None):
+        if self._y_pred is None and self.estimator is not None and self.X is not None:
             self._y_pred = self.estimator.predict(self.X)
         return self._y_pred
 
     @property
     def y_score(self):
         # get scores if possible
-        if (self._y_score is None and self.estimator is not None
-                and self.X is not None):
+        if self._y_score is None and self.estimator is not None and self.X is not None:
             self._y_score = self.estimator.predict_proba(self.X)
         return self._y_score
 
@@ -100,53 +108,43 @@ class ClassifierEvaluator(object):
     def estimator_name(self):
         return self._estimator_name
 
-    @requires_properties(('y_true', 'y_pred'))
+    @requires_properties(("y_true", "y_pred"))
     def confusion_matrix(self):
-        """Confusion matrix plot
-        """
-        return plot.confusion_matrix(self.y_true, self.y_pred,
-                                     self.target_names, ax=_gen_ax()
-                                     )
+        """Confusion matrix plot"""
+        return plot.confusion_matrix(
+            self.y_true, self.y_pred, self.target_names, ax=_gen_ax()
+        )
 
-    @requires_properties(('y_true', 'y_score'))
+    @requires_properties(("y_true", "y_score"))
     def roc(self):
-        """ROC plot
-        """
-        return plot.roc(self.y_true, self.y_score, ax=_gen_ax()
-                        )
+        """ROC plot"""
+        return plot.roc(self.y_true, self.y_score, ax=_gen_ax())
 
-    @requires_properties(('y_true', 'y_score'))
+    @requires_properties(("y_true", "y_score"))
     def precision_recall(self):
-        """Precision-recall plot
-        """
-        return plot.precision_recall(self.y_true, self.y_score, ax=_gen_ax()
-                                     )
+        """Precision-recall plot"""
+        return plot.precision_recall(self.y_true, self.y_score, ax=_gen_ax())
 
-    @requires_properties(('estimator',))
+    @requires_properties(("estimator",))
     def feature_importances(self):
-        """Feature importances plot
-        """
-        return plot.feature_importances(self.estimator,
-                                        feature_names=self.feature_names,
-                                        ax=_gen_ax()
-                                        )
+        """Feature importances plot"""
+        return plot.feature_importances(
+            self.estimator, feature_names=self.feature_names, ax=_gen_ax()
+        )
 
-    @requires_properties(('estimator',))
+    @requires_properties(("estimator",))
     def feature_importances_table(self):
-        """Feature importances table
-        """
+        """Feature importances table"""
         from . import table
 
-        return table.feature_importances(self.estimator,
-                                         feature_names=self.feature_names)
+        return table.feature_importances(
+            self.estimator, feature_names=self.feature_names
+        )
 
-    @requires_properties(('y_true', 'y_score'))
+    @requires_properties(("y_true", "y_score"))
     def precision_at_proportions(self):
-        """Precision at proportions plot
-        """
-        return plot.precision_at_proportions(self.y_true, self.y_score,
-                                             ax=_gen_ax()
-                                             )
+        """Precision at proportions plot"""
+        return plot.precision_at_proportions(self.y_true, self.y_score, ax=_gen_ax())
 
     def html_serializable(self):
         """
@@ -160,7 +158,7 @@ class ClassifierEvaluator(object):
         """
         return EvaluatorHTMLSerializer(self)
 
-    @SKLearnEvaluationLogger.log(feature='report')
+    @tel_clf_eval.log_call()
     def make_report(self, template=None):
         """
         Make HTML report

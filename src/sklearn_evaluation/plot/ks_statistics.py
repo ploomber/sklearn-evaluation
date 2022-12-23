@@ -29,7 +29,7 @@ SOFTWARE.
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import telemetry
 
 
 def _binary_ks_curve(y_true, y_score):
@@ -139,7 +139,7 @@ def _binary_ks_curve(y_true, y_score):
     return thresholds, pct1, pct2, ks_statistic, max_distance_at, lb.classes_
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
+@telemetry.log_call()
 def ks_statistic(
     y_true,
     y_score,

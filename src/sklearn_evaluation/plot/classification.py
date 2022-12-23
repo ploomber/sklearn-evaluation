@@ -11,13 +11,16 @@ from matplotlib.figure import Figure
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from sklearn_evaluation import __version__
-from ..telemetry import SKLearnEvaluationLogger
-from ..plot.matplotlib import bar
-from ..metrics import precision_at
-from .. import compute
-from ..util import is_column_vector, is_row_vector, default_heatmap
-from ..plot.plot import Plot
-from ..plot import _matrix
+from sklearn_evaluation.telemetry import telemetry
+from sklearn_evaluation.plot.matplotlib import bar
+from sklearn_evaluation.metrics import precision_at
+from sklearn_evaluation import compute
+from sklearn_evaluation.util import is_column_vector, is_row_vector, default_heatmap
+from sklearn_evaluation.plot.plot import Plot
+from sklearn_evaluation.plot import _matrix
+
+
+tel_cm = telemetry.create_group("confusion-matrix")
 
 
 def _confusion_matrix_add(first, second, ax, target_names):
@@ -57,7 +60,7 @@ class ConfusionMatrixAdd(Plot):
 
 
 class ConfusionMatrix(Plot):
-    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
+    @tel_cm.log_call(log_args=True, ignore_args={"y_true", "y_pred", "cm"})
     def __init__(self, y_true, y_pred, target_names=None, normalize=False, cm=None):
         if y_true is not None and cm is None:
             warn(
@@ -84,12 +87,12 @@ class ConfusionMatrix(Plot):
 
         _plot_cm(self.cm, cmap, ax, self.target_names, self.normalize)
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-sub")
+    @tel_cm.log_call()
     def __sub__(self, other):
         cm = self.cm - other.cm
         return ConfusionMatrixSub(cm, self.target_names)
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-add")
+    @tel_cm.log_call()
     def __add__(self, other):
         return ConfusionMatrixAdd(self.cm, other.cm, self.target_names)
 
@@ -141,7 +144,7 @@ def _confusion_matrix(y_true, y_pred, normalize):
     return cm
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
+@tel_cm.log_call(action="function")
 def confusion_matrix(
     y_true, y_pred, target_names=None, normalize=False, cmap=None, ax=None
 ):
@@ -272,7 +275,7 @@ def _plot_cm(cm, cmap, ax, target_names, normalize):
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-@SKLearnEvaluationLogger.log(feature="plot")
+@telemetry.log_call()
 def feature_importances(
     data, top_n=None, feature_names=None, orientation="horizontal", ax=None
 ):
@@ -325,7 +328,7 @@ def feature_importances(
     return ax
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
+@telemetry.log_call()
 def precision_at_proportions(y_true, y_score, ax=None):
     """
     Plot precision values at different proportions.

@@ -12,14 +12,17 @@ import pandas as pd
 from IPython.display import HTML, Image
 from jinja2 import Environment, PackageLoader
 
-from .NotebookIntrospector import NotebookIntrospector
-from .sets import differences
-from ..table import Table
-from ..telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.nb.NotebookIntrospector import NotebookIntrospector
+from sklearn_evaluation.nb.sets import differences
+from sklearn_evaluation.table import Table
+from sklearn_evaluation.telemetry import telemetry
 
 _env = Environment(loader=PackageLoader("sklearn_evaluation", "assets/nb"))
 _fm = black.FileMode(string_normalization=False, line_length=40)
 _htmldiff = HtmlDiff()
+
+
+tel_nb_col = telemetry.create_group("notebook-collection")
 
 
 class NotebookCollection(Mapping):
@@ -41,9 +44,7 @@ class NotebookCollection(Mapping):
         as identifier (ignores extension)
     """
 
-    @SKLearnEvaluationLogger.log(
-        feature="NotebookCollection", action="init-NotebookCollection"
-    )
+    @tel_nb_col.log_call()
     def __init__(self, paths, ids=None, scores=False):
         if ids is None:
             ids = paths

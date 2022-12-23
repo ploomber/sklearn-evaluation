@@ -6,22 +6,23 @@ import collections
 import matplotlib.pyplot as plt
 import numpy as np
 from six import string_types
-from ..telemetry import SKLearnEvaluationLogger
 
+from sklearn_evaluation.telemetry import telemetry
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
-from ..util import (_group_by, _get_params_value, _mapping_to_tuple_pairs,
-                    default_heatmap, _sorted_map_iter, _flatten_list)
+from sklearn_evaluation.util import (
+    _group_by,
+    _get_params_value,
+    _mapping_to_tuple_pairs,
+    default_heatmap,
+    _sorted_map_iter,
+    _flatten_list,
+)
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
-def grid_search(cv_results_,
-                change,
-                subset=None,
-                kind='line',
-                cmap=None,
-                ax=None,
-                sort=True
-                ):
+@telemetry.log_call()
+def grid_search(
+    cv_results_, change, subset=None, kind="line", cmap=None, ax=None, sort=True
+):
     """
     Plot results from a sklearn grid search by changing two parameters at most.
 
@@ -60,8 +61,12 @@ def grid_search(cv_results_,
 
     """
     if change is None:
-        raise ValueError(('change can\'t be None, you need to select at least'
-                          ' one value to make the plot.'))
+        raise ValueError(
+            (
+                "change can't be None, you need to select at least"
+                " one value to make the plot."
+            )
+        )
 
     if ax is None:
         ax = plt.gca()
@@ -73,13 +78,16 @@ def grid_search(cv_results_,
     # this still works on sklearn >= 0.20. I need to refactor the code
     # so it works with the new format
     gs = collections.namedtuple(
-        'grid_scores_',
-        ['parameters', 'mean_validation_score', 'std_test_score'])
+        "grid_scores_", ["parameters", "mean_validation_score", "std_test_score"]
+    )
 
     grid_scores = [
-        gs(p, m, s) for p, m, s in
-        zip(cv_results_['params'], cv_results_['mean_test_score'],
-            cv_results_['std_test_score'])
+        gs(p, m, s)
+        for p, m, s in zip(
+            cv_results_["params"],
+            cv_results_["mean_test_score"],
+            cv_results_["std_test_score"],
+        )
     ]
 
     if isinstance(change, string_types) or len(change) == 1:
@@ -87,7 +95,7 @@ def grid_search(cv_results_,
     elif len(change) == 2:
         return _grid_search_double(grid_scores, change, subset, cmap, ax, sort)
     else:
-        raise ValueError('change must have length 1 or 2 or be a string')
+        raise ValueError("change must have length 1 or 2 or be a string")
 
 
 def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
@@ -104,7 +112,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
     try:
         params.remove(change)
     except KeyError:
-        raise ValueError('{} is not a valid parameter'.format(change))
+        raise ValueError("{} is not a valid parameter".format(change))
 
     # now need need to filter out the grid_scores that the user
     # didn't select, for that we have to cases, the first one is when
@@ -118,21 +126,23 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
         grid_scores = _flatten_list(groups.values())
         groups = _group_by(grid_scores, _get_params_value(params))
         if not groups:
-            raise ValueError(('Your subset didn\'t match any data'
-                              ' verify that the values are correct.'))
+            raise ValueError(
+                (
+                    "Your subset didn't match any data"
+                    " verify that the values are correct."
+                )
+            )
     # if the user didn't select any values don't filter anything
     # just group the grid_scores depending on the values they
     # have for the parameters
     else:
         groups = _group_by(grid_scores, _get_params_value(params))
 
-    if kind == 'bar':
+    if kind == "bar":
         change_unique = len(set([g.parameters[change] for g in grid_scores]))
         # bar shifter is just a wrapper around matplotlib's bar plot
         # to automatically calculate the left position on each bar
-        bar_shifter = BarShifter(g_number=change_unique,
-                                 g_size=len(groups),
-                                 ax=ax)
+        bar_shifter = BarShifter(g_number=change_unique, g_size=len(groups), ax=ax)
 
     for params_kv, group in _sorted_map_iter(groups, sort):
         # get the x and y values for each grid_score on this group
@@ -142,13 +152,13 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
         stds = [element.std_test_score for element in group]
 
         # take (param, value) and convert them to 'param: value'
-        label = ['{}: {}'.format(*t) for t in params_kv]
+        label = ["{}: {}".format(*t) for t in params_kv]
         # now convert it to one string
-        label = ', '.join(label)
+        label = ", ".join(label)
 
-        if kind == 'bar':
+        if kind == "bar":
             bar_shifter(y, yerr=stds, label=label)
-        elif kind == 'line':
+        elif kind == "line":
             is_categorical = isinstance(x[0], string_types)
             if is_categorical:
                 ints = range(len(x))
@@ -159,8 +169,8 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
                 ax.set_xticks(x)
 
     ax.set_xticklabels(x)
-    ax.set_title('Grid search results')
-    ax.set_ylabel('Mean score')
+    ax.set_title("Grid search results")
+    ax.set_ylabel("Mean score")
     ax.set_xlabel(change)
     ax.legend(loc="best")
     ax.margins(0.05)
@@ -170,7 +180,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
 def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
     # check that the two different parameters were passed
     if len(set(change)) == 1:
-        raise ValueError('You need to pass two different parameters')
+        raise ValueError("You need to pass two different parameters")
 
     # if a value in subset was passed, use it to filter the groups
     if subset is not None:
@@ -179,17 +189,25 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
         groups = {k: v for k, v in _sorted_map_iter(groups, sort) if k in keys}
         grid_scores = _flatten_list(groups.values())
         if not groups:
-            raise ValueError(('Your subset didn\'t match any data'
-                              ' verify that the values are correct.'))
+            raise ValueError(
+                (
+                    "Your subset didn't match any data"
+                    " verify that the values are correct."
+                )
+            )
 
     # group by every possible combination in change
     matrix_elements = _group_by(grid_scores, _get_params_value(change))
 
     for k, v in matrix_elements.items():
         if len(v) > 1:
-            raise ValueError(('More than one result matched your criteria.'
-                              ' Make sure you specify parameters using change'
-                              ' and subset so only one group matches.'))
+            raise ValueError(
+                (
+                    "More than one result matched your criteria."
+                    " Make sure you specify parameters using change"
+                    " and subset so only one group matches."
+                )
+            )
 
     # on each group there must be only one element, get it
     matrix_elements = {k: v[0] for k, v in matrix_elements.items()}
@@ -197,10 +215,12 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
     # get the unique values for each element
     # and sort the results to make sure the matrix axis
     # is showed in increasing order
-    row_names = sorted(set([t[0] for t in matrix_elements.keys()]),
-                       key=lambda x: (x[1] is None, x[1]))
-    col_names = sorted(set([t[1] for t in matrix_elements.keys()]),
-                       key=lambda x: (x[1] is None, x[1]))
+    row_names = sorted(
+        set([t[0] for t in matrix_elements.keys()]), key=lambda x: (x[1] is None, x[1])
+    )
+    col_names = sorted(
+        set([t[1] for t in matrix_elements.keys()]), key=lambda x: (x[1] is None, x[1])
+    )
 
     # size of the matrix
     cols = len(col_names)
@@ -220,19 +240,15 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
         matrix[i][j] = v.mean_validation_score
 
     # ticks for the axis
-    row_labels = ['{}={}'.format(*x) for x in row_names]
-    col_labels = ['{}={}'.format(*y) for y in col_names]
+    row_labels = ["{}={}".format(*x) for x in row_names]
+    col_labels = ["{}={}".format(*y) for y in col_names]
 
-    im = ax.imshow(matrix, interpolation='nearest', cmap=cmap)
+    im = ax.imshow(matrix, interpolation="nearest", cmap=cmap)
 
     # set text on cells
     for (x, y), v in m.items():
-        label = '{:.3}'.format(v.mean_validation_score)
-        ax.text(x,
-                y,
-                label,
-                horizontalalignment='center',
-                verticalalignment='center')
+        label = "{:.3}".format(v.mean_validation_score)
+        ax.text(x, y, label, horizontalalignment="center", verticalalignment="center")
 
     ax.set_xticks(range(cols))
     ax.set_xticklabels(col_labels, rotation=45)

@@ -21,7 +21,7 @@ import pandas as pd
 from scipy.stats import shapiro
 from scipy.stats import spearmanr
 from scipy.stats import kendalltau as sp_kendalltau
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import telemetry
 
 import matplotlib.pyplot as plt
 
@@ -107,8 +107,7 @@ class RankD:
         algorithm = self.algorithm.lower()
 
         if algorithm not in self.ranking_methods:
-            raise ValueError(
-                "'{}' is unrecognized ranking method".format(algorithm))
+            raise ValueError("'{}' is unrecognized ranking method".format(algorithm))
 
         # Extract matrix from dataframe if necessary
         if isinstance(X, pd.DataFrame):
@@ -121,9 +120,12 @@ class RankD:
 
         if self.features is not None:
             if len(self.features) != n_columns:
-                raise ValueError((
-                    "number of supplied feature names does not match the number "
-                    "of columns in the training data."))
+                raise ValueError(
+                    (
+                        "number of supplied feature names does not match the number "
+                        "of columns in the training data."
+                    )
+                )
 
             self.features_ = np.array(self.features)
 
@@ -141,12 +143,15 @@ class RankD:
             self.features_ = np.arange(0, len(ranks))
         else:
             if len(self.features) != len(ranks):
-                raise ValueError((
-                    "number of supplied feature names does not match the number "
-                    "of ranks provided."))
+                raise ValueError(
+                    (
+                        "number of supplied feature names does not match the number "
+                        "of ranks provided."
+                    )
+                )
             self.features_ = np.array(self.features)
 
-    @SKLearnEvaluationLogger.log(feature='plot')
+    @telemetry.log()
     def feature_ranks(self, X):
         """
         Parameters
@@ -165,7 +170,7 @@ class RankD:
         self._draw()
         return self.ax
 
-    @SKLearnEvaluationLogger.log(feature='plot')
+    @telemetry.log()
     def feature_ranks_custom_algorithm(self, ranks):
         """
         This method is useful if user wants to use custom algorithm for feature ranking.
@@ -234,21 +239,18 @@ class Rank1D(RankD):
     .. versionadded:: 0.8.4
     """
 
-    ranking_methods = {
-        "shapiro": lambda X: np.array([shapiro(x)[0] for x in X.T])
-    }
+    ranking_methods = {"shapiro": lambda X: np.array([shapiro(x)[0] for x in X.T])}
 
-    def __init__(self,
-                 algorithm="shapiro",
-                 features=None,
-                 figsize=(7, 7),
-                 orient="h",
-                 color='g',
-                 ax=None):
-        super().__init__(algorithm=algorithm,
-                         features=features,
-                         figsize=figsize,
-                         ax=ax)
+    def __init__(
+        self,
+        algorithm="shapiro",
+        features=None,
+        figsize=(7, 7),
+        orient="h",
+        color="g",
+        ax=None,
+    ):
+        super().__init__(algorithm=algorithm, features=features, figsize=figsize, ax=ax)
         self.color = color
         self.orientation_ = orient
 
@@ -262,14 +264,13 @@ class Rank1D(RankD):
         Draws the bar plot of the ranking array of features.
         """
 
-        title = "{} Ranking of {} Features".format(self.algorithm.title(),
-                                                   len(self.features_))
+        title = "{} Ranking of {} Features".format(
+            self.algorithm.title(), len(self.features_)
+        )
         self.ax.set_title(title)
         if self.orientation_ == "h":
             # Make the plot
-            self.ax.barh(np.arange(len(self.ranks_)),
-                         self.ranks_,
-                         color=self.color)
+            self.ax.barh(np.arange(len(self.ranks_)), self.ranks_, color=self.color)
 
             # Add ticks and tick labels
             self.ax.set_yticks(np.arange(len(self.ranks_)))
@@ -278,13 +279,11 @@ class Rank1D(RankD):
             self.ax.invert_yaxis()
             # Turn off y grid lines
             self.ax.set_axisbelow(True)
-            self.ax.xaxis.grid(True, color='#808080')
+            self.ax.xaxis.grid(True, color="#808080")
 
         elif self.orientation_ == "v":
             # Make the plot
-            self.ax.bar(np.arange(len(self.ranks_)),
-                        self.ranks_,
-                        color=self.color)
+            self.ax.bar(np.arange(len(self.ranks_)), self.ranks_, color=self.color)
 
             # Add ticks and tick labels
             self.ax.set_xticks(np.arange(len(self.ranks_)))
@@ -292,7 +291,7 @@ class Rank1D(RankD):
 
             # Turn off x grid lines
             self.ax.set_axisbelow(True)
-            self.ax.yaxis.grid(True, color='#808080')
+            self.ax.yaxis.grid(True, color="#808080")
 
         else:
             raise ValueError("Orientation must be 'h' or 'v'")
@@ -348,20 +347,19 @@ class Rank2D(RankD):
         "pearson": lambda X: np.corrcoef(X.transpose()),
         "covariance": lambda X: np.cov(X.transpose()),
         "spearman": lambda X: spearmanr(X, axis=0)[0],
-        "kendalltau": lambda X: kendalltau(X)
+        "kendalltau": lambda X: kendalltau(X),
     }
 
-    def __init__(self,
-                 algorithm="pearson",
-                 features=None,
-                 colormap="RdBu_r",
-                 figsize=(7, 7),
-                 ax=None):
+    def __init__(
+        self,
+        algorithm="pearson",
+        features=None,
+        colormap="RdBu_r",
+        figsize=(7, 7),
+        ax=None,
+    ):
 
-        super().__init__(algorithm=algorithm,
-                         features=features,
-                         figsize=figsize,
-                         ax=ax)
+        super().__init__(algorithm=algorithm, features=features, figsize=figsize, ax=ax)
         self.colormap = colormap
 
     @staticmethod
@@ -374,8 +372,9 @@ class Rank2D(RankD):
         Draws the heatmap of the ranking matrix of variables.
         """
 
-        title = "{} Ranking of {} Features".format(self.algorithm.title(),
-                                                   len(self.features_))
+        title = "{} Ranking of {} Features".format(
+            self.algorithm.title(), len(self.features_)
+        )
         self.ax.set_title(title)
 
         # Set the axes aspect to be equal
@@ -393,11 +392,7 @@ class Rank2D(RankD):
         self.ax.set(xlim=(0, data.shape[1]), ylim=(0, data.shape[0]))
 
         # Add the colorbar
-        cb = self.ax.figure.colorbar(mesh,
-                                     None,
-                                     self.ax,
-                                     fraction=0.046,
-                                     pad=0.04)
+        cb = self.ax.figure.colorbar(mesh, None, self.ax, fraction=0.046, pad=0.04)
         cb.outline.set_linewidth(0)
 
         # Reverse the rows to get the lower left triangle

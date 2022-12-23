@@ -9,13 +9,14 @@ from jinja2 import Template
 
 from sklearn_evaluation.table import Table
 from sklearn_evaluation.report.serialize import try_serialize_figures, figure2html
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import telemetry
 from sklearn_evaluation.nb.NotebookCollection import (
     add_compare_tab,
     tabs_html_from_content,
     HTMLMapping,
 )
 from sklearn_evaluation import plot
+
 
 minor = sqlite3.sqlite_version.split(".")[1]
 
@@ -186,6 +187,9 @@ class Experiment:
         return self._data[key]
 
 
+tel_tracker = telemetry.create_group("sqlitetracker")
+
+
 class SQLiteTracker:
     """A experiment tracker backed by a SQLite database
 
@@ -237,6 +241,7 @@ class SQLiteTracker:
             index_col="uuid",
         )
 
+    @tel_tracker.log_call(log_args=True)
     def recent(self, n=5, normalize=False):
         """Get most recent experiments as a pandas.DataFrame"""
         query = """
@@ -263,7 +268,7 @@ class SQLiteTracker:
 
         return df
 
-    @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
+    @tel_tracker.log_call(log_args=True)
     def query(self, code, as_frame=True, render_plots=False):
         """Query the database
 
@@ -321,7 +326,7 @@ class SQLiteTracker:
             rows = cursor.fetchall()
             return Results(columns, rows, render_plots=render_plots)
 
-    @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
+    @tel_tracker.log_call()
     def new(self):
         """Create a new experiment, returns a uuid"""
         uuid = str(uuid4())[:8]
@@ -337,12 +342,12 @@ class SQLiteTracker:
         self.conn.commit()
         return uuid
 
-    @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
+    @tel_tracker.log_call()
     def new_experiment(self):
         """Returns an experiment instance"""
         return Experiment.new(self)
 
-    @SKLearnEvaluationLogger.log(feature="SQLiteTracker")
+    @tel_tracker.log_call(log_args=True, ignore_args={"parameters"})
     def update(self, uuid, parameters, allow_overwrite=False):
         """Update the parameters of a experiment given its uuid"""
         if not allow_overwrite:
@@ -377,7 +382,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
-    @SKLearnEvaluationLogger.log("SQLiteTracker")
+    @tel_tracker.log_call(log_args=True, ignore_args={"parameters"})
     def insert(self, uuid, parameters):
         """Insert a new experiment"""
         # serialize matplotlib.figure.Figure, if any
@@ -394,7 +399,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
-    @SKLearnEvaluationLogger.log("SQLiteTracker")
+    @tel_tracker.log_call()
     def insert_many(self, parameters_all):
         """Insert many experiments at once"""
         cur = self.conn.cursor()
@@ -413,7 +418,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
-    @SKLearnEvaluationLogger.log("SQLiteTracker")
+    @tel_tracker.log_call()
     def comment(self, uuid, comment):
         """Add a comment to an experiment given its uuid"""
         # TODO: add overwrite (false by default) and append options
@@ -492,7 +497,7 @@ class SQLiteTracker:
                 "not exist".format(uuid)
             )
 
-    @SKLearnEvaluationLogger.log("SQLiteTracker")
+    @tel_tracker.log_call(log_args=True)
     def get_parameters_keys(self, limit=100):
         """
         Return the keys in the parameters column by randomly sampling records
@@ -516,7 +521,7 @@ class SQLiteTracker:
 
         return extract_if_length_one(sorted(keys))
 
-    @SKLearnEvaluationLogger.log("SQLiteTracker")
+    @tel_tracker.log_call(log_args=True)
     def get_sample_query(self, compatibility_mode=True):
         keys = self.get_parameters_keys()
 
@@ -528,7 +533,7 @@ class SQLiteTracker:
         template = Template(TEMPLATE)
         return template.render(keys=collapse(keys))
 
-    @SKLearnEvaluationLogger.log("SQLiteTracker")
+    @tel_tracker.log_call(log_args=True, ignore_args={"uuid"})
     def get(self, uuid, unserialize_plots=True):
         """Get an experiment given its UUID
 

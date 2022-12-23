@@ -1,6 +1,6 @@
 from jinja2 import Template
 from pathlib import Path
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import telemetry
 
 try:
     import mistune
@@ -10,12 +10,13 @@ except ModuleNotFoundError:
 from sklearn_evaluation.report.util import jinja_env
 
 
-class Report:
+tel_report = telemetry.create_group("report")
 
+
+class Report:
     def __init__(self, evaluator, template=None):
         if mistune is None:
-            raise ModuleNotFoundError(
-                'You need to install mistune to generate reports')
+            raise ModuleNotFoundError("You need to install mistune to generate reports")
 
         self.evaluator = evaluator
 
@@ -28,7 +29,7 @@ class Report:
 
         rendered = template.render(e=evaluator)
 
-        if mistune.__version__[0] == '2':
+        if mistune.__version__[0] == "2":
             md = mistune.create_markdown()
         else:
             md = mistune.Markdown()
@@ -38,6 +39,6 @@ class Report:
     def _repr_html_(self):
         return self.rendered
 
-    @SKLearnEvaluationLogger.log(feature='report', action='save')
+    @tel_report.log_call()
     def save(self, path):
         Path(path).write_text(self.rendered)
