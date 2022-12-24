@@ -1,8 +1,8 @@
 CHANGELOG
 =========
 
-0.8.4dev
---------
+0.8.4 (2022-12-24)
+------------------
 * New ``plot.ROC`` api added
 * Adds ``plot.ROC.__add__`` for generating overlapping curves
 * ``plot.ROC`` can be serialized/unserialized with ``.dump``/ ``.from_dump``
