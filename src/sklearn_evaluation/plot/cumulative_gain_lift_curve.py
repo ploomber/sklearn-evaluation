@@ -62,17 +62,19 @@ def _cumulative_gain_curve(y_true, y_score, pos_label=None):
 
     # ensure binary classification if pos_label is not specified
     classes = np.unique(y_true)
-    if (pos_label is None
-            and not (np.array_equal(classes, [0, 1]) or np.array_equal(
-                classes, [-1, 1]) or np.array_equal(classes, [0])
-                     or np.array_equal(classes, [-1])
-                     or np.array_equal(classes, [1]))):
+    if pos_label is None and not (
+        np.array_equal(classes, [0, 1])
+        or np.array_equal(classes, [-1, 1])
+        or np.array_equal(classes, [0])
+        or np.array_equal(classes, [-1])
+        or np.array_equal(classes, [1])
+    ):
         raise ValueError("Data is not binary and pos_label is not specified")
     elif pos_label is None:
-        pos_label = 1.
+        pos_label = 1.0
 
     # make y_true a boolean vector
-    y_true = (y_true == pos_label)
+    y_true = y_true == pos_label
 
     sorted_indices = np.argsort(y_score)[::-1]
     y_true = y_true[sorted_indices]
@@ -89,13 +91,15 @@ def _cumulative_gain_curve(y_true, y_score, pos_label=None):
     return percentages, gains
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
-def cumulative_gain(y_true,
-                    y_score,
-                    figsize=None,
-                    title_fontsize="large",
-                    text_fontsize="medium",
-                    ax=None):
+@SKLearnEvaluationLogger.log(feature="plot")
+def cumulative_gain(
+    y_true,
+    y_score,
+    figsize=None,
+    title_fontsize="large",
+    text_fontsize="medium",
+    ax=None,
+):
     """
     Generates the Cumulative Gains Plot from labels and scores/probabilities
     The cumulative gains chart is used to determine the effectiveness of a
@@ -138,51 +142,53 @@ def cumulative_gain(y_true,
 
     Notes
     -----
-    .. versionadded:: 0.8.3
+    .. versionadded:: 0.8.4
     """
     y_true = np.array(y_true)
     y_score = np.array(y_score)
 
     classes = np.unique(y_true)
     if len(classes) != 2:
-        raise ValueError('Cannot calculate Cumulative Gains for data with '
-                         '{} category/ies'.format(len(classes)))
+        raise ValueError(
+            "Cannot calculate Cumulative Gains for data with "
+            "{} category/ies".format(len(classes))
+        )
 
     # Compute Cumulative Gain Curves
-    percentages, gains1 = _cumulative_gain_curve(y_true, y_score[:, 0],
-                                                 classes[0])
-    percentages, gains2 = _cumulative_gain_curve(y_true, y_score[:, 1],
-                                                 classes[1])
+    percentages, gains1 = _cumulative_gain_curve(y_true, y_score[:, 0], classes[0])
+    percentages, gains2 = _cumulative_gain_curve(y_true, y_score[:, 1], classes[1])
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title('Cumulative Gains Curve', fontsize=title_fontsize)
+    ax.set_title("Cumulative Gains Curve", fontsize=title_fontsize)
 
-    ax.plot(percentages, gains1, lw=3, label='Class {}'.format(classes[0]))
-    ax.plot(percentages, gains2, lw=3, label='Class {}'.format(classes[1]))
+    ax.plot(percentages, gains1, lw=3, label="Class {}".format(classes[0]))
+    ax.plot(percentages, gains2, lw=3, label="Class {}".format(classes[1]))
 
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.0])
 
-    ax.plot([0, 1], [0, 1], 'k--', lw=2, label='Baseline')
+    ax.plot([0, 1], [0, 1], "k--", lw=2, label="Baseline")
 
-    ax.set_xlabel('Percentage of sample', fontsize=text_fontsize)
-    ax.set_ylabel('Gain', fontsize=text_fontsize)
+    ax.set_xlabel("Percentage of sample", fontsize=text_fontsize)
+    ax.set_ylabel("Gain", fontsize=text_fontsize)
     ax.tick_params(labelsize=text_fontsize)
-    ax.grid('on')
-    ax.legend(loc='lower right', fontsize=text_fontsize)
+    ax.grid("on")
+    ax.legend(loc="lower right", fontsize=text_fontsize)
 
     return ax
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
-def lift_curve(y_true,
-               y_score,
-               ax=None,
-               figsize=None,
-               title_fontsize="large",
-               text_fontsize="medium"):
+@SKLearnEvaluationLogger.log(feature="plot")
+def lift_curve(
+    y_true,
+    y_score,
+    ax=None,
+    figsize=None,
+    title_fontsize="large",
+    text_fontsize="medium",
+):
     """Generates the Lift Curve from labels and scores/probabilities
     The lift curve is used to determine the effectiveness of a
     binary classifier. A detailed explanation can be found at
@@ -224,7 +230,7 @@ def lift_curve(y_true,
 
     Notes
     -----
-    .. versionadded:: 0.8.3
+    .. versionadded:: 0.8.4
 
     """
     y_true = np.array(y_true)
@@ -232,14 +238,14 @@ def lift_curve(y_true,
 
     classes = np.unique(y_true)
     if len(classes) != 2:
-        raise ValueError('Cannot calculate Lift Curve for data with '
-                         '{} category/ies'.format(len(classes)))
+        raise ValueError(
+            "Cannot calculate Lift Curve for data with "
+            "{} category/ies".format(len(classes))
+        )
 
     # Compute Cumulative Gain Curves
-    percentages, gains1 = _cumulative_gain_curve(y_true, y_score[:, 0],
-                                                 classes[0])
-    percentages, gains2 = _cumulative_gain_curve(y_true, y_score[:, 1],
-                                                 classes[1])
+    percentages, gains1 = _cumulative_gain_curve(y_true, y_score[:, 0], classes[0])
+    percentages, gains2 = _cumulative_gain_curve(y_true, y_score[:, 1], classes[1])
 
     percentages = percentages[1:]
     gains1 = gains1[1:]
@@ -253,14 +259,14 @@ def lift_curve(y_true,
 
     ax.set_title("Lift Curve", fontsize=title_fontsize)
 
-    ax.plot(percentages, gains1, lw=3, label='Class {}'.format(classes[0]))
-    ax.plot(percentages, gains2, lw=3, label='Class {}'.format(classes[1]))
+    ax.plot(percentages, gains1, lw=3, label="Class {}".format(classes[0]))
+    ax.plot(percentages, gains2, lw=3, label="Class {}".format(classes[1]))
 
-    ax.plot([0, 1], [1, 1], 'k--', lw=2, label='Baseline')
+    ax.plot([0, 1], [1, 1], "k--", lw=2, label="Baseline")
 
-    ax.set_xlabel('Percentage of sample', fontsize=text_fontsize)
-    ax.set_ylabel('Lift', fontsize=text_fontsize)
+    ax.set_xlabel("Percentage of sample", fontsize=text_fontsize)
+    ax.set_ylabel("Lift", fontsize=text_fontsize)
     ax.tick_params(labelsize=text_fontsize)
-    ax.grid('on')
-    ax.legend(loc='lower right', fontsize=text_fontsize)
+    ax.grid("on")
+    ax.legend(loc="lower right", fontsize=text_fontsize)
     return ax

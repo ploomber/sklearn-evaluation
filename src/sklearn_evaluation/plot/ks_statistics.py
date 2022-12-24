@@ -186,7 +186,7 @@ def ks_statistic(
 
     Notes
     -----
-    .. versionadded:: 0.8.3
+    .. versionadded:: 0.8.4
 
     """
     y_true = np.array(y_true)
