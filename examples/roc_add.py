@@ -17,7 +17,7 @@ y_pred = est.predict(X_test)
 y_score = est.predict_proba(X_test)
 y_true = y_test
 
-roc = plot.ROC(y_true, y_score)
+roc = plot.ROC.from_raw_data(y_true, y_score)
 
 # create another dataset
 data_ = datasets.make_classification(200, 10, n_informative=5, class_sep=0.15)
@@ -33,7 +33,7 @@ y_pred_ = est.predict(X_test_)
 y_score_ = est.predict_proba(X_test_)
 y_true_ = y_test_
 
-roc2 = plot.ROC(y_true_, y_score_)
+roc2 = plot.ROC.from_raw_data(y_true_, y_score_)
 
 # Generate a new plot with overlapping curves
 roc + roc2

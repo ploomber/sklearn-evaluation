@@ -19,13 +19,14 @@ def test_from_raw_data(y):
         'class': 'sklearn_evaluation.plot.ROC',
         'version': __version__,
         'fpr': roc.fpr.tolist(),
-        'tpr': roc.tpr.tolist()
+        'tpr': roc.tpr.tolist(),
+        'roc_rates_n_classes': roc.roc_rates_n_classes
     }
 
 
 def test_from_raw_data_multi(tmp_directory, y,
-                             roc_multi_classification_values):
-    y_test, y_score = roc_multi_classification_values
+                             roc_multi_classification_raw_data):
+    y_test, y_score = roc_multi_classification_raw_data
 
     roc = plot.ROC.from_raw_data(y_test, y_score)
 
@@ -33,7 +34,8 @@ def test_from_raw_data_multi(tmp_directory, y,
         'class': 'sklearn_evaluation.plot.ROC',
         'version': __version__,
         'fpr': roc.fpr.tolist(),
-        'tpr': roc.tpr.tolist()
+        'tpr': roc.tpr.tolist(),
+        'roc_rates_n_classes': roc.roc_rates_n_classes
     }
 
 
@@ -48,8 +50,8 @@ def test_roc_dump(tmp_directory, y):
     assert roc._get_data() == roc2._get_data()
 
 
-def test_roc_dump_multi(tmp_directory, roc_multi_classification_values):
-    y_test, y_score = roc_multi_classification_values
+def test_roc_dump_multi(tmp_directory, roc_multi_classification_raw_data):
+    y_test, y_score = roc_multi_classification_raw_data
 
     roc = plot.ROC.from_raw_data(y_test, y_score)
 
@@ -66,13 +68,13 @@ def test_roc_warning(y):
     with pytest.warns(
         FutureWarning, match="ROC will change its signature"
     ):
-        plot.ROC(y_test, y_score)
+        plot.roc(y_test, y_score)
 
 
-def test_roc_sub_not_implemented_error(y):
-    y_test, y_score = y
+def test_roc_sub_not_implemented_error(roc_values):
+    fpr, tpr, _ = roc_values
 
-    roc = plot.ROC(y_test, y_score)
+    roc = plot.ROC(fpr, tpr)
 
     with pytest.raises(NotImplementedError) as excinfo:
         roc.__sub__()

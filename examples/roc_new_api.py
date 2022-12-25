@@ -17,5 +17,5 @@ y_pred = est.predict(X_test)
 y_score = est.predict_proba(X_test)
 y_true = y_test
 
-roc = plot.ROC(y_true, y_score)
+roc = plot.ROC.from_raw_data(y_true, y_score)
 roc

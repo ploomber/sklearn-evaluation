@@ -166,7 +166,7 @@ def target_analysis_multiclass():
 
 
 @pytest.fixture
-def roc_multi_classification_values(target_analysis_multiclass):
+def roc_multi_classification_raw_data(target_analysis_multiclass):
     X_train, X_test, y_train, y_test = target_analysis_multiclass
     classifier = LogisticRegression()
     y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
@@ -175,7 +175,7 @@ def roc_multi_classification_values(target_analysis_multiclass):
 
 
 @pytest.fixture
-def roc_multi_classification_values_set2():
+def roc_multi_classification_raw_data_set2():
     from sklearn.datasets import load_iris
 
     iris = load_iris()
@@ -197,3 +197,42 @@ def roc_multi_classification_values_set2():
     y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
 
     return y_test, y_score
+
+
+@pytest.fixture
+def roc_multi_classification_values():
+    roc_rates_n_classes = [{'fpr': [0.0, 0.0, 0.11764705882352941, 0.11764705882352941,
+                                    0.23529411764705882, 0.23529411764705882, 1.0],
+                            'tpr': [0.0, 0.3333333333333333, 0.3333333333333333,
+                                    0.6666666666666666, 0.6666666666666666, 1.0, 1.0]},
+                           {'fpr': [0.0, 0.0, 0.058823529411764705,
+                                    0.058823529411764705,
+                            0.17647058823529413, 0.17647058823529413, 1.0],
+                            'tpr': [0.0, 0.3333333333333333, 0.3333333333333333,
+                                    0.6666666666666666, 0.6666666666666666, 1.0, 1.0]},
+                           {'fpr': [0.0, 0.0, 0.0, 0.26666666666666666,
+                                    0.26666666666666666,
+                                    0.7333333333333333, 0.7333333333333333, 1.0],
+                            'tpr': [0.0, 0.2, 0.6, 0.6, 0.8, 0.8, 1.0, 1.0]},
+                           {'fpr': [0.0, 0.0, 0.0, 0.13333333333333333,
+                                    0.13333333333333333, 1.0],
+                            'tpr': [0.0, 0.2, 0.4, 0.4, 1.0, 1.0]},
+                           {'fpr': [0.0, 0.0, 0.0, 1.0], 'tpr': [0.0, 0.25, 1.0, 1.0]}]
+
+    fpr = [0.0, 0.0, 0.0, 0.0125, 0.0125, 0.0375, 0.0375, 0.0625, 0.0625, 0.075, 0.075,
+           0.0875, 0.0875, 0.125, 0.125, 0.15, 0.15, 0.2125, 0.2125, 0.35,
+           0.35, 0.6, 0.6, 1.0]
+    tpr = [0.0, 0.05, 0.35, 0.35, 0.4, 0.4, 0.5, 0.5, 0.55, 0.55, 0.6, 0.6,
+           0.65, 0.65, 0.7, 0.7, 0.75, 0.75, 0.8, 0.8, 0.95, 0.95, 1.0, 1.0]
+
+    return fpr, tpr, roc_rates_n_classes
+
+
+@pytest.fixture
+def roc_values():
+    fpr = [0.0, 0.2, 0.4, 0.4, 0.6, 1.0]
+    tpr = [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]
+
+    roc_rates_n_classes = None
+
+    return fpr, tpr, roc_rates_n_classes

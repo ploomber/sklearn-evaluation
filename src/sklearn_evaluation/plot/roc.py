@@ -39,7 +39,14 @@ def roc(y_true, y_score, ax=None):
     .. plot:: ../examples/roc.py
 
     """
-    r = ROC(y_true, y_score, ax=ax)
+    if y_true is not None and y_score is not None:
+        warn(
+            "ROC will change its signature in version 0.10"
+            ", please use ROC.from_raw_data",
+            FutureWarning,
+            stacklevel=2,
+        )
+    r = ROC.from_raw_data(y_true, y_score, ax=ax)
     return r.ax
 
 
@@ -110,7 +117,7 @@ def _plot_roc_multi_classification(
         Increasing true positive rates such that element `i` is the true
         positive rate of predictions with score >= `thresholds[i]`
 
-    roc_rates_n_classes : list of dictionaries with 'fpr' and 'tpr'
+    roc_rates_n_classes : list of dictionaries with 'fpr' and 'tpr' keys
         i.e : [{'fpr' : [0.0, 0.2, 0.4, 0.4, 0.6, 1.0],
         'tpr' : [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]}]
 
@@ -156,14 +163,14 @@ class ROCAdd(Plot):
         ax = self.figure.add_subplot()
         added_curve_label = "ROC curve 2"
 
-        if hasattr(a, "roc_rates_n_classes"):
+        if a.roc_rates_n_classes:
             self.ax = _plot_roc_multi_classification(
                 a.fpr, a.tpr, a.roc_rates_n_classes, ax
             )
         else:
             _plot_roc(a.fpr, a.tpr, ax=ax)
 
-        if hasattr(b, "roc_rates_n_classes"):
+        if b.roc_rates_n_classes:
             self.ax = _plot_roc_multi_classification(
                 b.fpr, b.tpr, b.roc_rates_n_classes, ax, curve_label=added_curve_label
             )
@@ -176,13 +183,6 @@ class ROC(Plot):
     Plot ROC curve
     Parameters
     ----------
-    y_true : array-like, shape = [n_samples]
-        Correct target values (ground truth).
-
-    y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
-        classification or [n_samples, n_classes] for multiclass
-        Target scores (estimator predictions).
-
     fpr : ndarray of shape (>2,), default: None
         Increasing false positive rates such that element i is the false
         positive rate of predictions with score >= `thresholds[i]`. If
@@ -193,15 +193,12 @@ class ROC(Plot):
         positive rate of predictions with score >= `thresholds[i]`. If
         None, it will be calculated based on y_true and y_score.
 
+    roc_rates_n_classes : list of dictionaries with 'fpr' and 'tpr' keys
+        i.e : [{'fpr' : [0.0, 0.2, 0.4, 0.4, 0.6, 1.0],
+        'tpr' : [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]}]
+
     ax: matplotlib Axes, default: None
         Axes object to draw the plot onto, otherwise uses current Axes
-
-    Notes
-    -----
-    It is assumed that the y_score parameter columns are in order.
-    For example, if ``y_true = [2, 2, 1, 0, 0, 1, 2]``, then the
-    first column in y_score must contain the scores for class 0,
-    second column for class 1 and so on.
 
     Examples
     --------
@@ -213,57 +210,20 @@ class ROC(Plot):
     -----
     .. versionadded:: 0.8.4
     """
-
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
-    def __init__(self, y_true, y_score, fpr=None, tpr=None, ax=None):
-
-        if y_true is not None and y_score is not None:
-            warn(
-                "ROC will change its signature in version 0.10"
-                ", please use ROC.from_raw_data",
-                FutureWarning,
-                stacklevel=2,
-            )
+    def __init__(self, fpr, tpr, roc_rates_n_classes=None, ax=None):
 
         if ax is None:
             self.figure = plt.figure()
             ax = self.figure.add_subplot()
 
-        # check data shape?
-        if tpr is None or fpr is None:
-
-            if any((val is None for val in (y_true, y_score))):
-                raise ValueError("y_true and y_score are needed to plot ROC")
-
-            # get the number of classes based on the shape of y_score
-            y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
-            if y_score_is_vector:
-                n_classes = 2
-            else:
-                _, n_classes = y_score.shape
-
-            if n_classes > 2:
-                # convert y_true to binary format
-                y_true_bin = label_binarize(y_true, classes=np.unique(y_true))
-
-                fpr, tpr, _ = _roc_curve_multi(y_true_bin, y_score)
-                self.roc_rates_n_classes = []
-                for i in range(n_classes):
-                    fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])
-
-                    d = {"fpr": fpr_.tolist(), "tpr": tpr_.tolist()}
-                    self.roc_rates_n_classes.append(d)
-            else:
-                if y_score_is_vector:
-                    fpr, tpr, _ = roc_curve(y_true, y_score)
-                else:
-                    fpr, tpr, _ = roc_curve(y_true, y_score[:, 1])
-
         self.fpr = fpr
         self.tpr = tpr
+        self.roc_rates_n_classes = roc_rates_n_classes
         self.ax = ax
 
-        if hasattr(self, "roc_rates_n_classes"):
+        # if hasattr(self, "roc_rates_n_classes"):
+        if roc_rates_n_classes is not None:
             self.ax = _plot_roc_multi_classification(
                 self.fpr, self.tpr, self.roc_rates_n_classes, self.ax
             )
@@ -283,6 +243,7 @@ class ROC(Plot):
             "version": __version__,
             "fpr": self.fpr.tolist(),
             "tpr": self.tpr.tolist(),
+            "roc_rates_n_classes": self.roc_rates_n_classes,
         }
 
     @classmethod
@@ -290,9 +251,46 @@ class ROC(Plot):
         data = json.loads(Path(path).read_text(encoding="utf-8"))
         fpr = np.array(data["fpr"])
         tpr = np.array(data["tpr"])
+        roc_rates_n_classes = data["roc_rates_n_classes"]
 
-        return cls(y_true=None, y_score=None, fpr=fpr, tpr=tpr, ax=None)
+        return cls(fpr, tpr, roc_rates_n_classes, ax=None)
 
     @classmethod
-    def from_raw_data(cls, y_true, y_score):
-        return cls(y_true, y_score)
+    def from_raw_data(cls, y_true, y_score, ax=None):
+
+        fpr, tpr, roc_rates_n_classes = cls._calculate_plotting_data(y_true, y_score)
+
+        return cls(fpr, tpr, roc_rates_n_classes=roc_rates_n_classes, ax=ax)
+
+    @staticmethod
+    def _calculate_plotting_data(y_true, y_score):
+        if any((val is None for val in (y_true, y_score))):
+            raise ValueError("y_true and y_score are needed to plot ROC")
+
+        # get the number of classes based on the shape of y_score
+        y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
+        if y_score_is_vector:
+            n_classes = 2
+        else:
+            _, n_classes = y_score.shape
+
+        if n_classes > 2:
+            # convert y_true to binary format
+            y_true_bin = label_binarize(y_true, classes=np.unique(y_true))
+
+            fpr, tpr, _ = _roc_curve_multi(y_true_bin, y_score)
+            roc_rates_n_classes = []
+            for i in range(n_classes):
+                fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])
+
+                d = {"fpr": fpr_.tolist(), "tpr": tpr_.tolist()}
+                roc_rates_n_classes.append(d)
+        else:
+            roc_rates_n_classes = None
+
+            if y_score_is_vector:
+                fpr, tpr, _ = roc_curve(y_true, y_score)
+            else:
+                fpr, tpr, _ = roc_curve(y_true, y_score[:, 1])
+
+        return fpr, tpr, roc_rates_n_classes
