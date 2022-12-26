@@ -82,8 +82,9 @@ forest_cm - tree_cm
 *Added in sklearn-evaluation version 0.7.8*
 
 ```{code-cell} ipython3
-tree_cr = plot.ClassificationReport(y_test, tree_pred)
-forest_cr = plot.ClassificationReport(y_test, forest_pred)
+:tags: ["remove-output"]
+tree_cr = plot.ClassificationReport.from_raw_data(y_test, tree_pred)
+forest_cr = plot.ClassificationReport.from_raw_data(y_test, forest_pred)
 ```
 
 ### Decision tree classification report
@@ -101,9 +102,9 @@ forest_cr
 ### Compare classification reports
 
 ```{code-cell} ipython3
-tree_cr + forest_cr
+compare = tree_cr + forest_cr
 ```
 
 ```{code-cell} ipython3
-forest_cr - tree_cr
+diff = forest_cr - tree_cr
 ```
