@@ -38,7 +38,7 @@ def _confusion_matrix_add(first, second, ax, target_names):
 
 class ConfusionMatrixSub(Plot):
     def __init__(self, cm, target_names) -> None:
-        self.figure = Figure()
+        self.figure = plt.figure()
         ax = self.figure.add_subplot()
         _plot_cm(
             cm,
@@ -51,7 +51,7 @@ class ConfusionMatrixSub(Plot):
 
 class ConfusionMatrixAdd(Plot):
     def __init__(self, a, b, target_names) -> None:
-        self.figure = Figure()
+        self.figure = plt.figure()
         ax = self.figure.add_subplot()
         _confusion_matrix_add(a, b, ax=ax, target_names=target_names)
 
@@ -84,13 +84,9 @@ class ConfusionMatrix(Plot):
     --------
     .. plot:: ../examples/confusion_matrix_oop.py
 
-    .. plot:: ../examples/confusion_matrix_add.py
-
     Notes
     -----
     http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-
-    .. versionadded:: 0.8.5
 
     """
 
@@ -104,7 +100,7 @@ class ConfusionMatrix(Plot):
                 stacklevel=3,
             )
 
-        self.figure = Figure()
+        self.figure = plt.figure()
         ax = self.figure.add_subplot()
 
         if cm is not None and cm is not False:

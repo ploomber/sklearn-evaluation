@@ -37,6 +37,7 @@ matplotlib.rcParams["font.size"] = 18
 ```
 
 ```{code-cell} ipython3
+:tags: ["remove-output"]
 # get training and testing data
 X, y = datasets.make_classification(
     1000, 20, n_informative=10, class_sep=0.80, n_classes=3, random_state=0
@@ -51,8 +52,8 @@ tree_pred, forest_pred = [
     for est in [DecisionTreeClassifier(), RandomForestClassifier()]
 ]
 
-tree_cm = plot.ConfusionMatrix(y_test, tree_pred, normalize=False)
-forest_cm = plot.ConfusionMatrix(y_test, forest_pred, normalize=False)
+tree_cm = plot.ConfusionMatrix.from_raw_data(y_test, tree_pred, normalize=False)
+forest_cm = plot.ConfusionMatrix.from_raw_data(y_test, forest_pred, normalize=False)
 ```
 
 ### Decision tree confusion matrix
@@ -70,11 +71,11 @@ forest_cm
 ### Compare confusion matrices
 
 ```{code-cell} ipython3
-tree_cm + forest_cm
+compare = tree_cm + forest_cm
 ```
 
 ```{code-cell} ipython3
-forest_cm - tree_cm
+diff = forest_cm - tree_cm
 ```
 
 ## Classification report
