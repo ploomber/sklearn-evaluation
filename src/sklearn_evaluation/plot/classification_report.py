@@ -5,7 +5,6 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report as sk_classification_report
-from matplotlib.figure import Figure
 from ..telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.classification import _add_values_to_matrix
@@ -32,18 +31,18 @@ def _classification_report_add(first, second, keys, target_names, ax):
 class ClassificationReportSub(Plot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
         self.figure = plt.figure()
-        self.ax = self.figure.add_subplot()
+        ax = self.figure.add_subplot()
         _classification_report_plot(
-            matrix - matrix_another, keys, target_names, self.ax)
-        self.ax.set(title="Classification report (difference)")
+            matrix - matrix_another, keys, target_names, ax)
+        ax.set(title="Classification report (difference)")
 
 
 class ClassificationReportAdd(Plot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
         self.figure = plt.figure()
-        self.ax = self.figure.add_subplot()
+        ax = self.figure.add_subplot()
         _classification_report_add(
-            matrix, matrix_another, keys, target_names, self.ax)
+            matrix, matrix_another, keys, target_names, ax)
 
 
 class ClassificationReport(Plot):
@@ -74,7 +73,7 @@ class ClassificationReport(Plot):
             )
 
         self.figure = plt.figure()
-        self.ax = self.figure.add_subplot()
+        ax = self.figure.add_subplot()
 
         if matrix is not None and matrix is not False:
             self.matrix = matrix
@@ -90,7 +89,7 @@ class ClassificationReport(Plot):
             )
 
         _classification_report_plot(
-            self.matrix, self.keys, self.target_names, self.ax)
+            self.matrix, self.keys, self.target_names, ax)
 
     @SKLearnEvaluationLogger.log(feature='plot', action='classification-report-sub')
     def __sub__(self, other):
