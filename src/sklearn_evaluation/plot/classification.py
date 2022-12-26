@@ -7,7 +7,6 @@ from warnings import warn
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from sklearn_evaluation import __version__
@@ -38,7 +37,7 @@ def _confusion_matrix_add(first, second, ax, target_names):
 
 class ConfusionMatrixSub(Plot):
     def __init__(self, cm, target_names) -> None:
-        self.figure = Figure()
+        self.figure = plt.figure()
         ax = self.figure.add_subplot()
         _plot_cm(
             cm,
@@ -51,12 +50,25 @@ class ConfusionMatrixSub(Plot):
 
 class ConfusionMatrixAdd(Plot):
     def __init__(self, a, b, target_names) -> None:
-        self.figure = Figure()
+        self.figure = plt.figure()
         ax = self.figure.add_subplot()
         _confusion_matrix_add(a, b, ax=ax, target_names=target_names)
 
 
 class ConfusionMatrix(Plot):
+    """
+    Plot confusion matrix.
+
+    Examples
+    --------
+    .. plot:: ../examples/confusion_matrix_oop.py
+
+    Notes
+    -----
+    http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
+
+    """
+
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
     def __init__(self, y_true, y_pred, target_names=None, normalize=False, cm=None):
         if y_true is not None and cm is None:
@@ -67,7 +79,7 @@ class ConfusionMatrix(Plot):
                 stacklevel=3,
             )
 
-        self.figure = Figure()
+        self.figure = plt.figure()
         ax = self.figure.add_subplot()
 
         if cm is not None and cm is not False:

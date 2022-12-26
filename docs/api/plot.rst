@@ -29,7 +29,7 @@ confusion_matrix
 
 ConfusionMatrix
 ---------------
-.. autofunction:: sklearn_evaluation.plot.ConfusionMatrix
+.. autoclass:: sklearn_evaluation.plot.ConfusionMatrix
 
 cumulative_gain
 ---------------
