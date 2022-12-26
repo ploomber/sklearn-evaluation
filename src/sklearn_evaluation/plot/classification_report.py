@@ -40,9 +40,9 @@ class ClassificationReportSub(Plot):
 class ClassificationReportAdd(Plot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
         self.figure = plt.figure()
-        ax = self.figure.add_subplot()
+        self.ax = self.figure.add_subplot()
         _classification_report_add(
-            matrix, matrix_another, keys, target_names, ax)
+            matrix, matrix_another, keys, target_names, self.ax)
 
 
 class ClassificationReport(Plot):
