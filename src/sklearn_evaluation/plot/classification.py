@@ -7,7 +7,6 @@ from warnings import warn
 
 import numpy as np
 import matplotlib.pyplot as plt
-from matplotlib.figure import Figure
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from sklearn_evaluation import __version__
