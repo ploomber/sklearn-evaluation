@@ -60,26 +60,6 @@ class ConfusionMatrix(Plot):
     """
     Plot confusion matrix.
 
-    Parameters
-    ----------
-    y_true : array-like, shape = [n_samples]
-        Correct target values (ground truth).
-    y_pred : array-like, shape = [n_samples]
-        Target predicted classes (estimator predictions).
-    target_names : list
-        List containing the names of the target classes. List must be in order
-        e.g. ``['Label for class 0', 'Label for class 1']``. If ``None``,
-        generic labels will be generated e.g. ``['Class 0', 'Class 1']``
-    normalize : bool
-        Normalize the confusion matrix
-    cmap : matplotlib Colormap
-        If ``None`` uses a modified version of matplotlib's OrRd colormap.
-
-    Returns
-    -------
-    ax: matplotlib Axes
-        Axes containing the plot
-
     Examples
     --------
     .. plot:: ../examples/confusion_matrix_oop.py
@@ -179,7 +159,7 @@ def confusion_matrix(
     y_true, y_pred, target_names=None, normalize=False, cmap=None, ax=None
 ):
     """
-    Plot confusion matrix check.
+    Plot confusion matrix.
 
     Parameters
     ----------
