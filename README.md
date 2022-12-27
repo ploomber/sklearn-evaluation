@@ -33,8 +33,6 @@ Supports Python 3.7 and higher. Tested on Linux, macOS and Windows.
 
 ![confusion matrix](examples/cm.png)
 
-![grid search](https://sklearn-evaluation.readthedocs.io/en/stable/_images/gs_1.png)
-
 # Install  
 
 ```bash
@@ -43,10 +41,10 @@ pip install sklearn-evaluation
 
 # Features
 
-* [Plotting](https://sklearn-evaluation.readthedocs.io/en/stable/_images/cm.png) (confusion matrix, feature importances, precision-recall, roc, elbow curve, silhouette plot)
+* [Plotting](https://sklearn-evaluation.ploomber.io/en/latest/classification/basic.html) (confusion matrix, feature importances, precision-recall, roc, elbow curve, silhouette plot)
 * Report generation ([example](https://htmlpreview.github.io/?https://github.com/ploomber/sklearn-evaluation/blob/master/examples/report.html))
-* [Evaluate grid search results](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/grid_search.html)
-* [Track experiments using a local SQLite database](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/SQLiteTracker.html)
-* [Analyze notebooks output](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/NotebookCollection.html)
-* [Query notebooks with SQL](https://sklearn-evaluation.readthedocs.io/en/stable/user_guide/nbdb.html)
+* [Evaluate grid search results](https://sklearn-evaluation.ploomber.io/en/latest/optimization/grid_search.html)
+* [Track experiments using a local SQLite database](https://sklearn-evaluation.ploomber.io/en/latest/comparison/SQLiteTracker.html)
+* [Analyze notebooks output](https://sklearn-evaluation.ploomber.io/en/latest/comparison/NotebookCollection.html)
+* [Query notebooks with SQL](https://sklearn-evaluation.ploomber.io/en/latest/comparison/nbdb.html)
 
