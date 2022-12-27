@@ -164,3 +164,12 @@ this will generate the following log:
 ### Errors
 
 Failing runnings will be named: `sklearn-evaluation-error`
+
+## Object-Oriented API
+
+### Adding a new plot
+
+Use [figure](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html) instead of [Figure](https://matplotlib.org/3.3.4/api/_as_gen/matplotlib.figure.Figure.html). When a plot is generated using `Figure`, the `FigureManager` gets destroyed and hence the image becomes inaccessible from example scripts. Plots generated using `figure` can easily be accessed through `pyplot.show()`. 
+
+
+
