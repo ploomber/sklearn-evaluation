@@ -2,6 +2,10 @@ format: jb-book
 root: intro.md
 
 parts:
+  - caption: Quick Start
+    chapters:
+      - file: quickstart/classification
+
   - caption: Classification
     chapters:
     - file: classification/basic
