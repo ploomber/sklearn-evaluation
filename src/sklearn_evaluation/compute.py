@@ -56,7 +56,7 @@ def feature_importances(data, top_n=None, feature_names=None):
              ' features ({}), showing all features'.format(top_n, n_features)))
     if top_n and top_n < 1:
         raise ValueError('top_n cannot be less than 1')
-    if feature_names and len(feature_names) != n_features:
+    if feature_names is not None and len(feature_names) != n_features:
         raise ValueError(('feature_names ({}) must match the number of'
                           ' features ({})'.format(len(feature_names),
                                                   n_features)))

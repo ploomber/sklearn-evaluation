@@ -36,6 +36,15 @@ def test_feature_importances_feature_names(path_to_tests_static):
     )
 
 
+def test_feature_importances_feature_names_array(path_to_tests_static):
+    feature_importances = np.array([0.12, 0.10, 0.8, 0.06, 0.03])
+    feature_names = np.array(["thing_a", "thing_b", "thing_c", "thing_d", "thing_e"])
+    with open(path_to_tests_static / "table_ft_names.txt", "r") as f:
+        expected = f.read()
+    assert expected == str(
+        table.feature_importances(feature_importances, feature_names=feature_names)
+    )
+
 def test_feature_importances_w_subestimators(path_to_tests_static):
     rf = Mock()
     tree_1 = Mock()
