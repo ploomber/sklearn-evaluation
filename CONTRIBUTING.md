@@ -169,7 +169,7 @@ Failing runnings will be named: `sklearn-evaluation-error`
 
 ### Adding a new plot
 
-Use [figure](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html) instead of [Figure](https://matplotlib.org/3.3.4/api/_as_gen/matplotlib.figure.Figure.html). When a plot is generated using `Figure`, the `FigureManager` gets destroyed and hence the image becomes inaccessible from example scripts. The solution is to [create a dummy manager](https://stackoverflow.com/questions/49503869/attributeerror-while-trying-to-load-the-pickled-matplotlib-figure) and use its canvas manager to display the image again. On the other hand, plots generated using `figure` can easily be accessed through `pyplot.show()`. 
+Use [figure](https://matplotlib.org/stable/api/_as_gen/matplotlib.pyplot.figure.html) instead of [Figure](https://matplotlib.org/3.3.4/api/_as_gen/matplotlib.figure.Figure.html). When a plot is generated using `Figure`, the `FigureManager` gets destroyed and hence the image becomes inaccessible from example scripts. Plots generated using `figure` can easily be accessed through `pyplot.show()`. 
 
 
 
