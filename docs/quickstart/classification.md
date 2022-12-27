@@ -13,8 +13,8 @@ kernelspec:
 
 # Sklearn-evaluation quickstart
 
-In this guid we'll show how to compare and evaluate models with sklearn-evaluation.
-We will use the penguins dataset and will try to classify based on paraters such as bill and filpper size, which penguin species is it.
+In this guide we'll show how to compare and evaluate models with sklearn-evaluation.
+We will use the penguins dataset and will try to classify based on parameters such as bill and flipper size, and which penguin species is it.
 
 The steps in this guide are:
 1. Loading the dataset
@@ -23,7 +23,7 @@ The steps in this guide are:
 4. Evaluating the features and models
 5. Comparing the different models
 
-In step 4 & 5 the real value of SKE comes into fruition as we get a lot of visualizations out of the box which will help us compare and evaluate the models, making it easier to pick the optimal one. 
+In steps 4 & 5 the real value of sklearn-evaluation comes to fruition as we get a lot of visualizations out of the box which will help us compare and evaluate the models, making it easier to pick the optimal one. 
 
 ```{code-cell} ipython3
 import pandas as pd
@@ -52,7 +52,7 @@ df.head(5)
 
 ## Data cleaning
 
-In this section we're cleaning and preparing the dataset for fitting.
+In this section, we're cleaning and preparing the dataset for fitting.
 It's all in a single cell since this isn't too relevant to the tool itself.
 
 ```{code-cell} ipython3
@@ -89,7 +89,7 @@ y_test
 
 ## Evaluate our model
 
-In this section we can easily evaluate our model via a confusion matrix, and understand which feature affects our accuracy by order of importance. 
+In this section, we can easily evaluate our model via a confusion matrix, and understand which feature affects our accuracy by order of importance. 
 
 ```{code-cell} ipython3
 plot.confusion_matrix(y_test, y_pred_dt)
@@ -120,7 +120,7 @@ knn_cm = plot.confusion_matrix(y_test, y_pred_knn)
 
 # Comparing KNN and Random Forest reports
 
-In this section, we will overlay both of the models via the confusion matrices. We will do the same with the classification report. This will allow us to pick the superior model without a lot of efforts.
+In this section, we will overlay both of the models via the confusion matrices. We will do the same with the classification report. This will allow us to pick the superior model without a lot of effort.
 
 ```{code-cell} ipython3
 knn_cm = plot.ConfusionMatrix.from_raw_data(y_test, y_pred_knn)
