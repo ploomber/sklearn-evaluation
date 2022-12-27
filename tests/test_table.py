@@ -44,7 +44,7 @@ def test_feature_importances_feature_names_array(path_to_tests_static):
     assert expected == str(
         table.feature_importances(feature_importances, feature_names=feature_names)
     )
-    
+
 
 def test_feature_importances_w_subestimators(path_to_tests_static):
     rf = Mock()
