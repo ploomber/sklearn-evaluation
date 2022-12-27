@@ -19,6 +19,7 @@ jobs:
       with:
         miniconda-version: latest
         activate-environment: conda-env
+        channels: conda-forge, defaults
         python-version: ${{ matrix.python-version }}
 
     - name: Lint with flake8
