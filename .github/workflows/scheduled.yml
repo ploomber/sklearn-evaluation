@@ -1,4 +1,4 @@
-name: check-broken-links
+name: check-for-broken-links
 
 on:
   schedule:
