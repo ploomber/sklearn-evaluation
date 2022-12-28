@@ -221,11 +221,9 @@ def silhouette_analysis(
         )
 
     for n_clusters in range_n_clusters:
-        fig, ax = plt.subplots(1, 1, figsize=figsize)
-        fig.set_size_inches(18, 7)
+        _, ax = plt.subplots(1, 1, figsize=figsize)
         clf = clone(clf)
         setattr(clf, "n_clusters", n_clusters)
-        setattr(clf, "random_state", 10)
         cluster_labels = clf.fit_predict(X)
 
         ax = silhouette_analysis_from_results(
@@ -265,9 +263,8 @@ def silhouette_analysis_from_results(
     sample_silhouette_values = silhouette_samples(X, cluster_labels, metric=metric)
 
     if ax is None:
-        fig, ax = plt.subplots(1, 1, figsize=figsize)
+        _, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_title("Silhouette Analysis", fontsize="large")
     ax.set_xlim([-0.1, 1])
 
     if hasattr(X, "shape"):
@@ -282,6 +279,8 @@ def silhouette_analysis_from_results(
     y_lower = 10
 
     for i in range(n_clusters):
+        ax.set_title(f"Silhouette Analysis (n_clusters={n_clusters})", fontsize="large")
+
         ith_cluster_silhouette_values = sample_silhouette_values[
             cluster_labels_encoded == i
         ]
