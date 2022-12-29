@@ -45,7 +45,9 @@ X_pca = pca.fit_transform(X)
 
 plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y)
 plt.grid()
-_ = plt.title("Data in PCA space")
+plt.title("Data in PCA space")
+plt.xlabel("First principal component")
+_ = plt.ylabel("Second principal component")
 ```
 
 We can see the clusters in our synthetic data. However, the clusters won't be as transparent when using real-world datasets as in our example dataset.
@@ -120,7 +122,7 @@ In our curve, we see significant improvements when moving from 2 to 5 clusters; 
 
 ### `plot.silhouette_analysis`
 
-We can visually represent the `silhouette_score` to assess the number of clusters. Remember that values close to +1 indicate that the clusters are well-separated. Another characteristic to consider is the size of each silhouette plot. If they're too different, it means some clusters are tiny while others are too large (see, for example, `n_clusters=6,7,8`).
+We can visually represent the `silhouette_score` to assess the number of clusters. Remember that values close to +1 indicate that the clusters are well-separated. Another characteristic to consider is the size of each silhouette plot. If they're too different, it means some clusters are tiny while others are too large (see, for example the plots with `n_clusters` from 6 to 8: they all have  some tiny clusters.
 
 Note that the silhouette score reported on each plot (top-right corner) matches our previous table. Again, we see that the value is maximized when `n_clusters=5`, and that all clusters have similar size and silhouette scores, so we choose that as the optimal value.
 
