@@ -6,6 +6,9 @@ For general guidelines, see [Ploombers' documentation framework.](https://github
 
 To provide a consistent user experience, all the functions that produce plots follow a few conventions:
 
+## Do not set figure/text sizes
+
+We should not hardcode figure or font sizes inside the plots; we should allow the user to decide on this.
 ## Function should not contain `plot` in its name
 
 Example:

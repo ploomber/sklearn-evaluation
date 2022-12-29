@@ -110,8 +110,11 @@ def test_n_jobs():
     remove_text=False,
 )
 def test_plot_silhouette():
-    clf = KMeans()
+    clf = KMeans(random_state=10)
+    # original = plt.rcParams["figure.figsize"]
+    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf)
+    # plt.rcParams["figure.figsize"] = original
 
 
 @image_comparison(
@@ -121,6 +124,7 @@ def test_plot_silhouette():
 )
 def test_plot_silhouette_with_cluster_range():
     clf = KMeans(random_state=10)
+    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[4, 5])
 
 
@@ -134,6 +138,7 @@ def test_plot_silhouette_with_cluster_range():
 )
 def test_plot_silhouette_with_minibatchkmeans():
     clf = MiniBatchKMeans(random_state=10)
+    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[4, 5])
 
 
@@ -141,7 +146,8 @@ def test_plot_silhouette_with_minibatchkmeans():
     baseline_images=["silhouette_plot_spectral"], extensions=["png"], remove_text=False
 )
 def test_cmap():
-    clf = KMeans()
+    clf = KMeans(random_state=10)
+    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[2], cmap="Spectral")
 
 
@@ -149,7 +155,8 @@ def test_cmap():
     baseline_images=["silhouette_plot_cosine"], extensions=["png"], remove_text=False
 )
 def test_metric():
-    clf = KMeans()
+    clf = KMeans(random_state=10)
+    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[6], metric="cosine")
 
 
@@ -189,12 +196,12 @@ def test_ax_silhouette():
 
 
 def test_ax_params():
-    clf = KMeans()
+    clf = KMeans(n_clusters=8)
     cluster_labels = clf.fit_predict(X)
     out_ax = plot.silhouette_analysis_from_results(
         X, cluster_labels, text_fontsize="large"
     )
-    assert out_ax.get_title() == "Silhouette Analysis"
+    assert out_ax.get_title() == "Silhouette Analysis (n_clusters=8)"
     assert out_ax.get_ylim() == (0.0, 250.0)
 
 
