@@ -39,13 +39,8 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 # TODO: add unit test
-@SKLearnEvaluationLogger.log(feature='plot')
-def elbow_curve(X,
-                clf,
-                n_clusters=None,
-                n_jobs=1,
-                show_cluster_time=True,
-                ax=None):
+@SKLearnEvaluationLogger.log(feature="plot")
+def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=None):
     """Plots elbow curve of different values of K of a clustering algorithm.
 
     Parameters
@@ -89,21 +84,22 @@ def elbow_curve(X,
     else:
         n_clusters = sorted(n_clusters)
 
-    if not hasattr(clf, 'n_clusters'):
-        raise TypeError('"n_clusters" attribute not in classifier. '
-                        'Cannot plot elbow method.')
+    if not hasattr(clf, "n_clusters"):
+        raise TypeError(
+            '"n_clusters" attribute not in classifier. ' "Cannot plot elbow method."
+        )
 
     tuples = Parallel(n_jobs=n_jobs)(
-        delayed(_clone_and_score_clusterer)(clf, X, i) for i in n_clusters)
+        delayed(_clone_and_score_clusterer)(clf, X, i) for i in n_clusters
+    )
     clfs, times = zip(*tuples)
     sum_of_squares = np.absolute(clfs)
-    return elbow_curve_from_results(n_clusters,
-                                    sum_of_squares,
-                                    times if show_cluster_time else None,
-                                    ax=ax)
+    return elbow_curve_from_results(
+        n_clusters, sum_of_squares, times if show_cluster_time else None, ax=ax
+    )
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
+@SKLearnEvaluationLogger.log(feature="plot")
 def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     """
     Same as `elbow_curve`, but it takes the number of clusters and sum of
@@ -118,43 +114,42 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     if ax is None:
         ax = plt.gca()
 
-    ax.set_title('Elbow Plot')
-    ax.plot(n_clusters, sum_of_squares, 'b*-')
+    ax.set_title("Elbow Plot")
+    ax.plot(n_clusters, sum_of_squares, "b*-")
     ax.grid(True)
-    ax.set_xlabel('Number of clusters')
-    ax.set_ylabel('Sum of Squared Errors')
+    ax.set_xlabel("Number of clusters")
+    ax.set_ylabel("Sum of Squared Errors")
 
     if times is not None:
         times = np.array(times)[idx]
-        ax2_color = 'green'
+        ax2_color = "green"
         ax2 = ax.twinx()
-        ax2.plot(n_clusters, times, ':', alpha=0.75, color=ax2_color)
-        ax2.set_ylabel('Clustering duration (seconds)',
-                       color=ax2_color,
-                       alpha=0.75)
+        ax2.plot(n_clusters, times, ":", alpha=0.75, color=ax2_color)
+        ax2.set_ylabel("Clustering duration (seconds)", color=ax2_color, alpha=0.75)
         ax2.tick_params(colors=ax2_color)
 
     return ax
 
 
 def _clone_and_score_clusterer(clf, X, n_clusters):
-    """Clones and scores a clustering model
-    """
+    """Clones and scores a clustering model"""
     start = time.time()
     clf = clone(clf)
-    setattr(clf, 'n_clusters', n_clusters)
+    setattr(clf, "n_clusters", n_clusters)
     return clf.fit(X).score(X), time.time() - start
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
-def silhouette_analysis(X,
-                        clf,
-                        range_n_clusters=None,
-                        metric='euclidean',
-                        figsize=None,
-                        cmap='nipy_spectral',
-                        text_fontsize="medium",
-                        ax=None):
+@SKLearnEvaluationLogger.log(feature="plot")
+def silhouette_analysis(
+    X,
+    clf,
+    range_n_clusters=None,
+    metric="euclidean",
+    figsize=None,
+    cmap="nipy_spectral",
+    text_fontsize="medium",
+    ax=None,
+):
     """Plots silhouette analysis of clusters provided.
 
     Parameters
@@ -219,31 +214,36 @@ def silhouette_analysis(X,
     else:
         range_n_clusters = sorted(range_n_clusters)
 
-    if not hasattr(clf, 'n_clusters'):
-        raise TypeError('"n_clusters" attribute not in classifier. '
-                        'Cannot plot silhouette analysis .')
+    if not hasattr(clf, "n_clusters"):
+        raise TypeError(
+            '"n_clusters" attribute not in classifier. '
+            "Cannot plot silhouette analysis ."
+        )
 
     for n_clusters in range_n_clusters:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
         fig.set_size_inches(18, 7)
         clf = clone(clf)
-        setattr(clf, 'n_clusters', n_clusters)
-        setattr(clf, 'random_state', 10)
+        setattr(clf, "n_clusters", n_clusters)
+        setattr(clf, "random_state", 10)
         cluster_labels = clf.fit_predict(X)
 
-        ax = silhouette_analysis_from_results(X, cluster_labels, metric,
-                                              figsize, cmap, text_fontsize, ax)
+        ax = silhouette_analysis_from_results(
+            X, cluster_labels, metric, figsize, cmap, text_fontsize, ax
+        )
     return ax
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
-def silhouette_analysis_from_results(X,
-                                     cluster_labels,
-                                     metric='euclidean',
-                                     figsize=None,
-                                     cmap='nipy_spectral',
-                                     text_fontsize="medium",
-                                     ax=None):
+@SKLearnEvaluationLogger.log(feature="plot")
+def silhouette_analysis_from_results(
+    X,
+    cluster_labels,
+    metric="euclidean",
+    figsize=None,
+    cmap="nipy_spectral",
+    text_fontsize="medium",
+    ax=None,
+):
     """
     Same as `silhouette_plot` but takes cluster_labels as input.
     Useful if you want to train the model yourself
@@ -262,9 +262,7 @@ def silhouette_analysis_from_results(X,
 
     silhouette_avg = silhouette_score(X, cluster_labels, metric=metric)
 
-    sample_silhouette_values = silhouette_samples(X,
-                                                  cluster_labels,
-                                                  metric=metric)
+    sample_silhouette_values = silhouette_samples(X, cluster_labels, metric=metric)
 
     if ax is None:
         fig, ax = plt.subplots(1, 1, figsize=figsize)
@@ -272,20 +270,21 @@ def silhouette_analysis_from_results(X,
     ax.set_title("Silhouette Analysis", fontsize="large")
     ax.set_xlim([-0.1, 1])
 
-    if hasattr(X, 'shape'):
+    if hasattr(X, "shape"):
         length = X.shape[0]
     else:
         length = len(X)
     ax.set_ylim([0, length + (n_clusters + 1) * 10 + 10])
 
-    ax.set_xlabel('Silhouette coefficient values', fontsize=text_fontsize)
-    ax.set_ylabel('Cluster label', fontsize=text_fontsize)
+    ax.set_xlabel("Silhouette coefficient values", fontsize=text_fontsize)
+    ax.set_ylabel("Cluster label", fontsize=text_fontsize)
 
     y_lower = 10
 
     for i in range(n_clusters):
         ith_cluster_silhouette_values = sample_silhouette_values[
-            cluster_labels_encoded == i]
+            cluster_labels_encoded == i
+        ]
 
         ith_cluster_silhouette_values.sort()
 
@@ -294,28 +293,34 @@ def silhouette_analysis_from_results(X,
 
         color = plt.cm.get_cmap(cmap)(float(i) / n_clusters)
 
-        ax.fill_betweenx(np.arange(y_lower, y_upper),
-                         0,
-                         ith_cluster_silhouette_values,
-                         facecolor=color,
-                         edgecolor=color,
-                         alpha=0.7)
+        ax.fill_betweenx(
+            np.arange(y_lower, y_upper),
+            0,
+            ith_cluster_silhouette_values,
+            facecolor=color,
+            edgecolor=color,
+            alpha=0.7,
+        )
 
-        ax.text(-0.05,
-                y_lower + 0.5 * size_cluster_i,
-                str(le.classes_[i]),
-                fontsize=text_fontsize)
+        ax.text(
+            -0.05,
+            y_lower + 0.5 * size_cluster_i,
+            str(le.classes_[i]),
+            fontsize=text_fontsize,
+        )
 
         y_lower = y_upper + 10
 
-    ax.axvline(x=silhouette_avg,
-               color="red",
-               linestyle="--",
-               label='Silhouette score: {0:0.3f}'.format(silhouette_avg))
+    ax.axvline(
+        x=silhouette_avg,
+        color="red",
+        linestyle="--",
+        label="Silhouette score: {0:0.3f}".format(silhouette_avg),
+    )
 
     ax.set_yticks([])  # Clear the y-axis labels / ticks
     ax.set_xticks(np.arange(-0.1, 1.0, 0.2))
 
     ax.tick_params(labelsize=text_fontsize)
-    ax.legend(loc='best', fontsize=text_fontsize)
+    ax.legend(loc="best", fontsize=text_fontsize)
     return ax

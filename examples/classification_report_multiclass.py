@@ -5,11 +5,9 @@ from sklearn.model_selection import train_test_split
 
 from sklearn_evaluation import plot
 
-X, y = datasets.make_classification(200,
-                                    10,
-                                    n_informative=5,
-                                    class_sep=0.65,
-                                    n_classes=3)
+X, y = datasets.make_classification(
+    200, 10, n_informative=5, class_sep=0.65, n_classes=3
+)
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3)
 
 est = RandomForestClassifier()

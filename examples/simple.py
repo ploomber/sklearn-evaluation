@@ -7,22 +7,17 @@ import matplotlib.pyplot as plt
 
 from matplotlib import style
 
-style.use('seaborn-dark')
+style.use("seaborn-dark")
 
 # Import some data to play with
-data = datasets.make_classification(1000,
-                                    10,
-                                    n_informative=5,
-                                    class_sep=0.7,
-                                    n_classes=8)
+data = datasets.make_classification(
+    1000, 10, n_informative=5, class_sep=0.7, n_classes=8
+)
 X = data[0]
 y = data[1]
 
 # shuffle and split training and test sets
-X_train, X_test, y_train, y_test = train_test_split(X,
-                                                    y,
-                                                    test_size=.5,
-                                                    random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
 
 est = RandomForestClassifier()
 est.fit(X_train, y_train)

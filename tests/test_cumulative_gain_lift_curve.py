@@ -40,10 +40,12 @@ def _convert_labels_into_string(y_true):
     return ["A" if x == 0 else x for x in y_true]
 
 
-@image_comparison(baseline_images=['string_classes_cumulative_gain'],
-                  extensions=['png'],
-                  remove_text=True,
-                  tol=7.0)
+@image_comparison(
+    baseline_images=["string_classes_cumulative_gain"],
+    extensions=["png"],
+    remove_text=True,
+    tol=7.0,
+)
 def test_string_classes_cumulative_gain():
     clf = LogisticRegression()
     clf.fit(X, _convert_labels_into_string(y))
@@ -59,7 +61,8 @@ def test_two_classes_cumulative_gain():
     with pytest.raises(ValueError) as e:
         cumulative_gain(y, probas)
     assert "Cannot calculate Cumulative Gains for data with 3 category/ies" in str(
-        e.value)
+        e.value
+    )
 
 
 def test_ax_cumulative_gain():
@@ -73,22 +76,27 @@ def test_ax_cumulative_gain():
     assert ax is out_ax
 
 
-@image_comparison(baseline_images=[
-    'array_like_cumulative_gain_1', 'array_like_cumulative_gain_2',
-    'array_like_cumulative_gain_3'
-],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(
+    baseline_images=[
+        "array_like_cumulative_gain_1",
+        "array_like_cumulative_gain_2",
+        "array_like_cumulative_gain_3",
+    ],
+    extensions=["png"],
+    remove_text=True,
+)
 def test_array_like_cumulative_gain():
     cumulative_gain([0, 1], [[0.8, 0.2], [0.2, 0.8]])
-    cumulative_gain([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
-    cumulative_gain(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    cumulative_gain([0, "a"], [[0.8, 0.2], [0.2, 0.8]])
+    cumulative_gain(["b", "a"], [[0.8, 0.2], [0.2, 0.8]])
 
 
-@image_comparison(baseline_images=['string_classes_lift_curve'],
-                  extensions=['png'],
-                  remove_text=True,
-                  tol=8.0)
+@image_comparison(
+    baseline_images=["string_classes_lift_curve"],
+    extensions=["png"],
+    remove_text=True,
+    tol=8.0,
+)
 def test_string_classes_lift_curve():
     clf = LogisticRegression()
     clf.fit(X, _convert_labels_into_string(y))
@@ -103,8 +111,7 @@ def test_two_classes_lift_curve():
     probas = clf.predict_proba(X)
     with pytest.raises(ValueError) as e:
         lift_curve(y, probas)
-    assert "Cannot calculate Lift Curve for data with 3 category/ies" in str(
-        e.value)
+    assert "Cannot calculate Lift Curve for data with 3 category/ies" in str(e.value)
 
 
 def test_ax_lift_curve():
@@ -118,13 +125,16 @@ def test_ax_lift_curve():
     assert ax is out_ax
 
 
-@image_comparison(baseline_images=[
-    'array_like_lift_curve_1', 'array_like_lift_curve_2',
-    'array_like_lift_curve_3'
-],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(
+    baseline_images=[
+        "array_like_lift_curve_1",
+        "array_like_lift_curve_2",
+        "array_like_lift_curve_3",
+    ],
+    extensions=["png"],
+    remove_text=True,
+)
 def test_array_like_lift_curve():
     lift_curve([0, 1], [[0.8, 0.2], [0.2, 0.8]])
-    lift_curve([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
-    lift_curve(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    lift_curve([0, "a"], [[0.8, 0.2], [0.2, 0.8]])
+    lift_curve(["b", "a"], [[0.8, 0.2], [0.2, 0.8]])

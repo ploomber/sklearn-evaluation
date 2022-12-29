@@ -5,15 +5,12 @@ from sklearn.linear_model import LogisticRegression
 
 from sklearn_evaluation import plot
 
-X, y = make_classification(n_samples=10000,
-                           n_features=2,
-                           n_informative=2,
-                           n_redundant=0,
-                           random_state=0)
-X_train, X_test, y_train, y_test = train_test_split(X,
-                                                    y,
-                                                    test_size=0.33,
-                                                    random_state=0)
+X, y = make_classification(
+    n_samples=10000, n_features=2, n_informative=2, n_redundant=0, random_state=0
+)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.33, random_state=0
+)
 
 clf = LogisticRegression()
 

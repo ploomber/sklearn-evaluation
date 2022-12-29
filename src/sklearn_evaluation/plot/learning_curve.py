@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 from ..telemetry import SKLearnEvaluationLogger
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
+@SKLearnEvaluationLogger.log(feature="plot")
 def learning_curve(train_scores, test_scores, train_sizes, ax=None):
     """Plot a learning curve
 
@@ -45,16 +45,25 @@ def learning_curve(train_scores, test_scores, train_sizes, ax=None):
     test_scores_mean = np.mean(test_scores, axis=1)
     test_scores_std = np.std(test_scores, axis=1)
 
-    ax.fill_between(train_sizes, train_scores_mean - train_scores_std,
-                    train_scores_mean + train_scores_std, alpha=0.1,
-                    color="r")
-    ax.fill_between(train_sizes, test_scores_mean - test_scores_std,
-                    test_scores_mean + test_scores_std, alpha=0.1, color="g")
+    ax.fill_between(
+        train_sizes,
+        train_scores_mean - train_scores_std,
+        train_scores_mean + train_scores_std,
+        alpha=0.1,
+        color="r",
+    )
+    ax.fill_between(
+        train_sizes,
+        test_scores_mean - test_scores_std,
+        test_scores_mean + test_scores_std,
+        alpha=0.1,
+        color="g",
+    )
 
-    ax.plot(train_sizes, train_scores_mean, 'o-', color="r",
-            label="Training score")
-    ax.plot(train_sizes, test_scores_mean, 'o-', color="g",
-            label="Cross-validation score")
+    ax.plot(train_sizes, train_scores_mean, "o-", color="r", label="Training score")
+    ax.plot(
+        train_sizes, test_scores_mean, "o-", color="g", label="Cross-validation score"
+    )
 
     ax.legend(loc="best")
     ax.margins(0.05)
