@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.8.6dev
+--------
+
 0.8.5 (2022-12-29)
 ------------------
 * Fixes to ``plot.elbow_curve``: no longer hardcoding figure size, random seed for model, also showing ``n_clusters`` in title
