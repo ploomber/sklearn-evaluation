@@ -15,6 +15,10 @@ kernelspec:
 
 In this guide, you'll learn how to use `sklearn-evaluation`, and `sklearn` to evaluate clustering models.
 
+```{note}
+This guide requires `scikit-learn>=1.2`
+```
+
 +++
 
 ## Sample clustering model

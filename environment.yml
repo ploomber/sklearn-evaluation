@@ -5,13 +5,16 @@ channels:
   - conda-forge
 
 dependencies:
-  - python=3.8
+  - python=3.10
   - lxml # for pandas.read_html, used in NotebookCollection
   - pip
+  - scikit-learn>=1.2
+  - matplotlib
   - pip:
-    # Binder docs say setup.py is automatically installed but it's not working
-    - git+https://github.com/ploomber/sklearn-evaluation
+    - sklearn-evaluation
     # NotebookCollection example
     - jupytext
     - papermill
     - seaborn
+    - ipywidgets
+    - jupysql
