@@ -7,38 +7,38 @@ from pathlib import Path
 from glob import glob
 import shutil
 
-failed = glob('result_images/*/*-failed-diff*.png')
+failed = glob("result_images/*/*-failed-diff*.png")
 
-print('Found failed images...')
+print("Found failed images...")
 
 for f in failed:
-    print('* ', f)
+    print("* ", f)
 
-print('Getting reference images to replace...')
+print("Getting reference images to replace...")
 
 
 def get_ref_image(path):
     path = Path(path)
-    return path.with_name(path.name.replace('-failed-diff', ''))
+    return path.with_name(path.name.replace("-failed-diff", ""))
 
 
 ref = [get_ref_image(f) for f in failed]
 
 for f in ref:
-    print('* ', f)
+    print("* ", f)
 
 
 def get_new_location(path):
     path = Path(path)
     # get rid of the first part "result_images", and add the new relative
     # location inside tests/baseline_images
-    return Path('tests', 'baseline_images', *path.parts[1:])
+    return Path("tests", "baseline_images", *path.parts[1:])
 
 
 new_location = [get_new_location(f) for f in ref]
 
-print('Copying...')
+print("Copying...")
 
 for old, new in zip(ref, new_location):
-    print(f'*  {old} -> {new}')
+    print(f"*  {old} -> {new}")
     shutil.copy(old, new)

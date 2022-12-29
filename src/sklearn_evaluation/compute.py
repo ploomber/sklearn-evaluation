@@ -52,20 +52,24 @@ def feature_importances(data, top_n=None, feature_names=None):
     if top_n and top_n > n_features:
         top_n = n_features
         warnings.warn(
-            ('top_n ({}) is greater than the number of'
-             ' features ({}), showing all features'.format(top_n, n_features)))
+            (
+                "top_n ({}) is greater than the number of"
+                " features ({}), showing all features".format(top_n, n_features)
+            )
+        )
     if top_n and top_n < 1:
-        raise ValueError('top_n cannot be less than 1')
+        raise ValueError("top_n cannot be less than 1")
     if feature_names is not None and len(feature_names) != n_features:
-        raise ValueError(('feature_names ({}) must match the number of'
-                          ' features ({})'.format(len(feature_names),
-                                                  n_features)))
+        raise ValueError(
+            (
+                "feature_names ({}) must match the number of"
+                " features ({})".format(len(feature_names), n_features)
+            )
+        )
 
     # if the user did not pass feature names create generic names
     if feature_names is None:
-        feature_names = [
-            'Feature {}'.format(n) for n in range(1, n_features + 1)
-        ]
+        feature_names = ["Feature {}".format(n) for n in range(1, n_features + 1)]
         feature_names = np.array(feature_names)
     else:
         feature_names = np.array(feature_names)
@@ -79,11 +83,10 @@ def feature_importances(data, top_n=None, feature_names=None):
 
     # build the structured array
     if std is not None:
-        names = 'feature_name,importance,std_'
-        res = np.core.records.fromarrays([feature_names, imp, std],
-                                         names=names)
+        names = "feature_name,importance,std_"
+        res = np.core.records.fromarrays([feature_names, imp, std], names=names)
     else:
-        names = 'feature_name,importance'
+        names = "feature_name,importance"
         res = np.core.records.fromarrays([feature_names, imp], names=names)
 
     # get subset if top_n is not none

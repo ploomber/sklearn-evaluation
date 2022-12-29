@@ -6,7 +6,7 @@ import numpy as np
 from sklearn_evaluation import validate
 
 
-@validate.argument_is_proportion('top_proportion')
+@validate.argument_is_proportion("top_proportion")
 def cutoff_score_at_top_proportion(y_score, top_proportion):
     """
     Sort scores and get the score at
@@ -30,10 +30,9 @@ def cutoff_score_at_quantile(y_score, quantile):
     return np.quantile(y_score, quantile)
 
 
-@validate.argument_is_proportion('top_proportion')
+@validate.argument_is_proportion("top_proportion")
 def scores_at_top_proportion(y_score, top_proportion):
-    """Binary scores by sorting them and grabbing a proportion from the top
-    """
+    """Binary scores by sorting them and grabbing a proportion from the top"""
     cutoff_score = cutoff_score_at_top_proportion(y_score, top_proportion)
     y_score_binary = np.array(y_score >= cutoff_score).astype(int)
     return y_score_binary
@@ -45,10 +44,9 @@ def at_top_n(y_score, top_n):
     return y_score_binary
 
 
-@validate.argument_is_proportion('quantile')
+@validate.argument_is_proportion("quantile")
 def scores_at_quantile(y_score, quantile):
-    """Binary scores at certain quantile
-    """
+    """Binary scores at certain quantile"""
     cutoff_score = cutoff_score_at_quantile(y_score, quantile)
     y_score_binary = (y_score >= cutoff_score).astype(int)
     return y_score_binary
