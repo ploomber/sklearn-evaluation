@@ -20,6 +20,7 @@ limitations under the License.
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.linear_model import LinearRegression
@@ -118,9 +119,14 @@ def prediction_error(y_true, y_pred, model=None, ax=None):
     if not hasattr(model, 'fit_intercept'):
         raise TypeError('"fit_intercept" attribute not in model. '
                         'Cannot plot prediction error.')
+
+    if isinstance(y_true, pd.Series):
+        y_reshaped = y_true.values.reshape((-1, 1))
+    else:
+        y_reshaped = y_true.reshape((-1, 1))
     # best fit line
-    model.fit(y_true.reshape((-1, 1)), y_pred)
-    x = np.linspace(80, 230, 100)
+    model.fit(y_reshaped, y_pred)
+    x = np.linspace(min(y_true), max(y_true))
     y = model.intercept_ + model.coef_ * x
     ax.plot(x, y, "-b", label="best fit")
 
@@ -131,7 +137,7 @@ def prediction_error(y_true, y_pred, model=None, ax=None):
     ax.scatter(y_true, y_pred)
 
     # R2
-    r2 = model.score(y_true.reshape((-1, 1)), y_pred)
+    r2 = model.score(y_reshaped, y_pred)
     plt.plot([], [], ' ', label=f"R2 = {round(r2,5)}")
 
     _set_ax_settings(ax, 'y_true', 'y_pred', 'Prediction Error')
