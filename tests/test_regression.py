@@ -8,10 +8,21 @@ from sklearn.datasets import make_regression
 from sklearn_evaluation import plot
 
 y_true = np.array([105, 120, 120, 160, 120, 145, 175, 160, 185, 210, 150])
-y_pred = np.array([
-    108.19, 115.16, 122.13, 136.06, 136.06, 156.97, 163.94, 170.91, 184.84,
-    205.75, 151.23
-])
+y_pred = np.array(
+    [
+        108.19,
+        115.16,
+        122.13,
+        136.06,
+        136.06,
+        156.97,
+        163.94,
+        170.91,
+        184.84,
+        205.75,
+        151.23,
+    ]
+)
 
 X, y = make_regression(
     n_samples=100,
@@ -24,9 +35,7 @@ X, y = make_regression(
 )
 
 
-@image_comparison(baseline_images=['residual'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(baseline_images=["residual"], extensions=["png"], remove_text=True)
 def test_residuals():
     plot.residuals(y_true, y_pred)
 
@@ -42,9 +51,9 @@ def test_prediction_error(y_true, y_pred):
     plot.prediction_error(y_true, y_pred)
 
 
-@image_comparison(baseline_images=['cooks_distance'],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(
+    baseline_images=["cooks_distance"], extensions=["png"], remove_text=True
+)
 def test_cooks_distance():
     plot.cooks_distance(X, y)
 

@@ -26,8 +26,8 @@ from sklearn.utils.multiclass import unique_labels, type_of_target
 
 def _validate_target(y):
     """
-        Raises a value error if the target is not a classification target.
-        """
+    Raises a value error if the target is not a classification target.
+    """
     # Ignore None values
     if y is None:
         return
@@ -35,11 +35,11 @@ def _validate_target(y):
     y_type = type_of_target(y)
     if y_type not in ("binary", "multiclass"):
         raise TypeError(
-            "'{}' target type not supported, only binary and multiclass".
-            format(y_type))
+            "'{}' target type not supported, only binary and multiclass".format(y_type)
+        )
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
+@SKLearnEvaluationLogger.log(feature="plot")
 def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
     """Target analysis plot for visualising class imbalance.
 
@@ -94,19 +94,21 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
     _validate_target(y_train)
     _validate_target(y_test)
     # Get the unique values from the dataset
-    targets = (y_train, ) if y_test is None else (y_train, y_test)
+    targets = (y_train,) if y_test is None else (y_train, y_test)
     classes_ = unique_labels(*targets)
     if labels is not None:
         if len(labels) != len(classes_):
             raise ValueError(
-                ("Discovered {} classes in the data, does not match "
-                 "the {} labels specified.").format(len(classes_),
-                                                    len(labels)))
+                (
+                    "Discovered {} classes in the data, does not match "
+                    "the {} labels specified."
+                ).format(len(classes_), len(labels))
+            )
 
     if ax is None:
         ax = plt.gca()
-    mode = 'balance' if y_test is None else 'compare'
-    if mode == 'balance':
+    mode = "balance" if y_test is None else "compare"
+    if mode == "balance":
         support_ = np.array([(y_train == idx).sum() for idx in classes_])
         ax.bar(
             np.arange(len(support_)),
@@ -116,28 +118,23 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
             width=0.5,
         )
     else:
-        support_ = np.array([[(y == idx).sum() for idx in classes_]
-                             for y in targets])
+        support_ = np.array([[(y == idx).sum() for idx in classes_] for y in targets])
         bar_width = 0.35
         legends = ["train", "test"]
-        colors = colors if colors else ['#0070FF', '#FF9B00']
+        colors = colors if colors else ["#0070FF", "#FF9B00"]
         for idx, support in enumerate(support_):
             index = np.arange(len(classes_))
             if idx > 0:
                 index = index + bar_width
 
-            ax.bar(index,
-                   support,
-                   bar_width,
-                   color=colors[idx],
-                   label=legends[idx])
+            ax.bar(index, support, bar_width, color=colors[idx], label=legends[idx])
 
     ax.set_title("Class Balance for {:,} Instances".format(support_.sum()))
 
     # Set the x ticks with the class names or labels if specified
     labels = labels if labels else classes_
     xticks = np.arange(len(labels))
-    if mode == 'compare':
+    if mode == "compare":
         xticks = xticks + (0.35 / 2)
 
     ax.set_xticks(xticks)
@@ -150,10 +147,10 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
 
     # Remove the vertical grid
     ax.set_axisbelow(True)
-    ax.yaxis.grid(True, color='#808080')
+    ax.yaxis.grid(True, color="#808080")
     ax.autoscale(enable=True)
 
-    if mode == 'compare':
+    if mode == "compare":
         ax.legend(frameon=True)
 
     return ax

@@ -1,16 +1,21 @@
 import pytest
 import numpy as np
 
-from sklearn_evaluation.util import (_can_iterate, is_column_vector,
-                                     is_row_vector, _group_by, _product,
-                                     _mapping_to_tuple_pairs,
-                                     map_parameters_in_fn_call)
+from sklearn_evaluation.util import (
+    _can_iterate,
+    is_column_vector,
+    is_row_vector,
+    _group_by,
+    _product,
+    _mapping_to_tuple_pairs,
+    map_parameters_in_fn_call,
+)
 
 # can iterate
 
 
 def test_can_terate_with_str():
-    assert not _can_iterate('')
+    assert not _can_iterate("")
 
 
 def test_can_terate_with_int():
@@ -57,129 +62,71 @@ def test_column_vector_multid_array():
 
 def test_group_by_all_different():
     all_diferent = [{1: 1}, {2: 2}, {3: 3}, {4: 4}, {5: 5}, {6: 6}]
-    d = {
-        1: [{
-            1: 1
-        }],
-        2: [{
-            2: 2
-        }],
-        3: [{
-            3: 3
-        }],
-        4: [{
-            4: 4
-        }],
-        5: [{
-            5: 5
-        }],
-        6: [{
-            6: 6
-        }]
-    }
+    d = {1: [{1: 1}], 2: [{2: 2}], 3: [{3: 3}], 4: [{4: 4}], 5: [{5: 5}], 6: [{6: 6}]}
     assert _group_by(all_diferent, lambda s: list(s.keys())[0]) == d
 
 
 def test_group_by_group_by_key():
-    common_key_values = [{
-        1: 1,
-        'key': 'value'
-    }, {
-        2: 2,
-        'key': 'value'
-    }, {
-        3: 3,
-        'key': 'value'
-    }, {
-        4: 4,
-        'key': 'value2'
-    }, {
-        5: 5,
-        'key': 'value2'
-    }, {
-        6: 6,
-        'key': 'value3'
-    }]
+    common_key_values = [
+        {1: 1, "key": "value"},
+        {2: 2, "key": "value"},
+        {3: 3, "key": "value"},
+        {4: 4, "key": "value2"},
+        {5: 5, "key": "value2"},
+        {6: 6, "key": "value3"},
+    ]
     d = {
-        'value': [{
-            1: 1,
-            'key': 'value'
-        }, {
-            2: 2,
-            'key': 'value'
-        }, {
-            3: 3,
-            'key': 'value'
-        }],
-        'value2': [{
-            4: 4,
-            'key': 'value2'
-        }, {
-            5: 5,
-            'key': 'value2'
-        }],
-        'value3': [{
-            6: 6,
-            'key': 'value3'
-        }]
+        "value": [
+            {1: 1, "key": "value"},
+            {2: 2, "key": "value"},
+            {3: 3, "key": "value"},
+        ],
+        "value2": [{4: 4, "key": "value2"}, {5: 5, "key": "value2"}],
+        "value3": [{6: 6, "key": "value3"}],
     }
-    assert _group_by(common_key_values, 'key') == d
+    assert _group_by(common_key_values, "key") == d
 
 
 def test_group_by_using_fn():
-    requires_fn = [{
-        'k': 'v   '
-    }, {
-        'k': '     v   '
-    }, {
-        'k': 'v   '
-    }, {
-        'k': 'v2   '
-    }, {
-        'k': 'v2'
-    }, {
-        'k': ' v2     '
-    }]
+    requires_fn = [
+        {"k": "v   "},
+        {"k": "     v   "},
+        {"k": "v   "},
+        {"k": "v2   "},
+        {"k": "v2"},
+        {"k": " v2     "},
+    ]
     d = {
-        'v': [{
-            'k': 'v   '
-        }, {
-            'k': '     v   '
-        }, {
-            'k': 'v   '
-        }],
-        'v2': [{
-            'k': 'v2   '
-        }, {
-            'k': 'v2'
-        }, {
-            'k': ' v2     '
-        }]
+        "v": [{"k": "v   "}, {"k": "     v   "}, {"k": "v   "}],
+        "v2": [{"k": "v2   "}, {"k": "v2"}, {"k": " v2     "}],
     }
-    assert _group_by(requires_fn, lambda d: d['k'].strip()) == d
+    assert _group_by(requires_fn, lambda d: d["k"].strip()) == d
 
 
 # test mapping to tuple
 
 
 def test_mapping_tuple_single_kv():
-    d = {'a': [1, 2, 3]}
-    assert _mapping_to_tuple_pairs(d) == ((('a', 1), ), (('a', 2), ), (('a',
-                                                                        3), ))
+    d = {"a": [1, 2, 3]}
+    assert _mapping_to_tuple_pairs(d) == ((("a", 1),), (("a", 2),), (("a", 3),))
 
 
 def test_mapping_tuple():
-    d = {'a': [1, 2, 3], 'b': [4]}
-    assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
-                                          (('a', 2), ('b', 4)), (('a', 3),
-                                                                 ('b', 4)))
+    d = {"a": [1, 2, 3], "b": [4]}
+    assert _mapping_to_tuple_pairs(d) == (
+        (("a", 1), ("b", 4)),
+        (("a", 2), ("b", 4)),
+        (("a", 3), ("b", 4)),
+    )
 
 
 def test_mapping_tuple_single_element():
-    d = {'a': [1, 2, 3], 'b': 4}
-    assert _mapping_to_tuple_pairs(d) == ((('a', 1), ('b', 4)),
-                                          (('a', 2), ('b', 4)), (('a', 3),
-                                                                 ('b', 4)))
+    d = {"a": [1, 2, 3], "b": 4}
+    assert _mapping_to_tuple_pairs(d) == (
+        (("a", 1), ("b", 4)),
+        (("a", 2), ("b", 4)),
+        (("a", 3), ("b", 4)),
+    )
 
 
 def test_order_does_not_matter():
@@ -226,33 +173,22 @@ def test_one_len_lists():
 
 
 def test_mixed_types():
-    a = ['a', 'b']
+    a = ["a", "b"]
     b = [(1, 2, 3)]
-    assert _product(a, b) == [('a', (1, 2, 3)), ('b', (1, 2, 3))]
+    assert _product(a, b) == [("a", (1, 2, 3)), ("b", (1, 2, 3))]
 
 
 def fn(a, b, c=None):
     pass
 
 
-@pytest.mark.parametrize('args, kwargs, expected', [
-    [[1, 2, 3], {}, {
-        'a': 1,
-        'b': 2,
-        'c': 3
-    }],
-    [[1, 2], {
-        'c': 3
-    }, {
-        'a': 1,
-        'b': 2,
-        'c': 3
-    }],
-    [[1, 2], {}, {
-        'a': 1,
-        'b': 2,
-        'c': None
-    }],
-])
+@pytest.mark.parametrize(
+    "args, kwargs, expected",
+    [
+        [[1, 2, 3], {}, {"a": 1, "b": 2, "c": 3}],
+        [[1, 2], {"c": 3}, {"a": 1, "b": 2, "c": 3}],
+        [[1, 2], {}, {"a": 1, "b": 2, "c": None}],
+    ],
+)
 def test_map_parameters_in_fn_call(args, kwargs, expected):
     assert map_parameters_in_fn_call(args, kwargs, fn) == expected

@@ -1,8 +1,14 @@
 CHANGELOG
 =========
 
-0.8.5dev
+0.8.6dev
 --------
+
+0.8.5 (2022-12-29)
+------------------
+* Fixes to ``plot.elbow_curve``: no longer hardcoding figure size, random seed for model, also showing ``n_clusters`` in title
+* Fixes error when passing array to ``table.feature_importances`` (#144)
+* Adds clustering quick start
 
 0.8.4 (2022-12-24)
 ------------------

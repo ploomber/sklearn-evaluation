@@ -57,5 +57,5 @@ __all__ = [
     "lift_curve",
     "Rank1D",
     "Rank2D",
-    "cooks_distance"
+    "cooks_distance",
 ]

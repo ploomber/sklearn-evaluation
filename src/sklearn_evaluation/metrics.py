@@ -26,16 +26,15 @@ def compute_at_thresholds(fn, y_true, y_score, n_thresholds=10, start=0.0):
     ...                                    y_true, y_score)
     """
     if util.isiter(fn):
-        (thresholds,
-         Y_pred) = binarize.scores_at_thresholds(y_score,
-                                                 n_thresholds=n_thresholds)
-        metrics = [np.array([fn_(y_true, y_pred) for y_pred in Y_pred])
-                   for fn_ in fn]
+        (thresholds, Y_pred) = binarize.scores_at_thresholds(
+            y_score, n_thresholds=n_thresholds
+        )
+        metrics = [np.array([fn_(y_true, y_pred) for y_pred in Y_pred]) for fn_ in fn]
         return thresholds, metrics
     else:
-        (thresholds,
-         Y_pred) = binarize.scores_at_thresholds(y_score,
-                                                 n_thresholds=n_thresholds)
+        (thresholds, Y_pred) = binarize.scores_at_thresholds(
+            y_score, n_thresholds=n_thresholds
+        )
         metrics = np.array([fn(y_true, y_pred) for y_pred in Y_pred])
         return thresholds, metrics
 
@@ -44,12 +43,12 @@ def confusion_matrix(y_true, y_pred, normalize):
     pass
 
 
-@validate.argument_is_proportion('top_proportion')
+@validate.argument_is_proportion("top_proportion")
 def precision_at(y_true, y_score, top_proportion, ignore_nas=False):
-    '''
+    """
     Calculates precision at a given proportion.
     Only supports binary classification.
-    '''
+    """
     # Sort scores in descending order
     scores_sorted = np.sort(y_score)[::-1]
 
@@ -71,10 +70,10 @@ def precision_at(y_true, y_score, top_proportion, ignore_nas=False):
 
 
 def __precision(y_true, y_pred):
-    '''
-        Precision metric tolerant to unlabeled data in y_true,
-        NA values are ignored for the precision calculation
-    '''
+    """
+    Precision metric tolerant to unlabeled data in y_true,
+    NA values are ignored for the precision calculation
+    """
     # make copies of the arrays to avoid modifying the original ones
     y_true = np.copy(y_true)
     y_pred = np.copy(y_pred)
@@ -90,39 +89,39 @@ def __precision(y_true, y_pred):
     return precision
 
 
-@validate.argument_is_proportion('top_proportion')
+@validate.argument_is_proportion("top_proportion")
 def tp_at(y_true, y_score, top_proportion):
     y_pred = binarize.scores_at_top_proportion(y_score, top_proportion)
     tp = (y_pred == 1) & (y_true == 1)
     return tp.sum()
 
 
-@validate.argument_is_proportion('top_proportion')
+@validate.argument_is_proportion("top_proportion")
 def fp_at(y_true, y_score, top_proportion):
     y_pred = binarize.scores_at_top_proportion(y_score, top_proportion)
     fp = (y_pred == 1) & (y_true == 0)
     return fp.sum()
 
 
-@validate.argument_is_proportion('top_proportion')
+@validate.argument_is_proportion("top_proportion")
 def tn_at(y_true, y_score, top_proportion):
     y_pred = binarize.scores_at_top_proportion(y_score, top_proportion)
     tn = (y_pred == 0) & (y_true == 0)
     return tn.sum()
 
 
-@validate.argument_is_proportion('top_proportion')
+@validate.argument_is_proportion("top_proportion")
 def fn_at(y_true, y_score, top_proportion):
     y_pred = binarize.scores_at_top_proportion(y_score, top_proportion)
     fn = (y_pred == 0) & (y_true == 1)
     return fn.sum()
 
 
-@validate.argument_is_proportion('top_proportion')
+@validate.argument_is_proportion("top_proportion")
 def labels_at(y_true, y_score, top_proportion, normalize=False):
-    '''
-        Return the number of labels encountered in the top  X proportion
-    '''
+    """
+    Return the number of labels encountered in the top  X proportion
+    """
     # Get indexes of scores sorted in descending order
     indexes = np.argsort(y_score)[::-1]
 
@@ -132,7 +131,7 @@ def labels_at(y_true, y_score, top_proportion, normalize=False):
     # Grab top x proportion of true values
     cutoff_index = max(int(len(y_true_sorted) * top_proportion) - 1, 0)
     # add one to index to grab values including that index
-    y_true_top = y_true_sorted[:cutoff_index + 1]
+    y_true_top = y_true_sorted[: cutoff_index + 1]
 
     # Count the number of non-nas in the top x proportion
     # we are returning a count so it should be an int

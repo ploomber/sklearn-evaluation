@@ -1,4 +1,4 @@
-__version__ = '0.8.5dev'
+__version__ = "0.8.6dev"
 
 from .evaluator import ClassifierEvaluator
 from .nb.NotebookIntrospector import NotebookIntrospector
@@ -8,11 +8,11 @@ from .tracker import SQLiteTracker
 from .telemetry import telemetry
 
 __all__ = [
-    'ClassifierEvaluator',
-    'NotebookIntrospector',
-    'SQLiteTracker',
-    'NotebookCollection',
-    'NotebookDatabase',
+    "ClassifierEvaluator",
+    "NotebookIntrospector",
+    "SQLiteTracker",
+    "NotebookCollection",
+    "NotebookDatabase",
 ]
 
-telemetry.log_api('imported')
+telemetry.log_api("imported")

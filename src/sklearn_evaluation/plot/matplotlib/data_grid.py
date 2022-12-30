@@ -8,19 +8,22 @@ class DataGrid:
         df = pd.DataFrame.from_dict(records)
 
         # columns that will be interpreted as paramers
-        params = sorted(set(df.columns) - set(['data']))
+        params = sorted(set(df.columns) - set(["data"]))
 
         if group_by is None:
             if len(params) != 2:
-                raise ValueError('There should be exactly two columns apart '
-                                 f'from data, found: {len(params)} ({params}) '
-                                 'if group_by is not specified')
+                raise ValueError(
+                    "There should be exactly two columns apart "
+                    f"from data, found: {len(params)} ({params}) "
+                    "if group_by is not specified"
+                )
             else:
                 group_by = params
         else:
             if len(group_by) != 2:
-                raise ValueError('group_by must have 2 elements, '
-                                 f'got: {len(group_by)}')
+                raise ValueError(
+                    "group_by must have 2 elements, " f"got: {len(group_by)}"
+                )
 
         self.params = params
         self.group_by = group_by
@@ -29,11 +32,9 @@ class DataGrid:
         unique = [df[p].unique().tolist() for p in params]
         prod = pd.MultiIndex.from_product(unique, names=params)
 
-        df = (df.set_index(params).reindex(prod,
-                                           fill_value=np.nan).reset_index())
+        df = df.set_index(params).reindex(prod, fill_value=np.nan).reset_index()
 
-        self.shape = len(df[group_by[0]].unique()), len(
-            df[group_by[1]].unique())
+        self.shape = len(df[group_by[0]].unique()), len(df[group_by[1]].unique())
         self.df = df.sort_values(group_by)
 
     def celliter(self):
@@ -49,13 +50,13 @@ class DataGrid:
             # then ['data'].values will return the values for a fixed param1
             # in increasing param2 order
             if len(self.params) == 2:
-                yield name, group['data'].values
+                yield name, group["data"].values
             # if there are more than one params, then we have to do a second
             # group_by, so the values are grouped together for a fixed
             # (param1, param2) combination
             else:
                 values = [
-                    df_sub['data'].values
+                    df_sub["data"].values
                     for _, df_sub in group.groupby(self.group_by[1])
                 ]
                 yield name, values

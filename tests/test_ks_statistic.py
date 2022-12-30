@@ -41,10 +41,12 @@ def _convert_labels_into_string(y_true):
     return ["A" if x == 0 else x for x in y_true]
 
 
-@image_comparison(baseline_images=['string_classes_ks_statistics'],
-                  extensions=['png'],
-                  remove_text=True,
-                  tol=21.0)
+@image_comparison(
+    baseline_images=["string_classes_ks_statistics"],
+    extensions=["png"],
+    remove_text=True,
+    tol=21.0,
+)
 def test_string_classes():
     clf = LogisticRegression(random_state=101)
     clf.fit(X, _convert_labels_into_string(y))
@@ -60,8 +62,7 @@ def test_two_classes():
     probas = clf.predict_proba(X)
     with pytest.raises(ValueError) as e:
         ks_statistic(y, probas)
-    assert "Cannot calculate KS statistic for data with 3 category/ies" in str(
-        e.value)
+    assert "Cannot calculate KS statistic for data with 3 category/ies" in str(e.value)
 
 
 def test_ax():
@@ -76,13 +77,16 @@ def test_ax():
     assert ax is out_ax
 
 
-@image_comparison(baseline_images=[
-    'array_like_ks_statistics_1', 'array_like_ks_statistics_2',
-    'array_like_ks_statistics_3'
-],
-                  extensions=['png'],
-                  remove_text=True)
+@image_comparison(
+    baseline_images=[
+        "array_like_ks_statistics_1",
+        "array_like_ks_statistics_2",
+        "array_like_ks_statistics_3",
+    ],
+    extensions=["png"],
+    remove_text=True,
+)
 def test_array_like():
     ks_statistic([0, 1], [[0.8, 0.2], [0.2, 0.8]])
-    ks_statistic([0, 'a'], [[0.8, 0.2], [0.2, 0.8]])
-    ks_statistic(['b', 'a'], [[0.8, 0.2], [0.2, 0.8]])
+    ks_statistic([0, "a"], [[0.8, 0.2], [0.2, 0.8]])
+    ks_statistic(["b", "a"], [[0.8, 0.2], [0.2, 0.8]])

@@ -2,7 +2,7 @@ from copy import copy
 
 from . import compute
 
-__all__ = ['feature_importances']
+__all__ = ["feature_importances"]
 
 
 def extend_to(list_, n):
@@ -24,9 +24,9 @@ def fixed_length_lists(lists):
 class Table:
     def __init__(self, content, header):
         try:
-            self._tabulate = __import__('tabulate').tabulate
+            self._tabulate = __import__("tabulate").tabulate
         except ImportError:
-            raise ImportError('tabulate is required to use the table module')
+            raise ImportError("tabulate is required to use the table module")
         self.content = content
         self.header = header
 
@@ -36,14 +36,10 @@ class Table:
         return cls(rows, header)
 
     def to_html(self):
-        return self._tabulate(self.content,
-                              headers=self.header,
-                              tablefmt='html')
+        return self._tabulate(self.content, headers=self.header, tablefmt="html")
 
     def __str__(self):
-        return self._tabulate(self.content,
-                              headers=self.header,
-                              tablefmt='grid')
+        return self._tabulate(self.content, headers=self.header, tablefmt="grid")
 
     def _repr_html_(self):
         return self.to_html()
@@ -82,9 +78,11 @@ def feature_importances(data, top_n=None, feature_names=None):
 
     """
     if data is None:
-        raise ValueError('data is needed to tabulate feature importances. '
-                         'When plotting using the evaluator you need to pass '
-                         'an estimator ')
+        raise ValueError(
+            "data is needed to tabulate feature importances. "
+            "When plotting using the evaluator you need to pass "
+            "an estimator "
+        )
 
     res = compute.feature_importances(data, top_n, feature_names)
     return Table(res, res.dtype.names)
