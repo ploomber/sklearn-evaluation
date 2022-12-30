@@ -25,10 +25,7 @@ Let's import the required libraries and read the dataset.
 
 ```{code-cell} ipython3
 import urllib.request
-import numpy as np 
 import pandas as pd 
-import os
-import matplotlib.pyplot as plt
 import seaborn as sns
 import warnings
 warnings.filterwarnings('ignore')
@@ -39,8 +36,7 @@ from sklearn.metrics import r2_score
 from sklearn_evaluation import plot
 
 # download dataset
-#urllib.request.urlretrieve('https://raw.githubusercontent.com/ploomber/sklearn-evaluation/master/docs-assets/nb-collection/train.py', filename='train.py')
-urllib.request.urlretrieve('https://raw.githubusercontent.com/neelasha23/sklearn-evaluation/reg_quickstart/docs-assets/regression/insurance.csv', filename='insurance.csv')
+urllib.request.urlretrieve('https://raw.githubusercontent.com/ploomber/sklearn-evaluation/master/docs-assets/regression/insurance.csv', filename='insurance.csv')
 
 data = pd.read_csv('insurance.csv')
 ```
