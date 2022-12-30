@@ -40,13 +40,14 @@ def test_residuals():
     plot.residuals(y_true, y_pred)
 
 
-@pytest.mark.parametrize("y_true, y_pred",
-                         [(y_true, y_pred),
-                          (pd.Series(y_true), pd.Series(y_pred))],
-                         ids=["numpy", "pandas"])
-@image_comparison(baseline_images=['prediction_error'],
-                  extensions=['png'],
-                  remove_text=True)
+@pytest.mark.parametrize(
+    "y_true, y_pred",
+    [(y_true, y_pred), (pd.Series(y_true), pd.Series(y_pred))],
+    ids=["numpy", "pandas"],
+)
+@image_comparison(
+    baseline_images=["prediction_error"], extensions=["png"], remove_text=True
+)
 def test_prediction_error(y_true, y_pred):
     plot.prediction_error(y_true, y_pred)
 
