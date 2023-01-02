@@ -121,9 +121,8 @@ def prediction_error(y_true, y_pred, model=None, ax=None):
         )
 
     if isinstance(y_true, pd.Series):
-        y_reshaped = y_true.values.reshape((-1, 1))
-    else:
-        y_reshaped = y_true.reshape((-1, 1))
+        y_true = y_true.values
+    y_reshaped = y_true.reshape((-1, 1))
     # best fit line
     model.fit(y_reshaped, y_pred)
     x = np.linspace(min(y_true), max(y_true))
