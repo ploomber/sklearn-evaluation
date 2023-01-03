@@ -200,19 +200,7 @@ def roc_multi_classification_values_set2():
 
 
 @pytest.fixture
-def regression_data_one():
-    from sklearn.linear_model import LinearRegression
-
-    X, y = datasets.load_diabetes(return_X_y=True)
-    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
-    model = LinearRegression()
-    model.fit(X_train, y_train)
-    y_pred = model.predict(X_test)
-    return y_test, y_pred
-
-
-@pytest.fixture
-def regression_data_two():
+def regression_data():
     from sklearn.linear_model import LinearRegression
 
     X, y = datasets.make_regression(

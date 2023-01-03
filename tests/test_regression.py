@@ -56,21 +56,19 @@ def test_prediction_error(y_true, y_pred):
     baseline_images=["prediction_error_lines_one"],
     extensions=["png"],
     remove_text=True,
-    tol=1.2,
+    tol=0.1,
 )
-def test_prediction_error_lines_one(regression_data_one):
-    y_true, y_pred = regression_data_one
+def test_prediction_error_lines_one(regression_data):
+    y_true, y_pred = regression_data
     plot.prediction_error(y_true, y_pred)
 
 
 @image_comparison(
-    baseline_images=["prediction_error_lines_two"],
-    extensions=["png"],
-    remove_text=True,
-    tol=0.1,
+    baseline_images=["prediction_error_lines_two"], extensions=["png"], remove_text=True
 )
-def test_prediction_error_lines_two(regression_data_two):
-    y_true, y_pred = regression_data_two
+def test_prediction_error_lines_two():
+    y_true = np.array([150, 500, 750, 35, 1200])
+    y_pred = np.array([155, 495, 703, 41, 950])
     plot.prediction_error(y_true, y_pred)
 
 
