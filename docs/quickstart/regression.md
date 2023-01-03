@@ -111,7 +111,10 @@ plot.residuals(y_test, y_pred)
 
 ## Prediction Error Plot
 
-Another diagnostic tool to analyse the regression model is the prediction error plot. This plot visualises the observed target values against the values predicted by the model. The closer the best fit and the identity lines, the better the correlation between the predicted and the actual outcome.
+Another diagnostic tool to analyse the regression model is the prediction error plot. This plot visualises the observed target values against the values predicted by the model. 
+The identity line represents the best case scenario where every predicted outcome is accurate. 
+The best fit line represents the trend in the actual predicted outcomes.
+The closer the best fit and the identity lines, the better the correlation between the predicted and the actual outcome.
 
 From the below plot we can see there is a fairly small deviation between the best fit and the identity lines, hence the model performance is good.
 ```{code-cell} ipython3
