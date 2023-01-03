@@ -113,6 +113,7 @@ plot.residuals(y_test, y_pred)
 
 Another diagnostic tool to analyse the regression model is the prediction error plot. This plot visualises the observed target values against the values predicted by the model. The closer the best fit and the identity lines, the better the correlation between the predicted and the actual outcome.
 
+From the below plot we can see there is a fairly small deviation between the best fit and the identity lines, hence the model performance is good.
 ```{code-cell} ipython3
 plot.prediction_error(y_test, y_pred)
 ```
@@ -121,6 +122,7 @@ plot.prediction_error(y_test, y_pred)
 
 Cook's distance is a metric that can be used for detecting outliers in the dataset. Outliers are data points that vary significantly from the rest of the data points in the training set. The presence of outliers in the training phase can affect the parameters that the model learns. 
 Cook's distance measures how much a regression model changes when a particular data point is removed from the dataset. From the plot we can see that the large spikes are the data points that can influence the model and affect the results significantly. Removal of these outlier points should be done after careful inspection.
+
 The following guidelines will help you understand how to deal with outliers:
 - If the data point can be determined as erroneous, remove it. This can happen if typos are made during data entry, or experiments are not run properly.
 - If the data point doesn't belong to the target population and has been mistakenly added while sampling, then remove it.
