@@ -103,9 +103,7 @@ def cumulative_gain(
     """
     Generates the Cumulative Gains Plot from labels and scores/probabilities
     The cumulative gains chart is used to determine the effectiveness of a
-    binary classifier. A detailed explanation can be found at
-    http://mlwiki.org/index.php/Cumulative_Gain_Chart. The implementation
-    here works only for binary classification.
+    binary classifier. The implementation here works only for binary classification.
 
     Parameters
     ----------
