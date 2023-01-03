@@ -53,6 +53,22 @@ def test_prediction_error(y_true, y_pred):
 
 
 @image_comparison(
+    baseline_images=["prediction_error_lines_one"], extensions=["png"], remove_text=True
+)
+def test_prediction_error_lines_one(regression_data_one):
+    y_true, y_pred = regression_data_one
+    plot.prediction_error(y_true, y_pred)
+
+
+@image_comparison(
+    baseline_images=["prediction_error_lines_two"], extensions=["png"], remove_text=True
+)
+def test_prediction_error_lines_two(regression_data_two):
+    y_true, y_pred = regression_data_two
+    plot.prediction_error(y_true, y_pred)
+
+
+@image_comparison(
     baseline_images=["cooks_distance"], extensions=["png"], remove_text=True
 )
 def test_cooks_distance():
