@@ -120,7 +120,7 @@ plot.prediction_error(y_test, y_pred)
 
 ## Outlier Detection 
 
-Cook's distance is a metric that can be used for detecting outliers in the dataset. Outliers are data points that vary significantly from the rest of the data points in the training set. The presence of outliers in the training phase can affect the parameters that the model learns. 
+Outliers are data points that vary significantly from the rest of the data points in the training set. The presence of outliers in the training phase can affect the parameters that the model learns, thereby affecting model performance. 
 Cook's distance measures how much a regression model changes when a particular data point is removed from the dataset. From the plot we can see that the large spikes are the data points that can influence the model and affect the results significantly. Removal of these outlier points should be done after careful inspection.
 
 The following guidelines will help you understand how to deal with outliers:
