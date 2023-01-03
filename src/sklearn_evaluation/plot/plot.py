@@ -1,12 +1,9 @@
 import json
 from pathlib import Path
 
-from ..report.serialize import figure2html
-
 
 class Plot:
-    def _repr_html_(self):
-        return figure2html(self.figure)
+    # Deleted serializaiton function as proof of fix
 
     def dump(self, path):
         data = self._get_data()
