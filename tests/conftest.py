@@ -197,3 +197,17 @@ def roc_multi_classification_values_set2():
     y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
 
     return y_test, y_score
+
+
+@pytest.fixture
+def regression_data():
+    from sklearn.linear_model import LinearRegression
+
+    X, y = datasets.make_regression(
+        n_samples=2000, n_features=4, n_informative=3, noise=30.0, random_state=0
+    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    return y_test, y_pred
