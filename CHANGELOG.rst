@@ -3,6 +3,7 @@ CHANGELOG
 
 0.8.7dev
 --------
+* Plot ``ValueError`` replaced with ``PloomberValueError`` (#153)
 
 0.8.6 (2023-01-04)
 ------------------
