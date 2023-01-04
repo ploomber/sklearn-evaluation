@@ -104,7 +104,7 @@ def prediction_error(y_true, y_pred, model="deprecated", ax=None):
     Notes
     -----
     .. deprecated:: 0.8.6
-        'model' argument is deprecated, will be removed in version 0.8.8
+        'model' argument is deprecated, will be removed in version 0.9
 
     Examples
     --------
@@ -113,7 +113,7 @@ def prediction_error(y_true, y_pred, model="deprecated", ax=None):
     """
 
     deprecated.parameter_deprecated(
-        deprecated_in="0.8.6", removed_in="0.8.8", name_old="model", value_passed=model
+        deprecated_in="0.8.6", removed_in="0.9", name_old="model", value_passed=model
     )
 
     _check_parameter_validity(y_true, y_pred)

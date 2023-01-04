@@ -1,10 +1,13 @@
-import matplotlib.pyplot as plt
 import pytest
+import warnings
+
 import numpy as np
 import pandas as pd
-from matplotlib.testing.decorators import image_comparison
 from sklearn.datasets import make_regression
+import matplotlib.pyplot as plt
+from matplotlib.testing.decorators import image_comparison
 
+from ploomber_core.warnings import PloomberDeprecationWarning
 from sklearn_evaluation import plot
 
 y_true = np.array([105, 120, 120, 160, 120, 145, 175, 160, 185, 210, 150])
@@ -70,6 +73,19 @@ def test_prediction_error_lines_two():
     y_true = np.array([150, 500, 750, 35, 1200])
     y_pred = np.array([155, 495, 703, 41, 950])
     plot.prediction_error(y_true, y_pred)
+
+
+def test_model_deprecation_warning():
+    from sklearn.linear_model import Lasso
+
+    with pytest.warns(PloomberDeprecationWarning) as record:
+        lasso = Lasso()
+        plot.prediction_error(y_true, y_pred, model=lasso)
+    assert len(record) == 1
+    assert (
+        "'model' was deprecated in version 0.8.6. 'model' will be removed in 0.9."
+        in record[0].message.args[0]
+    )
 
 
 @image_comparison(
