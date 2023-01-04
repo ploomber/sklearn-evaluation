@@ -3,15 +3,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
  
-import os
-import sys
-import inspect
-
-currentdir = os.path.dirname(os.path.abspath(inspect.getfile(inspect.currentframe())))
-parentdir = os.path.dirname(currentdir)
-sys.path.insert(0, parentdir) 
-
-from src.sklearn_evaluation import plot
+from sklearn_evaluation import plot
 
 X, y = datasets.make_classification(
     1000, 20, n_informative=10, class_sep=0.80, n_classes=3, random_state=0
