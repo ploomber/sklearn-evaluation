@@ -31,6 +31,8 @@ from sklearn.model_selection import train_test_split
 
 from sklearn_evaluation import plot
 
+from ploomber_core.exceptions import PloomberValueError
+
 iris_data = datasets.load_iris()
 
 
@@ -53,7 +55,7 @@ def test_class_names_must_match(target_analysis_binary):
 
     _, _, y_train, y_test = target_analysis_binary
 
-    with pytest.raises(ValueError):
+    with pytest.raises(PloomberValueError):
         plot.target_analysis(y_train, y_test=y_test, labels=["a", "b", "c"])
 
 

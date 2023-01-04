@@ -12,6 +12,7 @@ from sklearn_evaluation.util import default_heatmap
 from sklearn_evaluation.plot.plot import Plot
 from sklearn_evaluation.plot import _matrix
 from sklearn_evaluation import __version__
+from ploomber_core.exceptions import PloomberValueError
 
 
 def _classification_report_add(first, second, keys, target_names, ax):
@@ -70,23 +71,26 @@ class ClassificationReport(Plot):
                 stacklevel=2,
             )
 
-        self.figure = plt.figure()
-        ax = self.figure.add_subplot()
+        try:
+            self.figure = plt.figure()
+            ax = self.figure.add_subplot()
 
-        if matrix is not None and matrix is not False:
-            self.matrix = matrix
-            self.keys = keys
-            self.target_names = target_names
-        else:
-            self.matrix, self.keys, self.target_names = _classification_report(
-                y_true,
-                y_pred,
-                target_names=target_names,
-                sample_weight=sample_weight,
-                zero_division=zero_division,
-            )
+            if matrix is not None and matrix is not False:
+                self.matrix = matrix
+                self.keys = keys
+                self.target_names = target_names
+            else:
+                self.matrix, self.keys, self.target_names = _classification_report(
+                    y_true,
+                    y_pred,
+                    target_names=target_names,
+                    sample_weight=sample_weight,
+                    zero_division=zero_division,
+                )
 
-        _classification_report_plot(self.matrix, self.keys, self.target_names, ax)
+            _classification_report_plot(self.matrix, self.keys, self.target_names, ax)
+        except ValueError as e:
+            raise PloomberValueError(e)
 
     @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-sub")
     def __sub__(self, other):
@@ -228,15 +232,19 @@ def classification_report(
     .. plot:: ../examples/classification_report_multiclass.py
     """
 
-    if ax is None:
-        ax = plt.gca()
+    try:
+        if ax is None:
+            ax = plt.gca()
 
-    matrix, keys, target_names = _classification_report(
-        y_true,
-        y_pred,
-        target_names=target_names,
-        sample_weight=sample_weight,
-        zero_division=zero_division,
-    )
+        matrix, keys, target_names = _classification_report(
+            y_true,
+            y_pred,
+            target_names=target_names,
+            sample_weight=sample_weight,
+            zero_division=zero_division,
+        )
 
-    return _classification_report_plot(matrix, keys, target_names, ax)
+        return _classification_report_plot(matrix, keys, target_names, ax)
+
+    except ValueError as e:
+        raise PloomberValueError(e)

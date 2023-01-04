@@ -33,7 +33,7 @@ from matplotlib.testing.decorators import image_comparison
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer, load_iris
 from sklearn_evaluation.plot import ks_statistic
-
+from ploomber_core.exceptions import PloomberValueError
 X, y = load_breast_cancer(return_X_y=True)
 
 
@@ -60,7 +60,7 @@ def test_two_classes():
     clf = LogisticRegression()
     clf.fit(X, y)
     probas = clf.predict_proba(X)
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(PloomberValueError) as e:
         ks_statistic(y, probas)
     assert "Cannot calculate KS statistic for data with 3 category/ies" in str(e.value)
 

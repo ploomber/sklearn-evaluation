@@ -37,8 +37,11 @@ from joblib import Parallel, delayed
 
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
+from ploomber_core.exceptions import PloomberValueError
 
 # TODO: add unit test
+
+
 @SKLearnEvaluationLogger.log(feature="plot")
 def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=None):
     """Plots elbow curve of different values of K of a clustering algorithm.
@@ -79,24 +82,28 @@ def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=No
     .. plot:: ../examples/elbow_curve.py
 
     """
-    if n_clusters is None:
-        n_clusters = range(1, 10, 2)
-    else:
-        n_clusters = sorted(n_clusters)
+    try:
+        if n_clusters is None:
+            n_clusters = range(1, 10, 2)
+        else:
+            n_clusters = sorted(n_clusters)
 
-    if not hasattr(clf, "n_clusters"):
-        raise TypeError(
-            '"n_clusters" attribute not in classifier. ' "Cannot plot elbow method."
+        if not hasattr(clf, "n_clusters"):
+            raise TypeError(
+                '"n_clusters" attribute not in classifier. ' "Cannot plot elbow method."
+            )
+
+        tuples = Parallel(n_jobs=n_jobs)(
+            delayed(_clone_and_score_clusterer)(clf, X, i) for i in n_clusters
+        )
+        clfs, times = zip(*tuples)
+        sum_of_squares = np.absolute(clfs)
+        return elbow_curve_from_results(
+            n_clusters, sum_of_squares, times if show_cluster_time else None, ax=ax
         )
 
-    tuples = Parallel(n_jobs=n_jobs)(
-        delayed(_clone_and_score_clusterer)(clf, X, i) for i in n_clusters
-    )
-    clfs, times = zip(*tuples)
-    sum_of_squares = np.absolute(clfs)
-    return elbow_curve_from_results(
-        n_clusters, sum_of_squares, times if show_cluster_time else None, ax=ax
-    )
+    except ValueError as e:
+        raise PloomberValueError(e)
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
@@ -107,28 +114,31 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     """
     # TODO: unit test this
     # TODO: also test with unsorted input
-    idx = np.argsort(n_clusters)
-    n_clusters = np.array(n_clusters)[idx]
-    sum_of_squares = np.array(sum_of_squares)[idx]
+    try:
+        idx = np.argsort(n_clusters)
+        n_clusters = np.array(n_clusters)[idx]
+        sum_of_squares = np.array(sum_of_squares)[idx]
 
-    if ax is None:
-        ax = plt.gca()
+        if ax is None:
+            ax = plt.gca()
 
-    ax.set_title("Elbow Plot")
-    ax.plot(n_clusters, sum_of_squares, "b*-")
-    ax.grid(True)
-    ax.set_xlabel("Number of clusters")
-    ax.set_ylabel("Sum of Squared Errors")
+        ax.set_title("Elbow Plot")
+        ax.plot(n_clusters, sum_of_squares, "b*-")
+        ax.grid(True)
+        ax.set_xlabel("Number of clusters")
+        ax.set_ylabel("Sum of Squared Errors")
 
-    if times is not None:
-        times = np.array(times)[idx]
-        ax2_color = "green"
-        ax2 = ax.twinx()
-        ax2.plot(n_clusters, times, ":", alpha=0.75, color=ax2_color)
-        ax2.set_ylabel("Clustering duration (seconds)", color=ax2_color, alpha=0.75)
-        ax2.tick_params(colors=ax2_color)
+        if times is not None:
+            times = np.array(times)[idx]
+            ax2_color = "green"
+            ax2 = ax.twinx()
+            ax2.plot(n_clusters, times, ":", alpha=0.75, color=ax2_color)
+            ax2.set_ylabel("Clustering duration (seconds)", color=ax2_color, alpha=0.75)
+            ax2.tick_params(colors=ax2_color)
 
-    return ax
+        return ax
+    except ValueError as e:
+        raise PloomberValueError(e)
 
 
 def _clone_and_score_clusterer(clf, X, n_clusters):
@@ -209,27 +219,30 @@ def silhouette_analysis(
 
     """
 
-    if range_n_clusters is None:
-        range_n_clusters = [2, 3, 4, 5, 6]
-    else:
-        range_n_clusters = sorted(range_n_clusters)
+    try:
+        if range_n_clusters is None:
+            range_n_clusters = [2, 3, 4, 5, 6]
+        else:
+            range_n_clusters = sorted(range_n_clusters)
 
-    if not hasattr(clf, "n_clusters"):
-        raise TypeError(
-            '"n_clusters" attribute not in classifier. '
-            "Cannot plot silhouette analysis ."
-        )
+        if not hasattr(clf, "n_clusters"):
+            raise TypeError(
+                '"n_clusters" attribute not in classifier. '
+                "Cannot plot silhouette analysis ."
+            )
 
-    for n_clusters in range_n_clusters:
-        _, ax = plt.subplots(1, 1, figsize=figsize)
-        clf = clone(clf)
-        setattr(clf, "n_clusters", n_clusters)
-        cluster_labels = clf.fit_predict(X)
+        for n_clusters in range_n_clusters:
+            _, ax = plt.subplots(1, 1, figsize=figsize)
+            clf = clone(clf)
+            setattr(clf, "n_clusters", n_clusters)
+            cluster_labels = clf.fit_predict(X)
 
-        ax = silhouette_analysis_from_results(
-            X, cluster_labels, metric, figsize, cmap, text_fontsize, ax
-        )
-    return ax
+            ax = silhouette_analysis_from_results(
+                X, cluster_labels, metric, figsize, cmap, text_fontsize, ax
+            )
+        return ax
+    except ValueError as e:
+        raise PloomberValueError(e)
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
@@ -251,75 +264,80 @@ def silhouette_analysis_from_results(
     .. versionadded:: 0.8.3
     """
 
-    cluster_labels = np.asarray(cluster_labels)
+    try:
+        cluster_labels = np.asarray(cluster_labels)
 
-    le = LabelEncoder()
-    cluster_labels_encoded = le.fit_transform(cluster_labels)
+        le = LabelEncoder()
+        cluster_labels_encoded = le.fit_transform(cluster_labels)
 
-    n_clusters = len(np.unique(cluster_labels))
+        n_clusters = len(np.unique(cluster_labels))
 
-    silhouette_avg = silhouette_score(X, cluster_labels, metric=metric)
+        silhouette_avg = silhouette_score(X, cluster_labels, metric=metric)
 
-    sample_silhouette_values = silhouette_samples(X, cluster_labels, metric=metric)
+        sample_silhouette_values = silhouette_samples(X, cluster_labels, metric=metric)
 
-    if ax is None:
-        _, ax = plt.subplots(1, 1, figsize=figsize)
+        if ax is None:
+            _, ax = plt.subplots(1, 1, figsize=figsize)
 
-    ax.set_xlim([-0.1, 1])
+        ax.set_xlim([-0.1, 1])
 
-    if hasattr(X, "shape"):
-        length = X.shape[0]
-    else:
-        length = len(X)
-    ax.set_ylim([0, length + (n_clusters + 1) * 10 + 10])
+        if hasattr(X, "shape"):
+            length = X.shape[0]
+        else:
+            length = len(X)
+        ax.set_ylim([0, length + (n_clusters + 1) * 10 + 10])
 
-    ax.set_xlabel("Silhouette coefficient values", fontsize=text_fontsize)
-    ax.set_ylabel("Cluster label", fontsize=text_fontsize)
+        ax.set_xlabel("Silhouette coefficient values", fontsize=text_fontsize)
+        ax.set_ylabel("Cluster label", fontsize=text_fontsize)
 
-    y_lower = 10
+        y_lower = 10
 
-    for i in range(n_clusters):
-        ax.set_title(f"Silhouette Analysis (n_clusters={n_clusters})", fontsize="large")
+        for i in range(n_clusters):
+            ax.set_title(
+                f"Silhouette Analysis (n_clusters={n_clusters})", fontsize="large")
 
-        ith_cluster_silhouette_values = sample_silhouette_values[
-            cluster_labels_encoded == i
-        ]
+            ith_cluster_silhouette_values = sample_silhouette_values[
+                cluster_labels_encoded == i
+            ]
 
-        ith_cluster_silhouette_values.sort()
+            ith_cluster_silhouette_values.sort()
 
-        size_cluster_i = ith_cluster_silhouette_values.shape[0]
-        y_upper = y_lower + size_cluster_i
+            size_cluster_i = ith_cluster_silhouette_values.shape[0]
+            y_upper = y_lower + size_cluster_i
 
-        color = plt.cm.get_cmap(cmap)(float(i) / n_clusters)
+            color = plt.cm.get_cmap(cmap)(float(i) / n_clusters)
 
-        ax.fill_betweenx(
-            np.arange(y_lower, y_upper),
-            0,
-            ith_cluster_silhouette_values,
-            facecolor=color,
-            edgecolor=color,
-            alpha=0.7,
+            ax.fill_betweenx(
+                np.arange(y_lower, y_upper),
+                0,
+                ith_cluster_silhouette_values,
+                facecolor=color,
+                edgecolor=color,
+                alpha=0.7,
+            )
+
+            ax.text(
+                -0.05,
+                y_lower + 0.5 * size_cluster_i,
+                str(le.classes_[i]),
+                fontsize=text_fontsize,
+            )
+
+            y_lower = y_upper + 10
+
+        ax.axvline(
+            x=silhouette_avg,
+            color="red",
+            linestyle="--",
+            label="Silhouette score: {0:0.3f}".format(silhouette_avg),
         )
 
-        ax.text(
-            -0.05,
-            y_lower + 0.5 * size_cluster_i,
-            str(le.classes_[i]),
-            fontsize=text_fontsize,
-        )
+        ax.set_yticks([])  # Clear the y-axis labels / ticks
+        ax.set_xticks(np.arange(-0.1, 1.0, 0.2))
 
-        y_lower = y_upper + 10
+        ax.tick_params(labelsize=text_fontsize)
+        ax.legend(loc="best", fontsize=text_fontsize)
+        return ax
 
-    ax.axvline(
-        x=silhouette_avg,
-        color="red",
-        linestyle="--",
-        label="Silhouette score: {0:0.3f}".format(silhouette_avg),
-    )
-
-    ax.set_yticks([])  # Clear the y-axis labels / ticks
-    ax.set_xticks(np.arange(-0.1, 1.0, 0.2))
-
-    ax.tick_params(labelsize=text_fontsize)
-    ax.legend(loc="best", fontsize=text_fontsize)
-    return ax
+    except ValueError as e:
+        raise PloomberValueError(e)

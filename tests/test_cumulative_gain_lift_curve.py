@@ -32,6 +32,7 @@ from matplotlib.testing.decorators import image_comparison
 from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer, load_iris
 from sklearn_evaluation.plot import cumulative_gain, lift_curve
+from ploomber_core.exceptions import PloomberValueError
 
 X, y = load_breast_cancer(return_X_y=True)
 
@@ -58,7 +59,7 @@ def test_two_classes_cumulative_gain():
     clf = LogisticRegression()
     clf.fit(X, y)
     probas = clf.predict_proba(X)
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(PloomberValueError) as e:
         cumulative_gain(y, probas)
     assert "Cannot calculate Cumulative Gains for data with 3 category/ies" in str(
         e.value
@@ -109,7 +110,7 @@ def test_two_classes_lift_curve():
     clf = LogisticRegression()
     clf.fit(X, y)
     probas = clf.predict_proba(X)
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(PloomberValueError) as e:
         lift_curve(y, probas)
     assert "Cannot calculate Lift Curve for data with 3 category/ies" in str(e.value)
 

@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from collections import defaultdict
 from itertools import product
 from six import string_types
+from ploomber_core.exceptions import PloomberValueError
 
 
 def isiter(obj):
@@ -79,7 +80,7 @@ def _get_params_value(params):
             try:
                 keys.append((p, obj.parameters[p]))
             except KeyError:
-                raise ValueError("{} is not a valid parameter".format(p))
+                raise PloomberValueError("{} is not a valid parameter".format(p))
         return tuple(keys)
 
     return fn

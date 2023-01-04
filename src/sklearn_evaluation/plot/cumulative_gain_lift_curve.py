@@ -29,6 +29,7 @@ SOFTWARE.
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from ploomber_core.exceptions import PloomberValueError
 
 
 def _cumulative_gain_curve(y_true, y_score, pos_label=None):
@@ -69,7 +70,7 @@ def _cumulative_gain_curve(y_true, y_score, pos_label=None):
         or np.array_equal(classes, [-1])
         or np.array_equal(classes, [1])
     ):
-        raise ValueError("Data is not binary and pos_label is not specified")
+        raise PloomberValueError("Data is not binary and pos_label is not specified")
     elif pos_label is None:
         pos_label = 1.0
 
@@ -147,7 +148,7 @@ def cumulative_gain(
 
     classes = np.unique(y_true)
     if len(classes) != 2:
-        raise ValueError(
+        raise PloomberValueError(
             "Cannot calculate Cumulative Gains for data with "
             "{} category/ies".format(len(classes))
         )
@@ -236,7 +237,7 @@ def lift_curve(
 
     classes = np.unique(y_true)
     if len(classes) != 2:
-        raise ValueError(
+        raise PloomberValueError(
             "Cannot calculate Lift Curve for data with "
             "{} category/ies".format(len(classes))
         )

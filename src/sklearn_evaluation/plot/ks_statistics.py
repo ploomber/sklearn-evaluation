@@ -30,6 +30,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from ploomber_core.exceptions import PloomberValueError
 
 
 def _binary_ks_curve(y_true, y_score):
@@ -71,7 +72,7 @@ def _binary_ks_curve(y_true, y_score):
     lb = LabelEncoder()
     encoded_labels = lb.fit_transform(y_true)
     if len(lb.classes_) != 2:
-        raise ValueError(
+        raise PloomberValueError(
             "Cannot calculate KS statistic for data with "
             "{} category/ies".format(len(lb.classes_))
         )
@@ -194,7 +195,7 @@ def ks_statistic(
 
     classes = np.unique(y_true)
     if len(classes) != 2:
-        raise ValueError(
+        raise PloomberValueError(
             "Cannot calculate KS statistic for data with "
             "{} category/ies".format(len(classes))
         )

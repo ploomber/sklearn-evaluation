@@ -22,6 +22,7 @@ from scipy.stats import shapiro
 from scipy.stats import spearmanr
 from scipy.stats import kendalltau as sp_kendalltau
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from ploomber_core.exceptions import PloomberValueError
 
 import matplotlib.pyplot as plt
 
@@ -107,7 +108,8 @@ class RankD:
         algorithm = self.algorithm.lower()
 
         if algorithm not in self.ranking_methods:
-            raise ValueError("'{}' is unrecognized ranking method".format(algorithm))
+            raise PloomberValueError(
+                "'{}' is unrecognized ranking method".format(algorithm))
 
         # Extract matrix from dataframe if necessary
         if isinstance(X, pd.DataFrame):
@@ -120,7 +122,7 @@ class RankD:
 
         if self.features is not None:
             if len(self.features) != n_columns:
-                raise ValueError(
+                raise PloomberValueError(
                     (
                         "number of supplied feature names does not match the number "
                         "of columns in the training data."
@@ -143,7 +145,7 @@ class RankD:
             self.features_ = np.arange(0, len(ranks))
         else:
             if len(self.features) != len(ranks):
-                raise ValueError(
+                raise PloomberValueError(
                     (
                         "number of supplied feature names does not match the number "
                         "of ranks provided."
@@ -187,7 +189,6 @@ class RankD:
         ax: matplotlib Axes
             Axes containing the plot
         """
-
         self._validate_rank(ranks)
         self._derive_features_from_ranks(ranks)
         self.ranks_ = ranks
@@ -257,7 +258,7 @@ class Rank1D(RankD):
     @staticmethod
     def _validate_rank(ranks):
         if ranks.ndim != 1:
-            raise ValueError("Ranks must be 1-dimensional")
+            raise PloomberValueError("Ranks must be 1-dimensional")
 
     def _draw(self):
         """
@@ -294,7 +295,7 @@ class Rank1D(RankD):
             self.ax.yaxis.grid(True, color="#808080")
 
         else:
-            raise ValueError("Orientation must be 'h' or 'v'")
+            raise PloomberValueError("Orientation must be 'h' or 'v'")
         return self.ax
 
 
@@ -365,7 +366,7 @@ class Rank2D(RankD):
     @staticmethod
     def _validate_rank(ranks):
         if ranks.ndim != 2:
-            raise ValueError("Ranks must be 2-dimensional")
+            raise PloomberValueError("Ranks must be 2-dimensional")
 
     def _draw(self):
         """

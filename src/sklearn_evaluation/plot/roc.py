@@ -9,6 +9,7 @@ from sklearn_evaluation import __version__
 import json
 from pathlib import Path
 from warnings import warn  # noqa
+from ploomber_core.exceptions import PloomberValueError
 
 
 def roc(y_true, y_score, ax=None):
@@ -233,7 +234,7 @@ class ROC(Plot):
         if tpr is None or fpr is None:
 
             if any((val is None for val in (y_true, y_score))):
-                raise ValueError("y_true and y_score are needed to plot ROC")
+                raise PloomberValueError("y_true and y_score are needed to plot ROC")
 
             # get the number of classes based on the shape of y_score
             y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
