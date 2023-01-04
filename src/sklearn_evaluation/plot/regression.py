@@ -22,6 +22,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
+from ploomber_core import deprecated
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.linear_model import LinearRegression
 
@@ -80,7 +81,7 @@ def residuals(y_true, y_pred, ax=None):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
-def prediction_error(y_true, y_pred, ax=None):
+def prediction_error(y_true, y_pred, model="deprecated", ax=None):
     """
     Plot the scatter plot of measured values v. predicted values, with
     an identity line and a best fitted line to show the prediction
@@ -100,11 +101,20 @@ def prediction_error(y_true, y_pred, ax=None):
     ax: matplotlib Axes
         Axes containing the plot
 
+    Notes
+    -----
+    .. deprecated:: 0.8.6
+        'model' argument is deprecated, will be removed in version 0.8.8
+
     Examples
     --------
     .. plot:: ../examples/prediction_error.py
 
     """
+
+    deprecated.parameter_deprecated(
+        deprecated_in="0.8.6", removed_in="0.8.8", name_old="model", value_passed=model
+    )
 
     _check_parameter_validity(y_true, y_pred)
     if ax is None:
