@@ -81,8 +81,6 @@ Gain and lift charts are an effective visual tool for measuring the model perfor
 
 References:
 
-http://mlwiki.org/index.php/Cumulative_Gain_Chart
-
 http://www2.cs.uregina.ca/~dbd/cs831/notes/lift_chart/lift_chart.html
 
 ```{code-cell} ipython3
