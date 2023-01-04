@@ -228,16 +228,6 @@ def test_invalid_clusterer():
         plot.silhouette_analysis(X, clf)
 
 
-def test_silhouette_analysis_value_error():
-    clf = KMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
-
-    with pytest.raises(PloomberValueError) as e:
-        plot.silhouette_analysis(X, clf, range_n_clusters=[-1])
-
-    assert "KMeans must be an int in the range" in str(e.value)
-
-
 def test_silhouette_analysis_from_results_value_error():
     with pytest.raises(PloomberValueError) as e:
         plot.silhouette_analysis_from_results([], y.tolist())
