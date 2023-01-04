@@ -2,7 +2,6 @@ from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.model_selection import train_test_split
- 
 from sklearn_evaluation import plot
 
 X, y = datasets.make_classification(
