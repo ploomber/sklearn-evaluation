@@ -1,6 +1,9 @@
 CHANGELOG
 =========
 
+0.8.7dev
+--------
+
 0.8.6 (2023-01-04)
 ------------------
 * Adds support for ``pandas.Series`` to prediction error plot (#154)
