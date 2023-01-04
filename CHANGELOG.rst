@@ -3,6 +3,9 @@ CHANGELOG
 
 0.8.6dev
 --------
+* Adds support for ``pandas.Series`` to prediction error plot (#154)
+* Fixes error to prediction plot due to hardcoded axis (#155)
+* Deprecates ``model`` argument in prediction plot
 
 0.8.5 (2022-12-29)
 ------------------
