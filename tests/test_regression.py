@@ -1,8 +1,12 @@
-import matplotlib.pyplot as plt
-import numpy as np
-from matplotlib.testing.decorators import image_comparison
-from sklearn.datasets import make_regression
+import pytest
 
+import numpy as np
+import pandas as pd
+from sklearn.datasets import make_regression
+import matplotlib.pyplot as plt
+from matplotlib.testing.decorators import image_comparison
+
+from ploomber_core.warnings import PloomberDeprecationWarning
 from sklearn_evaluation import plot
 
 y_true = np.array([105, 120, 120, 160, 120, 145, 175, 160, 185, 210, 150])
@@ -38,11 +42,49 @@ def test_residuals():
     plot.residuals(y_true, y_pred)
 
 
+@pytest.mark.parametrize(
+    "y_true, y_pred",
+    [(y_true, y_pred), (pd.Series(y_true), pd.Series(y_pred))],
+    ids=["numpy", "pandas"],
+)
 @image_comparison(
     baseline_images=["prediction_error"], extensions=["png"], remove_text=True
 )
-def test_prediction_error():
+def test_prediction_error(y_true, y_pred):
     plot.prediction_error(y_true, y_pred)
+
+
+@image_comparison(
+    baseline_images=["prediction_error_lines_one"],
+    extensions=["png"],
+    remove_text=True,
+    tol=0.1,
+)
+def test_prediction_error_lines_one(regression_data):
+    y_true, y_pred = regression_data
+    plot.prediction_error(y_true, y_pred)
+
+
+@image_comparison(
+    baseline_images=["prediction_error_lines_two"], extensions=["png"], remove_text=True
+)
+def test_prediction_error_lines_two():
+    y_true = np.array([150, 500, 750, 35, 1200])
+    y_pred = np.array([155, 495, 703, 41, 950])
+    plot.prediction_error(y_true, y_pred)
+
+
+def test_model_deprecation_warning():
+    from sklearn.linear_model import Lasso
+
+    with pytest.warns(PloomberDeprecationWarning) as record:
+        lasso = Lasso()
+        plot.prediction_error(y_true, y_pred, model=lasso)
+    assert len(record) == 1
+    assert (
+        "'model' was deprecated in version 0.8.6. 'model' will be removed in 0.9."
+        in record[0].message.args[0]
+    )
 
 
 @image_comparison(

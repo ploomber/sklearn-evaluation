@@ -5,6 +5,7 @@ parts:
   - caption: Quick Start
     chapters:
       - file: quickstart/classification
+      - file: quickstart/regression
       - file: quickstart/clustering
 
   - caption: Classification
