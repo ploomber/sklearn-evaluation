@@ -65,8 +65,7 @@ def test_n_clusters_in_clf():
 
 
 def test_plot_elbow_curve_bad_input_value_error():
-    X = np.array([[1, 2], [1, 4], [1, 0],
-                  [10, 2], [10, 4], [10, 0]])
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
     clf = KMeans()
     with pytest.raises(PloomberValueError):
         plot.elbow_curve(X, clf, n_clusters=range(1, 10))

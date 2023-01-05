@@ -109,7 +109,8 @@ class RankD:
 
         if algorithm not in self.ranking_methods:
             raise PloomberValueError(
-                "'{}' is unrecognized ranking method".format(algorithm))
+                "'{}' is unrecognized ranking method".format(algorithm)
+            )
 
         # Extract matrix from dataframe if necessary
         if isinstance(X, pd.DataFrame):

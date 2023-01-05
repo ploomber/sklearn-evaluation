@@ -58,8 +58,9 @@ def validation_curve(
             ax.set_xlabel(param_name)
 
         ax.plot(param_range, train_scores_mean, label="Training score", color="r")
-        ax.plot(param_range, test_scores_mean,
-                label="Cross-validation score", color="g")
+        ax.plot(
+            param_range, test_scores_mean, label="Cross-validation score", color="g"
+        )
 
         ax.fill_between(
             param_range,

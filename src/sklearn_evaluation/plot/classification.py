@@ -205,7 +205,8 @@ def confusion_matrix(
 def _confusion_matrix_validate_predictions(y_true, y_pred, target_names):
     if any((val is None for val in (y_true, y_pred))):
         raise PloomberValueError(
-            "y_true and y_pred are needed to plot confusion " "matrix")
+            "y_true and y_pred are needed to plot confusion " "matrix"
+        )
 
     # calculate how many names you expect
     values = set(y_true).union(set(y_pred))

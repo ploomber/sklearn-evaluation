@@ -294,7 +294,8 @@ def silhouette_analysis_from_results(
 
         for i in range(n_clusters):
             ax.set_title(
-                f"Silhouette Analysis (n_clusters={n_clusters})", fontsize="large")
+                f"Silhouette Analysis (n_clusters={n_clusters})", fontsize="large"
+            )
 
             ith_cluster_silhouette_values = sample_silhouette_values[
                 cluster_labels_encoded == i

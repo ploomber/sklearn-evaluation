@@ -65,8 +65,11 @@ def learning_curve(train_scores, test_scores, train_sizes, ax=None):
 
         ax.plot(train_sizes, train_scores_mean, "o-", color="r", label="Training score")
         ax.plot(
-            train_sizes, test_scores_mean, "o-", color="g",
-            label="Cross-validation score"
+            train_sizes,
+            test_scores_mean,
+            "o-",
+            color="g",
+            label="Cross-validation score",
         )
 
         ax.legend(loc="best")

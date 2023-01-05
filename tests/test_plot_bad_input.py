@@ -15,6 +15,7 @@ def y():
 @pytest.mark.parametrize("bad_y_true", [np.array([0, 0]), [""]])
 def test_plot_calibration_curve_bad_input_value_error(bad_y_true):
     from examples.calibration_curve import probabilities, clf_names
+
     with pytest.raises(PloomberValueError):
         plot.calibration_curve(bad_y_true, probabilities, clf_names)
 
@@ -27,8 +28,9 @@ def test_plot_feature_importances_bad_input_value_error(bad_top_n):
         plot.feature_importances(model, top_n=bad_top_n)
 
 
-@pytest.mark.parametrize("bad_train_sizes", [[], [143, 467, 790, 1113, 1437, 1],
-                                             [1, 0], ""])
+@pytest.mark.parametrize(
+    "bad_train_sizes", [[], [143, 467, 790, 1113, 1437, 1], [1, 0], ""]
+)
 def test_plot_learning_curve_bad_input_value_error(bad_train_sizes):
     from examples.learning_curve import train_scores, test_scores
 
@@ -38,7 +40,9 @@ def test_plot_learning_curve_bad_input_value_error(bad_train_sizes):
 
 def test_plot_metrics_at_thresholds_bad_input_value_error(y):
     y_true, y_pred = y
-    def fn(a, b): return [1, 2, 3]
+
+    def fn(a, b):
+        return [1, 2, 3]
 
     with pytest.raises(PloomberValueError) as e:
         plot.metrics_at_thresholds(fn, y_true, y_pred)
@@ -56,8 +60,9 @@ def test_plot_prediction_error_bad_input_value_error(bad_y_true_value, y):
     assert "parameters should have same shape" in str(e.value)
 
 
-@pytest.mark.parametrize("bad_y_pairs", [([0, 1], [0]), ([0], [1, 1]), ([], [1]),
-                                         ([1, 2, 3], [])])
+@pytest.mark.parametrize(
+    "bad_y_pairs", [([0, 1], [0]), ([0], [1, 1]), ([], [1]), ([1, 2, 3], [])]
+)
 def test_plot_residuals_bad_input_value_error(bad_y_pairs):
     y_true, y_pred = bad_y_pairs
 
@@ -78,12 +83,18 @@ def test_plot_scores_distribution_bad_input_value_error(bad_y_scores):
 
 
 def test_plot_validation_curve_bad_input_value_error():
-    from examples.validation_curve import (train_scores, test_scores,
-                                           param_range, param_name)
+    from examples.validation_curve import (
+        train_scores,
+        test_scores,
+        param_range,
+        param_name,
+    )
+
     bad_train_scores = train_scores[:2]
     with pytest.raises(PloomberValueError) as e:
-        plot.validation_curve(bad_train_scores, test_scores,
-                              param_range, param_name, semilogx=True)
+        plot.validation_curve(
+            bad_train_scores, test_scores, param_range, param_name, semilogx=True
+        )
 
     assert "x and y must have same first dimension" in str(e.value)
 

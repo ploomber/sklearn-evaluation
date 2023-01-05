@@ -34,6 +34,7 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.datasets import load_breast_cancer, load_iris
 from sklearn_evaluation.plot import ks_statistic
 from ploomber_core.exceptions import PloomberValueError
+
 X, y = load_breast_cancer(return_X_y=True)
 
 

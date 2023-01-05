@@ -42,7 +42,8 @@ def precision_recall(y_true, y_score, ax=None):
     """
     if any((val is None for val in (y_true, y_score))):
         raise PloomberValueError(
-            "y_true and y_score are needed to plot " "Precision-Recall")
+            "y_true and y_score are needed to plot " "Precision-Recall"
+        )
 
     if ax is None:
         ax = plt.gca()

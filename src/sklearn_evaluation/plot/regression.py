@@ -37,7 +37,8 @@ def _set_ax_settings(ax, xlabel, ylabel, title):
 def _check_parameter_validity(y_true, y_pred):
     if any((val is None for val in (y_true, y_pred))):
         raise PloomberValueError(
-            "y_true and y_pred are needed to plot " "Residuals Plot")
+            "y_true and y_pred are needed to plot " "Residuals Plot"
+        )
 
     if y_true.shape != y_pred.shape:
         raise PloomberValueError("parameters should have same shape.")
@@ -202,7 +203,8 @@ def cooks_distance(X, y, ax=None):
         ax.set_xlim(0, len(distance_))
 
         label = r"{:0.2f}% > $I_t$ ($I_t=\frac {{4}} {{n}}$)".format(
-            outlier_percentage_)
+            outlier_percentage_
+        )
         ax.axhline(
             influence_threshold_,
             ls="--",
