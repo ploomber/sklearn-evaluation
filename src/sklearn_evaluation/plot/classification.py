@@ -81,7 +81,7 @@ class ConfusionMatrix(AbstractPlot):
     Notes
     -----
     .. versionchanged:: 0.9
-        ``cmap`` argument
+        Added ``cmap`` argument
     """
 
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
@@ -156,9 +156,18 @@ class ConfusionMatrix(AbstractPlot):
         ).plot()
 
     @classmethod
-    def from_raw_data(cls, y_true, y_pred, target_names=None, normalize=False):
+    def from_raw_data(
+        cls, y_true, y_pred, target_names=None, normalize=False, cmap=None
+    ):
+        """
+
+        Notes
+        -----
+        .. versionchanged:: 0.9
+            Added ``cmap`` argument.
+        """
         # pass cm=False so we don't emit the future warning
-        return cls(y_true, y_pred, target_names, normalize, cm=False).plot()
+        return cls(y_true, y_pred, target_names, normalize, cm=False, cmap=cmap).plot()
 
     @classmethod
     def _from_data(cls, target_names, normalize, cm):
@@ -215,17 +224,13 @@ def confusion_matrix(
     .. plot:: ../examples/confusion_matrix.py
 
     """
-    # pass cm=False so we don't emit the future warning
-    obj = ConfusionMatrix(
+    return ConfusionMatrix.from_raw_data(
         y_true=y_true,
         y_pred=y_pred,
         target_names=target_names,
         normalize=normalize,
         cmap=cmap,
-        cm=False,
-    ).plot(ax=ax)
-
-    return obj.ax_
+    ).ax_
 
 
 def _confusion_matrix_validate_predictions(y_true, y_pred, target_names):
