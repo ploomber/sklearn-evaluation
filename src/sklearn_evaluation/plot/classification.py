@@ -204,10 +204,6 @@ def confusion_matrix(
     cmap : matplotlib Colormap
         If ``None`` uses a modified version of matplotlib's OrRd colormap.
 
-    Notes
-    -----
-    http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-
 
     Returns
     -------
@@ -227,7 +223,7 @@ def confusion_matrix(
         normalize=normalize,
         cmap=cmap,
         cm=False,
-    ).plot()
+    ).plot(ax=ax)
 
     return obj.ax_
 
