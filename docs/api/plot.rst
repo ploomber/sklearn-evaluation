@@ -15,6 +15,11 @@ ConfusionMatrix
 ---------------
 .. autoclass:: sklearn_evaluation.plot.ConfusionMatrix
 
+PrecisionRecall
+----------------
+.. autoclass:: sklearn_evaluation.plot.PrecisionRecall
+    :members:
+
 ROC
 ---
 .. autofunction:: sklearn_evaluation.plot.ROC
@@ -96,6 +101,7 @@ precision_at_proportions
 precision_recall
 ----------------
 .. autofunction:: sklearn_evaluation.plot.precision_recall
+
 
 prediction_error
 ----------------
