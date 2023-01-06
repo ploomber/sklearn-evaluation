@@ -16,7 +16,7 @@
   |
   <a href="mailto:contact@ploomber.io">Contact us</a>
   |
-  <a href="https://docs.ploomber.io/">Docs</a>
+  <a href="https://sklearn-evaluation.readthedocs.io/">Docs</a>
   |
   <a href="https://ploomber.io/">Blog</a>
   |
