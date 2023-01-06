@@ -19,7 +19,7 @@ class AbstractPlot(abc.ABC):
     """An abstract class for all class-based plots"""
 
     @abc.abstractmethod
-    def __init__(self, name=None):
+    def __init__(self, *, name=None):
         """
         The constructor must take all input data required to create the plot and assign
         it as attributes. e.g., ``self.value = value``, no other processing should
@@ -29,6 +29,9 @@ class AbstractPlot(abc.ABC):
 
         The only suggested argument is ``name=None``, which shoould be used to
         identify the plot (e.g., in the title), and in composed plots.
+
+        All arguments beyond the input data must be keyword-only (add a *
+        argument between the input and the rest of the arguments).
         """
         pass
 
@@ -46,6 +49,12 @@ class AbstractPlot(abc.ABC):
         """Takes raw unaggregated data, compute statistics and initializes the object.
         This is the method that users typically use. (e.g., they pass ``y_true``, and
         ``y_pred`` here, we aggregate and call the constructor).
+
+        Apart from input data, this method must have the same argument as the
+        constructor.
+
+        All arguments beyond the input data must be keyword-only (add a *
+        argument between the input and the rest of the arguments).
         """
         pass
 
