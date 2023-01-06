@@ -37,7 +37,8 @@ matplotlib.rcParams["font.size"] = 18
 ```
 
 ```{code-cell} ipython3
-:tags: ["remove-output"]
+:tags: [remove-output]
+
 # get training and testing data
 X, y = datasets.make_classification(
     1000, 20, n_informative=10, class_sep=0.80, n_classes=3, random_state=0
@@ -51,21 +52,18 @@ tree_pred, forest_pred = [
     est.fit(X_train, y_train).predict(X_test)
     for est in [DecisionTreeClassifier(), RandomForestClassifier()]
 ]
-
-tree_cm = plot.ConfusionMatrix.from_raw_data(y_test, tree_pred, normalize=False)
-forest_cm = plot.ConfusionMatrix.from_raw_data(y_test, forest_pred, normalize=False)
 ```
 
 ### Decision tree confusion matrix
 
 ```{code-cell} ipython3
-tree_cm
+tree_cm = plot.ConfusionMatrix.from_raw_data(y_test, tree_pred, normalize=False)
 ```
 
 ### Random forest confusion matrix
 
 ```{code-cell} ipython3
-forest_cm
+forest_cm = plot.ConfusionMatrix.from_raw_data(y_test, forest_pred, normalize=False)
 ```
 
 ### Compare confusion matrices
@@ -83,7 +81,8 @@ diff = forest_cm - tree_cm
 *Added in sklearn-evaluation version 0.7.8*
 
 ```{code-cell} ipython3
-:tags: ["remove-output"]
+:tags: [remove-output]
+
 tree_cr = plot.ClassificationReport.from_raw_data(y_test, tree_pred)
 forest_cr = plot.ClassificationReport.from_raw_data(y_test, forest_pred)
 ```

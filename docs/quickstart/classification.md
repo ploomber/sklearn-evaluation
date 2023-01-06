@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.4
+    jupytext_version: 1.14.1
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -23,7 +23,7 @@ The steps in this guide are:
 4. Evaluating the features and models
 5. Comparing the different models
 
-In steps 4 & 5 the real value of sklearn-evaluation comes to fruition as we get a lot of visualizations out of the box which will help us compare and evaluate the models, making it easier to pick the optimal one. 
+In steps 4 & 5 the real value of sklearn-evaluation comes to fruition as we get a lot of visualizations out of the box which will help us compare and evaluate the models, making it easier to pick the optimal one.
 
 ```{code-cell} ipython3
 import pandas as pd
@@ -89,7 +89,7 @@ y_test
 
 ## Evaluate our model
 
-In this section, we can easily evaluate our model via a confusion matrix, and understand which feature affects our accuracy by order of importance. 
+In this section, we can easily evaluate our model via a confusion matrix, and understand which feature affects our accuracy by order of importance.
 
 ```{code-cell} ipython3
 plot.confusion_matrix(y_test, y_pred_dt)
@@ -138,4 +138,8 @@ knn_cr = plot.ClassificationReport.from_raw_data(y_test, y_pred_knn)
 
 ```{code-cell} ipython3
 knn_cr + dt_cr
+```
+
+```{code-cell} ipython3
+
 ```
