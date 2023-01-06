@@ -110,6 +110,9 @@ class AbstractPlot(abc.ABC):
         del data["class"]
         return cls(**data).plot()
 
+    def to_html(self):
+        return figure2html(self.figure_)
+
 
 class AbstractComposedPlot(abc.ABC):
     @abc.abstractmethod

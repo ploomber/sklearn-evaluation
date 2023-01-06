@@ -637,7 +637,18 @@ def unserialize_plot(obj, return_instance=False):
     class_ = getattr(importlib.import_module(mod), attribute)
     instance = class_._from_data(**obj)
 
-    return instance if return_instance else instance._repr_html_()
+    return instance if return_instance else _to_html(instance)
+
+
+def _to_html(instance):
+
+    try:
+        # keep backward compatibility with old base class (Plot)
+        return instance._repr_html_()
+    except AttributeError:
+        # new base class (AbstractPlot)
+        instance.plot()
+        return instance.to_html()
 
 
 class GenericPlot:
