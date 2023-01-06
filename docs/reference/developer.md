@@ -23,7 +23,7 @@ This guide will show you how to add new plots to `sklearn-evaluation`.
 
 All plots are implemented using an object-oriented API, this implies that each plot is a class.
 
-Users interact with the plots via a `from_raw_data` method, that takes raw, unaggregated data as input, optinal arguments to customize the plot, and an optional `name` argument to idenfity the plot.
+Users interact with the plots via a `from_raw_data` method, that takes raw, unaggregated data as input, optional arguments to customize the plot, and an optional `name` argument to idenfity the plot.
 
 Let's see an example. Our example plot takes a list of elements and it produces a bar plot with the count for each different value:
 
