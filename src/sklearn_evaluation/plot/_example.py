@@ -1,6 +1,10 @@
 """
 Example implemention of ``AbstractPlot``, and ``ComposedAbstractPlot``. This is
 intended to guide developers add new plots, and not intended for new users.
+
+Useful links:
+
+.. plot:: documentation https://matplotlib.org/3.1.3/devel/plot_directive.html
 """
 from collections import Counter
 
@@ -233,8 +237,5 @@ def my_bar(things_to_count, ax=None, color=None):
         my_bar(["banana", "banana", "apple", "pineapple", "apple"],
                color="lightblue")
     """
-    return (
-        MyBar.from_raw_data(things_to_count=things_to_count, color=color)
-        .plot(ax=ax)
-        .ax_
-    )
+    # do not call plot here, from_raw_data already calls it!
+    return MyBar.from_raw_data(things_to_count=things_to_count, color=color).ax_
