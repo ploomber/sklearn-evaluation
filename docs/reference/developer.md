@@ -13,8 +13,14 @@ kernelspec:
 
 # Developer guide
 
-```{note}
-Note that this guide will only cover the basics. For more details, see the `AbstractPlot` (abstract class), and `MyBar` (example class) implementations, which contain more information.
+
+```{eval-rst}
+.. note::
+
+   Note that this guide will only the implementation at a high-level. For more details,
+   see the :class:`~sklearn_evaluation.plot.plot.AbstractPlot` (abstract class), and
+   :class:`~sklearn_evaluation.plot._example.MyBar` (example class) implementations,
+   which contain more information.
 ```
 
 This guide will show you how to add new plots to `sklearn-evaluation`.
