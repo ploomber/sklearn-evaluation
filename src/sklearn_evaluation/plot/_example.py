@@ -172,13 +172,9 @@ class MyBarAdd(AbstractComposedPlot):
         self.counts = counts
         self.names = names
 
+        # in a real implementation, input data validation should be performed here
+
     def plot(self, ax=None):
-        # TODO: do validation
-
-        # TODO: validate its only two
-
-        # TODO: validate they have the same unique values
-
         if ax is None:
             _, ax = plt.subplots()
 
