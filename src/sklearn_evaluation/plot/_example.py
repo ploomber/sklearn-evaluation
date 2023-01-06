@@ -60,7 +60,7 @@ class MyBar(AbstractPlot):
 
     """
 
-    def __init__(self, count, color=None, name=None):
+    def __init__(self, count, *, color=None, name=None):
         self.count = count
         self.color = color
         self.name = name
@@ -96,7 +96,7 @@ class MyBar(AbstractPlot):
         return self
 
     @classmethod
-    def from_raw_data(cls, things_to_count, color=None, name=None):
+    def from_raw_data(cls, things_to_count, *, color=None, name=None):
         """
         check typical naming: such as y_pred, y_score, y_true
 

@@ -23,11 +23,14 @@ class AbstractPlot(abc.ABC):
         """
         The constructor must take all input data required to create the plot and assign
         it as attributes. e.g., ``self.value = value``, no other processing should
-        happen here. The input data must be already aggregated. Since users typically
-        create plots from raw data (such as ``y_true`` and ``y_pred``), the will often
-        use ``Plot.from_raw_data`` instead of this constructor.
+        happen here. The input data must be already aggregated. For example, when
+        plotting a confusion matrix, the aggregated data are the numbers that appear
+        in each of the quadrants (the unagreggated data are the ``y_true``, ``y_pred``
+        arrays). Since users typically create plots from raw data (such as ``y_true``
+        and ``y_pred``), they will often use ``Plot.from_raw_data`` instead of this
+        constructor.
 
-        The only suggested argument is ``name=None``, which shoould be used to
+        The only suggested argument is ``name=None``, which should be used to
         identify the plot (e.g., in the title), and in composed plots.
 
         All arguments beyond the input data must be keyword-only (add a *
@@ -46,9 +49,10 @@ class AbstractPlot(abc.ABC):
     @classmethod
     @abc.abstractmethod
     def from_raw_data(cls):
-        """Takes raw unaggregated data, compute statistics and initializes the object.
-        This is the method that users typically use. (e.g., they pass ``y_true``, and
-        ``y_pred`` here, we aggregate and call the constructor).
+        """Takes raw unaggregated (for an example of aggregated vs unaggregated data
+        see the constructor docstring) data, compute statistics and initializes the
+        object. This is the method that users typically use. (e.g., they pass
+        ``y_true``, and ``y_pred`` here, we aggregate and call the constructor).
 
         Apart from input data, this method must have the same argument as the
         constructor.
