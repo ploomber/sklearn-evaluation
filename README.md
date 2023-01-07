@@ -16,7 +16,7 @@
   |
   <a href="mailto:contact@ploomber.io">Contact us</a>
   |
-  <a href="https://sklearn-evaluation.readthedocs.io/">Docs</a>
+  <a href="https://sklearn-evaluation.ploomber.io">Docs</a>
   |
   <a href="https://ploomber.io/">Blog</a>
   |
@@ -31,7 +31,7 @@ Supports Python 3.7 and higher. Tested on Linux, macOS and Windows.
 
 *Note:* Recent versions likely work on Python 3.6, however, `0.8.2` was the latest version we tested with Python 3.6.
 
-[Documentation here.](https://sklearn-evaluation.readthedocs.io)
+[Documentation here.](https://sklearn-evaluation.ploomber.io)
 
 ![confusion matrix](examples/cm.png)
 
