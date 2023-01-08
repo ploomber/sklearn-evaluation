@@ -211,3 +211,13 @@ def regression_data():
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     return y_test, y_pred
+
+
+@pytest.fixture
+def ploomber_value_error_message():
+    COMMUNITY = (
+        "\nIf you need help solving this "
+        "issue, send us a message: https://ploomber.io/community"
+    )
+
+    return COMMUNITY

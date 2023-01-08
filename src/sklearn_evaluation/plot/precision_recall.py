@@ -4,10 +4,11 @@ from sklearn.metrics import precision_recall_curve, average_precision_score
 from sklearn.preprocessing import label_binarize
 from ..telemetry import SKLearnEvaluationLogger
 from ..util import is_column_vector, is_row_vector
-from ploomber_core.exceptions import PloomberValueError
+from ploomber_core.exceptions import modify_exceptions
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def precision_recall(y_true, y_score, ax=None):
     """
     Plot precision-recall curve.
@@ -41,9 +42,7 @@ def precision_recall(y_true, y_score, ax=None):
 
     """
     if any((val is None for val in (y_true, y_score))):
-        raise PloomberValueError(
-            "y_true and y_score are needed to plot " "Precision-Recall"
-        )
+        raise ValueError("y_true and y_score are needed to plot " "Precision-Recall")
 
     if ax is None:
         ax = plt.gca()

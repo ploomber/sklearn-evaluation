@@ -31,7 +31,6 @@ from sklearn.model_selection import train_test_split
 
 from sklearn_evaluation import plot
 
-from ploomber_core.exceptions import PloomberValueError
 
 iris_data = datasets.load_iris()
 
@@ -48,14 +47,14 @@ def test_invalid_target():
         plot.target_analysis(y_valid, y_invalid)
 
 
-def test_class_names_must_match(target_analysis_binary):
+def test_class_names_must_match(target_analysis_binary, ploomber_value_error_message):
     """
     Assert error raised when more classes are in data than specified
     """
 
     _, _, y_train, y_test = target_analysis_binary
 
-    with pytest.raises(PloomberValueError):
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.target_analysis(y_train, y_test=y_test, labels=["a", "b", "c"])
 
 

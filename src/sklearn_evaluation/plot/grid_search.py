@@ -10,7 +10,7 @@ from ..telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
 
-from ploomber_core.exceptions import PloomberValueError
+from ploomber_core.exceptions import modify_exceptions
 
 from ..util import (
     _group_by,
@@ -23,6 +23,7 @@ from ..util import (
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def grid_search(
     cv_results_, change, subset=None, kind="line", cmap=None, ax=None, sort=True
 ):
@@ -64,7 +65,7 @@ def grid_search(
 
     """
     if change is None:
-        raise PloomberValueError(
+        raise ValueError(
             (
                 "change can't be None, you need to select at least"
                 " one value to make the plot."
@@ -98,7 +99,7 @@ def grid_search(
     elif len(change) == 2:
         return _grid_search_double(grid_scores, change, subset, cmap, ax, sort)
     else:
-        raise PloomberValueError("change must have length 1 or 2 or be a string")
+        raise ValueError("change must have length 1 or 2 or be a string")
 
 
 def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
@@ -115,7 +116,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
     try:
         params.remove(change)
     except KeyError:
-        raise PloomberValueError("{} is not a valid parameter".format(change))
+        raise ValueError("{} is not a valid parameter".format(change))
 
     # now need need to filter out the grid_scores that the user
     # didn't select, for that we have to cases, the first one is when
@@ -129,7 +130,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
         grid_scores = _flatten_list(groups.values())
         groups = _group_by(grid_scores, _get_params_value(params))
         if not groups:
-            raise PloomberValueError(
+            raise ValueError(
                 (
                     "Your subset didn't match any data"
                     " verify that the values are correct."
@@ -183,7 +184,7 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
 def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
     # check that the two different parameters were passed
     if len(set(change)) == 1:
-        raise PloomberValueError("You need to pass two different parameters")
+        raise ValueError("You need to pass two different parameters")
 
     # if a value in subset was passed, use it to filter the groups
     if subset is not None:
@@ -192,7 +193,7 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
         groups = {k: v for k, v in _sorted_map_iter(groups, sort) if k in keys}
         grid_scores = _flatten_list(groups.values())
         if not groups:
-            raise PloomberValueError(
+            raise ValueError(
                 (
                     "Your subset didn't match any data"
                     " verify that the values are correct."
@@ -204,7 +205,7 @@ def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
 
     for k, v in matrix_elements.items():
         if len(v) > 1:
-            raise PloomberValueError(
+            raise ValueError(
                 (
                     "More than one result matched your criteria."
                     " Make sure you specify parameters using change"

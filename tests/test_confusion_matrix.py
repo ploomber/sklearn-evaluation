@@ -3,7 +3,6 @@ import numpy as np
 from sklearn_evaluation import plot, __version__
 
 import warnings
-from ploomber_core.exceptions import PloomberValueError
 
 
 @pytest.fixture
@@ -64,7 +63,9 @@ def test_raw_data_doesnt_warn(y):
 
 
 @pytest.mark.parametrize("bad_y_true_value", [None, [], [1, 2, 3, 4, 5], [1, 0], ""])
-def test_confusion_matrix_bad_input_value_error(y, bad_y_true_value):
+def test_confusion_matrix_bad_input_value_error(
+    y, bad_y_true_value, ploomber_value_error_message
+):
     _, y_pred = y
-    with pytest.raises(PloomberValueError):
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.ConfusionMatrix(bad_y_true_value, y_pred)

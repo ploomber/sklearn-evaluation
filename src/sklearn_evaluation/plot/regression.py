@@ -25,7 +25,7 @@ import pandas as pd
 from ploomber_core import deprecated
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.linear_model import LinearRegression
-from ploomber_core.exceptions import PloomberValueError
+from ploomber_core.exceptions import modify_exceptions
 
 
 def _set_ax_settings(ax, xlabel, ylabel, title):
@@ -36,15 +36,14 @@ def _set_ax_settings(ax, xlabel, ylabel, title):
 
 def _check_parameter_validity(y_true, y_pred):
     if any((val is None for val in (y_true, y_pred))):
-        raise PloomberValueError(
-            "y_true and y_pred are needed to plot " "Residuals Plot"
-        )
+        raise ValueError("y_true and y_pred are needed to plot " "Residuals Plot")
 
     if y_true.shape != y_pred.shape:
-        raise PloomberValueError("parameters should have same shape.")
+        raise ValueError("parameters should have same shape.")
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def residuals(y_true, y_pred, ax=None):
     """
     Plot the residuals between measured and predicted values.
@@ -84,6 +83,7 @@ def residuals(y_true, y_pred, ax=None):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def prediction_error(y_true, y_pred, model="deprecated", ax=None):
     """
     Plot the scatter plot of measured values v. predicted values, with
@@ -152,6 +152,7 @@ def prediction_error(y_true, y_pred, model="deprecated", ax=None):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def cooks_distance(X, y, ax=None):
     """Plots cooks distance.
 
@@ -178,45 +179,38 @@ def cooks_distance(X, y, ax=None):
     -----
     .. versionadded:: 0.8.4
     """
+    model = LinearRegression()
+    model.fit(X, y)
+    leverage = (X * np.linalg.pinv(X).T).sum(1)
+    rank = np.linalg.matrix_rank(X)
+    df = X.shape[0] - rank
+    residuals = y - model.predict(X)
+    mse = np.dot(residuals, residuals) / df
+    residuals_studentized = residuals / np.sqrt(mse) / np.sqrt(1 - leverage)
+    distance_ = residuals_studentized**2 / X.shape[1]
+    distance_ *= leverage / (1 - leverage)
+    influence_threshold_ = 4 / X.shape[0]
+    outlier_percentage_ = sum(distance_ > influence_threshold_) / X.shape[0]
+    outlier_percentage_ *= 100.0
 
-    try:
-        model = LinearRegression()
-        model.fit(X, y)
-        leverage = (X * np.linalg.pinv(X).T).sum(1)
-        rank = np.linalg.matrix_rank(X)
-        df = X.shape[0] - rank
-        residuals = y - model.predict(X)
-        mse = np.dot(residuals, residuals) / df
-        residuals_studentized = residuals / np.sqrt(mse) / np.sqrt(1 - leverage)
-        distance_ = residuals_studentized**2 / X.shape[1]
-        distance_ *= leverage / (1 - leverage)
-        influence_threshold_ = 4 / X.shape[0]
-        outlier_percentage_ = sum(distance_ > influence_threshold_) / X.shape[0]
-        outlier_percentage_ *= 100.0
+    if ax is None:
+        ax = plt.gca()
+    _, _, baseline = ax.stem(
+        distance_, linefmt="C0-", markerfmt=",", use_line_collection=True
+    )
 
-        if ax is None:
-            ax = plt.gca()
-        _, _, baseline = ax.stem(
-            distance_, linefmt="C0-", markerfmt=",", use_line_collection=True
-        )
+    ax.set_xlim(0, len(distance_))
 
-        ax.set_xlim(0, len(distance_))
-
-        label = r"{:0.2f}% > $I_t$ ($I_t=\frac {{4}} {{n}}$)".format(
-            outlier_percentage_
-        )
-        ax.axhline(
-            influence_threshold_,
-            ls="--",
-            label=label,
-            c=baseline.get_color(),
-            lw=baseline.get_linewidth(),
-        )
-        ax.set_title("Cook's Distance Outlier Detection")
-        ax.set_xlabel("instance index")
-        ax.set_ylabel("influence (I)")
-        ax.legend(loc="best", frameon=True)
-        return ax
-
-    except ValueError as e:
-        raise PloomberValueError(e)
+    label = r"{:0.2f}% > $I_t$ ($I_t=\frac {{4}} {{n}}$)".format(outlier_percentage_)
+    ax.axhline(
+        influence_threshold_,
+        ls="--",
+        label=label,
+        c=baseline.get_color(),
+        lw=baseline.get_linewidth(),
+    )
+    ax.set_title("Cook's Distance Outlier Detection")
+    ax.set_xlabel("instance index")
+    ax.set_ylabel("influence (I)")
+    ax.legend(loc="best", frameon=True)
+    return ax

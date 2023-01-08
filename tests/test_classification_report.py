@@ -4,8 +4,6 @@ from sklearn_evaluation import plot, __version__
 
 import warnings
 
-from ploomber_core.exceptions import PloomberValueError
-
 
 @pytest.fixture
 def y():
@@ -62,11 +60,13 @@ def test_raw_data_doesnt_warn(y):
         plot.ClassificationReport.from_raw_data(y_true, y_pred)
 
 
-def test_plot_classification_report_bad_input_value_error(y):
+def test_plot_classification_report_bad_input_value_error(
+    y, ploomber_value_error_message
+):
     _, y_pred = y
 
-    with pytest.raises(PloomberValueError):
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.ClassificationReport.from_raw_data([1, 2, 1], y_pred)
 
-    with pytest.raises(PloomberValueError):
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.classification_report([1, 2, 1], y_pred, target_names=["Not spam", "Spam"])

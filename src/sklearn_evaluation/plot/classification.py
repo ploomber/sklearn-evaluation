@@ -17,7 +17,7 @@ from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
 from ..plot.plot import Plot
 from ..plot import _matrix
-from ploomber_core.exceptions import PloomberValueError
+from ploomber_core.exceptions import modify_exceptions
 
 
 def _confusion_matrix_add(first, second, ax, target_names):
@@ -71,6 +71,7 @@ class ConfusionMatrix(Plot):
     """
 
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
+    @modify_exceptions
     def __init__(self, y_true, y_pred, target_names=None, normalize=False, cm=None):
         if y_true is not None and cm is None:
             warn(
@@ -79,25 +80,22 @@ class ConfusionMatrix(Plot):
                 FutureWarning,
                 stacklevel=3,
             )
-        try:
-            self.figure = plt.figure()
-            ax = self.figure.add_subplot()
+        self.figure = plt.figure()
+        ax = self.figure.add_subplot()
 
-            if cm is not None and cm is not False:
-                self.cm = cm
-                self.target_names = target_names
-                self.normalize = normalize
-                cmap, ax = _confusion_matrix_init_defaults(cmap=None, ax=ax)
-            else:
-                self.cm = _confusion_matrix(y_true, y_pred, normalize)
-                self.target_names, cmap, ax = _confusion_matrix_validate(
-                    y_true, y_pred, target_names, cmap=None, ax=ax
-                )
-                self.normalize = normalize
+        if cm is not None and cm is not False:
+            self.cm = cm
+            self.target_names = target_names
+            self.normalize = normalize
+            cmap, ax = _confusion_matrix_init_defaults(cmap=None, ax=ax)
+        else:
+            self.cm = _confusion_matrix(y_true, y_pred, normalize)
+            self.target_names, cmap, ax = _confusion_matrix_validate(
+                y_true, y_pred, target_names, cmap=None, ax=ax
+            )
+            self.normalize = normalize
 
-            _plot_cm(self.cm, cmap, ax, self.target_names, self.normalize)
-        except ValueError as e:
-            raise PloomberValueError(e)
+        _plot_cm(self.cm, cmap, ax, self.target_names, self.normalize)
 
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-sub")
     def __sub__(self, other):
@@ -157,6 +155,7 @@ def _confusion_matrix(y_true, y_pred, normalize):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def confusion_matrix(
     y_true, y_pred, target_names=None, normalize=False, cmap=None, ax=None
 ):
@@ -204,16 +203,14 @@ def confusion_matrix(
 
 def _confusion_matrix_validate_predictions(y_true, y_pred, target_names):
     if any((val is None for val in (y_true, y_pred))):
-        raise PloomberValueError(
-            "y_true and y_pred are needed to plot confusion " "matrix"
-        )
+        raise ValueError("y_true and y_pred are needed to plot confusion " "matrix")
 
     # calculate how many names you expect
     values = set(y_true).union(set(y_pred))
     expected_len = len(values)
 
     if target_names and (expected_len != len(target_names)):
-        raise PloomberValueError(
+        raise ValueError(
             (
                 "Data cointains {} different values, but target"
                 " names contains {} values.".format(expected_len, len(target_names))
@@ -290,6 +287,7 @@ def _plot_cm(cm, cmap, ax, target_names, normalize):
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def feature_importances(
     data, top_n=None, feature_names=None, orientation="horizontal", ax=None
 ):
@@ -322,31 +320,28 @@ def feature_importances(
     .. plot:: ../examples/feature_importances.py
 
     """
-    try:
-        if data is None:
-            raise ValueError(
-                "data is needed to plot feature importances. "
-                "When plotting using the evaluator you need to pass "
-                "an estimator "
-            )
-
-        # If no feature_names is provided, assign numbers
-        res = compute.feature_importances(data, top_n, feature_names)
-
-        ax = bar.plot(
-            res.importance,
-            orientation,
-            res.feature_name,
-            error=None if not hasattr(res, "std_") else res.std_,
+    if data is None:
+        raise ValueError(
+            "data is needed to plot feature importances. "
+            "When plotting using the evaluator you need to pass "
+            "an estimator "
         )
-        ax.set_title("Feature importances")
-        return ax
 
-    except ValueError as e:
-        raise PloomberValueError(e)
+    # If no feature_names is provided, assign numbers
+    res = compute.feature_importances(data, top_n, feature_names)
+
+    ax = bar.plot(
+        res.importance,
+        orientation,
+        res.feature_name,
+        error=None if not hasattr(res, "std_") else res.std_,
+    )
+    ax.set_title("Feature importances")
+    return ax
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def precision_at_proportions(y_true, y_score, ax=None):
     """
     Plot precision values at different proportions.
@@ -367,7 +362,7 @@ def precision_at_proportions(y_true, y_score, ax=None):
 
     """
     if any((val is None for val in (y_true, y_score))):
-        raise PloomberValueError(
+        raise ValueError(
             "y_true and y_score are needed to plot precision at " "proportions"
         )
 

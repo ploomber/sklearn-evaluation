@@ -37,7 +37,6 @@ from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
-from ploomber_core.exceptions import PloomberValueError
 
 
 def convert_labels_into_string(y_true):
@@ -64,18 +63,20 @@ def test_n_clusters_in_clf():
         plot.elbow_curve(X, clf)
 
 
-def test_plot_elbow_curve_bad_input_value_error():
+def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
     clf = KMeans()
-    with pytest.raises(PloomberValueError):
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.elbow_curve(X, clf, n_clusters=range(1, 10))
 
 
-def test_plot_elbow_curve_from_results_bad_input_value_error():
+def test_plot_elbow_curve_from_results_bad_input_value_error(
+    ploomber_value_error_message,
+):
     n_clusters = range(1, 10, 2)
     sum_of_squares = [4572.2, 470.7, 389.9, 335.1, [305.5]]
 
-    with pytest.raises(PloomberValueError):
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
 
 
@@ -227,8 +228,8 @@ def test_invalid_clusterer():
         plot.silhouette_analysis(X, clf)
 
 
-def test_silhouette_analysis_from_results_value_error():
-    with pytest.raises(PloomberValueError) as e:
+def test_silhouette_analysis_from_results_value_error(ploomber_value_error_message):
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         plot.silhouette_analysis_from_results([], y.tolist())
 
     assert "Expected 2D array, got 1D array" in str(e.value)

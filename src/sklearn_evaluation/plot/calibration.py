@@ -29,12 +29,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.calibration import calibration_curve as sk_calibration_curve
 from sklearn.utils import column_or_1d
-from ploomber_core.exceptions import PloomberValueError
+from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.util import isiterofiter
 
 # TODO: add unit tests
 
 
+@modify_exceptions
 def calibration_curve(
     y_true, probabilities, clf_names=None, n_bins=10, cmap="nipy_spectral", ax=None
 ):
@@ -87,12 +88,12 @@ def calibration_curve(
     .. plot:: ../examples/calibration_curve_diff_sample_size.py
     """
     if not isinstance(probabilities, list):
-        raise PloomberValueError("`probabilities` does not contain a list.")
+        raise ValueError("`probabilities` does not contain a list.")
 
     if isiterofiter(y_true):
         # check len of y_true and probabilities
         if len(y_true) != len(probabilities):
-            raise PloomberValueError(
+            raise ValueError(
                 "y_true and probabilities should have the "
                 "same size when y_true is an iterator of array-like objects"
             )
@@ -104,7 +105,7 @@ def calibration_curve(
         classes = np.unique(y_true)
 
     if len(classes) > 2:
-        raise PloomberValueError(
+        raise ValueError(
             "plot_calibration_curve only " "works for binary classification"
         )
 
@@ -112,7 +113,7 @@ def calibration_curve(
         clf_names = ["Classifier {}".format(x + 1) for x in range(len(probabilities))]
 
     if len(clf_names) != len(probabilities):
-        raise PloomberValueError(
+        raise ValueError(
             "Length {} of `clf_names` does not match length {} of"
             " `probabilities`".format(len(clf_names), len(probabilities))
         )
@@ -125,7 +126,7 @@ def calibration_curve(
     for i, (probas, y_true_) in enumerate(zip(probabilities, y_true)):
         probas = np.asarray(probas)
         if probas.ndim > 2:
-            raise PloomberValueError(
+            raise ValueError(
                 "Index {} in probabilities has invalid "
                 "shape {}".format(i, probas.shape)
             )
@@ -133,7 +134,7 @@ def calibration_curve(
             probas = probas[:, 1]
 
         if probas.shape != y_true_.shape:
-            raise PloomberValueError(
+            raise ValueError(
                 "Index {} in probabilities has invalid "
                 "shape {}".format(i, probas.shape)
             )
@@ -162,6 +163,7 @@ def calibration_curve(
     return ax
 
 
+@modify_exceptions
 def scores_distribution(y_scores, n_bins=5, ax=None):
     """Generate a histogram from model's predictions
 
@@ -185,25 +187,22 @@ def scores_distribution(y_scores, n_bins=5, ax=None):
     --------
     .. plot:: ../examples/scores_distribution.py
     """
-    try:
-        if ax is None:
-            ax = plt.gca()
+    if ax is None:
+        ax = plt.gca()
 
-        y_scores = column_or_1d(y_scores)
+    y_scores = column_or_1d(y_scores)
 
-        # this is how the calibration curve computes the bins, we do it the same
-        # way so it matches
-        # https://github.com/scikit-learn/scikit-learn/blob/f3f51f9b611bf873bd5836748647221480071a87/sklearn/calibration.py#L989
-        bins = np.linspace(0.0, 1.0, n_bins + 1)
+    # this is how the calibration curve computes the bins, we do it the same
+    # way so it matches
+    # https://github.com/scikit-learn/scikit-learn/blob/f3f51f9b611bf873bd5836748647221480071a87/sklearn/calibration.py#L989
+    bins = np.linspace(0.0, 1.0, n_bins + 1)
 
-        ax.hist(y_scores, range=(0, 1), bins=bins)
+    ax.hist(y_scores, range=(0, 1), bins=bins)
 
-        ax.set(
-            title="Predictions distribution",
-            xlabel="Mean predicted probability",
-            ylabel="Count",
-        )
+    ax.set(
+        title="Predictions distribution",
+        xlabel="Mean predicted probability",
+        ylabel="Count",
+    )
 
-        return ax
-    except ValueError as e:
-        raise PloomberValueError(e)
+    return ax

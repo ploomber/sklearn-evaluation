@@ -9,9 +9,10 @@ from sklearn_evaluation import __version__
 import json
 from pathlib import Path
 from warnings import warn  # noqa
-from ploomber_core.exceptions import PloomberValueError
+from ploomber_core.exceptions import modify_exceptions
 
 
+@modify_exceptions
 def roc(y_true, y_score, ax=None):
     # Support old api
     """
@@ -216,6 +217,7 @@ class ROC(Plot):
     """
 
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
+    @modify_exceptions
     def __init__(self, y_true, y_score, fpr=None, tpr=None, ax=None):
 
         if y_true is not None and y_score is not None:
@@ -234,7 +236,7 @@ class ROC(Plot):
         if tpr is None or fpr is None:
 
             if any((val is None for val in (y_true, y_score))):
-                raise PloomberValueError("y_true and y_score are needed to plot ROC")
+                raise ValueError("y_true and y_score are needed to plot ROC")
 
             # get the number of classes based on the shape of y_score
             y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
@@ -295,5 +297,6 @@ class ROC(Plot):
         return cls(y_true=None, y_score=None, fpr=fpr, tpr=tpr, ax=None)
 
     @classmethod
+    @modify_exceptions
     def from_raw_data(cls, y_true, y_score):
         return cls(y_true, y_score)

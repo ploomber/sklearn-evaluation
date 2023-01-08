@@ -21,7 +21,6 @@ import pandas as pd
 import numpy as np
 from sklearn.datasets import load_iris
 from matplotlib.testing.decorators import image_comparison
-from ploomber_core.exceptions import PloomberValueError
 
 
 from sklearn_evaluation.plot import Rank1D, Rank2D
@@ -32,8 +31,8 @@ X = pd.DataFrame(data=np.c_[iris["data"]], columns=features)
 rank1d = Rank1D()
 
 
-def test_unknown_algorithm_1d():
-    with pytest.raises(PloomberValueError) as e:
+def test_unknown_algorithm_1d(ploomber_value_error_message):
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         Rank1D(algorithm="unknown").feature_ranks(X)
         assert "'unknown' is unrecognized ranking method" in str(e.value)
 
@@ -58,9 +57,9 @@ def test_1d_vertical():
     ).feature_ranks(X)
 
 
-def test_1d_invalid_orientation():
+def test_1d_invalid_orientation(ploomber_value_error_message):
 
-    with pytest.raises(PloomberValueError) as e:
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         Rank1D(
             algorithm="shapiro",
             features=features,
@@ -69,8 +68,8 @@ def test_1d_invalid_orientation():
         assert "Orientation must be 'h' or 'v'" in str(e.value)
 
 
-def test_1d_incorrect_features():
-    with pytest.raises(PloomberValueError) as e:
+def test_1d_incorrect_features(ploomber_value_error_message):
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
 
         Rank1D(
             features=["Sepal length", "Sepal width"], algorithm="shapiro"
@@ -124,9 +123,9 @@ def test_1d_custom_ranks():
     ).feature_ranks_custom_algorithm(ranks)
 
 
-def test_1d_custom_ranks_incorrect_features():
+def test_1d_custom_ranks_incorrect_features(ploomber_value_error_message):
     ranks = np.array([0.96784323, 0.79394983, 0.47927427])
-    with pytest.raises(PloomberValueError) as e:
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         Rank1D(
             features=["Feature1", "Feature2", "Feature3", "Feature4"]
         ).feature_ranks_custom_algorithm(ranks)
@@ -136,9 +135,9 @@ def test_1d_custom_ranks_incorrect_features():
         )
 
 
-def test_1d_custom_ranks_incorrect_dimension():
+def test_1d_custom_ranks_incorrect_dimension(ploomber_value_error_message):
     ranks = np.array([[1.0, -0.076], [-0.076, 1.0]])
-    with pytest.raises(PloomberValueError) as e:
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         Rank1D(
             features=["Feature1", "Feature2"],
         ).feature_ranks_custom_algorithm(ranks)
@@ -163,8 +162,8 @@ def test_ax_1d():
     assert ax is out_ax
 
 
-def test_unknown_algorithm_2d():
-    with pytest.raises(PloomberValueError) as e:
+def test_unknown_algorithm_2d(ploomber_value_error_message):
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         Rank2D(algorithm="unknown").feature_ranks(X)
         assert "'unknown' is unrecognized ranking method" in str(e.value)
 
@@ -206,8 +205,8 @@ def test_2d_kendalltau():
     Rank2D(algorithm="KendallTau", features=features, figsize=(12, 12)).feature_ranks(X)
 
 
-def test_2d_incorrect_features():
-    with pytest.raises(PloomberValueError) as e:
+def test_2d_incorrect_features(ploomber_value_error_message):
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
 
         Rank2D(
             features=["Sepal length", "Sepal width"], algorithm="pearson"
@@ -255,9 +254,9 @@ def test_2d_custom_ranks():
     ).feature_ranks_custom_algorithm(ranks)
 
 
-def test_2d_custom_ranks_incorrect_dimension():
+def test_2d_custom_ranks_incorrect_dimension(ploomber_value_error_message):
     ranks = np.array([1.0, -0.076, 0.71, 0.65])
-    with pytest.raises(PloomberValueError) as e:
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         Rank2D(
             features=["Feature1", "Feature2", "Feature3", "Feature4"], figsize=(9, 12)
         ).feature_ranks_custom_algorithm(ranks)
@@ -281,7 +280,7 @@ def test_2d_custom_ranks_no_features():
     Rank2D(figsize=(9, 12)).feature_ranks_custom_algorithm(ranks)
 
 
-def test_2d_custom_ranks_incorrect_features():
+def test_2d_custom_ranks_incorrect_features(ploomber_value_error_message):
     ranks = np.array(
         [
             [1.0, -0.076, 0.71, 0.65],
@@ -290,7 +289,7 @@ def test_2d_custom_ranks_incorrect_features():
             [0.65, -0.15, 0.80, 1.0],
         ]
     )
-    with pytest.raises(PloomberValueError) as e:
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         Rank2D(
             features=["Feature1", "Feature2", "Feature3"]
         ).feature_ranks_custom_algorithm(ranks)

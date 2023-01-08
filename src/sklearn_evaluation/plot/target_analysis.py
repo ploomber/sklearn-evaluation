@@ -22,7 +22,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from ..telemetry import SKLearnEvaluationLogger
 from sklearn.utils.multiclass import unique_labels, type_of_target
-from ploomber_core.exceptions import PloomberValueError
+from ploomber_core.exceptions import modify_exceptions
 
 
 def _validate_target(y):
@@ -41,6 +41,7 @@ def _validate_target(y):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
     """Target analysis plot for visualising class imbalance.
 
@@ -99,7 +100,7 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
     classes_ = unique_labels(*targets)
     if labels is not None:
         if len(labels) != len(classes_):
-            raise PloomberValueError(
+            raise ValueError(
                 (
                     "Discovered {} classes in the data, does not match "
                     "the {} labels specified."
