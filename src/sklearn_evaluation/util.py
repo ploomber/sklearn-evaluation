@@ -5,7 +5,6 @@ from collections.abc import Iterable
 from collections import defaultdict
 from itertools import product
 from six import string_types
-from ploomber_core.exceptions import modify_exceptions
 
 
 def isiter(obj):
