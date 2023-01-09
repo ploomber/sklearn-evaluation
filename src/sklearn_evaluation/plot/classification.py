@@ -15,47 +15,62 @@ from ..plot.matplotlib import bar
 from ..metrics import precision_at
 from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
-from ..plot.plot import Plot
+from ..plot.plot import AbstractPlot, AbstractComposedPlot
 from ..plot import _matrix
 
 
-def _confusion_matrix_add(first, second, ax, target_names):
-    _matrix.add(first, second, ax, invert_axis=True)
+class ConfusionMatrixSub(AbstractComposedPlot):
+    """A composed plot to compare the difference between two confusion matrices"""
 
-    tick_marks = np.arange(len(target_names))
-    ax.set_xticks(tick_marks)
-    ax.set_xticklabels(target_names)
-    ax.set_yticks(tick_marks)
-    ax.set_yticklabels(target_names)
-
-    title = "Confusion matrix (compare)"
-    ax.set_title(title)
-
-    ax.set_ylabel("True label")
-    ax.set_xlabel("Predicted label")
-
-
-class ConfusionMatrixSub(Plot):
     def __init__(self, cm, target_names) -> None:
-        self.figure = plt.figure()
-        ax = self.figure.add_subplot()
+        self.cm = cm
+        self.target_names = target_names
+
+    def plot(self, ax=None):
+        if ax is None:
+            ax = plt.gca()
+
         _plot_cm(
-            cm,
+            self.cm,
             cmap=default_heatmap(),
             ax=ax,
-            target_names=target_names,
+            target_names=self.target_names,
             normalize=False,
         )
 
+        return ax
 
-class ConfusionMatrixAdd(Plot):
+
+class ConfusionMatrixAdd(AbstractComposedPlot):
+    """A composed plot to compare two confusion matrices"""
+
     def __init__(self, a, b, target_names) -> None:
-        self.figure = plt.figure()
-        ax = self.figure.add_subplot()
-        _confusion_matrix_add(a, b, ax=ax, target_names=target_names)
+        self.a = a
+        self.b = b
+        self.target_names = target_names
+
+    def plot(self, ax=None):
+        if ax is None:
+            ax = plt.gca()
+
+        _matrix.add(self.a, self.b, ax, invert_axis=True)
+
+        tick_marks = np.arange(len(self.target_names))
+        ax.set_xticks(tick_marks)
+        ax.set_xticklabels(self.target_names)
+        ax.set_yticks(tick_marks)
+        ax.set_yticklabels(self.target_names)
+
+        title = "Confusion matrix (compare)"
+        ax.set_title(title)
+
+        ax.set_ylabel("True label")
+        ax.set_xlabel("Predicted label")
+
+        return ax
 
 
-class ConfusionMatrix(Plot):
+class ConfusionMatrix(AbstractPlot):
     """
     Plot confusion matrix.
 
@@ -65,12 +80,14 @@ class ConfusionMatrix(Plot):
 
     Notes
     -----
-    http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-
+    .. versionchanged:: 0.9
+        Added ``cmap`` argument
     """
 
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
-    def __init__(self, y_true, y_pred, target_names=None, normalize=False, cm=None):
+    def __init__(
+        self, y_true, y_pred, target_names=None, normalize=False, cm=None, cmap=None
+    ):
         if y_true is not None and cm is None:
             warn(
                 "ConfusionMatrix will change its signature in version 0.10"
@@ -79,31 +96,41 @@ class ConfusionMatrix(Plot):
                 stacklevel=3,
             )
 
-        self.figure = plt.figure()
-        ax = self.figure.add_subplot()
-
         if cm is not None and cm is not False:
             self.cm = cm
             self.target_names = target_names
             self.normalize = normalize
-            cmap, ax = _confusion_matrix_init_defaults(cmap=None, ax=ax)
+            self.cmap = _confusion_matrix_init_defaults(cmap=cmap)
         else:
-            self.cm = _confusion_matrix(y_true, y_pred, normalize)
-            self.target_names, cmap, ax = _confusion_matrix_validate(
-                y_true, y_pred, target_names, cmap=None, ax=ax
+            self.target_names, self.cmap = _confusion_matrix_validate(
+                y_true, y_pred, target_names, cmap=cmap
             )
+            self.cm = _confusion_matrix(y_true, y_pred, normalize)
             self.normalize = normalize
 
-        _plot_cm(self.cm, cmap, ax, self.target_names, self.normalize)
+    def plot(self, ax=None):
+        if ax is None:
+            _, ax = plt.subplots()
+
+        _plot_cm(self.cm, self.cmap, ax, self.target_names, self.normalize)
+
+        self.ax_ = ax
+        self.figure_ = ax.figure
+
+        return self
 
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-sub")
     def __sub__(self, other):
         cm = self.cm - other.cm
-        return ConfusionMatrixSub(cm, self.target_names)
+        obj = ConfusionMatrixSub(cm, self.target_names)
+        obj.plot()
+        return obj
 
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-add")
     def __add__(self, other):
-        return ConfusionMatrixAdd(self.cm, other.cm, self.target_names)
+        obj = ConfusionMatrixAdd(self.cm, other.cm, self.target_names)
+        obj.plot()
+        return obj
 
     def _get_data(self):
         return {
@@ -126,12 +153,21 @@ class ConfusionMatrix(Plot):
             target_names=target_names,
             normalize=normalize,
             cm=cm,
-        )
+        ).plot()
 
     @classmethod
-    def from_raw_data(cls, y_true, y_pred, target_names=None, normalize=False):
+    def from_raw_data(
+        cls, y_true, y_pred, target_names=None, normalize=False, cmap=None
+    ):
+        """
+
+        Notes
+        -----
+        .. versionchanged:: 0.9
+            Added ``cmap`` argument.
+        """
         # pass cm=False so we don't emit the future warning
-        return cls(y_true, y_pred, target_names, normalize, cm=False)
+        return cls(y_true, y_pred, target_names, normalize, cm=False, cmap=cmap).plot()
 
     @classmethod
     def _from_data(cls, target_names, normalize, cm):
@@ -177,10 +213,6 @@ def confusion_matrix(
     cmap : matplotlib Colormap
         If ``None`` uses a modified version of matplotlib's OrRd colormap.
 
-    Notes
-    -----
-    http://scikit-learn.org/stable/auto_examples/model_selection/plot_confusion_matrix.html
-
 
     Returns
     -------
@@ -192,14 +224,17 @@ def confusion_matrix(
     .. plot:: ../examples/confusion_matrix.py
 
     """
-    target_names, cmap, ax = _confusion_matrix_validate(
-        y_true, y_pred, target_names, cmap, ax
-    )
-    cm = _confusion_matrix(y_true, y_pred, normalize)
-    return _plot_cm(cm, cmap, ax, target_names, normalize)
+    return ConfusionMatrix.from_raw_data(
+        y_true=y_true,
+        y_pred=y_pred,
+        target_names=target_names,
+        normalize=normalize,
+        cmap=cmap,
+    ).ax_
 
 
 def _confusion_matrix_validate_predictions(y_true, y_pred, target_names):
+    """Validate input prediction data for a confusion matrix"""
     if any((val is None for val in (y_true, y_pred))):
         raise ValueError("y_true and y_pred are needed to plot confusion " "matrix")
 
@@ -223,23 +258,22 @@ def _confusion_matrix_validate_predictions(y_true, y_pred, target_names):
     return target_names
 
 
-def _confusion_matrix_init_defaults(cmap, ax):
+def _confusion_matrix_init_defaults(cmap):
+    """Initialize default values for confusion matrix"""
     # if the user didn't pass target_names, create generic ones
     np.set_printoptions(precision=2)
-
-    if ax is None:
-        ax = plt.gca()
 
     if cmap is None:
         cmap = default_heatmap()
 
-    return cmap, ax
+    return cmap
 
 
-def _confusion_matrix_validate(y_true, y_pred, target_names, cmap, ax):
+def _confusion_matrix_validate(y_true, y_pred, target_names, cmap):
+    """Validate values for confusion matrix and initialize defaults"""
     target_names = _confusion_matrix_validate_predictions(y_true, y_pred, target_names)
-    cmap, ax = _confusion_matrix_init_defaults(cmap, ax)
-    return target_names, cmap, ax
+    cmap = _confusion_matrix_init_defaults(cmap)
+    return target_names, cmap
 
 
 def _add_values_to_matrix(m, ax):
@@ -257,6 +291,7 @@ def _add_values_to_matrix(m, ax):
 
 
 def _plot_cm(cm, cmap, ax, target_names, normalize):
+    """Adds confusion matrix graphical elements to a ``matplotlib.Axes`` object"""
     _add_values_to_matrix(cm, ax)
 
     im = ax.imshow(cm, interpolation="nearest", cmap=cmap)

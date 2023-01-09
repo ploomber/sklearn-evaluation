@@ -2,6 +2,7 @@ from copy import copy
 import sys
 import os
 from pathlib import Path
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 import pytest

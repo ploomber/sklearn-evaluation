@@ -108,9 +108,7 @@ class ClassifierEvaluator(object):
     @requires_properties(("y_true", "y_pred"))
     def confusion_matrix(self):
         """Confusion matrix plot"""
-        return plot.confusion_matrix(
-            self.y_true, self.y_pred, self.target_names, ax=_gen_ax()
-        )
+        return plot.confusion_matrix(self.y_true, self.y_pred, self.target_names)
 
     @requires_properties(("y_true", "y_score"))
     def roc(self):
