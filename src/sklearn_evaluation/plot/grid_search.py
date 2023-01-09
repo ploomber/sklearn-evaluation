@@ -9,6 +9,9 @@ from six import string_types
 from ..telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
+
+from ploomber_core.exceptions import modify_exceptions
+
 from ..util import (
     _group_by,
     _get_params_value,
@@ -20,6 +23,7 @@ from ..util import (
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def grid_search(
     cv_results_, change, subset=None, kind="line", cmap=None, ax=None, sort=True
 ):

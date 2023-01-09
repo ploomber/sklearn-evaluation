@@ -29,11 +29,13 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.calibration import calibration_curve as sk_calibration_curve
 from sklearn.utils import column_or_1d
-
+from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.util import isiterofiter
 
-
 # TODO: add unit tests
+
+
+@modify_exceptions
 def calibration_curve(
     y_true, probabilities, clf_names=None, n_bins=10, cmap="nipy_spectral", ax=None
 ):
@@ -161,6 +163,7 @@ def calibration_curve(
     return ax
 
 
+@modify_exceptions
 def scores_distribution(y_scores, n_bins=5, ax=None):
     """Generate a histogram from model's predictions
 

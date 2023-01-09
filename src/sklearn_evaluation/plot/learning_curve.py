@@ -1,9 +1,11 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from ..telemetry import SKLearnEvaluationLogger
+from ploomber_core.exceptions import modify_exceptions
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def learning_curve(train_scores, test_scores, train_sizes, ax=None):
     """Plot a learning curve
 
@@ -62,7 +64,11 @@ def learning_curve(train_scores, test_scores, train_sizes, ax=None):
 
     ax.plot(train_sizes, train_scores_mean, "o-", color="r", label="Training score")
     ax.plot(
-        train_sizes, test_scores_mean, "o-", color="g", label="Cross-validation score"
+        train_sizes,
+        test_scores_mean,
+        "o-",
+        color="g",
+        label="Cross-validation score",
     )
 
     ax.legend(loc="best")

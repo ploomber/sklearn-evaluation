@@ -37,9 +37,13 @@ from joblib import Parallel, delayed
 
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
+from ploomber_core.exceptions import modify_exceptions
 
 # TODO: add unit test
+
+
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=None):
     """Plots elbow curve of different values of K of a clustering algorithm.
 
@@ -100,6 +104,7 @@ def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=No
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     """
     Same as `elbow_curve`, but it takes the number of clusters and sum of
@@ -233,6 +238,7 @@ def silhouette_analysis(
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def silhouette_analysis_from_results(
     X,
     cluster_labels,
@@ -250,7 +256,6 @@ def silhouette_analysis_from_results(
     -----
     .. versionadded:: 0.8.3
     """
-
     cluster_labels = np.asarray(cluster_labels)
 
     le = LabelEncoder()

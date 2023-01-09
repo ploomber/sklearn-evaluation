@@ -53,12 +53,12 @@ def test_string_classes_cumulative_gain():
     cumulative_gain(_convert_labels_into_string(y), probas)
 
 
-def test_two_classes_cumulative_gain():
+def test_two_classes_cumulative_gain(ploomber_value_error_message):
     X, y = load_iris(return_X_y=True)
     clf = LogisticRegression()
     clf.fit(X, y)
     probas = clf.predict_proba(X)
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         cumulative_gain(y, probas)
     assert "Cannot calculate Cumulative Gains for data with 3 category/ies" in str(
         e.value
@@ -104,12 +104,12 @@ def test_string_classes_lift_curve():
     lift_curve(_convert_labels_into_string(y), probas)
 
 
-def test_two_classes_lift_curve():
+def test_two_classes_lift_curve(ploomber_value_error_message):
     X, y = load_iris(return_X_y=True)
     clf = LogisticRegression()
     clf.fit(X, y)
     probas = clf.predict_proba(X)
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         lift_curve(y, probas)
     assert "Cannot calculate Lift Curve for data with 3 category/ies" in str(e.value)
 

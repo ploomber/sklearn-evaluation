@@ -17,6 +17,7 @@ from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
 from ..plot.plot import AbstractPlot, AbstractComposedPlot
 from ..plot import _matrix
+from ploomber_core.exceptions import modify_exceptions
 
 
 class ConfusionMatrixSub(AbstractComposedPlot):
@@ -85,6 +86,7 @@ class ConfusionMatrix(AbstractPlot):
     """
 
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
+    @modify_exceptions
     def __init__(
         self, y_true, y_pred, target_names=None, normalize=False, cm=None, cmap=None
     ):
@@ -190,6 +192,7 @@ def _confusion_matrix(y_true, y_pred, normalize):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def confusion_matrix(
     y_true, y_pred, target_names=None, normalize=False, cmap=None, ax=None
 ):
@@ -320,6 +323,7 @@ def _plot_cm(cm, cmap, ax, target_names, normalize):
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def feature_importances(
     data, top_n=None, feature_names=None, orientation="horizontal", ax=None
 ):
@@ -373,6 +377,7 @@ def feature_importances(
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def precision_at_proportions(y_true, y_score, ax=None):
     """
     Plot precision values at different proportions.

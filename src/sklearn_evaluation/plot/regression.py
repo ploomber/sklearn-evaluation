@@ -25,6 +25,7 @@ import pandas as pd
 from ploomber_core import deprecated
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.linear_model import LinearRegression
+from ploomber_core.exceptions import modify_exceptions
 
 
 def _set_ax_settings(ax, xlabel, ylabel, title):
@@ -42,6 +43,7 @@ def _check_parameter_validity(y_true, y_pred):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def residuals(y_true, y_pred, ax=None):
     """
     Plot the residuals between measured and predicted values.
@@ -81,6 +83,7 @@ def residuals(y_true, y_pred, ax=None):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def prediction_error(y_true, y_pred, model="deprecated", ax=None):
     """
     Plot the scatter plot of measured values v. predicted values, with
@@ -149,6 +152,7 @@ def prediction_error(y_true, y_pred, model="deprecated", ax=None):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def cooks_distance(X, y, ax=None):
     """Plots cooks distance.
 
@@ -175,7 +179,6 @@ def cooks_distance(X, y, ax=None):
     -----
     .. versionadded:: 0.8.4
     """
-
     model = LinearRegression()
     model.fit(X, y)
     leverage = (X * np.linalg.pinv(X).T).sum(1)
