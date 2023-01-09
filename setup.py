@@ -75,7 +75,7 @@ setup(
     classifiers=[],
     include_package_data=True,
     install_requires=[
-        "ploomber-core>=0.1.1",
+        "ploomber-core>=0.1.1,<0.2",
         # compute metrics
         "scikit-learn",
         # plotting
