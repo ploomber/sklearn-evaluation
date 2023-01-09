@@ -50,4 +50,6 @@ parts:
     - file: reference/matplotlib
     - file: reference/projects
     - file: reference/community
+    - file: reference/developer
+    - file: reference/developer-api
 

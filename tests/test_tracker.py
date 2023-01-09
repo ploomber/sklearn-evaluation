@@ -5,6 +5,7 @@ import time
 import pytest
 from sklearn_evaluation.tracker import SQLiteTracker
 from sklearn_evaluation import tracker as tracker_module
+from sklearn_evaluation import plot
 
 
 def test_insert():
@@ -314,12 +315,43 @@ def test_experiment_log_dict():
     assert len(tracker) == 1
 
 
+def test_experiment_log_figure():
+    tracker = SQLiteTracker(":memory:")
+    experiment = tracker.new_experiment()
+    ax = plot.confusion_matrix([1, 1, 0, 0], [1, 0, 1, 0])
+    experiment.log_figure("confusion_matrix", ax.figure)
+    retrieved = tracker.get(experiment.uuid)
+
+    # this will force unserialization
+    assert tracker.query(
+        """
+SELECT  json_extract(parameters, '$.confusion_matrix') AS cm
+FROM experiments
+""",
+        as_frame=False,
+        render_plots=True,
+    )._repr_html_()
+
+    assert retrieved["confusion_matrix"]
+    assert len(tracker) == 1
+
+
 def test_experiment_log_confusion_matrix():
     tracker = SQLiteTracker(":memory:")
     experiment = tracker.new_experiment()
     experiment.log_confusion_matrix([1, 1, 0, 0], [1, 0, 1, 0])
 
     retrieved = tracker.get(experiment.uuid)
+
+    # this will force unserialization
+    assert tracker.query(
+        """
+SELECT  json_extract(parameters, '$.confusion_matrix') AS cm
+FROM experiments
+""",
+        as_frame=False,
+        render_plots=True,
+    )._repr_html_()
 
     assert retrieved["confusion_matrix"]
     assert len(tracker) == 1
@@ -331,6 +363,16 @@ def test_experiment_log_classification_report():
     experiment.log_classification_report([1, 1, 0, 0], [1, 0, 1, 0])
 
     retrieved = tracker.get(experiment.uuid)
+
+    # this will force unserialization
+    assert tracker.query(
+        """
+SELECT  json_extract(parameters, '$.classification_report') AS cm
+FROM experiments
+""",
+        as_frame=False,
+        render_plots=True,
+    )._repr_html_()
 
     assert retrieved["classification_report"]
     assert len(tracker) == 1

@@ -13,6 +13,7 @@ execute:
   timeout: 30
   # some notebooks download files, so we run them in a tmp directory to clean everything up
   run_in_temp: true
+  allow_errors: false
 
 sphinx:
   extra_extensions:
