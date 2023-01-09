@@ -5,7 +5,6 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report as sk_classification_report
-from matplotlib.figure import Figure
 from ..telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.classification import _add_values_to_matrix
@@ -25,25 +24,22 @@ def _classification_report_add(first, second, keys, target_names, ax):
     ax.set_yticks(tick_marks)
     ax.set_yticklabels(target_names)
 
-    ax.set(title="Classification report (compare)",
-           xlabel="Metric", ylabel="Class")
+    ax.set(title="Classification report (compare)", xlabel="Metric", ylabel="Class")
 
 
 class ClassificationReportSub(Plot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
-        self.figure = Figure()
+        self.figure = plt.figure()
         ax = self.figure.add_subplot()
-        _classification_report_plot(
-            matrix - matrix_another, keys, target_names, ax)
+        _classification_report_plot(matrix - matrix_another, keys, target_names, ax)
         ax.set(title="Classification report (difference)")
 
 
 class ClassificationReportAdd(Plot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
-        self.figure = Figure()
+        self.figure = plt.figure()
         self.ax = self.figure.add_subplot()
-        _classification_report_add(
-            matrix, matrix_another, keys, target_names, self.ax)
+        _classification_report_add(matrix, matrix_another, keys, target_names, self.ax)
 
 
 class ClassificationReport(Plot):
@@ -53,7 +49,8 @@ class ClassificationReport(Plot):
     --------
     .. plot:: ../examples/ClassificationReport.py
     """
-    @SKLearnEvaluationLogger.log(feature='plot', action='classification-report-init')
+
+    @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-init")
     def __init__(
         self,
         y_true,
@@ -73,7 +70,7 @@ class ClassificationReport(Plot):
                 stacklevel=2,
             )
 
-        self.figure = Figure()
+        self.figure = plt.figure()
         ax = self.figure.add_subplot()
 
         if matrix is not None and matrix is not False:
@@ -89,16 +86,15 @@ class ClassificationReport(Plot):
                 zero_division=zero_division,
             )
 
-        _classification_report_plot(
-            self.matrix, self.keys, self.target_names, ax)
+        _classification_report_plot(self.matrix, self.keys, self.target_names, ax)
 
-    @SKLearnEvaluationLogger.log(feature='plot', action='classification-report-sub')
+    @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-sub")
     def __sub__(self, other):
         return ClassificationReportSub(
             self.matrix, other.matrix, self.keys, target_names=self.target_names
         )
 
-    @SKLearnEvaluationLogger.log(feature='plot', action='classification-report-add')
+    @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-add")
     def __add__(self, other):
         return ClassificationReportAdd(
             self.matrix, other.matrix, keys=self.keys, target_names=self.target_names
@@ -163,8 +159,7 @@ def _classification_report(
         output_dict=True,
     )
 
-    report = {k: v for k, v in report.items(
-    ) if "avg" not in k and k != "accuracy"}
+    report = {k: v for k, v in report.items() if "avg" not in k and k != "accuracy"}
     n_classes = len(report.keys())
 
     target_names = target_names or [str(i) for i in range(n_classes)]

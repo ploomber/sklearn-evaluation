@@ -23,8 +23,7 @@ class EvaluatorHTMLSerializer:
 
 
 class HTMLSerializableCallable:
-    """Wraps a method so that the results is serialized after it is run
-    """
+    """Wraps a method so that the results is serialized after it is run"""
 
     def __init__(self, attr):
         self.attr = attr
@@ -36,10 +35,10 @@ class HTMLSerializableCallable:
             return figure2html(obj.get_figure())
         elif isinstance(obj, matplotlib.figure.Figure):
             return figure2html(obj)
-        elif hasattr(obj, 'to_html'):
+        elif hasattr(obj, "to_html"):
             return obj.to_html()
         else:
-            raise TypeError('Unsupported type {}'.format(type(obj)))
+            raise TypeError("Unsupported type {}".format(type(obj)))
 
 
 def figure2html(fig):
@@ -57,7 +56,7 @@ def base64_2_html(img):
 
 def figure2base64(fig):
     io = BytesIO()
-    fig.savefig(io, format='png')
+    fig.savefig(io, format="png")
     try:
         fig_base64 = base64.encodebytes(io.getvalue())  # py3
     except Exception:
@@ -66,18 +65,16 @@ def figure2base64(fig):
 
 
 def prettify_list(elements):
-    elements = [
-        str(idx + 1) + '. ' + str(el) for idx, el in enumerate(elements)
-    ]
-    return reduce(lambda x, y: x + '<br>' + y, elements)
+    elements = [str(idx + 1) + ". " + str(el) for idx, el in enumerate(elements)]
+    return reduce(lambda x, y: x + "<br>" + y, elements)
 
 
 def prettify_dict(d):
-    return prettify_list([key + ': ' + str(d[key]) for key in d.keys()])
+    return prettify_list([key + ": " + str(d[key]) for key in d.keys()])
 
 
 def try_figure2html(obj):
-    if hasattr(obj, 'savefig'):
+    if hasattr(obj, "savefig"):
         return figure2html(obj)
     else:
         return obj

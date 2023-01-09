@@ -20,7 +20,9 @@ limitations under the License.
 
 import matplotlib.pyplot as plt
 import numpy as np
+import pandas as pd
 
+from ploomber_core import deprecated
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.linear_model import LinearRegression
 
@@ -33,14 +35,13 @@ def _set_ax_settings(ax, xlabel, ylabel, title):
 
 def _check_parameter_validity(y_true, y_pred):
     if any((val is None for val in (y_true, y_pred))):
-        raise ValueError('y_true and y_pred are needed to plot '
-                         'Residuals Plot')
+        raise ValueError("y_true and y_pred are needed to plot " "Residuals Plot")
 
     if y_true.shape != y_pred.shape:
-        raise ValueError('parameters should have same shape.')
+        raise ValueError("parameters should have same shape.")
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
+@SKLearnEvaluationLogger.log(feature="plot")
 def residuals(y_true, y_pred, ax=None):
     """
     Plot the residuals between measured and predicted values.
@@ -75,12 +76,12 @@ def residuals(y_true, y_pred, ax=None):
 
     ax.scatter(y_pred, y_true - y_pred)
 
-    _set_ax_settings(ax, 'Predicted Value', 'Residuals', 'Residuals Plot')
+    _set_ax_settings(ax, "Predicted Value", "Residuals", "Residuals Plot")
     return ax
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
-def prediction_error(y_true, y_pred, model=None, ax=None):
+@SKLearnEvaluationLogger.log(feature="plot")
+def prediction_error(y_true, y_pred, model="deprecated", ax=None):
     """
     Plot the scatter plot of measured values v. predicted values, with
     an identity line and a best fitted line to show the prediction
@@ -92,10 +93,6 @@ def prediction_error(y_true, y_pred, model=None, ax=None):
         Measured target values (ground truth).
     y_pred : array-like, shape = [n_samples]
         Predicted target values.
-    model : Regression instance that implements ``fit``,``predict``, and
-        ``score`` methods and ``fit_intercept`` attribute.
-        e.g. :class:`sklearn.linear_model.LinearRegression` instance
-        If not specified, use the LinearRegression model.
     ax : matplotlib Axes
         Axes object to draw the plot onto, otherwise uses current Axes
 
@@ -104,23 +101,35 @@ def prediction_error(y_true, y_pred, model=None, ax=None):
     ax: matplotlib Axes
         Axes containing the plot
 
+    Notes
+    -----
+    .. deprecated:: 0.8.6
+        'model' argument is deprecated, will be removed in version 0.9
+
     Examples
     --------
     .. plot:: ../examples/prediction_error.py
 
     """
 
+    deprecated.parameter_deprecated(
+        deprecated_in="0.8.6", removed_in="0.9", name_old="model", value_passed=model
+    )
+
     _check_parameter_validity(y_true, y_pred)
     if ax is None:
         ax = plt.gca()
 
-    model = model or LinearRegression()
-    if not hasattr(model, 'fit_intercept'):
-        raise TypeError('"fit_intercept" attribute not in model. '
-                        'Cannot plot prediction error.')
-    # best fit line
-    model.fit(y_true.reshape((-1, 1)), y_pred)
-    x = np.linspace(80, 230, 100)
+    model = LinearRegression()
+
+    if isinstance(y_true, pd.Series):
+        y_true = y_true.values
+    y_reshaped = y_true.reshape((-1, 1))
+
+    # it is necessary to fit the model with y_true and y_pred
+    # to get the best fit line representing the error trend
+    model.fit(y_reshaped, y_pred)
+    x = np.linspace(min(min(y_true), min(y_pred)), max(max(y_true), max(y_pred)))
     y = model.intercept_ + model.coef_ * x
     ax.plot(x, y, "-b", label="best fit")
 
@@ -131,40 +140,40 @@ def prediction_error(y_true, y_pred, model=None, ax=None):
     ax.scatter(y_true, y_pred)
 
     # R2
-    r2 = model.score(y_true.reshape((-1, 1)), y_pred)
-    plt.plot([], [], ' ', label=f"R2 = {round(r2,5)}")
+    r2 = model.score(y_reshaped, y_pred)
+    plt.plot([], [], " ", label=f"R2 = {round(r2,5)}")
 
-    _set_ax_settings(ax, 'y_true', 'y_pred', 'Prediction Error')
+    _set_ax_settings(ax, "y_true", "y_pred", "Prediction Error")
     ax.legend(loc="upper left")
     return ax
 
 
-@SKLearnEvaluationLogger.log(feature='plot')
+@SKLearnEvaluationLogger.log(feature="plot")
 def cooks_distance(X, y, ax=None):
     """Plots cooks distance.
 
-        Parameters
-        ----------
-        X : array-like, 2D
-            Training data
-            Refer https://numpy.org/doc/stable/glossary.html#term-array-like
+    Parameters
+    ----------
+    X : array-like, 2D
+        Training data
+        Refer https://numpy.org/doc/stable/glossary.html#term-array-like
 
-        y : array-like, 1D
-            Target data
-            Refer https://numpy.org/doc/stable/glossary.html#term-array-like
+    y : array-like, 1D
+        Target data
+        Refer https://numpy.org/doc/stable/glossary.html#term-array-like
 
-        Returns
-        -------
-        ax: matplotlib Axes
-            Axes containing the plot
+    Returns
+    -------
+    ax: matplotlib Axes
+        Axes containing the plot
 
-        Examples
-        --------
-        .. plot:: ../examples/cooks_distance.py
+    Examples
+    --------
+    .. plot:: ../examples/cooks_distance.py
 
-        Notes
-        -----
-        .. versionadded:: 0.8.4
+    Notes
+    -----
+    .. versionadded:: 0.8.4
     """
 
     model = LinearRegression()
@@ -178,20 +187,18 @@ def cooks_distance(X, y, ax=None):
     distance_ = residuals_studentized**2 / X.shape[1]
     distance_ *= leverage / (1 - leverage)
     influence_threshold_ = 4 / X.shape[0]
-    outlier_percentage_ = (sum(distance_ > influence_threshold_) / X.shape[0])
+    outlier_percentage_ = sum(distance_ > influence_threshold_) / X.shape[0]
     outlier_percentage_ *= 100.0
 
     if ax is None:
         ax = plt.gca()
-    _, _, baseline = ax.stem(distance_,
-                             linefmt="C0-",
-                             markerfmt=",",
-                             use_line_collection=True)
+    _, _, baseline = ax.stem(
+        distance_, linefmt="C0-", markerfmt=",", use_line_collection=True
+    )
 
     ax.set_xlim(0, len(distance_))
 
-    label = r"{:0.2f}% > $I_t$ ($I_t=\frac {{4}} {{n}}$)".format(
-        outlier_percentage_)
+    label = r"{:0.2f}% > $I_t$ ($I_t=\frac {{4}} {{n}}$)".format(outlier_percentage_)
     ax.axhline(
         influence_threshold_,
         ls="--",

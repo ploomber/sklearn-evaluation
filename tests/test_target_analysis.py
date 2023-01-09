@@ -57,9 +57,9 @@ def test_class_names_must_match(target_analysis_binary):
         plot.target_analysis(y_train, y_test=y_test, labels=["a", "b", "c"])
 
 
-@image_comparison(baseline_images=['binary_balance'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(
+    baseline_images=["binary_balance"], extensions=["png"], remove_text=False
+)
 def test_binary_balance(target_analysis_binary):
     """
     Test binary classification in balance mode
@@ -69,9 +69,9 @@ def test_binary_balance(target_analysis_binary):
     plot.target_analysis(y_train)
 
 
-@image_comparison(baseline_images=['binary_compare'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(
+    baseline_images=["binary_compare"], extensions=["png"], remove_text=False
+)
 def test_binary_compare(target_analysis_binary):
     """
     Test binary classification in compare mode
@@ -81,9 +81,9 @@ def test_binary_compare(target_analysis_binary):
     plot.target_analysis(y_train, y_test)
 
 
-@image_comparison(baseline_images=['multiclass_balance'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(
+    baseline_images=["multiclass_balance"], extensions=["png"], remove_text=False
+)
 def test_multiclass_balance(target_analysis_multiclass):
     """
     Test multiclass classification in balance mode
@@ -92,9 +92,9 @@ def test_multiclass_balance(target_analysis_multiclass):
     plot.target_analysis(y_train)
 
 
-@image_comparison(baseline_images=['multiclass_compare'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(
+    baseline_images=["multiclass_compare"], extensions=["png"], remove_text=False
+)
 def test_multiclass_compare(target_analysis_multiclass):
     """
     Test multiclass classification in compare mode
@@ -103,40 +103,35 @@ def test_multiclass_compare(target_analysis_multiclass):
     plot.target_analysis(y_train, y_test)
 
 
-@image_comparison(baseline_images=['multiclass_compare_iris_pandas'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(
+    baseline_images=["multiclass_compare_iris_pandas"],
+    extensions=["png"],
+    remove_text=False,
+)
 def test_multiclass_compare_iris_pandas():
     """
     Test multiclass classification in compare mode for pandas input type
     """
     df = pd.DataFrame(iris_data.data, columns=iris_data.feature_names)
-    df['target'] = pd.Series(iris_data.target)
+    df["target"] = pd.Series(iris_data.target)
     train, test = train_test_split(df, test_size=0.3, random_state=42)
     plot.target_analysis(train.target, test.target)
 
 
-@image_comparison(baseline_images=['iris_labels_compare'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(
+    baseline_images=["iris_labels_compare"], extensions=["png"], remove_text=False
+)
 def test_labels_iris():
     X = iris_data.data
     y = iris_data.target
-    _, _, y_train, y_test = train_test_split(X,
-                                             y,
-                                             test_size=0.3,
-                                             random_state=42)
-    plot.target_analysis(y_train,
-                         y_test,
-                         labels=['Setosa', 'Versicolour', 'Virginica'])
+    _, _, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+    plot.target_analysis(y_train, y_test, labels=["Setosa", "Versicolour", "Virginica"])
 
 
-@image_comparison(baseline_images=['bar_color'],
-                  extensions=['png'],
-                  remove_text=False)
+@image_comparison(baseline_images=["bar_color"], extensions=["png"], remove_text=False)
 def test_bar_color(target_analysis_binary):
     """
     Test multiclass classification in compare mode
     """
     _, _, y_train, y_test = target_analysis_binary
-    plot.target_analysis(y_train, y_test, colors=['y', 'g'])
+    plot.target_analysis(y_train, y_test, colors=["y", "g"])

@@ -6,8 +6,12 @@ from sklearn_evaluation import plot, __version__
 @pytest.fixture
 def y():
     y_test = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
-    y_score = np.array([[0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-                        [0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3]]).T
+    y_score = np.array(
+        [
+            [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+            [0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3],
+        ]
+    ).T
     return y_test, y_score
 
 
@@ -24,11 +28,10 @@ def test_from_raw_data(y):
     }
 
 
-def test_from_raw_data_multi(tmp_directory, y,
-                             roc_multi_classification_raw_data):
-    y_test, y_score = roc_multi_classification_raw_data
+def test_from_raw_data_multi(tmp_directory, y, roc_multi_classification_values):
+    y_test, y_score, _ = roc_multi_classification_values
 
-    roc = plot.ROC.from_raw_data(y_test, y_score)
+    roc = plot.ROC(y_test, y_score)
 
     assert roc._get_data() == {
         'class': 'sklearn_evaluation.plot.ROC',

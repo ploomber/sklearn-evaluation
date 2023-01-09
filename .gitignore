@@ -1,3 +1,4 @@
+docs/reference/*.json
 docs/_build
 
 .nox

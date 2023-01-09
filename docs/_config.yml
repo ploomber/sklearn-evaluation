@@ -1,6 +1,6 @@
 title: sklearn-evaluation
 author: Ploomber
-copyright: Ploomber
+copyright: '2023'
 logo: logo.jpeg
 
 # https://jupyterbook.org/en/stable/structure/configure.html#disable-building-files-that-arent-in-the-table-of-contents
@@ -13,6 +13,7 @@ execute:
   timeout: 30
   # some notebooks download files, so we run them in a tmp directory to clean everything up
   run_in_temp: true
+  allow_errors: false
 
 sphinx:
   extra_extensions:
@@ -57,6 +58,7 @@ html:
   use_repository_button: true
   extra_navbar: Join us on <a href="https://ploomber.io/community/">Slack!</a>
   announcement: To launch any tutorial in JupyterLab, click on the 🚀 button below!
+  google_analytics_id: G-3KL9PSJBZZ
 
 launch_buttons:
   notebook_interface: "jupyterlab"

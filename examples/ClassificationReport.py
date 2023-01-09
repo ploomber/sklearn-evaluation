@@ -20,9 +20,6 @@ cr_lr = plot.ClassificationReport.from_raw_data(
     y_test, y_pred_lr, target_names=target_names
 )
 
-# display one of the classification reports
-cr_rf
-
 # how better it is the random forest?
 cr_rf - cr_lr
 

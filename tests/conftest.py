@@ -2,6 +2,7 @@ from copy import copy
 import sys
 import os
 from pathlib import Path
+
 import numpy as np
 from sklearn.linear_model import LogisticRegression
 import pytest
@@ -200,6 +201,20 @@ def roc_multi_classification_raw_data_set2():
 
 
 @pytest.fixture
+def regression_data():
+    from sklearn.linear_model import LinearRegression
+
+    X, y = datasets.make_regression(
+        n_samples=2000, n_features=4, n_informative=3, noise=30.0, random_state=0
+    )
+    X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
+    model = LinearRegression()
+    model.fit(X_train, y_train)
+    y_pred = model.predict(X_test)
+    return y_test, y_pred
+
+
+@pytest.fixture
 def roc_multi_classification_values():
     roc_rates_n_classes = [{'fpr': [0.0, 0.0, 0.11764705882352941, 0.11764705882352941,
                                     0.23529411764705882, 0.23529411764705882, 1.0],
@@ -219,11 +234,11 @@ def roc_multi_classification_values():
                             'tpr': [0.0, 0.2, 0.4, 0.4, 1.0, 1.0]},
                            {'fpr': [0.0, 0.0, 0.0, 1.0], 'tpr': [0.0, 0.25, 1.0, 1.0]}]
 
-    fpr = [0.0, 0.0, 0.0, 0.0125, 0.0125, 0.0375, 0.0375, 0.0625, 0.0625, 0.075, 0.075,
-           0.0875, 0.0875, 0.125, 0.125, 0.15, 0.15, 0.2125, 0.2125, 0.35,
-           0.35, 0.6, 0.6, 1.0]
-    tpr = [0.0, 0.05, 0.35, 0.35, 0.4, 0.4, 0.5, 0.5, 0.55, 0.55, 0.6, 0.6,
-           0.65, 0.65, 0.7, 0.7, 0.75, 0.75, 0.8, 0.8, 0.95, 0.95, 1.0, 1.0]
+    fpr = np.array([0.0, 0.0, 0.0, 0.0125, 0.0125, 0.0375, 0.0375, 0.0625, 0.0625, 0.075, 0.075,
+                    0.0875, 0.0875, 0.125, 0.125, 0.15, 0.15, 0.2125, 0.2125, 0.35,
+                    0.35, 0.6, 0.6, 1.0])
+    tpr = np.array([0.0, 0.05, 0.35, 0.35, 0.4, 0.4, 0.5, 0.5, 0.55, 0.55, 0.6, 0.6,
+                    0.65, 0.65, 0.7, 0.7, 0.75, 0.75, 0.8, 0.8, 0.95, 0.95, 1.0, 1.0])
 
     return fpr, tpr, roc_rates_n_classes
 

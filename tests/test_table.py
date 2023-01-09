@@ -1,5 +1,6 @@
 from unittest.mock import Mock
 
+import pytest
 import numpy as np
 from sklearn_evaluation import table
 
@@ -26,9 +27,16 @@ def test_feature_importances_top3(path_to_tests_static):
     assert expected == str(table.feature_importances(ft_imp, top_n=3))
 
 
-def test_feature_importances_feature_names(path_to_tests_static):
+@pytest.mark.parametrize(
+    "feature_names",
+    [
+        ["thing_a", "thing_b", "thing_c", "thing_d", "thing_e"],
+        np.array(["thing_a", "thing_b", "thing_c", "thing_d", "thing_e"]),
+    ],
+    ids=["list", "array"],
+)
+def test_feature_importances_feature_names(path_to_tests_static, feature_names):
     feature_importances = np.array([0.12, 0.10, 0.8, 0.06, 0.03])
-    feature_names = ["thing_a", "thing_b", "thing_c", "thing_d", "thing_e"]
     with open(path_to_tests_static / "table_ft_names.txt", "r") as f:
         expected = f.read()
     assert expected == str(

@@ -49,7 +49,7 @@ def is_row_vector(x):
 
 def _group_by(data, criteria):
     """
-        Group objects in data using a function or a key
+    Group objects in data using a function or a key
     """
     if isinstance(criteria, str):
         criteria_str = criteria
@@ -66,9 +66,9 @@ def _group_by(data, criteria):
 
 def _get_params_value(params):
     """
-        Given an iterator (k1, k2), returns a function that when called
-        with an object obj returns a tuple of the form:
-        ((k1, obj.parameters[k1]), (k2, obj.parameters[k2]))
+    Given an iterator (k1, k2), returns a function that when called
+    with an object obj returns a tuple of the form:
+    ((k1, obj.parameters[k1]), (k2, obj.parameters[k2]))
     """
     # sort params for consistency
     ord_params = sorted(params)
@@ -79,7 +79,7 @@ def _get_params_value(params):
             try:
                 keys.append((p, obj.parameters[p]))
             except KeyError:
-                raise ValueError('{} is not a valid parameter'.format(p))
+                raise ValueError("{} is not a valid parameter".format(p))
         return tuple(keys)
 
     return fn
@@ -90,8 +90,7 @@ def _sorted_map_iter(d, sort=True):
         try:
             ord_keys = sorted(d.keys())
         except TypeError as e:
-            raise TypeError(
-                'Sorting not supported. Please pass sort=False') from e
+            raise TypeError("Sorting not supported. Please pass sort=False") from e
     else:
         ord_keys = d.keys()
     for k in ord_keys:
@@ -100,8 +99,8 @@ def _sorted_map_iter(d, sort=True):
 
 def _product(k, v):
     """
-        Perform the product between two objects
-        even if they don't support iteration
+    Perform the product between two objects
+    even if they don't support iteration
     """
     if not _can_iterate(k):
         k = [k]
@@ -112,10 +111,10 @@ def _product(k, v):
 
 def _mapping_to_tuple_pairs(d):
     """
-        Convert a mapping object (such as a dictionary) to tuple pairs,
-        using its keys and values to generate the pairs and then generating
-        all possible combinations between those
-        e.g. {1: (1,2,3)} -> (((1, 1),), ((1, 2),), ((1, 3),))
+    Convert a mapping object (such as a dictionary) to tuple pairs,
+    using its keys and values to generate the pairs and then generating
+    all possible combinations between those
+    e.g. {1: (1,2,3)} -> (((1, 1),), ((1, 2),), ((1, 3),))
     """
     # order the keys, this will prevent different implementations of Python,
     # return different results from the same dictionary since the order of
@@ -137,14 +136,17 @@ def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
     """
     import matplotlib.colors as colors
     import numpy as np
+
     new_cmap = colors.LinearSegmentedColormap.from_list(
-        'trunc({n},{a:.2f},{b:.2f})'.format(n=cmap.name, a=minval, b=maxval),
-        cmap(np.linspace(minval, maxval, n)))
+        "trunc({n},{a:.2f},{b:.2f})".format(n=cmap.name, a=minval, b=maxval),
+        cmap(np.linspace(minval, maxval, n)),
+    )
     return new_cmap
 
 
 def default_heatmap():
     import matplotlib.pyplot as plt
+
     return truncate_colormap(plt.cm.OrRd, 0.1, 0.7)
 
 
@@ -162,7 +164,7 @@ def map_parameters_in_fn_call(args, kwargs, func):
     params_all = set(args_spec)
     params_missing = params_all - set(kwargs.keys())
 
-    if 'self' in args_spec:
+    if "self" in args_spec:
         offset = 1
     else:
         offset = 0
@@ -187,10 +189,7 @@ def map_parameters_in_fn_call(args, kwargs, func):
     parsed.update(args_parsed)
 
     # fill default values
-    default = {
-        k: v.default
-        for k, v in sig.parameters.items() if v.default != _empty
-    }
+    default = {k: v.default for k, v in sig.parameters.items() if v.default != _empty}
 
     to_add = set(default.keys()) - set(parsed.keys())
 
