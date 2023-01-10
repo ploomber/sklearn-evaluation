@@ -54,7 +54,7 @@ def _set_ax_settings(ax):
 
 
 def _roc_curve_multi(y_true, y_score):
-    # Compute micro-average ROC curve
+    """Compute micro-average ROC curve"""
     return roc_curve(y_true.ravel(), y_score.ravel())
 
 
@@ -88,19 +88,20 @@ def _plot_roc(fpr, tpr, ax, label=None):
 
     label = label or "ROC curve"
 
-    ax.plot(
-        fpr, tpr, label=(f"{label} (area = {roc_auc:0.2f})")
-    )
+    ax.plot(fpr, tpr, label=(f"{label} (area = {roc_auc:0.2f})"))
 
     _set_ax_settings(ax)
     return ax
 
 
-def _plot_from_fpr_tpr_lists(fpr, tpr, ax, labels):
+def _generate_plot_from_fpr_tpr_lists(fpr, tpr, ax, labels=None):
+    """
+    Draws a plot for every list of values i.e tpr[i] and fpr[i].
+    """
     for i in range(len(fpr)):
         fpr_ = fpr[i]
         tpr_ = tpr[i]
-        label = labels[i] if labels is not None else None
+        label = labels[i] if labels is not None and len(labels) > 0 else None
         _plot_roc(fpr_, tpr_, ax, label=label)
 
 
@@ -134,15 +135,15 @@ class ROCAdd(AbstractComposedPlot):
         if ax is None:
             _, ax = plt.subplots()
 
-        _plot_from_fpr_tpr_lists(a.fpr, a.tpr, ax, labels=a.labels)
+        _generate_plot_from_fpr_tpr_lists(a.fpr, a.tpr, ax, labels=a.labels)
 
         # mark the added curve with 2
-        if b.labels is not None:
-            b_labels = [label + ' 2' for label in b.labels]
+        if b.labels is not None and len(b.labels) > 0:
+            b_labels = [label + " 2" for label in b.labels]
         else:
-            b_labels = ['ROC curve 2']
+            b_labels = ["ROC curve 2"]
 
-        _plot_from_fpr_tpr_lists(b.fpr, b.tpr, ax, labels=b_labels)
+        _generate_plot_from_fpr_tpr_lists(b.fpr, b.tpr, ax, labels=b_labels)
 
         self.ax_ = ax
         self.figure_ = ax.figure
@@ -155,21 +156,16 @@ class ROC(AbstractPlot):
     Plot ROC curve
     Parameters
     ----------
-    fpr : ndarray of shape (>2,), default: None
+    fpr : ndarray of shape (>2,), list of lists or list of numbers
         Increasing false positive rates such that element i is the false
-        positive rate of predictions with score >= `thresholds[i]`. If
-        None, it will be calculated based on y_true and y_score.
+        positive rate of predictions with score >= `thresholds[i]`.
 
-    tpr : ndarray of shape (>2,), default: None
+    tpr : ndarray of shape (>2,), list of lists or list of numbers
         Increasing true positive rates such that element `i` is the true
-        positive rate of predictions with score >= `thresholds[i]`. If
-        None, it will be calculated based on y_true and y_score.
+        positive rate of predictions with score >= `thresholds[i]`.
 
-    labels : list
-
-    roc_rates_n_classes : list of dictionaries with 'fpr' and 'tpr' keys
-        i.e : [{'fpr' : [0.0, 0.2, 0.4, 0.4, 0.6, 1.0],
-        'tpr' : [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]}]
+    labels : list of str, default: None
+        Set curve labels
 
     ax: matplotlib Axes, default: None
         Axes object to draw the plot onto, otherwise uses current Axes
@@ -184,9 +180,19 @@ class ROC(AbstractPlot):
     -----
     .. versionadded:: 0.8.4
     """
+
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
     def __init__(self, fpr, tpr, labels=None, ax=None):
-        if len(fpr) < 0 or len(tpr) < 0:
+        if fpr is None or tpr is None:
+            raise TypeError("fpr and tpr must be defined.")
+
+        if type(fpr) != type(tpr):
+            raise TypeError(
+                "fpr and tpr must be the same type. "
+                f"Recevied: fpr {type(fpr)} != tpr {type(tpr)}"
+            )
+
+        if len(fpr) == 0 or len(tpr) == 0:
             raise ValueError("fpr and tpr must not be empty")
 
         if not isinstance(fpr[0], (list, np.ndarray)):
@@ -195,7 +201,9 @@ class ROC(AbstractPlot):
 
         if len(fpr) != len(tpr):
             raise ValueError(
-                f'fpr and tpr lengths should correspond. Recevied: fpr {len(fpr)} != tpr {len(tpr)}')
+                "fpr and tpr lengths should correspond. "
+                f"Recevied: fpr {len(fpr)} != tpr {len(tpr)}"
+            )
 
         for i in range(len(fpr)):
             fpr_ = fpr[i]
@@ -203,7 +211,9 @@ class ROC(AbstractPlot):
 
             if len(fpr_) != len(tpr_):
                 raise ValueError(
-                    f'fpr and tpr lengths should correspond. Recevied: fpr {len(fpr_)} != tpr {len(tpr_)} at index {i}')
+                    "fpr and tpr lengths should correspond. "
+                    f"Recevied: fpr {len(fpr_)} != tpr {len(tpr_)} at index {i}"
+                )
 
         self.fpr = fpr
         self.tpr = tpr
@@ -232,15 +242,15 @@ class ROC(AbstractPlot):
         return {
             "class": "sklearn_evaluation.plot.ROC",
             "version": __version__,
-            "fpr": self.fpr,
-            "tpr": self.tpr,
+            "fpr": fpr,
+            "tpr": tpr,
         }
 
     def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
 
-        _plot_from_fpr_tpr_lists(self.fpr, self.tpr, ax, labels=self.labels)
+        _generate_plot_from_fpr_tpr_lists(self.fpr, self.tpr, ax, labels=self.labels)
 
         self.ax = ax
         self.figure_ = ax.figure
@@ -262,6 +272,25 @@ class ROC(AbstractPlot):
 
     @staticmethod
     def _calculate_plotting_data(y_true, y_score):
+        """
+        Plot ROC curve
+        Parameters
+        ----------
+        y_true : array-like, shape = [n_samples]
+            Correct target values (ground truth).
+
+        y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
+            classification or [n_samples, n_classes] for multiclass
+            Target scores (estimator predictions).
+
+        Returns
+        -------
+        fpr : list of lists with fpr values
+
+        tpr : list of lists with tpr values
+
+        labels : list of str for curves labels
+        """
         if any((val is None for val in (y_true, y_score))):
             raise ValueError("y_true and y_score are needed to plot ROC")
 
@@ -283,14 +312,14 @@ class ROC(AbstractPlot):
 
             avg_fpr, avg_tpr, _ = _roc_curve_multi(y_true_bin, y_score)
 
-            labels.append('micro-average ROC curve')
+            labels.append("micro-average ROC curve")
             fpr.append(avg_fpr)
             tpr.append(avg_tpr)
 
             for i in range(n_classes):
                 fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])
 
-                labels.append('ROC curve')
+                labels.append("ROC curve")
                 fpr.append(fpr_)
                 tpr.append(tpr_)
         else:
@@ -301,6 +330,5 @@ class ROC(AbstractPlot):
 
             fpr = [fpr]
             tpr = [tpr]
-            labels.append('ROC curve')
 
         return fpr, tpr, labels
