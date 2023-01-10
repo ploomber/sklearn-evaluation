@@ -4,9 +4,11 @@ from sklearn.metrics import precision_recall_curve, average_precision_score
 from sklearn.preprocessing import label_binarize
 from ..telemetry import SKLearnEvaluationLogger
 from ..util import is_column_vector, is_row_vector
+from ploomber_core.exceptions import modify_exceptions
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def precision_recall(y_true, y_score, ax=None):
     """
     Plot precision-recall curve.

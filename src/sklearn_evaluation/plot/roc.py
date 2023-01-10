@@ -7,10 +7,11 @@ from ..util import is_column_vector, is_row_vector
 from sklearn_evaluation import __version__
 import json
 from pathlib import Path
-from warnings import warn  # noqa
 from ..plot.plot import AbstractPlot, AbstractComposedPlot
+from ploomber_core.exceptions import modify_exceptions
 
 
+@modify_exceptions
 def roc(y_true, y_score, ax=None):
     # Support old api
     """
@@ -182,6 +183,7 @@ class ROC(AbstractPlot):
     """
 
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
+    @modify_exceptions
     def __init__(self, fpr, tpr, labels=None, ax=None):
         if fpr is None or tpr is None:
             raise TypeError("fpr and tpr must be defined.")
@@ -266,11 +268,13 @@ class ROC(AbstractPlot):
         return cls(fpr, tpr).plot()
 
     @classmethod
+    @modify_exceptions
     def from_raw_data(cls, y_true, y_score, ax=None):
         fpr, tpr, labels = cls._calculate_plotting_data(y_true, y_score)
         return cls(fpr, tpr, labels=labels, ax=ax).plot()
 
     @staticmethod
+    @modify_exceptions
     def _calculate_plotting_data(y_true, y_score):
         """
         Plot ROC curve

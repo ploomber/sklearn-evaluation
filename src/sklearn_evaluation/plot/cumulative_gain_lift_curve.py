@@ -29,6 +29,7 @@ SOFTWARE.
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from ploomber_core.exceptions import modify_exceptions
 
 
 def _cumulative_gain_curve(y_true, y_score, pos_label=None):
@@ -92,6 +93,7 @@ def _cumulative_gain_curve(y_true, y_score, pos_label=None):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def cumulative_gain(
     y_true,
     y_score,
@@ -179,6 +181,7 @@ def cumulative_gain(
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def lift_curve(
     y_true,
     y_score,

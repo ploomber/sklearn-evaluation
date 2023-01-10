@@ -54,13 +54,13 @@ def test_string_classes():
     ks_statistic(_convert_labels_into_string(y), probas)
 
 
-def test_two_classes():
+def test_two_classes(ploomber_value_error_message):
     np.random.seed(0)
     X, y = load_iris(return_X_y=True)
     clf = LogisticRegression()
     clf.fit(X, y)
     probas = clf.predict_proba(X)
-    with pytest.raises(ValueError) as e:
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         ks_statistic(y, probas)
     assert "Cannot calculate KS statistic for data with 3 category/ies" in str(e.value)
 

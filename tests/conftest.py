@@ -348,3 +348,13 @@ def roc_values():
     tpr = [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]
 
     return fpr, tpr
+
+
+@pytest.fixture
+def ploomber_value_error_message():
+    COMMUNITY = (
+        "\nIf you need help solving this "
+        "issue, send us a message: https://ploomber.io/community"
+    )
+
+    return COMMUNITY

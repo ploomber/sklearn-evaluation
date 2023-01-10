@@ -12,6 +12,7 @@ from sklearn_evaluation.util import default_heatmap
 from sklearn_evaluation.plot.plot import Plot
 from sklearn_evaluation.plot import _matrix
 from sklearn_evaluation import __version__
+from ploomber_core.exceptions import modify_exceptions
 
 
 def _classification_report_add(first, second, keys, target_names, ax):
@@ -121,6 +122,7 @@ class ClassificationReport(Plot):
         )
 
     @classmethod
+    @modify_exceptions
     def from_raw_data(
         cls, y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0
     ):
@@ -189,6 +191,7 @@ def _classification_report_plot(matrix, keys, target_names, ax):
 
 
 # TODO: add unit test
+@modify_exceptions
 def classification_report(
     y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0, ax=None
 ):
