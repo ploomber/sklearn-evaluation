@@ -15,16 +15,15 @@ def y():
     return y_test, y_score
 
 
-def test_from_raw_data(y):
+def test_from_raw_data(y, capsys):
     y_test, y_score = y
     roc = plot.ROC.from_raw_data(y_test, y_score)
 
     assert roc._get_data() == {
         'class': 'sklearn_evaluation.plot.ROC',
         'version': __version__,
-        'fpr': roc.fpr.tolist(),
-        'tpr': roc.tpr.tolist(),
-        'roc_rates_n_classes': roc.roc_rates_n_classes
+        'fpr': roc.fpr,
+        'tpr': roc.tpr,
     }
 
 
@@ -36,9 +35,8 @@ def test_from_raw_data_multi(tmp_directory, y, roc_multi_classification_values):
     assert roc._get_data() == {
         'class': 'sklearn_evaluation.plot.ROC',
         'version': __version__,
-        'fpr': roc.fpr.tolist(),
-        'tpr': roc.tpr.tolist(),
-        'roc_rates_n_classes': roc.roc_rates_n_classes
+        'fpr': roc.fpr,
+        'tpr': roc.tpr
     }
 
 
@@ -47,9 +45,7 @@ def test_roc_dump(tmp_directory, y):
     roc = plot.ROC.from_raw_data(y_test, y_score)
 
     roc.dump("roc.json")
-
     roc2 = plot.ROC.from_dump("roc.json")
-
     assert roc._get_data() == roc2._get_data()
 
 

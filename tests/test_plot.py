@@ -69,9 +69,9 @@ def test_roc_multi_from_raw_data(roc_multi_classification_raw_data):
 
 @image_comparison(baseline_images=["roc_multi"])
 def test_roc_multi(roc_multi_classification_values):
-    fpr, tpr, roc_rates_n_classes = roc_multi_classification_values
+    fpr, tpr, labels = roc_multi_classification_values
 
-    multi_roc = plot.ROC(fpr, tpr, roc_rates_n_classes=roc_rates_n_classes)
+    multi_roc = plot.ROC(fpr, tpr, labels=labels)
     multi_roc.plot()
 
 
@@ -106,28 +106,20 @@ def test_roc_add_to_roc(roc_values):
 @image_comparison(baseline_images=['roc_add_multi'])
 def test_roc_add_to_multi(roc_values, roc_multi_classification_values):
     fpr1, tpr1, _ = roc_values
-    fpr2, tpr2, roc_rates_n_classes = roc_multi_classification_values
+    fpr2, tpr2, labels = roc_multi_classification_values
 
     roc1 = plot.ROC(fpr1, tpr1)
-    roc2 = plot.ROC(fpr2, tpr2, roc_rates_n_classes=roc_rates_n_classes)
-    roc1 + roc2
-
-
-@image_comparison(baseline_images=["roc_multi", "roc", "multi_add_roc"])
-def test_roc_multi_add_to_roc(roc_multi_classification_values):
-    y_test_roc1, y_score_roc1 = roc_multi_classification_values
-
-    roc1 = plot.ROC.from_raw_data(y_test_roc1, y_score_roc1)
-    roc2 = plot.ROC.from_raw_data(y_test, y_score)
+    roc2 = plot.ROC(fpr2, tpr2, labels=labels)
     roc1 + roc2
 
 
 @image_comparison(baseline_images=['multi_add_roc'])
 def test_roc_multi_add_to_roc(roc_values, roc_multi_classification_values):
-    fpr1, tpr1, roc_rates_n_classes = roc_multi_classification_values
+    fpr1, tpr1, labels = roc_multi_classification_values
+
     fpr2, tpr2, _ = roc_values
 
-    roc1 = plot.ROC(fpr1, tpr1, roc_rates_n_classes=roc_rates_n_classes)
+    roc1 = plot.ROC(fpr1, tpr1, labels=labels)
     roc2 = plot.ROC(fpr2, tpr2)
     roc1 + roc2
 
@@ -148,10 +140,10 @@ def test_roc_multi_add_to_multi_from_raw_data(roc_multi_classification_raw_data,
                                    'roc_multi_add_multi'])
 def test_roc_multi_add_to_multi(roc_multi_classification_values,
                                 roc_multi_classification_raw_data_set2):
-    fpr1, tpr1, roc_rates_n_classes = roc_multi_classification_values
+    fpr1, tpr1, labels = roc_multi_classification_values
     y_test_roc2, y_score_roc2 = roc_multi_classification_raw_data_set2
 
-    roc1 = plot.ROC(fpr1, tpr1, roc_rates_n_classes=roc_rates_n_classes)
+    roc1 = plot.ROC(fpr1, tpr1, labels=labels)
     roc2 = plot.ROC.from_raw_data(y_test_roc2, y_score_roc2)
     roc1 + roc2
 
