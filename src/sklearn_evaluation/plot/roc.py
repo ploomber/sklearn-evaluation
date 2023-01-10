@@ -4,11 +4,11 @@ from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
 from ..telemetry import SKLearnEvaluationLogger
 from ..util import is_column_vector, is_row_vector
-from ..plot.plot import Plot
 from sklearn_evaluation import __version__
 import json
 from pathlib import Path
 from warnings import warn  # noqa
+from ..plot.plot import AbstractPlot, AbstractComposedPlot
 
 
 def roc(y_true, y_score, ax=None):
@@ -46,6 +46,7 @@ def roc(y_true, y_score, ax=None):
             FutureWarning,
             stacklevel=2,
         )
+
     r = ROC.from_raw_data(y_true, y_score, ax=ax)
     return r.ax
 
@@ -139,7 +140,7 @@ def _plot_roc_multi_classification(
     return ax
 
 
-class ROCAdd(Plot):
+class ROCAdd(AbstractComposedPlot):
     """
     Generate a new plot with overlapping ROC curves (roc1 + roc2)
 
@@ -159,26 +160,39 @@ class ROCAdd(Plot):
     """
 
     def __init__(self, a, b):
-        self.figure = plt.figure()
-        ax = self.figure.add_subplot()
+        self.a = a
+        self.b = b
+
+    def plot(self, ax=None):
+        a = self.a
+        b = self.b
+
+        if ax is None:
+            _, ax = plt.subplots()
+
         added_curve_label = "ROC curve 2"
 
         if a.roc_rates_n_classes:
-            self.ax = _plot_roc_multi_classification(
+            _plot_roc_multi_classification(
                 a.fpr, a.tpr, a.roc_rates_n_classes, ax
             )
         else:
-            _plot_roc(a.fpr, a.tpr, ax=ax)
+            _plot_roc(a.fpr, a.tpr, ax)
 
         if b.roc_rates_n_classes:
-            self.ax = _plot_roc_multi_classification(
+            _plot_roc_multi_classification(
                 b.fpr, b.tpr, b.roc_rates_n_classes, ax, curve_label=added_curve_label
             )
         else:
             _plot_roc(b.fpr, b.tpr, ax=ax, curve_label=added_curve_label)
 
+        self.ax_ = ax
+        self.figure_ = ax.figure
 
-class ROC(Plot):
+        return self
+
+
+class ROC(AbstractPlot):
     """
     Plot ROC curve
     Parameters
@@ -212,30 +226,19 @@ class ROC(Plot):
     """
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
     def __init__(self, fpr, tpr, roc_rates_n_classes=None, ax=None):
-
-        if ax is None:
-            self.figure = plt.figure()
-            ax = self.figure.add_subplot()
-
         self.fpr = fpr
         self.tpr = tpr
         self.roc_rates_n_classes = roc_rates_n_classes
         self.ax = ax
-
-        # if hasattr(self, "roc_rates_n_classes"):
-        if roc_rates_n_classes is not None:
-            self.ax = _plot_roc_multi_classification(
-                self.fpr, self.tpr, self.roc_rates_n_classes, self.ax
-            )
-        else:
-            self.ax = _plot_roc(self.fpr, self.tpr, ax)
 
     def __sub__(self):
         raise NotImplementedError("Not applicable for ROC")
 
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-add")
     def __add__(self, other):
-        return ROCAdd(self, other)
+        roc_add_result = ROCAdd(self, other)
+        roc_add_result.plot()
+        return roc_add_result
 
     def _get_data(self):
         return {
@@ -246,6 +249,21 @@ class ROC(Plot):
             "roc_rates_n_classes": self.roc_rates_n_classes,
         }
 
+    def plot(self, ax=None):
+        if ax is None:
+            _, ax = plt.subplots()
+
+        if self.roc_rates_n_classes is not None:
+            _plot_roc_multi_classification(
+                self.fpr, self.tpr, self.roc_rates_n_classes, ax
+            )
+        else:
+            _plot_roc(self.fpr, self.tpr, ax)
+
+        self.ax = ax
+        self.figure_ = ax.figure
+        return self
+
     @classmethod
     def from_dump(cls, path):
         data = json.loads(Path(path).read_text(encoding="utf-8"))
@@ -253,14 +271,14 @@ class ROC(Plot):
         tpr = np.array(data["tpr"])
         roc_rates_n_classes = data["roc_rates_n_classes"]
 
-        return cls(fpr, tpr, roc_rates_n_classes, ax=None)
+        return cls(fpr, tpr, roc_rates_n_classes, ax=None).plot()
 
     @classmethod
     def from_raw_data(cls, y_true, y_score, ax=None):
 
         fpr, tpr, roc_rates_n_classes = cls._calculate_plotting_data(y_true, y_score)
 
-        return cls(fpr, tpr, roc_rates_n_classes=roc_rates_n_classes, ax=ax)
+        return cls(fpr, tpr, roc_rates_n_classes=roc_rates_n_classes, ax=ax).plot()
 
     @staticmethod
     def _calculate_plotting_data(y_true, y_score):

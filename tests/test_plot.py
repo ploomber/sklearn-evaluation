@@ -42,7 +42,7 @@ def test_normalized_confusion_matrix():
 def test_roc_from_raw_data():
     # roc_old_api
     plot.roc(y_test, y_score)
-    # roc_from_raw_data
+
     plot.ROC.from_raw_data(y_test, y_score)
 
 
@@ -50,21 +50,20 @@ def test_roc_from_raw_data():
 def test_roc_y_score_vector():
     # roc_old_api
     plot.roc(y_test, y_score_vector)
-    # roc_from_raw_data
+
     plot.ROC.from_raw_data(y_test, y_score)
 
 
 @image_comparison(baseline_images=['roc'])
 def test_roc(roc_values):
     fpr, tpr, _ = roc_values
-
-    plot.ROC(fpr, tpr)
+    roc = plot.ROC(fpr, tpr)
+    roc.plot()
 
 
 @image_comparison(baseline_images=['roc_multi'])
 def test_roc_multi_from_raw_data(roc_multi_classification_raw_data):
     y_test, y_score = roc_multi_classification_raw_data
-
     plot.ROC.from_raw_data(y_test, y_score)
 
 
@@ -72,7 +71,8 @@ def test_roc_multi_from_raw_data(roc_multi_classification_raw_data):
 def test_roc_multi(roc_multi_classification_values):
     fpr, tpr, roc_rates_n_classes = roc_multi_classification_values
 
-    plot.ROC(fpr, tpr, roc_rates_n_classes=roc_rates_n_classes)
+    multi_roc = plot.ROC(fpr, tpr, roc_rates_n_classes=roc_rates_n_classes)
+    multi_roc.plot()
 
 
 @image_comparison(baseline_images=['roc', 'roc2', 'roc_add_roc'])
@@ -90,7 +90,7 @@ def test_roc_add_to_roc_from_raw_data():
     roc1 + roc2
 
 
-@image_comparison(baseline_images=['roc', 'roc2', 'roc_add_roc'])
+@image_comparison(baseline_images=['roc_add_roc'])
 def test_roc_add_to_roc(roc_values):
     fpr1, tpr1, _ = roc_values
 
@@ -103,16 +103,7 @@ def test_roc_add_to_roc(roc_values):
     roc1 + roc2
 
 
-@image_comparison(baseline_images=["roc", "roc_multi", "roc_add_multi"])
-def test_roc_add_to_multi(roc_multi_classification_values):
-    y_test_roc2, y_score_roc2 = roc_multi_classification_values
-
-    roc1 = plot.ROC.from_raw_data(y_test, y_score)
-    roc2 = plot.ROC.from_raw_data(y_test_roc2, y_score_roc2)
-    roc1 + roc2
-
-
-@image_comparison(baseline_images=['roc', 'roc_multi', 'roc_add_multi'])
+@image_comparison(baseline_images=['roc_add_multi'])
 def test_roc_add_to_multi(roc_values, roc_multi_classification_values):
     fpr1, tpr1, _ = roc_values
     fpr2, tpr2, roc_rates_n_classes = roc_multi_classification_values
@@ -131,7 +122,7 @@ def test_roc_multi_add_to_roc(roc_multi_classification_values):
     roc1 + roc2
 
 
-@image_comparison(baseline_images=['roc_multi', 'roc', 'multi_add_roc'])
+@image_comparison(baseline_images=['multi_add_roc'])
 def test_roc_multi_add_to_roc(roc_values, roc_multi_classification_values):
     fpr1, tpr1, roc_rates_n_classes = roc_multi_classification_values
     fpr2, tpr2, _ = roc_values
@@ -153,7 +144,7 @@ def test_roc_multi_add_to_multi_from_raw_data(roc_multi_classification_raw_data,
     roc1 + roc2
 
 
-@image_comparison(baseline_images=['roc_multi', 'roc_multi_set2',
+@image_comparison(baseline_images=['roc_multi_set2',
                                    'roc_multi_add_multi'])
 def test_roc_multi_add_to_multi(roc_multi_classification_values,
                                 roc_multi_classification_raw_data_set2):
