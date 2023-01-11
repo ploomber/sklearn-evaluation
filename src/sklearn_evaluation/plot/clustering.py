@@ -116,6 +116,11 @@ def elbow_curve(
         raise TypeError(
             '"n_clusters" attribute not in classifier. ' "Cannot plot elbow method."
         )
+        
+    if not hasattr(clf, "score"):
+        raise AttributeError(
+            "clf does not have a score method. Ensure it's one of the following: KMeans, MiniBatchKMeans, or BisectingKMeans"
+        )
 
     tuples = Parallel(n_jobs=n_jobs)(
         delayed(_clone_and_score_clusterer)(clf, X, i) for i in range_n_clusters
