@@ -60,7 +60,7 @@ We can see the clusters in our synthetic data. However, the clusters won't be as
 
 ## Evaluation metrics
 
-When clustering data, we want to find the number of clusters that better fit the data. Most models have `n_clusters` as a parameter, so we have to try different values and evaluate which number is the best. To find the _best model_, we need to quantify the quality of the clusters. Here are three metrics you can use that do not require ground truth data:
+When clustering data, we want to find the number of clusters that better fit the data. Most models have `n_clusters` as a parameter, so we have to try different values and evaluate which number is the best. To find the *best model*, we need to quantify the quality of the clusters. Here are three metrics you can use that do not require ground truth data:
 
 - `silhouette_score`: goes from -1 to +1, **higher is better** defined clusters ([documentation](https://scikit-learn.org/stable/modules/clustering.html#silhouette-coefficient))
 - `calinski_harabasz_score`: a ratio, **higher is better** ([documentation](https://scikit-learn.org/stable/modules/clustering.html#calinski-harabasz-index))
@@ -91,7 +91,7 @@ df_metrics.set_index("n_clusters", inplace=True)
  .highlight_min(subset=["davies_bouldin_score"], color="lightgreen"))
 ```
 
-All three metrics have their _best_ value when `n_clusters=5`. We know this is the best value since our data has 5 clusters; however, when using real datasets, you might find that these metrics might not agree, so it's advisable to understand how each metric is computed and choose the best one for your project.
+All three metrics have their *best* value when `n_clusters=5`. We know this is the best value since our data has 5 clusters; however, when using real datasets, you might find that these metrics might not agree, so it's advisable to understand how each metric is computed and choose the best one for your project.
 
 You can also find the best number of clusters visually. Let's see how to do it using an elbow curve.
 
