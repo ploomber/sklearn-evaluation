@@ -87,6 +87,11 @@ def elbow_curve(
     ax: matplotlib Axes
         Axes containing the plot
 
+    Notes
+    -----
+    .. deprecated:: 0.8.7
+        'n_clusters' renamed to 'range_n_clusters' and will be removed.
+
     Examples
     --------
     .. plot:: ../examples/elbow_curve.py
