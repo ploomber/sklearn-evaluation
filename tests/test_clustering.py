@@ -62,12 +62,10 @@ def test_n_clusters_in_clf():
     with pytest.raises(TypeError):
         plot.elbow_curve(X, clf)
 
-
 def test_score_in_clf():
     clf = SpectralClustering()
     with pytest.raises(AttributeError):
         plot.elbow_curve(X, clf)
-
 
 def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
