@@ -7,6 +7,10 @@ parts:
       - file: quickstart/classification
       - file: quickstart/clustering
 
+  - caption: Tutorials
+    chapters:
+      - file: tutorials/underfitting_overfitting
+
   - caption: Classification
     chapters:
     - file: classification/basic
