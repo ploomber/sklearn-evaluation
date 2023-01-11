@@ -92,10 +92,10 @@ def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=No
         raise TypeError(
             '"n_clusters" attribute not in classifier. ' "Cannot plot elbow method."
         )
-    
+
     if not hasattr(clf, "score"):
         raise AttributeError(
-            """clf does not have a score method. Ensure it's one of the following: 
+            """clf does not have a score method. Ensure it's one of the following:
             KMeans, MiniBatchKMeans, or BisectingKMeans"""
         )
 

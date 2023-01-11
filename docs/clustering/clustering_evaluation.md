@@ -48,7 +48,7 @@ kmeans = KMeans(random_state=10, n_init=5)
 
 ##### Elbow curve
 
-Elbow curve helps to identify the point at which the plot starts to become parallel to the x-axis. The K value corresponding to this point is the optimal number of clusters. In the below plot one is likely to select k=4. Ensure that the second parameter is Kmeans, MiniBatchKmeans, or BisectingKMeans to avoid errors.
+Elbow curve helps to identify the point at which the plot starts to become parallel to the x-axis. The K value corresponding to this point is the optimal number of clusters. In the below plot one is likely to select k=4. Currently the kmeans argument input only accepts Kmeans, MiniBatchKMeans, and BisectingKMeans.
 
 ```{code-cell} ipython3
 plot.elbow_curve(X, kmeans, n_clusters=range(1, 30))
