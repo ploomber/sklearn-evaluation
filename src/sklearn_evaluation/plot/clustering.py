@@ -38,13 +38,22 @@ from joblib import Parallel, delayed
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
+from warnings import warn
 
 # TODO: add unit test
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
-def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=None):
+def elbow_curve(
+    X,
+    clf,
+    range_n_clusters=None,
+    n_jobs=1,
+    show_cluster_time=True,
+    ax=None,
+    n_clusters=None,
+):
     """Plots elbow curve of different values of K of a clustering algorithm.
 
     Parameters
@@ -56,10 +65,10 @@ def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=No
 
     clf
         Clusterer instance that implements ``fit``,``fit_predict``, and
-        ``score`` methods, and an ``n_clusters`` hyperparameter.
+        ``score`` methods, and an ``range_n_clusters`` hyperparameter.
         e.g. :class:`sklearn.cluster.KMeans` instance
 
-    n_clusters : None or :obj:`list` of int, optional
+    range_n_clusters : None or :obj:`list` of int, optional
         List of n_clusters for which to plot the explained variances.
         Defaults to ``[1, 3, 5, 7, 9, 11]``.
 
@@ -78,15 +87,34 @@ def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=No
     ax: matplotlib Axes
         Axes containing the plot
 
+    Notes
+    -----
+    .. deprecated:: 0.8.7
+        'n_clusters' renamed to 'range_n_clusters' and will be removed in version 0.8.9
+
     Examples
     --------
     .. plot:: ../examples/elbow_curve.py
 
     """
-    if n_clusters is None:
-        n_clusters = range(1, 10, 2)
+
+    if n_clusters is not None:
+        if range_n_clusters is not None:
+            raise AttributeError(
+                "n_cluster attribute is deprecated. Please use only range_n_clusters."
+            )
+        else:
+            warn(
+                "elbow_curve will change its signature."
+                " Please use range_n_clusters instead of n_cluster",
+                FutureWarning,
+                stacklevel=2,
+            )
+
+    if range_n_clusters is None:
+        range_n_clusters = range(1, 10, 2)
     else:
-        n_clusters = sorted(n_clusters)
+        range_n_clusters = sorted(range_n_clusters)
 
     if not hasattr(clf, "n_clusters"):
         raise TypeError(
@@ -94,12 +122,12 @@ def elbow_curve(X, clf, n_clusters=None, n_jobs=1, show_cluster_time=True, ax=No
         )
 
     tuples = Parallel(n_jobs=n_jobs)(
-        delayed(_clone_and_score_clusterer)(clf, X, i) for i in n_clusters
+        delayed(_clone_and_score_clusterer)(clf, X, i) for i in range_n_clusters
     )
     clfs, times = zip(*tuples)
     sum_of_squares = np.absolute(clfs)
     return elbow_curve_from_results(
-        n_clusters, sum_of_squares, times if show_cluster_time else None, ax=ax
+        range_n_clusters, sum_of_squares, times if show_cluster_time else None, ax=ax
     )
 
 
@@ -136,11 +164,11 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     return ax
 
 
-def _clone_and_score_clusterer(clf, X, n_clusters):
+def _clone_and_score_clusterer(clf, X, range_n_clusters):
     """Clones and scores a clustering model"""
     start = time.time()
     clf = clone(clf)
-    setattr(clf, "n_clusters", n_clusters)
+    setattr(clf, "range_n_clusters", range_n_clusters)
     return clf.fit(X).score(X), time.time() - start
 
 
@@ -213,7 +241,6 @@ def silhouette_analysis(
     .. versionadded:: 0.8.3
 
     """
-
     if range_n_clusters is None:
         range_n_clusters = [2, 3, 4, 5, 6]
     else:
