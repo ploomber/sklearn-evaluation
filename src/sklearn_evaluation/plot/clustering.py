@@ -40,8 +40,6 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 from ploomber_core import deprecated
 
-from warnings import warn
-
 # TODO: add unit test
 
 
@@ -100,19 +98,11 @@ def elbow_curve(
 
     """
 
-    deprecated.parameter_deprecated(deprecated_in="0.8.7",
-                                    removed_in="0.9.0",
-                                    name_old="n_clusters",
-                                    value_passed=n_clusters)
-    if n_clusters and "deprecated" not in n_clusters:
-        if range_n_clusters:
-            warn(
-                "elbow_curve signature changed."
-                " Please use range_n_clusters instead of n_cluster"
-                " and not both. Using range_n_clusters value",
-                FutureWarning,
-                stacklevel=2,
-            )
+    if deprecated.parameter_deprecated(deprecated_in="0.8.7",
+                                       removed_in="0.9.0",
+                                       name_old="n_clusters",
+                                       value_passed=range_n_clusters):
+        range_n_clusters = n_clusters
 
     if range_n_clusters is None:
         range_n_clusters = range(1, 10, 2)
