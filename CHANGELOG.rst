@@ -3,6 +3,9 @@ CHANGELOG
 
 0.8.7dev
 --------
+* Adds labels to ``plot.elbow_curve`` (#152)
+* Fixes ROC constructor to accept only ``fpr`` and ``tpr`` (#135)
+* Replaced ``range_n_clusters`` with ``n_clusters`` in ``plot.elbow_curve``. deprecation warning added (#148)
 * Uses ``ploomber_core 0.1.1`` to generate Plot ``ValueError`` with community refernece (#153)
 
 0.8.6 (2023-01-04)

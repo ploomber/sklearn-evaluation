@@ -18,17 +18,6 @@ def test_plot_confusion_matrixe_bad_input_value_error(ploomber_value_error_messa
         plot.confusion_matrix(None, [1, 0])
 
 
-def test_plot_roc_bad_input_value_error(ploomber_value_error_message):
-    with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.roc([1, 0], None)
-
-    with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.ROC([1, 0], None)
-
-    with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.ROC.from_raw_data([1, 0], None)
-
-
 def test_plot_precision_recalle_bad_input_value_error(ploomber_value_error_message):
     with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.precision_recall(None, None)
