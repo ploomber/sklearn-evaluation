@@ -164,11 +164,11 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     return ax
 
 
-def _clone_and_score_clusterer(clf, X, range_n_clusters):
+def _clone_and_score_clusterer(clf, X, n_clusters):
     """Clones and scores a clustering model"""
     start = time.time()
     clf = clone(clf)
-    setattr(clf, "range_n_clusters", range_n_clusters)
+    setattr(clf, "n_clusters", n_clusters)
     return clf.fit(X).score(X), time.time() - start
 
 
