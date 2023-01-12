@@ -158,8 +158,9 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
         times = np.array(times)[idx]
         ax2_color = "green"
         ax2 = ax.twinx()
-        ax2.plot(n_clusters, times, ":", alpha=0.75,
-                 color=ax2_color, label="Fitting time")
+        ax2.plot(
+            n_clusters, times, ":", alpha=0.75, color=ax2_color, label="Fitting time"
+        )
         ax2.set_ylabel("Clustering duration (seconds)", color=ax2_color, alpha=0.75)
         ax2.tick_params(colors=ax2_color)
 
