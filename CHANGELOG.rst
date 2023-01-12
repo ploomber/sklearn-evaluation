@@ -3,6 +3,7 @@ CHANGELOG
 
 0.8.7dev
 --------
+* Fixes ROC constructor to accept only ``fpr`` and ``tpr`` (#135)
 * Uses ``ploomber_core 0.1.1`` to generate Plot ``ValueError`` with community refernece (#153)
 
 0.8.6 (2023-01-04)

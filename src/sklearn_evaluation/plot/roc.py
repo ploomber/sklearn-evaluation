@@ -7,7 +7,7 @@ from ..util import is_column_vector, is_row_vector
 from sklearn_evaluation import __version__
 import json
 from pathlib import Path
-from ..plot.plot import AbstractPlot, AbstractComposedPlot
+from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from ploomber_core.exceptions import modify_exceptions
 
 
@@ -173,9 +173,11 @@ class ROC(AbstractPlot):
 
     Examples
     --------
-    .. plot:: ../examples/roc_new_api.py
+    .. plot:: ../examples/roc_binary_classification.py
 
-    .. plot:: ../examples/roc_add.py
+    .. plot:: ../examples/roc_comparison.py
+
+    .. plot:: ../examples/roc_multi_classification.py
 
     Notes
     -----

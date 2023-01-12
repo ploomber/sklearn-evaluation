@@ -35,5 +35,5 @@ y_true_ = y_test_
 
 roc2 = plot.ROC.from_raw_data(y_true_, y_score_)
 
-# Generate a new plot with overlapping curves
+# Compare both classifiers
 roc + roc2
