@@ -90,7 +90,7 @@ def elbow_curve(
     Notes
     -----
     .. deprecated:: 0.8.7
-        'n_clusters' renamed to 'range_n_clusters' and will be removed.
+        'n_clusters' renamed to 'range_n_clusters' and will be removed in version 0.8.9
 
     Examples
     --------
