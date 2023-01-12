@@ -104,7 +104,7 @@ def elbow_curve(
                                     removed_in="0.9.0",
                                     name_old="n_clusters",
                                     value_passed=n_clusters)
-    if n_clusters:
+    if n_clusters and "deprecated" not in n_clusters:
         if range_n_clusters:
             warn(
                 "elbow_curve signature changed."
