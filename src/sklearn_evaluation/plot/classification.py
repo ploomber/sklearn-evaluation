@@ -75,6 +75,8 @@ class ConfusionMatrix(AbstractPlot):
     """
     Plot confusion matrix.
 
+    .. seealso:: :func:`confusion_matrix`
+
     Examples
     --------
     .. plot:: ../examples/confusion_matrix_oop.py
@@ -198,6 +200,8 @@ def confusion_matrix(
 ):
     """
     Plot confusion matrix.
+
+    .. seealso:: :class:`ConfusionMatrix`
 
     Parameters
     ----------
