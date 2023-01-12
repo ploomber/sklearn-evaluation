@@ -25,6 +25,10 @@
   <a href="https://www.youtube.com/channel/UCaIS5BMlmeNQE4-Gn0xTDXQ">YouTube</a>
 </p>
 
+<p align="center">
+  <a href="https://binder.ploomber.io/v2/gh/ploomber/binder-env/main?urlpath=git-pull%3Frepo%3Dhttps%253A%252F%252Fgithub.com%252Fploomber%252Fprojects%26urlpath%3Dlab%252Ftree%252Fprojects%252Fguides/intro-to-ploomber%252FREADME.ipynb%26branch%3Dmaster"> <img src="_static/get-started.svg" alt="Get Started"> </a>
+</p>
+
 Machine learning model evaluation made easy: plots, tables, HTML reports, experiment tracking, and Jupyter notebook analysis.
 
 Supports Python 3.7 and higher. Tested on Linux, macOS and Windows.
