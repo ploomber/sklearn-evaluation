@@ -35,8 +35,6 @@ Supports Python 3.7 and higher. Tested on Linux, macOS and Windows.
   <a href="https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?urlpath=lab/tree/docs/quickstart/classification.md"> <img src="_static/get-started.svg" alt="Get Started"> </a>
 </p>
 
-[Documentation here.](https://sklearn-evaluation.ploomber.io)
-
 ![confusion matrix](examples/cm.png)
 
 # Install  
