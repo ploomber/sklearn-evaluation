@@ -148,27 +148,35 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
         ax = plt.gca()
 
     ax.set_title("Elbow Plot")
-    ax.plot(n_clusters, sum_of_squares, "b*-")
+    ax.plot(n_clusters, sum_of_squares, "b*-", label="Elbow")
     ax.grid(True)
     ax.set_xlabel("Number of clusters")
     ax.set_ylabel("Sum of Squared Errors")
 
+    handles, labels = ax.get_legend_handles_labels()
     if times is not None:
         times = np.array(times)[idx]
         ax2_color = "green"
         ax2 = ax.twinx()
-        ax2.plot(n_clusters, times, ":", alpha=0.75, color=ax2_color)
+        ax2.plot(
+            n_clusters, times, ":", alpha=0.75, color=ax2_color, label="Fitting time"
+        )
         ax2.set_ylabel("Clustering duration (seconds)", color=ax2_color, alpha=0.75)
         ax2.tick_params(colors=ax2_color)
 
+        handles2, labels2 = ax2.get_legend_handles_labels()
+        handles = handles + handles2
+        labels = labels + labels2
+
+    ax.legend(handles, labels)
     return ax
 
 
-def _clone_and_score_clusterer(clf, X, range_n_clusters):
+def _clone_and_score_clusterer(clf, X, n_clusters):
     """Clones and scores a clustering model"""
     start = time.time()
     clf = clone(clf)
-    setattr(clf, "range_n_clusters", range_n_clusters)
+    setattr(clf, "n_clusters", n_clusters)
     return clf.fit(X).score(X), time.time() - start
 
 
