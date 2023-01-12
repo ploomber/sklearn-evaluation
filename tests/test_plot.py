@@ -38,35 +38,57 @@ def test_normalized_confusion_matrix():
     plot.confusion_matrix(y_test, y_pred, target_names, normalize=True)
 
 
-@image_comparison(baseline_images=["roc"])
-def test_roc():
+@image_comparison(baseline_images=["roc", "roc"])
+def test_roc_from_raw_data():
+    # roc_old_api
     plot.roc(y_test, y_score)
 
+    plot.ROC.from_raw_data(y_test, y_score)
 
-@image_comparison(baseline_images=["roc"])
+
+@image_comparison(baseline_images=["roc", "roc"])
 def test_roc_y_score_vector():
+    # roc_old_api
     plot.roc(y_test, y_score_vector)
 
-
-@image_comparison(baseline_images=["roc"])
-def test_roc_new_api():
-    plot.ROC(y_test, y_score)
+    plot.ROC.from_raw_data(y_test, y_score)
 
 
-@image_comparison(baseline_images=["roc"])
-def test_roc_y_score_vector_new_api():
-    plot.ROC(y_test, y_score_vector)
+@image_comparison(baseline_images=["roc", "roc"])
+def test_roc(roc_values):
+    fpr, tpr = roc_values
+
+    # test when list is given
+    roc = plot.ROC(fpr, tpr)
+    roc.plot()
+
+    # test when np.array
+    roc = plot.ROC(np.array(fpr), np.array(tpr))
+    roc.plot()
 
 
 @image_comparison(baseline_images=["roc_multi"])
-def test_roc_multi(roc_multi_classification_values):
-    y_test, y_score = roc_multi_classification_values
+def test_roc_multi_from_raw_data(roc_multi_classification_raw_data):
+    y_test, y_score = roc_multi_classification_raw_data
+    plot.ROC.from_raw_data(y_test, y_score)
 
-    plot.ROC(y_test, y_score)
+
+@image_comparison(baseline_images=["roc_multi", "roc_multi"])
+def test_roc_multi(roc_multi_classification_values):
+    fpr, tpr, labels = roc_multi_classification_values
+    # test when fpr and tpr are lists
+    multi_roc = plot.ROC(fpr, tpr, labels=labels)
+    multi_roc.plot()
+
+    # test when fpr and tpr are np.arrays
+    fpr_np_array = [np.array(fpr_list) for fpr_list in fpr]
+    tpr_np_array = [np.array(tpr_list) for tpr_list in tpr]
+    multi_roc = plot.ROC(fpr_np_array, tpr_np_array, labels=labels)
+    multi_roc.plot()
 
 
 @image_comparison(baseline_images=["roc", "roc2", "roc_add_roc"])
-def test_roc_add_to_roc():
+def test_roc_add_to_roc_from_raw_data():
     y_test_roc2 = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
     y_score_roc2 = np.array(
         [
@@ -75,46 +97,68 @@ def test_roc_add_to_roc():
         ]
     ).T
 
-    roc1 = plot.ROC(y_test, y_score)
-    roc2 = plot.ROC(y_test_roc2, y_score_roc2)
+    roc1 = plot.ROC.from_raw_data(y_test, y_score)
+    roc2 = plot.ROC.from_raw_data(y_test_roc2, y_score_roc2)
     roc1 + roc2
 
 
-@image_comparison(baseline_images=["roc", "roc"])
-def test_roc_plot_with_fpr_and_tpr():
-    roc = plot.ROC(y_test, y_score)
-    roc = plot.ROC(None, None, tpr=roc.tpr, fpr=roc.fpr)
+@image_comparison(baseline_images=["roc_add_roc"])
+def test_roc_add_to_roc(roc_values):
+    fpr1, tpr1 = roc_values
 
+    fpr2 = [0.0, 0.2, 0.4, 0.4, 0.6, 0.8, 1.0]
+    tpr2 = [0.0, 0.2, 0.4, 0.8, 0.8, 1.0, 1.0]
 
-@image_comparison(baseline_images=["roc", "roc_multi", "roc_add_multi"])
-def test_roc_add_to_multi(roc_multi_classification_values):
-    y_test_roc2, y_score_roc2 = roc_multi_classification_values
+    roc1 = plot.ROC(fpr1, tpr1)
+    roc2 = plot.ROC(fpr2, tpr2)
 
-    roc1 = plot.ROC(y_test, y_score)
-    roc2 = plot.ROC(y_test_roc2, y_score_roc2)
     roc1 + roc2
 
 
-@image_comparison(baseline_images=["roc_multi", "roc", "multi_add_roc"])
-def test_roc_multi_add_to_roc(roc_multi_classification_values):
-    y_test_roc1, y_score_roc1 = roc_multi_classification_values
+@image_comparison(baseline_images=["roc_add_multi"])
+def test_roc_add_to_multi(roc_values, roc_multi_classification_values):
+    fpr1, tpr1 = roc_values
+    fpr2, tpr2, labels = roc_multi_classification_values
 
-    roc1 = plot.ROC(y_test_roc1, y_score_roc1)
-    roc2 = plot.ROC(y_test, y_score)
+    roc1 = plot.ROC(fpr1, tpr1)
+    roc2 = plot.ROC(fpr2, tpr2, labels=labels)
+    roc1 + roc2
+
+
+@image_comparison(baseline_images=["multi_add_roc"])
+def test_roc_multi_add_to_roc(roc_values, roc_multi_classification_values):
+    fpr1, tpr1, labels = roc_multi_classification_values
+
+    fpr2, tpr2 = roc_values
+
+    roc1 = plot.ROC(fpr1, tpr1, labels=labels)
+    roc2 = plot.ROC(fpr2, tpr2)
     roc1 + roc2
 
 
 @image_comparison(
     baseline_images=["roc_multi", "roc_multi_set2", "roc_multi_add_multi"]
 )
-def test_roc_multi_add_to_multi(
-    roc_multi_classification_values, roc_multi_classification_values_set2
+def test_roc_multi_add_to_multi_from_raw_data(
+    roc_multi_classification_raw_data, roc_multi_classification_raw_data_set2
 ):
-    y_test, y_score = roc_multi_classification_values
-    y_test_roc2, y_score_roc2 = roc_multi_classification_values_set2
+    y_test, y_score = roc_multi_classification_raw_data
+    y_test_roc2, y_score_roc2 = roc_multi_classification_raw_data_set2
 
-    roc1 = plot.ROC(y_test, y_score)
-    roc2 = plot.ROC(y_test_roc2, y_score_roc2)
+    roc1 = plot.ROC.from_raw_data(y_test, y_score)
+    roc2 = plot.ROC.from_raw_data(y_test_roc2, y_score_roc2)
+    roc1 + roc2
+
+
+@image_comparison(baseline_images=["roc_multi_set2", "roc_multi_add_multi"])
+def test_roc_multi_add_to_multi(
+    roc_multi_classification_values, roc_multi_classification_raw_data_set2
+):
+    fpr1, tpr1, labels = roc_multi_classification_values
+    y_test_roc2, y_score_roc2 = roc_multi_classification_raw_data_set2
+
+    roc1 = plot.ROC(fpr1, tpr1, labels=labels)
+    roc2 = plot.ROC.from_raw_data(y_test_roc2, y_score_roc2)
     roc1 + roc2
 
 
