@@ -189,7 +189,7 @@ class Experiment:
 class SQLiteTracker:
     """A experiment tracker backed by a SQLite database
 
-    :doc:`Click here <../nbs/SQLiteTracker>` to see the user guide.
+    :doc:`Click here <../comparison/SQLiteTracker>` to see the user guide.
 
     Parameters
     ----------

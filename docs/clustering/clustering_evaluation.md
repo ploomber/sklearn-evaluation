@@ -15,7 +15,7 @@ kernelspec:
 
 Learn how to easily evaluate clustering algorithms and determine the optimal number of clusters using the below methods:
 
-- Elbow curve plots the sum of squared errors (squared errors summed across all points) for each value of k. 
+- Elbow curve plots the sum of squared errors (squared errors summed across all points) for each value of k.
 - Silhouette analysis determines if individual points are correctly assigned to their clusters.
 
 ```{code-cell} ipython3
@@ -51,7 +51,7 @@ kmeans = KMeans(random_state=10, n_init=5)
 Elbow curve helps to identify the point at which the plot starts to become parallel to the x-axis. The K value corresponding to this point is the optimal number of clusters. In the below plot one is likely to select k=4. Currently the kmeans argument input only accepts Kmeans, MiniBatchKMeans, and BisectingKMeans.
 
 ```{code-cell} ipython3
-plot.elbow_curve(X, kmeans, n_clusters=range(1, 30))
+plot.elbow_curve(X, kmeans, range_n_clusters=range(1, 30))
 ```
 
 ##### Elbow curve from results
@@ -63,7 +63,7 @@ sum_of_squares = np.array([4572.2, 470.7, 389.9, 335.1, 305.5])
 plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
 ```
 
-##### Silhouette plot 
+##### Silhouette plot
 
 The below plot shows that n_clusters value of 3, 5 and 6 are a bad pick for the given data. One is likely to select between 2 and 4 n_clusters.
 

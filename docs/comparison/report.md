@@ -59,7 +59,7 @@ We can use most of the functions in plot and table directly from the ClassifierE
 ce.confusion_matrix()
 ```
 
-We can also generate HTML reports from our models by using the make_report function. The first parameter is a HTML or Markdown template with jinja2 format. If a pathlib.Path object is passed, the content of the file is read. Within the template, the evaluator is passed as “e”, so you can use things like {{e.confusion_matrix()}} or any other attribute/method. If None, a default template is used
+We can also generate HTML reports from our models by using the make_report function. The first parameter is a HTML or Markdown template with jinja2 format. If a pathlib.Path object is passed, the content of the file is read. Within the template, the evaluator is passed as `e`, so you can use things like `{{e.confusion_matrix()}}` or any other attribute/method. If None, a default template is used
 
 ```{code-cell} ipython3
 report = ce.make_report()

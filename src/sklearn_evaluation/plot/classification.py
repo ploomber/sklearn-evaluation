@@ -15,7 +15,7 @@ from ..plot.matplotlib import bar
 from ..metrics import precision_at
 from .. import compute
 from ..util import is_column_vector, is_row_vector, default_heatmap
-from ..plot.plot import AbstractPlot, AbstractComposedPlot
+from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from ..plot import _matrix
 from ploomber_core.exceptions import modify_exceptions
 
