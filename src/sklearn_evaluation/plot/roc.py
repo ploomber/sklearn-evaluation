@@ -13,9 +13,8 @@ from ploomber_core.exceptions import modify_exceptions
 
 @modify_exceptions
 def roc(y_true, y_score, ax=None):
-    # Support old api
-    """
-    Plot ROC curve
+    """Plot ROC curve
+
     Parameters
     ----------
     y_true : array-like, shape = [n_samples]
@@ -38,8 +37,8 @@ def roc(y_true, y_score, ax=None):
     Examples
     --------
     .. plot:: ../examples/roc.py
-
     """
+    # support old API
     r = ROC.from_raw_data(y_true, y_score, ax=ax)
     return r.ax
 
