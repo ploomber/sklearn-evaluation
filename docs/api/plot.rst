@@ -2,7 +2,7 @@
 ===========================
 
 The Plot API supports both functional and object-oriented (OOP) interfaces. While the functional 
-API allows you to quickly generate out-of-the-box plots and are the easiest to get started with, 
+API allows you to quickly generate out-of-the-box plots and is the easiest to get started with, 
 the OOP API offers more flexibility to compare models using a simple synatx, i.e, plot1 + plot2; 
 or to customize the style and elements in the plot.
 
