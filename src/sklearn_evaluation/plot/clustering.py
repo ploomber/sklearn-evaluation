@@ -114,7 +114,6 @@ def elbow_curve(
                 stacklevel=2,
             )
 
-
     if range_n_clusters is None:
         range_n_clusters = range(1, 10, 2)
     else:
