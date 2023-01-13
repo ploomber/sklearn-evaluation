@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 0.9.1dev
+
 ## 0.9.0 (2023-01-13)
 
 - [API Change] Applies deprecation to ROC constructor ([#135](https://github.com/ploomber/jupysql/issues/135))

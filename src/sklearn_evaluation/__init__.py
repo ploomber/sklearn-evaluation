@@ -1,4 +1,4 @@
-__version__ = "0.9.0"
+__version__ = "0.9.1dev"
 
 from .evaluator import ClassifierEvaluator
 from .nb.NotebookIntrospector import NotebookIntrospector
