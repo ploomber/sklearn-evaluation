@@ -25,9 +25,10 @@ def setup(c, version=None):
 
 
 @task(aliases=["d"])
-def doc(c):
+def doc(c, strict=False):
     """Build docs"""
-    c.run("jupyter-book build docs/")
+    flags = "--warningiserror --keep-going" if strict else ""
+    c.run(f"jupyter-book build docs/ {flags}")
 
 
 @task(aliases=["v"])

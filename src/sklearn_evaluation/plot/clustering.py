@@ -39,7 +39,6 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
 from ploomber_core import deprecated
-from warnings import warn
 
 # TODO: add unit test
 
@@ -91,7 +90,8 @@ def elbow_curve(
     Notes
     -----
     .. deprecated:: 0.9
-        ``n_clusters`` renamed to ``range_n_clusters`` and will be removed in version 0.10
+        ``n_clusters`` renamed to ``range_n_clusters`` and will be removed in version
+        0.10
 
     Examples
     --------

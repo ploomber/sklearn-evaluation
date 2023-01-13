@@ -106,14 +106,15 @@ def _generate_plot_from_fpr_tpr_lists(fpr, tpr, ax, label=None):
 
 
 class ROCAdd(AbstractComposedPlot):
-    """
-    Generate a new plot with overlapping ROC curves (roc1 + roc2)
+    """Generate a new plot with overlapping ROC curves (roc1 + roc2)
 
     Parameters
     ----------
-    a : ROC plot
+    a : ROC
+        ROC plot
 
-    b : ROC plot
+    b : ROC
+        ROC plot
 
     Examples
     --------
@@ -122,6 +123,7 @@ class ROCAdd(AbstractComposedPlot):
     Notes
     -----
     .. versionadded:: 0.8.4
+
     """
 
     def __init__(self, a, b):
@@ -152,8 +154,8 @@ class ROCAdd(AbstractComposedPlot):
 
 
 class ROC(AbstractPlot):
-    """
-    Plot ROC curve
+    """Plot ROC curve
+
     Parameters
     ----------
     fpr : ndarray of shape (>2,), list of lists or list of numbers
