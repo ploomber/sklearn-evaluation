@@ -38,6 +38,19 @@ def test_normalized_confusion_matrix():
     plot.confusion_matrix(y_test, y_pred, target_names, normalize=True)
 
 
+@image_comparison(
+    baseline_images=[
+        "cm-add-one",
+        "cm-add-two",
+        "cm-add-combined",
+    ]
+)
+def test_confusion_matrix_add():
+    one = plot.ConfusionMatrix.from_raw_data(y_test, y_pred)
+    two = plot.ConfusionMatrix.from_raw_data(y_test, y_pred)
+    one + two
+
+
 @image_comparison(baseline_images=["roc", "roc"])
 def test_roc_from_raw_data():
     # roc_old_api
