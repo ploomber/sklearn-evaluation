@@ -13,6 +13,11 @@ kernelspec:
 
 # Classification
 
+
+```{important}
+this is some new stuff
+```
+
 In this guide we'll show how to compare and evaluate models with sklearn-evaluation.
 We will use the penguins dataset and will try to classify based on parameters such as bill and flipper size, and which penguin species is it.
 
