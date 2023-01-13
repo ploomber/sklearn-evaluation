@@ -6,6 +6,7 @@ CHANGELOG
 * Fixes ROC constructor to accept only ``fpr`` and ``tpr`` (#135)
 * Replaced ``range_n_clusters`` with ``n_clusters`` in ``plot.elbow_curve``. deprecation warning added (#148)
 * Uses ``ploomber_core 0.1.1`` to generate Plot ``ValueError`` with community refernece (#153)
+* Validating input model for plot.elbow_curve has score method (#146)
 
 0.8.6 (2023-01-04)
 ------------------
