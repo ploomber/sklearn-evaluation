@@ -29,7 +29,7 @@ class ConfusionMatrixSub(AbstractComposedPlot):
 
     def plot(self, ax=None):
         if ax is None:
-            ax = plt.gca()
+            _, ax = plt.subplots()
 
         _plot_cm(
             self.cm,
@@ -52,7 +52,7 @@ class ConfusionMatrixAdd(AbstractComposedPlot):
 
     def plot(self, ax=None):
         if ax is None:
-            ax = plt.gca()
+            _, ax = plt.subplots()
 
         _matrix.add(self.a, self.b, ax, invert_axis=True)
 
