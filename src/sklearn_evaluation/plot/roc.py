@@ -152,8 +152,8 @@ class ROCAdd(AbstractComposedPlot):
 
 
 class ROC(AbstractPlot):
-    """
-    Plot ROC curve
+    """Plot ROC curve
+
     Parameters
     ----------
     fpr : ndarray of shape (>2,), list of lists or list of numbers
