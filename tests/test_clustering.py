@@ -37,6 +37,7 @@ from sklearn.cluster import KMeans, MiniBatchKMeans
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
+from ploomber_core.warnings import PloomberDeprecationWarning
 
 
 def convert_labels_into_string(y_true):
@@ -115,6 +116,19 @@ def test_elbow_curve():
     clf = KMeans()
 
     plot.elbow_curve(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
+
+
+def test_elbow_curve_deprecation():
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
+    clf = KMeans(n_init=10)
+
+    match = (
+        "'n_clusters' was renamed to 'range_n_clusters' in version 0.9. "
+        "'n_clusters' will be removed in 0.10"
+    )
+
+    with pytest.warns(PloomberDeprecationWarning, match=match):
+        plot.elbow_curve(X, clf, n_clusters=range(1, 4), show_cluster_time=False)
 
 
 @image_comparison(

@@ -38,6 +38,7 @@ from joblib import Parallel, delayed
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
+from ploomber_core import deprecated
 from warnings import warn
 
 # TODO: add unit test
@@ -52,7 +53,7 @@ def elbow_curve(
     n_jobs=1,
     show_cluster_time=True,
     ax=None,
-    n_clusters=None,
+    n_clusters="deprecated",
 ):
     """Plots elbow curve of different values of K of a clustering algorithm.
 
@@ -89,27 +90,22 @@ def elbow_curve(
 
     Notes
     -----
-    .. deprecated:: 0.8.7
-        'n_clusters' renamed to 'range_n_clusters' and will be removed in version 0.8.9
+    .. deprecated:: 0.9
+        ``n_clusters`` renamed to ``range_n_clusters`` and will be removed in version 0.10
 
     Examples
     --------
     .. plot:: ../examples/elbow_curve.py
 
     """
-
-    if n_clusters is not None:
-        if range_n_clusters is not None:
-            raise AttributeError(
-                "n_cluster attribute is deprecated. Please use only range_n_clusters."
-            )
-        else:
-            warn(
-                "elbow_curve will change its signature."
-                " Please use range_n_clusters instead of n_cluster",
-                FutureWarning,
-                stacklevel=2,
-            )
+    range_n_clusters = deprecated.parameter_renamed(
+        deprecated_in="0.9",
+        remove_in="0.10",
+        old_name="n_clusters",
+        old_value=n_clusters,
+        new_name="range_n_clusters",
+        new_value=range_n_clusters,
+    )
 
     if range_n_clusters is None:
         range_n_clusters = range(1, 10, 2)
