@@ -64,25 +64,6 @@ def test_n_clusters_in_clf():
         plot.elbow_curve(X, clf)
 
 
-def test_plot_elbow_curve_n_clusters_future_warning():
-    clf = KMeans()
-    with pytest.warns(
-        FutureWarning,
-        match="elbow_curve will change its signature."
-        " Please use range_n_clusters instead of n_cluster",
-    ):
-        plot.elbow_curve(X, clf, n_clusters=range(1, 10))
-
-
-def test_plot_elbow_curve_n_clusters_attribute_error():
-    clf = KMeans()
-    with pytest.raises(
-        AttributeError,
-        match="n_cluster attribute is deprecated. Please use only range_n_clusters.",
-    ):
-        plot.elbow_curve(X, clf, range_n_clusters=range(1, 10), n_clusters=range(1, 10))
-
-
 def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
     clf = KMeans()
