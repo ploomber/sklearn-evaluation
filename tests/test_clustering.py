@@ -114,6 +114,16 @@ def test_cluster_ranges():
 
 
 @image_comparison(
+    baseline_images=["elbow_curve"], extensions=["png"], remove_text=False
+)
+def test_elbow_curve():
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
+    clf = KMeans()
+
+    plot.elbow_curve(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
+
+
+@image_comparison(
     baseline_images=["elbow_curve_from_results"], extensions=["png"], remove_text=False
 )
 def test_elbow_curve_from_results():
