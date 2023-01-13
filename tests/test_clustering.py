@@ -33,7 +33,7 @@ import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import image_comparison
 
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering
+from sklearn.cluster import KMeans, MiniBatchKMeans, BisectingKMeans, SpectralClustering
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
@@ -62,11 +62,20 @@ def test_n_clusters_in_clf():
     with pytest.raises(TypeError):
         plot.elbow_curve(X, clf)
 
-
-def test_score_in_clf():
+def test_score_in_clf_error():
     clf = SpectralClustering()
     with pytest.raises(AttributeError):
         plot.elbow_curve(X, clf)
+
+def test_score_methods_in_clf():
+    clf = KMeans()
+    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
+
+    clf = MiniBatchKMeans()
+    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
+
+    clf = BisectingKMeans()
+    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
 
 def test_plot_elbow_curve_n_clusters_future_warning():
