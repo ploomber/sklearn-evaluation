@@ -134,6 +134,7 @@ class ConfusionMatrix(AbstractPlot):
         return cls(cm=cm, target_names=target_names, normalize=normalize).plot()
 
     @classmethod
+    @modify_exceptions
     def from_raw_data(
         cls, y_true, y_pred, target_names=None, normalize=False, cmap=None
     ):
