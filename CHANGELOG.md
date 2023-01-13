@@ -1,24 +1,24 @@
 # CHANGELOG
 
-## 0.8.7dev
+## 0.9.0 (2023-01-13)
 
-- [API Change] Applies deprecation to ROC constructor (#135)
+- [API Change] Applies deprecation to ROC constructor ([#135](https://github.com/ploomber/jupysql/issues/135))
 - [API Change] Applies deprecation to ConfusionMatrix constructor
-- [API Change] Deprecates `n_clusters` in `plot.elbow_curve` in favor of `range_n_clusters` (#148)
-- [Fix] Adds labels to `plot.elbow_curve` (#152)
+- [API Change] Deprecates `n_clusters` in `plot.elbow_curve` in favor of `range_n_clusters` ([#148](https://github.com/ploomber/jupysql/issues/148))
+- [Fix] Adds labels to `plot.elbow_curve` ([#152](https://github.com/ploomber/jupysql/issues/152))
 - [Fix] Showing community link when throwing exceptions
 
 ## 0.8.6 (2023-01-04)
 
-- Adds support for `pandas.Series` to prediction error plot (#154)
-- Fixes error to prediction plot due to hardcoded axis (#155)
+- Adds support for `pandas.Series` to prediction error plot ([#154](https://github.com/ploomber/jupysql/issues/154))
+- Fixes error to prediction plot due to hardcoded axis ([#155](https://github.com/ploomber/jupysql/issues/155))
 - Deprecates `model` argument in prediction plot
 
 ## 0.8.5 (2022-12-29)
 
 - Fixes to `plot.elbow_curve`: no longer hardcoding figure size,
     random seed for model, also showing `n_clusters` in title
-- Fixes error when passing array to `table.feature_importances` (#144)
+- Fixes error when passing array to `table.feature_importances` ([#144](https://github.com/ploomber/jupysql/issues/144))
 - Adds clustering quick start
 
 ## 0.8.4 (2022-12-24)
@@ -136,7 +136,7 @@
 
 ## 0.5.9 (2022-07-04)
 
-- Adds `sort` argument to `plot.grid_search` (#45)
+- Adds `sort` argument to `plot.grid_search` ([#45](https://github.com/ploomber/jupysql/issues/45))
 
 ## 0.5.8 (2022-04-16)
 
@@ -150,7 +150,7 @@
 ## 0.5.6 (2021-06-26)
 
 - Fixes error that caused grid search plot to fail when a parameter
-    had a `None` value (#40)
+    had a `None` value ([#40](https://github.com/ploomber/jupysql/issues/40))
 
 ## 0.5.5 (2021-03-28)
 
