@@ -15,7 +15,7 @@ kernelspec:
 
 
 ```{important}
-this is some new stuff
+this is some new stuff!!
 ```
 
 In this guide we'll show how to compare and evaluate models with sklearn-evaluation.
