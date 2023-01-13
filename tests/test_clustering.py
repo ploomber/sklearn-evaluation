@@ -67,16 +67,9 @@ def test_score_in_clf_error():
     with pytest.raises(AttributeError):
         plot.elbow_curve(X, clf)
 
-def test_score_methods_in_clf():
-    clf = KMeans()
+@pytest.mark.parametrize('clf', [KMeans(), MiniBatchKMeans(), BisectingKMeans()])
+def test_score_methods_in_clf(clf):
     plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
-
-    clf = MiniBatchKMeans()
-    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
-
-    clf = BisectingKMeans()
-    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
-
 
 def test_plot_elbow_curve_n_clusters_future_warning():
     clf = KMeans()
