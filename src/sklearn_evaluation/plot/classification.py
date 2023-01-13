@@ -153,11 +153,9 @@ class ConfusionMatrix(AbstractPlot):
     @classmethod
     def _from_data(cls, target_names, normalize, cm):
         return cls(
-            y_true=None,
-            y_pred=None,
+            cm=np.array(cm),
             target_names=target_names,
             normalize=normalize,
-            cm=np.array(cm),
         )
 
 
