@@ -3,7 +3,7 @@
 ## 0.8.7dev
 
 - [API Change] Applies deprecation to ROC constructor (#135)
-- [API Change] Applies deprecation to ConfusionMatrix constructor (#135)
+- [API Change] Applies deprecation to ConfusionMatrix constructor
 - [API Change] Deprecates `n_clusters` in `plot.elbow_curve` in favor of `range_n_clusters` (#148)
 - [Fix] Adds labels to `plot.elbow_curve` (#152)
 - [Fix] Showing community link when throwing exceptions
