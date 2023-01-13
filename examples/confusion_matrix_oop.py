@@ -20,7 +20,7 @@ tree_cm = plot.ConfusionMatrix.from_raw_data(y_test, y_pred)
 est = DecisionTreeClassifier()
 est.fit(X_train, y_train)
 y_pred = est.predict(X_test)
-forest_cm = plot.ConfusionMatrix(y_test, y_pred)
+forest_cm = plot.ConfusionMatrix.from_raw_data(y_test, y_pred)
 
 # Compare
 tree_cm + forest_cm
