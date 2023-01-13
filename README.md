@@ -31,7 +31,9 @@ Supports Python 3.7 and higher. Tested on Linux, macOS and Windows.
 
 *Note:* Recent versions likely work on Python 3.6, however, `0.8.2` was the latest version we tested with Python 3.6.
 
-[Documentation here.](https://sklearn-evaluation.ploomber.io)
+<p align="center">
+  <a href="https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?urlpath=lab/tree/docs/quickstart/classification.md"> <img src="_static/get-started.svg" alt="Get Started"> </a>
+</p>
 
 ![confusion matrix](examples/cm.png)
 
