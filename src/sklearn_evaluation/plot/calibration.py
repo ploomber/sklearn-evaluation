@@ -119,7 +119,7 @@ def calibration_curve(
         )
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     ax.plot([0, 1], [0, 1], "k:", label="Perfectly calibrated")
 
@@ -188,7 +188,7 @@ def scores_distribution(y_scores, n_bins=5, ax=None):
     .. plot:: ../examples/scores_distribution.py
     """
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     y_scores = column_or_1d(y_scores)
 

@@ -381,7 +381,7 @@ def precision_at_proportions(y_true, y_score, ax=None):
         )
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
     if not y_score_is_vector:
