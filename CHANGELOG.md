@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.9.1dev
+- [Fix] Adds class labels for multi class roc plot (#209)
 
 ## 0.9.0 (2023-01-13)
 

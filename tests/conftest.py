@@ -334,10 +334,11 @@ def roc_multi_classification_values():
     tpr = [avg_tpr]
     labels = ["micro-average ROC curve"]
 
-    for i in roc_rates_n_classes:
-        fpr.append(i["fpr"])
-        tpr.append(i["tpr"])
-        labels.append("ROC curve")
+    for i in range(len(roc_rates_n_classes)):
+        fpr_tpr = roc_rates_n_classes[i]
+        fpr.append(fpr_tpr["fpr"])
+        tpr.append(fpr_tpr["tpr"])
+        labels.append(f"class {i} ROC curve")
 
     return fpr, tpr, labels
 
