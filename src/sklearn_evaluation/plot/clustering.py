@@ -183,6 +183,7 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def silhouette_analysis(
     X,
     clf,
@@ -262,18 +263,109 @@ def silhouette_analysis(
             "Cannot plot silhouette analysis ."
         )
 
+    param_ax = ax
     for n_clusters in range_n_clusters:
-        _, ax = plt.subplots(1, 1, figsize=figsize)
         clf = clone(clf)
         setattr(clf, "n_clusters", n_clusters)
         cluster_labels = clf.fit_predict(X)
+        if param_ax is None:
+            _, ax = plt.subplots(1, 1, figsize=figsize)
 
-        ax = silhouette_analysis_from_results(
+        _silhouette_analysis_one_cluster(
             X, cluster_labels, metric, figsize, cmap, text_fontsize, ax
         )
     return ax
 
 
+@SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
+def _silhouette_analysis_one_cluster(
+    X,
+    cluster_labels,
+    metric="euclidean",
+    figsize=None,
+    cmap="nipy_spectral",
+    text_fontsize="medium",
+    ax=None,
+):
+    """
+    Generate silhouette plot for one value of n_cluster.
+    """
+    cluster_labels = np.asarray(cluster_labels)
+
+    le = LabelEncoder()
+    cluster_labels_encoded = le.fit_transform(cluster_labels)
+
+    n_clusters = len(np.unique(cluster_labels))
+
+    silhouette_avg = silhouette_score(X, cluster_labels, metric=metric)
+
+    sample_silhouette_values = silhouette_samples(X, cluster_labels, metric=metric)
+
+    if ax is None:
+        _, ax = plt.subplots(1, 1, figsize=figsize)
+
+    ax.set_xlim([-0.1, 1])
+
+    if hasattr(X, "shape"):
+        length = X.shape[0]
+    else:
+        length = len(X)
+    ax.set_ylim([0, length + (n_clusters + 1) * 10 + 10])
+
+    ax.set_xlabel("Silhouette coefficient values", fontsize=text_fontsize)
+    ax.set_ylabel("Cluster label", fontsize=text_fontsize)
+
+    y_lower = 10
+
+    for i in range(n_clusters):
+        ax.set_title(f"Silhouette Analysis (n_clusters={n_clusters})", fontsize="large")
+
+        ith_cluster_silhouette_values = sample_silhouette_values[
+            cluster_labels_encoded == i
+        ]
+
+        ith_cluster_silhouette_values.sort()
+
+        size_cluster_i = ith_cluster_silhouette_values.shape[0]
+        y_upper = y_lower + size_cluster_i
+
+        color = plt.cm.get_cmap(cmap)(float(i) / n_clusters)
+
+        ax.fill_betweenx(
+            np.arange(y_lower, y_upper),
+            0,
+            ith_cluster_silhouette_values,
+            facecolor=color,
+            edgecolor=color,
+            alpha=0.7,
+        )
+
+        ax.text(
+            -0.05,
+            y_lower + 0.5 * size_cluster_i,
+            str(le.classes_[i]),
+            fontsize=text_fontsize,
+        )
+
+        y_lower = y_upper + 10
+
+    ax.axvline(
+        x=silhouette_avg,
+        color="red",
+        linestyle="--",
+        label="Silhouette score: {0:0.3f}".format(silhouette_avg),
+    )
+
+    ax.set_yticks([])  # Clear the y-axis labels / ticks
+    ax.set_xticks(np.arange(-0.1, 1.0, 0.2))
+
+    ax.tick_params(labelsize=text_fontsize)
+    ax.legend(loc="best", fontsize=text_fontsize)
+    return ax
+
+
+@deprecated.function(deprecated_in="0.9.1", remove_in="0.10")
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def silhouette_analysis_from_results(
@@ -291,7 +383,9 @@ def silhouette_analysis_from_results(
 
     Notes
     -----
-    .. versionadded:: 0.8.3
+    .. deprecated:: 0.9.1
+        ``silhouette_analysis_from_results`` is deprecated,
+        will be removed in version 0.10
     """
     cluster_labels = np.asarray(cluster_labels)
 

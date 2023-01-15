@@ -188,10 +188,7 @@ def test_n_jobs():
 )
 def test_plot_silhouette():
     clf = KMeans(random_state=10)
-    # original = plt.rcParams["figure.figsize"]
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf)
-    # plt.rcParams["figure.figsize"] = original
 
 
 @image_comparison(
@@ -201,7 +198,6 @@ def test_plot_silhouette():
 )
 def test_plot_silhouette_with_cluster_range():
     clf = KMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[4, 5])
 
 
@@ -215,7 +211,6 @@ def test_plot_silhouette_with_cluster_range():
 )
 def test_plot_silhouette_with_minibatchkmeans():
     clf = MiniBatchKMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[4, 5])
 
 
@@ -224,7 +219,6 @@ def test_plot_silhouette_with_minibatchkmeans():
 )
 def test_cmap():
     clf = KMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[2], cmap="Spectral")
 
 
@@ -233,53 +227,28 @@ def test_cmap():
 )
 def test_metric():
     clf = KMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[6], metric="cosine")
 
 
-def test_string_classes():
-    clf = KMeans()
-    cluster_labels = clf.fit_predict(X)
-    plot.silhouette_analysis_from_results(X, convert_labels_into_string(cluster_labels))
-
-
-@image_comparison(
-    baseline_images=["silhouette_plot_array_like"],
-    extensions=["png"],
-    remove_text=False,
-)
 def test_array_like():
-    plot.silhouette_analysis_from_results(X.tolist(), y.tolist())
-
-
-@image_comparison(
-    baseline_images=["silhouette_plot_array_like_string_label"],
-    extensions=["png"],
-    remove_text=False,
-)
-def test_array_like_string():
-    plot.silhouette_analysis_from_results(X.tolist(), convert_labels_into_string(y))
+    clf = KMeans()
+    plot.silhouette_analysis(X.tolist(), clf)
 
 
 def test_ax_silhouette():
     clf = KMeans()
-    cluster_labels = clf.fit_predict(X)
-    plot.silhouette_analysis_from_results(X, cluster_labels)
     fig, ax = plt.subplots(1, 1)
-    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels)
+    out_ax = plot.silhouette_analysis(X, clf)
     assert ax is not out_ax
-    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels, ax=ax)
+    out_ax = plot.silhouette_analysis(X, clf, ax=ax)
     assert ax is out_ax
 
 
 def test_ax_params():
-    clf = KMeans(n_clusters=8)
-    cluster_labels = clf.fit_predict(X)
-    out_ax = plot.silhouette_analysis_from_results(
-        X, cluster_labels, text_fontsize="large"
-    )
-    assert out_ax.get_title() == "Silhouette Analysis (n_clusters=8)"
-    assert out_ax.get_ylim() == (0.0, 250.0)
+    clf = KMeans(n_clusters=6)
+    out_ax = plot.silhouette_analysis(X, clf, text_fontsize="large")
+    assert out_ax.get_title() == "Silhouette Analysis (n_clusters=6)"
+    assert out_ax.get_ylim() == (0.0, 230.0)
 
 
 def test_invalid_clusterer():
@@ -289,17 +258,30 @@ def test_invalid_clusterer():
 
 
 def test_silhouette_analysis_from_results_value_error(ploomber_value_error_message):
+    clf = KMeans()
     with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
-        plot.silhouette_analysis_from_results([], y.tolist())
+        plot.silhouette_analysis([], clf)
 
     assert "Expected 2D array, got 1D array" in str(e.value)
 
 
 def test_from_results_call(monkeypatch):
     mock = Mock()
-    monkeypatch.setattr(cl, "silhouette_analysis_from_results", mock)
+    monkeypatch.setattr(cl, "_silhouette_analysis_one_cluster", mock)
     clf = KMeans()
     fig, ax = plt.subplots(1, 1)
-    ax = plot.silhouette_analysis(X, clf, range_n_clusters=[2, 3], ax=ax)
+    plot.silhouette_analysis(X, clf, range_n_clusters=[2, 3], ax=ax)
     assert mock.call_count == 2
-    assert mock.return_value == ax
+
+
+def test_silhouette_analysis_from_results_deprecation():
+    match = (
+        "Function 'silhouette_analysis_from_results' was "
+        "deprecated in version 0.9.1. 'silhouette_analysis_from_results' "
+        "will be removed in version 0.10."
+    )
+
+    with pytest.warns(PloomberDeprecationWarning, match=match):
+        clf = KMeans()
+        cluster_labels = clf.fit_predict(X)
+        plot.silhouette_analysis_from_results(X, cluster_labels)

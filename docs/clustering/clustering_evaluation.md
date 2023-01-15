@@ -70,24 +70,3 @@ The below plot shows that n_clusters value of 3, 5 and 6 are a bad pick for the 
 ```{code-cell} ipython3
 silhouette = plot.silhouette_analysis(X, kmeans)
 ```
-
-##### Silhouette plot from cluster labels
-
-```{code-cell} ipython3
-X, y = datasets.make_blobs(
-    n_samples=500,
-    n_features=2,
-    centers=4,
-    cluster_std=1,
-    center_box=(-10.0, 10.0),
-    shuffle=True,
-    random_state=1,
-)
-
-kmeans = KMeans(n_clusters=4, random_state=1, n_init=5)
-cluster_labels = kmeans.fit_predict(X)
-```
-
-```{code-cell} ipython3
-silhouette = plot.silhouette_analysis_from_results(X, cluster_labels)
-```
