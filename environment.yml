@@ -11,7 +11,7 @@ dependencies:
   - scikit-learn>=1.2
   - matplotlib
   - pip:
-    - sklearn-evaluation
+    - .
     # NotebookCollection example
     - jupytext
     - papermill
