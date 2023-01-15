@@ -3,7 +3,6 @@ Plotting functions for classifier models
 """
 import json
 from pathlib import Path
-from warnings import warn
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -29,7 +28,7 @@ class ConfusionMatrixSub(AbstractComposedPlot):
 
     def plot(self, ax=None):
         if ax is None:
-            ax = plt.gca()
+            _, ax = plt.subplots()
 
         _plot_cm(
             self.cm,
@@ -52,7 +51,7 @@ class ConfusionMatrixAdd(AbstractComposedPlot):
 
     def plot(self, ax=None):
         if ax is None:
-            ax = plt.gca()
+            _, ax = plt.subplots()
 
         _matrix.add(self.a, self.b, ax, invert_axis=True)
 
@@ -89,28 +88,11 @@ class ConfusionMatrix(AbstractPlot):
 
     @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
     @modify_exceptions
-    def __init__(
-        self, y_true, y_pred, target_names=None, normalize=False, cm=None, cmap=None
-    ):
-        if y_true is not None and cm is None:
-            warn(
-                "ConfusionMatrix will change its signature in version 0.10"
-                ", please use ConfusionMatrix.from_raw_data",
-                FutureWarning,
-                stacklevel=3,
-            )
-
-        if cm is not None and cm is not False:
-            self.cm = cm
-            self.target_names = target_names
-            self.normalize = normalize
-            self.cmap = _confusion_matrix_init_defaults(cmap=cmap)
-        else:
-            self.target_names, self.cmap = _confusion_matrix_validate(
-                y_true, y_pred, target_names, cmap=cmap
-            )
-            self.cm = _confusion_matrix(y_true, y_pred, normalize)
-            self.normalize = normalize
+    def __init__(self, cm, *, target_names=None, normalize=False, cmap=None):
+        self.cm = cm
+        self.target_names = target_names
+        self.normalize = normalize
+        self.cmap = _confusion_matrix_init_defaults(cmap=cmap)
 
     def plot(self, ax=None):
         if ax is None:
@@ -151,15 +133,10 @@ class ConfusionMatrix(AbstractPlot):
         cm = np.array(data["cm"])
         normalize = data["normalize"]
         target_names = data["target_names"]
-        return cls(
-            y_true=None,
-            y_pred=None,
-            target_names=target_names,
-            normalize=normalize,
-            cm=cm,
-        ).plot()
+        return cls(cm=cm, target_names=target_names, normalize=normalize).plot()
 
     @classmethod
+    @modify_exceptions
     def from_raw_data(
         cls, y_true, y_pred, target_names=None, normalize=False, cmap=None
     ):
@@ -170,17 +147,18 @@ class ConfusionMatrix(AbstractPlot):
         .. versionchanged:: 0.9
             Added ``cmap`` argument.
         """
-        # pass cm=False so we don't emit the future warning
-        return cls(y_true, y_pred, target_names, normalize, cm=False, cmap=cmap).plot()
+        target_names, cmap = _confusion_matrix_validate(
+            y_true, y_pred, target_names, cmap=cmap
+        )
+        cm = _confusion_matrix(y_true, y_pred, normalize)
+        return cls(cm, target_names=target_names, normalize=normalize, cmap=cmap).plot()
 
     @classmethod
     def _from_data(cls, target_names, normalize, cm):
         return cls(
-            y_true=None,
-            y_pred=None,
+            cm=np.array(cm),
             target_names=target_names,
             normalize=normalize,
-            cm=np.array(cm),
         )
 
 

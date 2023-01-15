@@ -47,13 +47,6 @@ def test_dump(tmp_directory, y):
     assert cm._get_data() == cm2._get_data()
 
 
-def test_warning(y):
-    y_true, y_pred = y
-
-    with pytest.warns(FutureWarning, match="ConfusionMatrix will change its signature"):
-        plot.ConfusionMatrix(y_true, y_pred)
-
-
 def test_raw_data_doesnt_warn(y):
     y_true, y_pred = y
 
@@ -68,4 +61,4 @@ def test_confusion_matrix_bad_input_value_error(
 ):
     _, y_pred = y
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.ConfusionMatrix(bad_y_true_value, y_pred)
+        plot.ConfusionMatrix.from_raw_data(bad_y_true_value, y_pred)

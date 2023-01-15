@@ -1,3 +1,6 @@
+[tool.pkgmt]
+github = "ploomber/jupysql"
+
 [tool.pkgmt.check_links]
 extensions = ["md", "rst", "py", "ipynb"]
 ignore_substrings = ["sklearn-evaluation/tarball"]
