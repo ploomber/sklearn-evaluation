@@ -6,10 +6,8 @@ build:
     python: "3.8"
   jobs:
     pre_build:
-      # Generate the Sphinx configuration for this Jupyter Book so it builds.
       - "pip install -r docs/requirements.txt"
       - "jupyter-book clean docs/ --all"
-      # - "jupyter-book config sphinx docs/"
 
 python:
   install:
