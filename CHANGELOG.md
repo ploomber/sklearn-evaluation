@@ -1,6 +1,7 @@
 # CHANGELOG
 
-## 0.9.1dev
+## 0.10.0dev
+- [API Change] Fixed overlapping plot issue ([#211](https://github.com/ploomber/sklearn-evaluation/pull/211))
 
 ## 0.9.0 (2023-01-13)
 
