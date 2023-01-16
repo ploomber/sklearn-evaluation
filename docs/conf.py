@@ -22,7 +22,13 @@ def get_repo_and_branch_for_pr(owner, repo, number):
     return url, ref
 
 
-version_name = os.environ.get("READTHEDOCS_VERSION", "master")
+# TODO: handle the "stable" case
+DEFAULT = "master"
+version_name = os.environ.get("READTHEDOCS_VERSION_NAME", DEFAULT)
+
+if version_name == "latest":
+    version_name = DEFAULT
+
 print(f"Version: {version_name}")
 
 
