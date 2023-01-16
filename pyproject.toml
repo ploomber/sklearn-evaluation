@@ -1,5 +1,5 @@
 [tool.pkgmt]
-github = "ploomber/jupysql"
+github = "ploomber/sklearn-evaluation"
 
 [tool.pkgmt.check_links]
 extensions = ["md", "rst", "py", "ipynb"]
