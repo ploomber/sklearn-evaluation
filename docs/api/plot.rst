@@ -8,7 +8,7 @@ or to customize the style and elements in the plot.
 
 
 Object Oriented API
--------------------
+*******************
 
 
 ConfusionMatrix
@@ -36,7 +36,7 @@ Rank2D
 
 
 Functional API
---------------
+**************
 
 
 calibration_curve
