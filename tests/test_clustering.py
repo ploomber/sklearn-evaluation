@@ -27,13 +27,17 @@ SOFTWARE.
 """
 
 import pytest
+import sys
 import numpy as np
 from unittest.mock import Mock
 import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import image_comparison
 
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering, BisectingKMeans
+from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering
+
+if sys.version_info > (3, 7):
+    from sklearn.cluster import BisectingKMeans
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
@@ -71,8 +75,11 @@ def test_score_in_clf_error():
 
 
 @pytest.mark.parametrize("clf", [KMeans(), MiniBatchKMeans(), BisectingKMeans()])
+@pytest.mark.skipif(
+    sys.version_info <= (3, 7), reason="scikit 1.1 not supported by Python 3.7"
+)
 def test_score_methods_in_clf(clf):
-    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
+    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
 
 
 def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
