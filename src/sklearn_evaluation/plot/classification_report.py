@@ -232,7 +232,7 @@ def classification_report(
     """
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     matrix, keys, target_names = _classification_report(
         y_true,

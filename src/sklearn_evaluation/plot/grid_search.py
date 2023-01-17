@@ -73,7 +73,7 @@ def grid_search(
         )
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     if cmap is None:
         cmap = default_heatmap()
