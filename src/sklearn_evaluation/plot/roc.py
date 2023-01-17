@@ -1,7 +1,7 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
-from sklearn.preprocessing import label_binarize
+from sklearn.preprocessing import LabelBinarizer
 from ..telemetry import SKLearnEvaluationLogger
 from ..util import is_column_vector, is_row_vector
 from sklearn_evaluation import __version__
@@ -306,6 +306,9 @@ class ROC(AbstractPlot):
         if any((val is None for val in (y_true, y_score))):
             raise ValueError("y_true and y_score are needed to plot ROC")
 
+        y_score = _preprocess_array_for_roc(y_score)
+        y_true = _preprocess_array_for_roc(y_true)
+
         label = []
 
         # get the number of classes based on the shape of y_score
@@ -316,20 +319,18 @@ class ROC(AbstractPlot):
             _, n_classes = y_score.shape
 
         if n_classes > 2:
-            # convert y_true to binary format
-            y_true_bin = label_binarize(y_true, classes=np.unique(y_true))
 
             fpr = []
             tpr = []
 
-            avg_fpr, avg_tpr, _ = _roc_curve_multi(y_true_bin, y_score)
+            avg_fpr, avg_tpr, _ = _roc_curve_multi(y_true, y_score)
 
             label.append("micro-average ROC curve")
             fpr.append(avg_fpr)
             tpr.append(avg_tpr)
 
             for i in range(n_classes):
-                fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])
+                fpr_, tpr_, _ = roc_curve(y_true[:, i], y_score[:, i])
 
                 label.append("ROC curve")
                 fpr.append(fpr_)
@@ -344,3 +345,44 @@ class ROC(AbstractPlot):
             tpr = [tpr]
 
         return fpr, tpr, label
+
+
+def _preprocess_array_for_roc(array):
+    """
+    Binarize the array to use as valid input for plotting a
+    single or a multi-class roc curve
+
+    Parameters
+    ----------
+    array : array-like, shape = [n_samples] or [n_samples, 2]
+
+        The input array for the roc function
+
+        array([0, 1, 2, 1, 0])
+
+        array([[0, 0, 1],
+               [1, 0, 0]])
+
+        array([[0.1, 0.1, 0.8],
+               [0.7, 0.15, 0.15]])
+
+    Returns
+    -------
+    binarized_array : ndarray of shape (n_classes,)
+        An input array that is valid for roc
+
+    """
+    is_array_binary = np.isin(array, [0, 1]).all()
+
+    binarized_array = array
+
+    if not is_array_binary:
+        should_binarize = array.dtype.type is np.str_ or np.any(
+            (array < 0) | (array > 1)
+        )
+
+        if should_binarize:
+            label_binarizer = LabelBinarizer().fit(array)
+            binarized_array = label_binarizer.transform(array)
+
+    return binarized_array

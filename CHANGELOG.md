@@ -2,6 +2,7 @@
 
 ## 0.10.0dev
 - [API Change] A new figure and axes is created (via `plt.subplots()`) when calling a plotting method with `ax=None`. Previously, the current axes was used (via `plt.gca()`) ([#211](https://github.com/ploomber/sklearn-evaluation/pull/211))
+- [Fix] Adds support for differrent inputs for `plot.ROC` (#98)
 
 ## 0.9.0 (2023-01-13)
 

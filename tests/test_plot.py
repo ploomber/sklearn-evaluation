@@ -1,7 +1,7 @@
 from functools import partial
 import sys
 from unittest.mock import Mock
-
+import pytest
 import numpy as np
 from matplotlib.testing.decorators import image_comparison as _image_comparison
 
@@ -83,6 +83,27 @@ def test_roc(roc_values):
 @image_comparison(baseline_images=["roc_multi"])
 def test_roc_multi_from_raw_data(roc_multi_classification_raw_data):
     y_test, y_score = roc_multi_classification_raw_data
+    plot.ROC.from_raw_data(y_test, y_score)
+
+
+@pytest.mark.parametrize(
+    "y_test, y_score",
+    [
+        (
+            np.array([0, 1, 2]),
+            np.array([[0.1, 0.8, 0.1], [0.8, 0.1, 0.1], [0.1, 0.1, 0.8]]),
+        ),
+        (np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]), np.array([1, 0, 2])),
+        (
+            np.array([[1, 0, 0], [0, 1, 0], [0, 0, 1]]),
+            np.array([[0, 1, 0], [1, 0, 0], [0, 0, 1]]),
+        ),
+        (np.array([0, 1, 2]), np.array([1, 0, 2])),
+        (np.array([0, 1, 2]), np.array([[0, 1, 0], [1, 0, 0], [0, 0, 1]])),
+    ],
+)
+@image_comparison(baseline_images=["roc_multi_different_inputs"])
+def test_multi_roc_with_different_valid_inputs(y_test, y_score):
     plot.ROC.from_raw_data(y_test, y_score)
 
 

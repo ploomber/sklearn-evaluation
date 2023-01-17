@@ -99,6 +99,27 @@ plot.confusion_matrix(y_test, y_pred_dt)
 plot.feature_importances(dtc, top_n=5, feature_names=list(dtc.feature_names_in_))
 ```
 
+Use the predicted labels or classes to plot an ROC curve.
+We support 3 main formats that allow you to quickly generate a single or a multi classification ROC curve.
+
+```
+array([0, 1, 2])
+
+array([[0, 1, 0], 
+        [1, 0, 0], 
+        [0, 0, 1]])
+
+array([[0.1, 0.8, 0.1], 
+        [0.8, 0.1, 0.1], 
+        [0.1, 0.1, 0.8]])
+```
+
+For this example we will plot a multi classification ROC using the predicted classes 
+
+```{code-cell} ipython3
+plot.roc(y_test, y_pred_dt)
+```
+
 In addition to the plot, we can also represent the importance through a table, which we can later track and query via SQL. For more information, check our [tracking guide](https://sklearn-evaluation.ploomber.io/en/latest/api/SQLiteTracker.html)
 
 ```{code-cell} ipython3
