@@ -38,7 +38,9 @@ except ValueError:
     repository_url = "https://github.com/ploomber/sklearn-evaluation"
     repository_branch = version_name
 else:
-    repository_url, repository_branch = get_repo_and_branch_for_pr("ploomber", "sklearn-evaluation", version_name)
+    repository_url, repository_branch = get_repo_and_branch_for_pr(
+        "ploomber", "sklearn-evaluation", version_name
+    )
 
 
 print(f"URL: {repository_url}. Branch: {repository_branch}")
