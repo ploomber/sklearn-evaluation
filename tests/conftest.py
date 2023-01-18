@@ -338,7 +338,7 @@ def roc_multi_classification_values():
         fpr_tpr = roc_rates_n_classes[i]
         fpr.append(fpr_tpr["fpr"])
         tpr.append(fpr_tpr["tpr"])
-        labels.append(f"class {i} ROC curve")
+        labels.append(f"(class {i}) ROC curve")
 
     return fpr, tpr, labels
 
