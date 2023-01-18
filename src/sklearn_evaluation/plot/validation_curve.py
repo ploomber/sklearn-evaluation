@@ -41,7 +41,7 @@ def validation_curve(
     """
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     if semilogx:
         ax.set_xscale("log")

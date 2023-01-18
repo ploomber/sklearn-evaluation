@@ -34,6 +34,8 @@ def roc(y_true, y_score, ax=None):
     first column in y_score must contain the scores for class 0,
     second column for class 1 and so on.
 
+    .. seealso:: :class:`ROC`
+
     Examples
     --------
     .. plot:: ../examples/roc.py
@@ -154,7 +156,8 @@ class ROCAdd(AbstractComposedPlot):
 
 
 class ROC(AbstractPlot):
-    """Plot ROC curve
+    """
+    Plot ROC curve
 
     Parameters
     ----------
@@ -171,6 +174,8 @@ class ROC(AbstractPlot):
 
     ax: matplotlib Axes, default: None
         Axes object to draw the plot onto, otherwise uses current Axes
+
+    .. seealso:: :func:`roc`
 
     Examples
     --------

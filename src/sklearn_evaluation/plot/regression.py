@@ -70,7 +70,7 @@ def residuals(y_true, y_pred, ax=None):
     _check_parameter_validity(y_true, y_pred)
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     # horizontal line for residual=0
     ax.axhline(y=0)
@@ -110,7 +110,7 @@ def prediction_error(y_true, y_pred, ax=None):
     """
     _check_parameter_validity(y_true, y_pred)
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     model = LinearRegression()
 
@@ -183,7 +183,7 @@ def cooks_distance(X, y, ax=None):
     outlier_percentage_ *= 100.0
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
     _, _, baseline = ax.stem(
         distance_, linefmt="C0-", markerfmt=",", use_line_collection=True
     )

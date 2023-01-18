@@ -141,7 +141,7 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     sum_of_squares = np.array(sum_of_squares)[idx]
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     ax.set_title("Elbow Plot")
     ax.plot(n_clusters, sum_of_squares, "b*-", label="Elbow")
