@@ -26,7 +26,7 @@ Here we are going to use the HeartDiseasesUCI dataset.
 import urllib.request
 import pandas as pd 
 
-# download dataset. Reference: https://www.kaggle.com/datasets/mirichoi0218/insurance
+# download dataset. Reference: https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data
 urllib.request.urlretrieve('https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv', filename='heart.csv')
 
 data = pd.read_csv('heart.csv')
