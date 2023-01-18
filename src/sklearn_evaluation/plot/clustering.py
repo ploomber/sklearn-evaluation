@@ -31,16 +31,181 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn.base import clone
-from sklearn.metrics import silhouette_samples, silhouette_score
+from sklearn.metrics import silhouette_samples, silhouette_score, davies_bouldin_score, calinski_harabasz_score
 from sklearn.preprocessing import LabelEncoder
 from joblib import Parallel, delayed
-
+from sklearn_evaluation.plot.plot import AbstractComposedPlot, AbstractPlot
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
 from warnings import warn
 
 # TODO: add unit test
+#Krina Code: Davies-Bouldin Index
+
+# metric_option = {
+#     "sum_of_square": elbow_curve,
+#     "silhouette": silhouette_analysis,
+#     "davies_bouldin":DaviesBouldin_analysis,
+#     "calinski_harabasz": calinski_harabasz_analysis,
+# }
+
+# class ElbowCurveMetrics(AbstractPlot):
+#     def __init__(self,
+#     X,
+#     clf,
+#     range_n_clusters=None,
+#     metric="elbow_curve",
+#     n_jobs=1,
+#     show_cluster_time=True,
+#     ax=None,
+#     n_clusters=None,):
+#         # super(ElbowCurveMetrics, self).__init__(ax=ax)
+#         # if metric not in metric_option:
+#         #     raise Exception( "given metric is not a defined metric "
+#         #         "use one of sum_of_square, silhouette, davies_bouldin or calinski_harabasz"
+#         #     )
+    
+#         self.X = X
+#         self.clf = clf
+#         self.range_n_clusters=range_n_clusters
+#         self.metric = metric
+#         self.n_jobs=n_jobs
+#         self.show_cluster_time=show_cluster_time
+#         self.ax=ax
+#         self.n_clusters=n_clusters
+
+    
+@SKLearnEvaluationLogger.log(feature="plot")
+def calinski_harabasz_analysis(
+    X,
+    clf,
+    range_n_clusters=None,
+    figsize=None,
+    ax=None,
+):
+    if range_n_clusters is None:
+        range_n_clusters = [2, 3, 4, 5, 6]
+    else:
+        range_n_clusters = sorted(range_n_clusters)
+
+    if not hasattr(clf, "n_clusters"):
+        raise TypeError(
+            '"n_clusters" attribute not in classifier. '
+            "Cannot plot silhouette analysis ."
+        )
+
+    for n_clusters in range_n_clusters:
+        _, ax = plt.subplots(1, 1, figsize=figsize)
+        clf = clone(clf)
+        setattr(clf, "n_clusters", n_clusters)
+        cluster_labels = clf.fit_predict(X)
+
+        ax = calinski_harabasz_analysis_from_results(
+            X, cluster_labels, figsize, ax
+        )
+    return ax
+
+
+@SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
+def calinski_harabasz_analysis_from_results(
+    X,
+    cluster_labels,
+    figsize=None,
+    ax=None,
+):
+    
+    cluster_labels = np.asarray(cluster_labels)
+
+    n_clusters = len(np.unique(cluster_labels))
+
+    calinski_harabasz_value = calinski_harabasz_score(X, cluster_labels)
+
+    if ax is None:
+        _, ax = plt.subplots(1, 1, figsize=figsize)
+
+    # if ax is None:
+    #     ax = plt.gca()
+
+    ax.set_title("calinski_harabasz_score Plot")
+    ax.plot(n_clusters, calinski_harabasz_value, "b*-", label="calinski_harabasz_value")
+    ax.grid(True)
+    ax.set_xlabel("Number of clusters")
+    ax.set_ylabel("calinski_harabasz_value")
+
+    handles, labels = ax.get_legend_handles_labels()
+
+    ax.legend(handles, labels)
+    return ax
+
+
+@SKLearnEvaluationLogger.log(feature="plot")
+def DaviesBouldin_analysis(
+    X,
+    clf,
+    range_n_clusters=None,
+    figsize=None,
+    cmap="nipy_spectral",
+    text_fontsize="medium",
+    ax=None,
+):
+
+    if range_n_clusters is None:
+        range_n_clusters = [2, 3, 4, 5, 6]
+    else:
+        range_n_clusters = sorted(range_n_clusters)
+
+    if not hasattr(clf, "n_clusters"):
+        raise TypeError(
+            '"n_clusters" attribute not in classifier. '
+            "Cannot plot silhouette analysis ."
+        )
+
+    for n_clusters in range_n_clusters:
+        _, ax = plt.subplots(1, 1, figsize=figsize)
+        clf = clone(clf)
+        setattr(clf, "n_clusters", n_clusters)
+        cluster_labels = clf.fit_predict(X)
+
+        ax = DaviesBouldin_analysis_from_results(
+            X, cluster_labels, figsize, cmap, text_fontsize, ax
+        )
+    return ax
+
+
+@SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
+def DaviesBouldin_analysis_from_results(
+    X,
+    cluster_labels,
+    figsize=None,
+    ax=None,
+):
+    
+    cluster_labels = np.asarray(cluster_labels)
+
+    n_clusters = len(np.unique(cluster_labels))
+
+    davies_bouldin_value = davies_bouldin_score(X, cluster_labels)
+
+    if ax is None:
+        _, ax = plt.subplots(1, 1, figsize=figsize)
+
+    # if ax is None:
+    #     ax = plt.gca()
+
+    ax.set_title("davies_bouldin_Index Plot")
+    ax.plot(n_clusters, davies_bouldin_value, "b*-", label="davies_bouldin_value")
+    ax.grid(True)
+    ax.set_xlabel("Number of clusters")
+    ax.set_ylabel("davies_bouldin_value")
+
+    handles, labels = ax.get_legend_handles_labels()
+
+    ax.legend(handles, labels)
+    return ax
+
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
@@ -52,51 +217,9 @@ def elbow_curve(
     n_jobs=1,
     show_cluster_time=True,
     ax=None,
-    n_clusters=None,
+    n_clusters=None
 ):
-    """Plots elbow curve of different values of K of a clustering algorithm.
 
-    Parameters
-    ----------
-    X : array-like, shape = [n_samples, n_features]:
-        Data to cluster, where n_samples is the number of samples and
-        n_features is the number of features.
-        Refer https://numpy.org/doc/stable/glossary.html#term-array-like
-
-    clf
-        Clusterer instance that implements ``fit``,``fit_predict``, and
-        ``score`` methods, and an ``range_n_clusters`` hyperparameter.
-        e.g. :class:`sklearn.cluster.KMeans` instance
-
-    range_n_clusters : None or :obj:`list` of int, optional
-        List of n_clusters for which to plot the explained variances.
-        Defaults to ``[1, 3, 5, 7, 9, 11]``.
-
-    n_jobs : int, optional
-        Number of jobs to run in parallel. Defaults to 1.
-
-    show_cluster_time : bool, optional
-        Include plot of time it took to cluster for a particular K.
-
-    ax : :class:`matplotlib.axes.Axes`, optional
-        The axes upon which to plot the curve. If None, the plot is drawn
-        on the current Axes
-
-    Returns
-    -------
-    ax: matplotlib Axes
-        Axes containing the plot
-
-    Notes
-    -----
-    .. deprecated:: 0.8.7
-        'n_clusters' renamed to 'range_n_clusters' and will be removed in version 0.8.9
-
-    Examples
-    --------
-    .. plot:: ../examples/elbow_curve.py
-
-    """
 
     if n_clusters is not None:
         if range_n_clusters is not None:
@@ -130,14 +253,18 @@ def elbow_curve(
         range_n_clusters, sum_of_squares, times if show_cluster_time else None, ax=ax
     )
 
+def _clone_and_score_clusterer(clf, X, n_clusters):
+    """Clones and scores a clustering model"""
+    start = time.time()
+    clf = clone(clf)
+    setattr(clf, "n_clusters", n_clusters)
+    return clf.fit(X).score(X), time.time() - start
+
 
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
-    """
-    Same as `elbow_curve`, but it takes the number of clusters and sum of
-    squares as inputs. Useful if you want to train the models yourself.
-    """
+
     # TODO: unit test this
     # TODO: also test with unsorted input
     idx = np.argsort(n_clusters)
@@ -172,14 +299,6 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     return ax
 
 
-def _clone_and_score_clusterer(clf, X, n_clusters):
-    """Clones and scores a clustering model"""
-    start = time.time()
-    clf = clone(clf)
-    setattr(clf, "n_clusters", n_clusters)
-    return clf.fit(X).score(X), time.time() - start
-
-
 @SKLearnEvaluationLogger.log(feature="plot")
 def silhouette_analysis(
     X,
@@ -191,64 +310,7 @@ def silhouette_analysis(
     text_fontsize="medium",
     ax=None,
 ):
-    """Plots silhouette analysis of clusters provided.
 
-    Parameters
-    -----------
-
-    X : array-like, shape = [n_samples, n_features]:
-        Cluster data, where n_samples is the number of samples and
-        n_features is the number of features.
-        Refer https://numpy.org/doc/stable/glossary.html#term-array-like
-
-    clf
-        Clusterer instance that implements ``fit``,``fit_predict``, and
-        ``score`` methods, and an ``n_clusters`` hyperparameter.
-        e.g. :class:`sklearn.cluster.KMeans` instance
-
-    range_n_clusters : None or :obj:`list` of int, optional
-        List of n_clusters for which to plot the silhouette scores.
-        Defaults to ``[2, 3, 4, 5, 6]``.
-
-    metric : string or callable, optional:
-        The metric to use when calculating distance between instances in
-        a feature array. If metric is a string, it must be one of the
-        options allowed by sklearn.metrics.pairwise.pairwise_distances.
-        If X is the distance array itself, use "precomputed" as the metric.
-
-    figsize : 2-tuple, optional:
-        Tuple denoting figure size of the plot
-        e.g. (6, 6). Defaults to ``None``.
-
-    cmap : string or :class:`matplotlib.colors.Colormap` instance, optional:
-        Colormap used for plotting the projection. View Matplotlib Colormap
-        documentation for available options.
-        https://matplotlib.org/users/colormaps.html
-
-    text_fontsize : string or int, optional:
-        Matplotlib-style fontsizes.
-        Use e.g. "small", "medium", "large" or integer-values. Defaults to
-        "medium".
-
-    ax : :class:`matplotlib.axes.Axes`, optional:
-        The axes upon which to plot the curve. If None, the plot is drawn on
-        a new set of axes.
-
-    Returns
-    -------
-    ax: matplotlib Axes
-        Axes containing the plot
-
-
-    Examples
-    --------
-    .. plot:: ../examples/silhouette_plot_basic.py
-
-    Notes
-    -----
-    .. versionadded:: 0.8.3
-
-    """
     if range_n_clusters is None:
         range_n_clusters = [2, 3, 4, 5, 6]
     else:
@@ -283,14 +345,7 @@ def silhouette_analysis_from_results(
     text_fontsize="medium",
     ax=None,
 ):
-    """
-    Same as `silhouette_plot` but takes cluster_labels as input.
-    Useful if you want to train the model yourself
-
-    Notes
-    -----
-    .. versionadded:: 0.8.3
-    """
+    
     cluster_labels = np.asarray(cluster_labels)
 
     le = LabelEncoder()
@@ -363,3 +418,25 @@ def silhouette_analysis_from_results(
     ax.tick_params(labelsize=text_fontsize)
     ax.legend(loc="best", fontsize=text_fontsize)
     return ax
+
+
+
+    # def draw_elbowcurve(self):
+       
+    #     if self.metric == "DB":
+    #         self.DaviesBouldin_analysis(self, self.X, self.clf, self.range_n_clusters, figsize=None, cmap="nipy_spectral", text_fontsize="medium", ax = self.ax)
+    #     elif self.metric == "CH":
+    #         self.calinski_harabasz_analysis(self, self.X, self.clf, self.range_n_clusters, figsize=None, cmap="nipy_spectral", text_fontsize="medium", ax = self.ax)
+    #     elif self.metric == "SIL":
+    #             self.silhouette_analysis(self,self.X,self.clf,self.range_n_clusters,self.metric,figsize=None,cmap="nipy_spectral",text_fontsize="medium",ax=self.ax)
+    #     else:
+    #         self.elbow_curve(self,self.X,self.clf,self.range_n_clusters,self.n_jobs,self.show_cluster_time,self.ax,self.n_clusters)
+            
+
+
+
+    
+
+
+    
+

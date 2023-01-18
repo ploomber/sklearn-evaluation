@@ -20,7 +20,11 @@ from .clustering import (
     elbow_curve_from_results,
     silhouette_analysis,
     silhouette_analysis_from_results,
+    calinski_harabasz_analysis,
+    calinski_harabasz_analysis_from_results
 )
+
+
 from .regression import residuals, prediction_error, cooks_distance
 from .target_analysis import target_analysis
 from .calibration import calibration_curve, scores_distribution
@@ -30,6 +34,7 @@ from .cumulative_gain_lift_curve import cumulative_gain, lift_curve
 from .feature_ranking import Rank1D, Rank2D
 
 __all__ = [
+    "ElbowCurveMetrics"
     "confusion_matrix",
     "feature_importances",
     "precision_recall",
@@ -47,6 +52,8 @@ __all__ = [
     "elbow_curve_from_results",
     "silhouette_analysis",
     "silhouette_analysis_from_results",
+    "calinski_harabasz_analysis",
+    "calinski_harabasz_analysis_from_results",
     "calibration_curve",
     "target_analysis",
     "scores_distribution",
