@@ -35,7 +35,7 @@ def learning_curve(train_scores, test_scores, train_sizes, ax=None):
 
     """
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     ax.grid()
     ax.set_title("Learning Curve")

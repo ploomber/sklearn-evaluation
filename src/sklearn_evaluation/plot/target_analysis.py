@@ -108,7 +108,7 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
             )
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
     mode = "balance" if y_test is None else "compare"
     if mode == "balance":
         support_ = np.array([(y_train == idx).sum() for idx in classes_])
