@@ -86,6 +86,12 @@ def test_roc_multi_from_raw_data(roc_multi_classification_raw_data):
     plot.ROC.from_raw_data(y_test, y_score)
 
 
+@image_comparison(baseline_images=["roc_multi_with_labels"])
+def test_roc_multi_from_raw_data_with_labels(roc_multi_classification_raw_data_set2):
+    y_test, y_score = roc_multi_classification_raw_data_set2
+    plot.ROC.from_raw_data(y_test, y_score)
+
+
 @image_comparison(baseline_images=["roc_multi", "roc_multi"])
 def test_roc_multi(roc_multi_classification_values):
     fpr, tpr, label = roc_multi_classification_values
