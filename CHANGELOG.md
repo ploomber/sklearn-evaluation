@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.10.0dev
-- [Fix] Uses existing lables in multi ROC curve (#225)
+- [Fix] Uses existing labels in multi ROC curve (#225)
 - [API Change] A new figure and axes is created (via `plt.subplots()`) when calling a plotting method with `ax=None`. Previously, the current axes was used (via `plt.gca()`) ([#211](https://github.com/ploomber/sklearn-evaluation/pull/211))
 - [Fix] Adds class labels for multi class roc plot (#209)
 

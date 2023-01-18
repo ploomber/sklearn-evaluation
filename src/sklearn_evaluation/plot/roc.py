@@ -332,9 +332,8 @@ class ROC(AbstractPlot):
                 fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])
 
                 y_true_class_i = np.unique(y_true)[i]
-                if isinstance(y_true_class_i, str):
-                    y_true_class_i = y_true_class_i
-                else:
+
+                if not isinstance(y_true_class_i, str):
                     y_true_class_i = i
 
                 label.append(f"(class {y_true_class_i}) ROC curve")
