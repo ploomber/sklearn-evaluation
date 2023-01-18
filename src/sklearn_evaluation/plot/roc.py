@@ -332,7 +332,7 @@ class ROC(AbstractPlot):
             for i in range(n_classes):
                 fpr_, tpr_, _ = roc_curve(y_true[:, i], y_score[:, i])
 
-                label.append("ROC curve")
+                label.append(f"(class {i}) ROC curve")
                 fpr.append(fpr_)
                 tpr.append(tpr_)
         else:
