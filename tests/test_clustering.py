@@ -35,9 +35,6 @@ from matplotlib.testing.decorators import image_comparison
 
 from sklearn.tree import DecisionTreeClassifier
 from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering
-
-if sys.version_info != (3, 7):
-    from sklearn.cluster import BisectingKMeans
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
@@ -74,9 +71,25 @@ def test_score_in_clf_error():
         plot.elbow_curve(X, clf)
 
 
-@pytest.mark.parametrize("clf", [KMeans(), MiniBatchKMeans(), BisectingKMeans()])
-@pytest.mark.skipif(
-    sys.version_info == (3, 7), reason="scikit 1.1 not supported by Python 3.7"
+try:
+    from sklearn.cluster import BisectingKMeans
+except ImportError:
+    pass
+
+
+@pytest.mark.parametrize(
+    "clf",
+    [
+        KMeans(),
+        MiniBatchKMeans(),
+        pytest.param(
+            BisectingKMeans(),
+            marks=pytest.mark.skipif(
+                sys.version_info <= (3, 7),
+                reason="scikit 1.1 not supported by Python 3.7",
+            ),
+        ),
+    ],
 )
 def test_score_methods_in_clf(clf):
     plot.elbow_curve(X, clf, n_clusters=range(1, 10))
