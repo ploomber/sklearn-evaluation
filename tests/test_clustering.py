@@ -77,19 +77,23 @@ except ImportError:
     pass
 
 
-@pytest.mark.skipif(
-    sys.version_info <= (3, 7),
-    reason="scikit-learn 1.1 (BisectingKMeans) cannot be used with Python 3.7",
-)
 @pytest.mark.parametrize(
     "clf",
     [
         KMeans(),
         MiniBatchKMeans(),
-        BisectingKMeans(),
+        pytest.param(
+            "bisect",
+            marks=pytest.mark.skipif(
+                sys.version_info <= (3, 7),
+                reason="scikit 1.1 not supported by Python 3.7",
+            ),
+        ),
     ],
 )
 def test_score_methods_in_clf(clf):
+    if clf == "bisect":
+        clf = BisectingKMeans()
     plot.elbow_curve(X, clf, n_clusters=range(1, 10))
 
 
