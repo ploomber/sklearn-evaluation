@@ -18,7 +18,13 @@ class AbstractClassifierGrid(abc.ABC):
             self.grid = GridTypes(grid)
         else:
             raise ValueError(
-                f"{grid} is not a valid grid value. allowed values : {grid_types} ")
+                f"{grid} is not a valid grid value. allowed values : {grid_types} "
+            )
+
+    @classmethod
+    @abc.abstractmethod
+    def set_test_data(self, X_test, y_test):
+        pass
 
     @classmethod
     @abc.abstractmethod
@@ -42,5 +48,5 @@ class AbstractClassifierGrid(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def grid_search(self, change='n_estimators', kind='line'):
+    def grid_search(self, change="n_estimators", kind="line"):
         pass
