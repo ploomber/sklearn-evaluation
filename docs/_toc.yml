@@ -7,7 +7,6 @@ parts:
       - file: quickstart/classification
       - file: quickstart/regression
       - file: quickstart/clustering
-      - file: quickstart/pre_made_grids
 
   - caption: Classification
     chapters:
@@ -15,6 +14,7 @@ parts:
     - file: classification/compare
     - file: classification/evaluate
     - file: classification/imbalance
+    - file: quickstart/pre_made_grids
 
   - caption: Regression
     chapters:
