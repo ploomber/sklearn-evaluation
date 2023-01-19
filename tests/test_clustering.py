@@ -85,7 +85,7 @@ except ImportError:
         pytest.param(
             "bisect",
             marks=pytest.mark.skipif(
-                sys.version_info <= (3, 7),
+                sys.version_info > (3, 7),
                 reason="scikit 1.1 not supported by Python 3.7",
             ),
         ),
