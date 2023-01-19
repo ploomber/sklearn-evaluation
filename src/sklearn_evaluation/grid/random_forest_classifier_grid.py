@@ -161,7 +161,7 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
 
     def feature_importances(self):
         """
-        Plots a feature importances based on `GridSearchCV.best_estimator_`.
+        Plots feature importances based on `GridSearchCV.best_estimator_`.
 
         Returns
         -------
@@ -171,9 +171,9 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         feature_importances = self.grid_search_cv_.best_estimator_.feature_importances_
         return plot.feature_importances(feature_importances)
 
-    def grid_search(self, change="n_estimators", kind="line"):
+    def grid_search_results(self, change="n_estimators", kind="line"):
         """
-        Plots a feature importances based on `GridSearchCV.best_estimator_`.
+        Plots grid search results based on `GridSearchCV.best_estimator_`.
 
         Parameters
         ----------

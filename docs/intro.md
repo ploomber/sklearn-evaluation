@@ -10,4 +10,3 @@ pip install sklearn-evaluation
 - [Classification](quickstart/classification.md)
 - [Regression](quickstart/regression.md)
 - [Clustering](quickstart/clustering.md)
-- [Pre made grids](quickstart/pre_made_grids.md)

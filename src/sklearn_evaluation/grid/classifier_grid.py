@@ -48,5 +48,5 @@ class AbstractClassifierGrid(abc.ABC):
 
     @classmethod
     @abc.abstractmethod
-    def grid_search(self, change="n_estimators", kind="line"):
+    def grid_search_results(self, change="n_estimators", kind="line"):
         pass

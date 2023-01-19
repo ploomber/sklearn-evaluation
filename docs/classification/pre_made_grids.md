@@ -90,6 +90,8 @@ model.set_test_data(X_test, y_test)
 
 ## Plots
 
+You can use these plots to visualize the grid search results
+
 ## Confusion matrix
 
 ```{code-cell} ipython3
@@ -108,8 +110,8 @@ model.roc()
 model.feature_importances()
 ```
 
-## Grid search
+## Grid search results
 
 ```{code-cell} ipython3
-model.grid_search()
+model.grid_search_results()
 ```
