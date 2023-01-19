@@ -21,12 +21,15 @@ from sklearn_evaluation.plot.clustering import (
     silhouette_analysis,
     silhouette_analysis_from_results,
 )
-from sklearn_evaluation.plot.regression import residuals, prediction_error, cooks_distance
+from sklearn_evaluation.plot.regression \
+    import residuals, prediction_error, cooks_distance
 from sklearn_evaluation.plot.target_analysis import target_analysis
 from sklearn_evaluation.plot.calibration import calibration_curve, scores_distribution
-from sklearn_evaluation.plot.classification_report import classification_report, ClassificationReport
+from sklearn_evaluation.plot.classification_report \
+    import classification_report, ClassificationReport
 from sklearn_evaluation.plot.ks_statistics import ks_statistic
-from sklearn_evaluation.plot.cumulative_gain_lift_curve import cumulative_gain, lift_curve
+from sklearn_evaluation.plot.cumulative_gain_lift_curve \
+     import cumulative_gain, lift_curve
 from sklearn_evaluation.plot.feature_ranking import Rank1D, Rank2D
 
 __all__ = [
