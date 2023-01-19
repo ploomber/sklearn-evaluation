@@ -1,6 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from ..telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 
 

@@ -2,7 +2,7 @@ import json
 from pathlib import Path
 import abc
 
-from ..report.serialize import figure2html
+from sklearn_evaluation.report.serialize import figure2html
 
 
 # NOTE: deprecate

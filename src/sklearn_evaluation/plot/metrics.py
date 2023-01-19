@@ -1,7 +1,7 @@
 import numpy as np
 from sklearn_evaluation.metrics import compute_at_thresholds
 from sklearn_evaluation.plot.util import set_default_ax
-from ..telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 
 

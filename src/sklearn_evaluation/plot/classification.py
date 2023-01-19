@@ -9,13 +9,13 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from sklearn_evaluation import __version__
-from ..telemetry import SKLearnEvaluationLogger
-from ..plot.matplotlib import bar
-from ..metrics import precision_at
-from .. import compute
-from ..util import is_column_vector, is_row_vector, default_heatmap
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.plot.matplotlib import bar
+from sklearn_evaluation.metrics import precision_at
+from sklearn_evaluation import compute
+from sklearn_evaluation.util import is_column_vector, is_row_vector, default_heatmap
 from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
-from ..plot import _matrix
+from sklearn_evaluation.plot import _matrix
 from ploomber_core.exceptions import modify_exceptions
 
 
