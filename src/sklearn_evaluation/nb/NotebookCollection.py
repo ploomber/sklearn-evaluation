@@ -12,8 +12,8 @@ import pandas as pd
 from IPython.display import HTML, Image
 from jinja2 import Environment, PackageLoader
 
-from nb.NotebookIntrospector import NotebookIntrospector
-from nb.sets import differences
+from sklearn_evaluation.nb.NotebookIntrospector import NotebookIntrospector
+from sklearn_evaluation.nb.sets import differences
 from sklearn_evaluation.table import Table
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
