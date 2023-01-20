@@ -54,19 +54,16 @@ Elbow curve helps to identify the point at which the plot starts to become paral
 plot.elbow_curve(X, kmeans, range_n_clusters=range(1, 30))
 ```
 
-##### Elbow curve from results
-
-```{code-cell} ipython3
-import numpy as np
-n_clusters = range(1, 10, 2)
-sum_of_squares = np.array([4572.2, 470.7, 389.9, 335.1, 305.5])
-plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
-```
-
 ##### Silhouette plot
 
 The below plot shows that n_clusters value of 3, 5 and 6 are a bad pick for the given data. One is likely to select between 2 and 4 n_clusters.
 
 ```{code-cell} ipython3
 silhouette = plot.silhouette_analysis(X, kmeans)
+```
+
+```{eval-rst}
+.. note::
+
+If you want to train the models yourself, you can use :ref:`silhouette-analysis-from-results-label` to plot.
 ```

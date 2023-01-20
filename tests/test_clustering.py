@@ -237,11 +237,15 @@ def test_array_like():
 
 def test_ax_silhouette():
     clf = KMeans()
-    fig, ax = plt.subplots(1, 1)
+    ax = []
+    for i in range(5):
+        fig, axes = plt.subplots(1, 1)
+        ax.append(axes)
     out_ax = plot.silhouette_analysis(X, clf)
-    assert ax is not out_ax
+    for axes in ax:
+        assert axes is not out_ax
     out_ax = plot.silhouette_analysis(X, clf, ax=ax)
-    assert ax is out_ax
+    assert ax[-1] is out_ax
 
 
 def test_ax_params():
@@ -257,7 +261,7 @@ def test_invalid_clusterer():
         plot.silhouette_analysis(X, clf)
 
 
-def test_silhouette_analysis_from_results_value_error(ploomber_value_error_message):
+def test_silhouette_analysis_value_error(ploomber_value_error_message):
     clf = KMeans()
     with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         plot.silhouette_analysis([], clf)
@@ -265,23 +269,56 @@ def test_silhouette_analysis_from_results_value_error(ploomber_value_error_messa
     assert "Expected 2D array, got 1D array" in str(e.value)
 
 
-def test_from_results_call(monkeypatch):
+def test_from_one_model_call(monkeypatch):
     mock = Mock()
-    monkeypatch.setattr(cl, "_silhouette_analysis_one_cluster", mock)
+    monkeypatch.setattr(cl, "_silhouette_analysis_one_model", mock)
     clf = KMeans()
-    fig, ax = plt.subplots(1, 1)
-    plot.silhouette_analysis(X, clf, range_n_clusters=[2, 3], ax=ax)
+    fig, ax1 = plt.subplots(1, 1)
+    fig, ax2 = plt.subplots(1, 1)
+    plot.silhouette_analysis(X, clf, range_n_clusters=[2, 3], ax=[ax1, ax2])
     assert mock.call_count == 2
 
 
-def test_silhouette_analysis_from_results_deprecation():
-    match = (
-        "Function 'silhouette_analysis_from_results' was "
-        "deprecated in version 0.9.1. 'silhouette_analysis_from_results' "
-        "will be removed in version 0.10."
-    )
+@image_comparison(
+    baseline_images=[
+        "silhouette_analysis_from_results_cluster_five",
+        "silhouette_analysis_from_results_cluster_six",
+    ],
+    extensions=["png"],
+    remove_text=False,
+)
+def test_silhouette_plot_from_results():
+    cluster_labels = [
+        KMeans(random_state=10, n_clusters=5).fit_predict(X),
+        KMeans(random_state=10, n_clusters=6).fit_predict(X),
+    ]
 
-    with pytest.warns(PloomberDeprecationWarning, match=match):
-        clf = KMeans()
-        cluster_labels = clf.fit_predict(X)
-        plot.silhouette_analysis_from_results(X, cluster_labels)
+    plot.silhouette_analysis_from_results(X, cluster_labels)
+
+
+def test_silhouette_analysis_from_results_value_error(ploomber_value_error_message):
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
+        plot.silhouette_analysis_from_results([], [y.tolist()])
+
+    assert "Expected 2D array, got 1D array" in str(e.value)
+
+
+def test_ax_silhouette_from_results():
+    X = [[1.2, 3.4], [2.2, 4.1], [1.1, 6.5]]
+    cluster_labels = [[0, 0, 1], [0, 1, 0]]
+    fig, ax1 = plt.subplots(1, 1)
+    fig, ax2 = plt.subplots(1, 1)
+    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels)
+    assert ax1 is not out_ax
+    assert ax2 is not out_ax
+    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels, ax=[ax1, ax2])
+    assert ax2 is out_ax
+
+
+def test_one_model_from_results_call(monkeypatch):
+    X = [[1.2, 3.4], [2.2, 4.1], [1.1, 6.5]]
+    cluster_labels = [[0, 0, 1], [0, 1, 0], [0, 0, 0]]
+    mock = Mock()
+    monkeypatch.setattr(cl, "_silhouette_analysis_one_model", mock)
+    plot.silhouette_analysis_from_results(X, cluster_labels)
+    assert mock.call_count == 3

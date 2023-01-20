@@ -15,6 +15,7 @@ from sklearn_evaluation.plot.grid_search import grid_search
 from sklearn_evaluation.plot.validation_curve import validation_curve
 from sklearn_evaluation.plot.learning_curve import learning_curve
 from sklearn_evaluation.plot.metrics import metrics_at_thresholds
+
 from sklearn_evaluation.plot.clustering import (
     elbow_curve,
     elbow_curve_from_results,
