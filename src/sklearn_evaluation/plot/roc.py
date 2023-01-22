@@ -1,14 +1,108 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
-from sklearn.preprocessing import label_binarize
+from sklearn.preprocessing import label_binarize, LabelBinarizer
 from ..telemetry import SKLearnEvaluationLogger
-from ..util import is_column_vector, is_row_vector
+from ..util import is_column_vector, is_row_vector, check_elements_in_range
 from sklearn_evaluation import __version__
 import json
 from pathlib import Path
 from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from ploomber_core.exceptions import modify_exceptions
+
+
+def _check_data_inputs(y_true, y_score) -> None:
+    """
+    Checks if data inputs are valid and supported for generating ROC with sklearn
+
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_samples]
+        Correct target values (ground truth).
+
+        e.g
+
+        "classes" format : [0, 1, 2, 0, 1, ...]
+        or ['virginica', 'versicolor', 'virginica', 'setosa', ...]
+
+        one-hot encoded : [[0, 0, 1],
+                           [1, 0, 0]]
+
+    y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
+        classification or [n_samples, n_classes] for multiclass
+        Target scores (estimator predictions).
+
+        e.g
+
+        "scores" format : [[0.1, 0.1, 0.8],
+                           [0.7, 0.15, 0.15]]
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    ValueError
+        If any of the inputs is invalid
+
+    """
+    if any((val is None for val in (y_true, y_score))):
+        raise ValueError("y_true and y_score are needed to plot ROC")
+
+    y_score_array = np.array(y_score)
+
+    _is_y_score_valid = _is_array_like_scores(y_score_array)
+
+    if not _is_y_score_valid:
+        raise ValueError(
+            "Please check y_true values. \n"
+            f"Expected scores array-like. got: {y_score_array}"
+        )
+
+
+def _is_array_like_scores(array) -> bool:
+    """
+    Checks if array is in "scores" format
+
+    Parameters
+    ----------
+    array : array-like, shape = [n_samples] or [n_samples, 2] for binary
+        classification or [n_samples, n_classes] for multiclass
+        Target scores (estimator predictions).
+
+        e.g
+
+        "scores" format : [[0.1, 0.1, 0.8],
+                           [0.7, 0.15, 0.15]]
+
+    Returns
+    -------
+    is_scores_format bool
+
+    """
+    is_scores_format = False
+
+    array_flatten = array.flatten()
+
+    # check if array consists of 0 and 1
+    _is_binary = np.array_equal(np.unique(array_flatten), [0, 1])
+
+    if _is_binary:
+        _is_1d_array = len(array.shape) == 1
+
+        if _is_1d_array:
+            _n_elements = len(array)
+        else:
+            _, _n_elements = array.shape
+
+        # allow cases such : [[0, 1], [1, 1]] or [1,0]
+        is_scores_format = _n_elements == 2
+    else:
+        _elements_in_range = check_elements_in_range(array_flatten, -1, 1)
+        is_scores_format = _elements_in_range
+
+    return is_scores_format
 
 
 @modify_exceptions
@@ -20,9 +114,22 @@ def roc(y_true, y_score, ax=None):
     y_true : array-like, shape = [n_samples]
         Correct target values (ground truth).
 
+        e.g
+
+        "classes" format : [0, 1, 2, 0, 1, ...]
+        or ['virginica', 'versicolor', 'virginica', 'setosa', ...]
+
+        one-hot encoded : [[0, 0, 1],
+                           [1, 0, 0]]
+
     y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
         classification or [n_samples, n_classes] for multiclass
         Target scores (estimator predictions).
+
+        e.g
+
+        "scores" format : [[0.1, 0.1, 0.8],
+                           [0.7, 0.15, 0.15]]
 
     ax: matplotlib Axes, default: None
         Axes object to draw the plot onto, otherwise uses current Axes
@@ -278,6 +385,8 @@ class ROC(AbstractPlot):
     @classmethod
     @modify_exceptions
     def from_raw_data(cls, y_true, y_score, ax=None):
+        _check_data_inputs(y_true, y_score)
+
         fpr, tpr, label = cls._calculate_plotting_data(y_true, y_score)
         return cls(fpr, tpr, label=label, ax=ax).plot()
 
@@ -303,9 +412,6 @@ class ROC(AbstractPlot):
 
         label : list of str for curves label
         """
-        if any((val is None for val in (y_true, y_score))):
-            raise ValueError("y_true and y_score are needed to plot ROC")
-
         label = []
 
         # get the number of classes based on the shape of y_score
@@ -349,3 +455,39 @@ class ROC(AbstractPlot):
             tpr = [tpr]
 
         return fpr, tpr, label
+
+
+def _preprocess_array_for_roc(array):
+    """
+    https://github.com/ploomber/sklearn-evaluation/pull/221/files
+
+    Binarize the array to use as valid input for plotting a
+    single or a multi-class roc curve
+    Parameters
+    ----------
+    array : array-like, shape = [n_samples] or [n_samples, 2]
+        The input array for the roc function
+        array([0, 1, 2, 1, 0])
+        array([[0, 0, 1],
+               [1, 0, 0]])
+        array([[0.1, 0.1, 0.8],
+               [0.7, 0.15, 0.15]])
+    Returns
+    -------
+    binarized_array : ndarray of shape (n_classes,)
+        An input array that is valid for roc
+    """
+    is_array_binary = np.isin(array, [0, 1]).all()
+
+    binarized_array = array
+
+    if not is_array_binary:
+        should_binarize = array.dtype.type is np.str_ or np.any(
+            (array < 0) | (array > 1)
+        )
+
+        if should_binarize:
+            label_binarizer = LabelBinarizer().fit(array)
+            binarized_array = label_binarizer.transform(array)
+
+    return binarized_array

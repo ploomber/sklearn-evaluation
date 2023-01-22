@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from collections import defaultdict
 from itertools import product
 from six import string_types
+import numpy as np
 
 
 def isiter(obj):
@@ -37,6 +38,17 @@ def _can_iterate(obj):
     is_iterable = isinstance(obj, Iterable)
 
     return is_iterable and not is_string
+
+
+def check_elements_in_range(array, min, max, include_min=True, inclue_max=True):
+    if include_min and inclue_max:
+        return np.all((array >= min) & (array <= max))
+    elif include_min and not inclue_max:
+        return np.all((array >= min) & (array < max))
+    elif not include_min and inclue_max:
+        return np.all((array > min) & (array <= max))
+    else:
+        return np.all((array > min) & (array < max))
 
 
 def is_column_vector(x):
