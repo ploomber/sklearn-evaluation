@@ -14,7 +14,7 @@ parts:
     - file: classification/compare
     - file: classification/evaluate
     - file: classification/imbalance
-    - file: classification/pre_made_grids
+    - file: classification/grid_search
 
   - caption: Regression
     chapters:

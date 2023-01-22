@@ -11,35 +11,41 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
     param_grids = dict(
         {
             GridTypes.TINY: {
-                "n_estimators": [1, 10],
+                "n_estimators": [50, 100, 500],
                 "criterion": ["gini", "entropy"],
-                "max_features": ["sqrt", "log2"],
+                "min_samples_split": [2, 4],
+                "min_samples_leaf": [1, 2],
+                "max_features": [1.0],
+
             },
             GridTypes.SMALL: {
-                "n_estimators": [1, 10, 50],
+                "n_estimators": [50, 100, 150, 500],
                 "criterion": ["gini", "entropy"],
-                "max_features": ["sqrt", "log2"],
+                "min_samples_split": [2, 4, 8],
+                "min_samples_leaf": [1, 2, 4],
+                "max_features": [1.0, "sqrt", "log2"],
             },
             GridTypes.MEDIUM: {
-                "n_estimators": [1, 10, 50, 100],
+                "n_estimators": [50, 100, 150, 200, 500],
                 "criterion": ["gini", "entropy"],
-                "max_features": ["sqrt", "log2"],
+                "min_samples_split": [2, 4, 8, 16],
+                "min_samples_leaf": [1, 2, 4, 8],
+                "max_features": [1.0, "sqrt", "log2"],
             },
             GridTypes.LARGE: {
-                "n_estimators": [1, 5],
-                "max_features": ["sqrt", "log2"],
-                "max_depth": [2, 4],
-                "min_samples_split": [2, 5],
-                "min_samples_leaf": [1, 2],
-                "bootstrap": [True],
+                "n_estimators": [50, 100, 150, 200, 300, 500],
+                "criterion": ["gini", "entropy", "log_loss"],
+                "min_samples_split": [2, 4, 8, 16, 24],
+                "min_samples_leaf": [1, 2, 4, 8, 16],
+                "max_features": [1.0, "sqrt", "log2"],
+
             },
             GridTypes.X_LARGE: {
-                "n_estimators": [1, 10, 50, 100],
-                "max_features": ["sqrt", "log2"],
-                "max_depth": [2, 4],
-                "min_samples_split": [2, 5],
-                "min_samples_leaf": [1, 2],
-                "bootstrap": [True],
+                "n_estimators": [50, 100, 150, 200, 300, 400, 500],
+                "criterion": ["gini", "entropy", "log_loss"],
+                "min_samples_split": [2, 4, 8, 16, 24, 40],
+                "min_samples_leaf": [1, 2, 4, 8, 16, 20],
+                "max_features": [1.0, "sqrt", "log2"],
             },
         }
     )

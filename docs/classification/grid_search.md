@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-# Pre made grids
+# Grid Search
 
 When training a new model, we often want to tune its hyperparameters; however, defining the grid of values is time-consuming since we need to look at the parameters, read the docs and define the values we want to try. 
 

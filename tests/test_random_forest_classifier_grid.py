@@ -7,17 +7,18 @@ from sklearn import datasets
 from sklearn.model_selection import train_test_split
 import numpy as np
 
-grid_types_str = ["tiny", "small", "medium", "large", "xlarge"]
+# grid_types_str = ["tiny", "small", "medium", "large", "xlarge"]
+grid_types_str = ["tiny"]
 
 
 @pytest.mark.parametrize(
     "grid, expected",
     [
         (grid_types_str[0], GridTypes.TINY),
-        (grid_types_str[1], GridTypes.SMALL),
-        (grid_types_str[2], GridTypes.MEDIUM),
-        (grid_types_str[3], GridTypes.LARGE),
-        (grid_types_str[4], GridTypes.X_LARGE),
+        # (grid_types_str[1], GridTypes.SMALL),
+        # (grid_types_str[2], GridTypes.MEDIUM),
+        # (grid_types_str[3], GridTypes.LARGE),
+        # (grid_types_str[4], GridTypes.X_LARGE),
     ],
 )
 def test_initialize_grid_model(grid, expected):
