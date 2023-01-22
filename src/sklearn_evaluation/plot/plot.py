@@ -19,7 +19,7 @@ class AbstractPlot(abc.ABC):
     """An abstract class for all class-based plots"""
 
     @abc.abstractmethod
-    def __init__(self, *, name=None):
+    def __init__(self, *, label=None):
         """
         The constructor must take all input data required to create the plot and assign
         it as attributes. e.g., ``self.value = value``, no other processing should
@@ -30,7 +30,7 @@ class AbstractPlot(abc.ABC):
         and ``y_pred``), they will often use ``Plot.from_raw_data`` instead of this
         constructor.
 
-        The only suggested argument is ``name=None``, which should be used to
+        The only suggested argument is ``label=None``, which should be used to
         identify the plot (e.g., in the title), and in composed plots.
 
         All arguments beyond the input data must be keyword-only (add a *

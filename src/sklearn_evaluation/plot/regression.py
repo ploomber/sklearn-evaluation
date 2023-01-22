@@ -22,7 +22,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from ploomber_core import deprecated
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.linear_model import LinearRegression
 from ploomber_core.exceptions import modify_exceptions
@@ -71,7 +70,7 @@ def residuals(y_true, y_pred, ax=None):
     _check_parameter_validity(y_true, y_pred)
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     # horizontal line for residual=0
     ax.axhline(y=0)
@@ -84,7 +83,7 @@ def residuals(y_true, y_pred, ax=None):
 
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
-def prediction_error(y_true, y_pred, model="deprecated", ax=None):
+def prediction_error(y_true, y_pred, ax=None):
     """
     Plot the scatter plot of measured values v. predicted values, with
     an identity line and a best fitted line to show the prediction
@@ -104,24 +103,14 @@ def prediction_error(y_true, y_pred, model="deprecated", ax=None):
     ax: matplotlib Axes
         Axes containing the plot
 
-    Notes
-    -----
-    .. deprecated:: 0.8.6
-        'model' argument is deprecated, will be removed in version 0.9
-
     Examples
     --------
     .. plot:: ../examples/prediction_error.py
 
     """
-
-    deprecated.parameter_deprecated(
-        deprecated_in="0.8.6", removed_in="0.9", name_old="model", value_passed=model
-    )
-
     _check_parameter_validity(y_true, y_pred)
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     model = LinearRegression()
 
@@ -194,7 +183,7 @@ def cooks_distance(X, y, ax=None):
     outlier_percentage_ *= 100.0
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
     _, _, baseline = ax.stem(
         distance_, linefmt="C0-", markerfmt=",", use_line_collection=True
     )

@@ -38,7 +38,7 @@ from sklearn_evaluation.plot.plot import AbstractComposedPlot, AbstractPlot
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
-from warnings import warn
+from ploomber_core import deprecated
 
 # TODO: add unit test
 
@@ -173,6 +173,15 @@ def DaviesBouldin_analysis_from_results(
 
 
 
+    Notes
+    -----
+    .. deprecated:: 0.9
+        ``n_clusters`` renamed to ``range_n_clusters`` and will be removed in version
+        0.10
+
+
+
+
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def elbow_curve(
@@ -199,6 +208,17 @@ def elbow_curve(
                 stacklevel=2,
             )
 
+    """
+    range_n_clusters = deprecated.parameter_renamed(
+        deprecated_in="0.9",
+        remove_in="0.10",
+        old_name="n_clusters",
+        old_value=n_clusters,
+        new_name="range_n_clusters",
+        new_value=range_n_clusters,
+    )
+
+
     if range_n_clusters is None:
         range_n_clusters = range(1, 10, 2)
     else:
@@ -207,6 +227,12 @@ def elbow_curve(
     if not hasattr(clf, "n_clusters"):
         raise TypeError(
             '"n_clusters" attribute not in classifier. ' "Cannot plot elbow method."
+        )
+
+    if not hasattr(clf, "score"):
+        raise AttributeError(
+            """clf does not have a score method. Ensure it's one of the following:
+            KMeans, MiniBatchKMeans, or BisectingKMeans"""
         )
 
     tuples = Parallel(n_jobs=n_jobs)(
@@ -237,7 +263,7 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     sum_of_squares = np.array(sum_of_squares)[idx]
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     ax.set_title("Elbow Plot")
     ax.plot(n_clusters, sum_of_squares, "b*-", label="Elbow")

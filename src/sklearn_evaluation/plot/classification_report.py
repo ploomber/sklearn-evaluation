@@ -45,6 +45,7 @@ class ClassificationReportAdd(Plot):
 
 class ClassificationReport(Plot):
     """
+    .. seealso:: :func:`classification_report`
 
     Examples
     --------
@@ -224,15 +225,20 @@ def classification_report(
     ax: matplotlib Axes
         Axes containing the plot
 
+
+    .. seealso:: :class:`ClassificationReport`
+
+
     Examples
     --------
     .. plot:: ../examples/classification_report.py
 
     .. plot:: ../examples/classification_report_multiclass.py
+
     """
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     matrix, keys, target_names = _classification_report(
         y_true,
