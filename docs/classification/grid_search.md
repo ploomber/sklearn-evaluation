@@ -55,12 +55,12 @@ X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, rando
 Create a new `RandomForestClassifierGrid` and set which grid size you would like to run. 
 You can choose any of the following sizes: `tiny`, `small`, `medium`, `large` or `xlarge`.
 
-For this example we will use a medium grid.
+For this example we will use a tiny grid.
 
 ```{code-cell} ipython3
 from sklearn_evaluation.grid import RandomForestClassifierGrid
 
-model = RandomForestClassifierGrid(grid='medium')
+model = RandomForestClassifierGrid(grid='tiny')
 ```
 
 ## Train all models
