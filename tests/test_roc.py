@@ -180,15 +180,40 @@ def test_fpr_and_tpr_different_types(fpr, tpr):
 @pytest.mark.parametrize(
     "bad_y_scores", [np.array([0, 1, 2, 0, 1]), np.array([[0, 0, 1], [1, 0, 0]])]
 )
-def test_plot_roc_bad_input_value_error(bad_y_scores):
+def test_plot_roc_bad_y_score_input_value_error(bad_y_scores):
     y_test = np.array([1, 1, 1, 1, 1, 0, 0, 0, 0, 0])
 
     # test classes example
-    with pytest.raises(ValueError, match="Please check y_true values"):
+    with pytest.raises(ValueError, match="Please check y_score values"):
         plot.roc(y_test, bad_y_scores)
 
-    with pytest.raises(ValueError, match="Please check y_true values"):
+    with pytest.raises(ValueError, match="Please check y_score values"):
         plot.ROC.from_raw_data(y_test, bad_y_scores)
+
+
+@pytest.mark.parametrize(
+    "bad_y_true",
+    [
+        np.array(
+            [
+                [0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+                [0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3],
+            ]
+        ),
+        np.array(
+            [0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3],
+        ),
+    ],
+)
+def test_plot_roc_bad_y_true_input_value_error(bad_y_true, y):
+    _, y_score = y
+
+    # test classes example
+    with pytest.raises(ValueError, match="Please check y_true values"):
+        plot.roc(bad_y_true, y_score)
+
+    with pytest.raises(ValueError, match="Please check y_true values"):
+        plot.ROC.from_raw_data(bad_y_true, y_score)
 
 
 @pytest.mark.parametrize(

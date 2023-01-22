@@ -25,8 +25,8 @@ def _check_data_inputs(y_true, y_score) -> None:
         "classes" format : [0, 1, 2, 0, 1, ...]
         or ['virginica', 'versicolor', 'virginica', 'setosa', ...]
 
-        one-hot encoded : [[0, 0, 1],
-                           [1, 0, 0]]
+        one-hot encoded classes : [[0, 0, 1],
+                                   [1, 0, 0]]
 
     y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
         classification or [n_samples, n_classes] for multiclass
@@ -51,17 +51,28 @@ def _check_data_inputs(y_true, y_score) -> None:
         raise ValueError("y_true and y_score are needed to plot ROC")
 
     y_score_array = np.array(y_score)
-
-    _is_y_score_valid = _is_array_like_scores(y_score_array)
+    # allow cases such : [[0, 1], [1, 1]] or [1,0]
+    _is_y_score_valid = _is_array_like_scores(y_score_array, min_allowed_length=2)
 
     if not _is_y_score_valid:
         raise ValueError(
+            "Please check y_score values. \n"
+            f"Expected scores array-like. got: {y_score_array} \n"
+            "You can generate scores with `model.predict_proba`"
+        )
+
+    y_true_array = np.array(y_true)
+
+    y_true_score_like = _is_array_like_scores(y_true_array)
+
+    if y_true_score_like:
+        raise ValueError(
             "Please check y_true values. \n"
-            f"Expected scores array-like. got: {y_score_array}"
+            f"Expected classes or one-hot encoded array-like. got: {y_true_array}"
         )
 
 
-def _is_array_like_scores(array) -> bool:
+def _is_array_like_scores(array, min_allowed_length=None) -> bool:
     """
     Checks if array is in "scores" format
 
@@ -83,24 +94,28 @@ def _is_array_like_scores(array) -> bool:
     """
     is_scores_format = False
 
-    array_flatten = array.flatten()
+    is_numeric = np.issubdtype(array.dtype, np.number)
 
-    # check if array consists of 0 and 1
-    _is_binary = np.array_equal(np.unique(array_flatten), [0, 1])
+    if is_numeric:
+        array_flatten = array.flatten()
 
-    if _is_binary:
-        _is_1d_array = len(array.shape) == 1
+        # check if array consists of 0 and 1
+        _is_binary = np.array_equal(np.unique(array_flatten), [0, 1])
 
-        if _is_1d_array:
-            _n_elements = len(array)
+        if _is_binary:
+            _is_1d_array = len(array.shape) == 1
+
+            if _is_1d_array:
+                _n_elements = len(array)
+            else:
+                _, _n_elements = array.shape
+
+            if min_allowed_length:
+                is_scores_format = _n_elements == min_allowed_length
+
         else:
-            _, _n_elements = array.shape
-
-        # allow cases such : [[0, 1], [1, 1]] or [1,0]
-        is_scores_format = _n_elements == 2
-    else:
-        _elements_in_range = check_elements_in_range(array_flatten, -1, 1)
-        is_scores_format = _elements_in_range
+            _elements_in_range = check_elements_in_range(array_flatten, -1, 1)
+            is_scores_format = _elements_in_range
 
     return is_scores_format
 
@@ -119,8 +134,8 @@ def roc(y_true, y_score, ax=None):
         "classes" format : [0, 1, 2, 0, 1, ...]
         or ['virginica', 'versicolor', 'virginica', 'setosa', ...]
 
-        one-hot encoded : [[0, 0, 1],
-                           [1, 0, 0]]
+        one-hot encoded classes : [[0, 0, 1],
+                                   [1, 0, 0]]
 
     y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
         classification or [n_samples, n_classes] for multiclass
