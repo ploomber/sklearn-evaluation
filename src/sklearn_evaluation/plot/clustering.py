@@ -41,39 +41,7 @@ from ploomber_core.exceptions import modify_exceptions
 from warnings import warn
 
 # TODO: add unit test
-#Krina Code: Davies-Bouldin Index
 
-# metric_option = {
-#     "sum_of_square": elbow_curve,
-#     "silhouette": silhouette_analysis,
-#     "davies_bouldin":DaviesBouldin_analysis,
-#     "calinski_harabasz": calinski_harabasz_analysis,
-# }
-
-# class ElbowCurveMetrics(AbstractPlot):
-#     def __init__(self,
-#     X,
-#     clf,
-#     range_n_clusters=None,
-#     metric="elbow_curve",
-#     n_jobs=1,
-#     show_cluster_time=True,
-#     ax=None,
-#     n_clusters=None,):
-#         # super(ElbowCurveMetrics, self).__init__(ax=ax)
-#         # if metric not in metric_option:
-#         #     raise Exception( "given metric is not a defined metric "
-#         #         "use one of sum_of_square, silhouette, davies_bouldin or calinski_harabasz"
-#         #     )
-    
-#         self.X = X
-#         self.clf = clf
-#         self.range_n_clusters=range_n_clusters
-#         self.metric = metric
-#         self.n_jobs=n_jobs
-#         self.show_cluster_time=show_cluster_time
-#         self.ax=ax
-#         self.n_clusters=n_clusters
 
     
 @SKLearnEvaluationLogger.log(feature="plot")
@@ -125,9 +93,7 @@ def calinski_harabasz_analysis_from_results(
     if ax is None:
         _, ax = plt.subplots(1, 1, figsize=figsize)
 
-    # if ax is None:
-    #     ax = plt.gca()
-
+   
     ax.set_title("calinski_harabasz_score Plot")
     ax.plot(n_clusters, calinski_harabasz_value, "b*-", label="calinski_harabasz_value")
     ax.grid(True)
@@ -192,8 +158,7 @@ def DaviesBouldin_analysis_from_results(
     if ax is None:
         _, ax = plt.subplots(1, 1, figsize=figsize)
 
-    # if ax is None:
-    #     ax = plt.gca()
+   
 
     ax.set_title("davies_bouldin_Index Plot")
     ax.plot(n_clusters, davies_bouldin_value, "b*-", label="davies_bouldin_value")
@@ -421,17 +386,6 @@ def silhouette_analysis_from_results(
 
 
 
-    # def draw_elbowcurve(self):
-       
-    #     if self.metric == "DB":
-    #         self.DaviesBouldin_analysis(self, self.X, self.clf, self.range_n_clusters, figsize=None, cmap="nipy_spectral", text_fontsize="medium", ax = self.ax)
-    #     elif self.metric == "CH":
-    #         self.calinski_harabasz_analysis(self, self.X, self.clf, self.range_n_clusters, figsize=None, cmap="nipy_spectral", text_fontsize="medium", ax = self.ax)
-    #     elif self.metric == "SIL":
-    #             self.silhouette_analysis(self,self.X,self.clf,self.range_n_clusters,self.metric,figsize=None,cmap="nipy_spectral",text_fontsize="medium",ax=self.ax)
-    #     else:
-    #         self.elbow_curve(self,self.X,self.clf,self.range_n_clusters,self.n_jobs,self.show_cluster_time,self.ax,self.n_clusters)
-            
 
 
 
