@@ -1,11 +1,11 @@
 __version__ = "0.10.0dev"
 
-from .evaluator import ClassifierEvaluator
-from .nb.NotebookIntrospector import NotebookIntrospector
-from .nb.NotebookCollection import NotebookCollection
-from .nb.NotebookDatabase import NotebookDatabase
-from .tracker import SQLiteTracker
-from .telemetry import telemetry
+from sklearn_evaluation.evaluator import ClassifierEvaluator
+from sklearn_evaluation.nb.NotebookIntrospector import NotebookIntrospector
+from sklearn_evaluation.nb.NotebookCollection import NotebookCollection
+from sklearn_evaluation.nb.NotebookDatabase import NotebookDatabase
+from sklearn_evaluation.tracker import SQLiteTracker
+from sklearn_evaluation.telemetry import telemetry
 
 __all__ = [
     "ClassifierEvaluator",

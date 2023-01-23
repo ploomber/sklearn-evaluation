@@ -3,9 +3,9 @@ import matplotlib.pyplot as plt
 from sklearn_evaluation.plot.util import requires_properties
 from sklearn_evaluation.report.serialize import EvaluatorHTMLSerializer
 from sklearn_evaluation.report.report import Report
-from .util import estimator_type, class_name
-from . import plot
-from .telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.util import estimator_type, class_name
+from sklearn_evaluation import plot
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 class ClassifierEvaluator(object):

@@ -2,8 +2,8 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize
-from ..telemetry import SKLearnEvaluationLogger
-from ..util import is_column_vector, is_row_vector
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.util import is_column_vector, is_row_vector
 from sklearn_evaluation import __version__
 import json
 from pathlib import Path
