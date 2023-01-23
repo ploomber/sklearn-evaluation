@@ -279,32 +279,6 @@ def test_from_results_call(monkeypatch):
 
 
 
-
-
-
-
-
-
-
-def test_plot_calinski_harabasz_n_clusters_future_warning():
-    clf = KMeans()
-    with pytest.warns(
-        FutureWarning,
-        match="elbow_curve will change its signature."
-        " Please use range_n_clusters instead of n_cluster",
-    ):
-        plot.calinski_harabasz_analysis(X, clf, n_clusters=range(1, 10))
-
-
-def test_plot_calinski_harabasz_n_clusters_attribute_error():
-    clf = KMeans()
-    with pytest.raises(
-        AttributeError,
-        match="n_cluster attribute is deprecated. Please use only range_n_clusters.",
-    ):
-        plot.calinski_harabasz_analysis(X, clf, range_n_clusters=range(1, 10), n_clusters=range(1, 10))
-
-
 def test_plot_calinski_harabasz_bad_input_value_error(ploomber_value_error_message):
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
     clf = KMeans()
@@ -315,37 +289,33 @@ def test_plot_calinski_harabasz_bad_input_value_error(ploomber_value_error_messa
 def test_plot_calinski_harabasz_from_results_bad_input_value_error(
     ploomber_value_error_message,
 ):
-    n_clusters = range(1, 10, 2)
-    sum_of_squares = [4572.2, 470.7, 389.9, 335.1, [305.5]]
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
+    y = np.array([0, 1, 0, 1])
 
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.calinski_harabasz_analysis_from_results(n_clusters, sum_of_squares, times=None)
+        plot.calinski_harabasz_analysis_from_results(X, y, times=None)
 
 
 def test_cluster_ranges():
     clf = KMeans()
-    plot.calinski_harabasz_analysis(X, clf, range_n_clusters=range(1, 10))
-
-    # test old attribute doesn't break
-    plot.calinski_harabasz_analysis(X, clf, n_clusters=range(1, 10))
+    plot.calinski_harabasz_analysis(X, clf)
+    plot.calinski_harabasz_analysis(X, clf)
 
 
 @image_comparison(
-    baseline_images=["elbow_curve"], extensions=["png"], remove_text=False
+    baseline_images=["calinski_harabasz"], extensions=["png"], remove_text=False
 )
 def test_calinski_harabasz():
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
     clf = KMeans()
 
-    plot.calinski_harabasz_analysis(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
+    plot.calinski_harabasz_analysis(X, clf, show_cluster_time=False)
 
 
 @image_comparison(
     baseline_images=["calinski_harabasz_analysis_from_results"], extensions=["png"], remove_text=False
 )
 def test_calinski_harabasz_from_results():
-    # n_clusters = range(1, 10, 2)
-    # sum_of_squares = np.array([4572.2, 470.7, 389.9, 335.1, 305.5])
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
     y = np.array([0, 1, 0, 1])
     plot.calinski_harabasz_analysis_from_results(X, y, times=None)
@@ -355,8 +325,6 @@ def test_calinski_harabasz_from_results():
     baseline_images=["calinski_harabasz_analysis_from_results"], extensions=["png"], remove_text=False
 )
 def test_calinski_harabasz_from_results_unsorted():
-    # n_clusters = [5, 3, 9, 1, 7]
-    # sum_of_squares = np.array([389.9, 470.7, 305.5, 4572.2, 335.1])
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
     y = np.array([0, 1, 0, 1])
     plot.calinski_harabasz_analysis_from_results(X, y, times=None)
@@ -369,6 +337,67 @@ def test_ax_calinski_harabasz():
     assert ax is out_ax
 
 
-def test_n_jobs_calinski_harabasz():
+
+
+
+
+
+
+def test_plot_davies_bouldin_bad_input_value_error(ploomber_value_error_message):
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
     clf = KMeans()
-    plot.calinski_harabasz_analysis(X, clf, n_jobs=2)
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.davies_bouldin_analysis(X, clf, n_clusters=range(1, 10))
+
+
+def test_plot_davies_bouldin_from_results_bad_input_value_error(
+    ploomber_value_error_message,
+):
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
+    y = np.array([0, 1, 0, 1])
+
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.davies_bouldin_analysis_from_results(X, y, times=None)
+
+
+def test_cluster_ranges():
+    clf = KMeans()
+    plot.davies_bouldin_analysis(X, clf)
+    plot.davies_bouldin_analysis(X, clf)
+
+
+@image_comparison(
+    baseline_images=["davies_bouldin"], extensions=["png"], remove_text=False
+)
+def test_davies_bouldin():
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
+    clf = KMeans()
+
+    plot.davies_bouldin_analysis(X, clf, show_cluster_time=False)
+
+
+@image_comparison(
+    baseline_images=["davies_bouldin_analysis_from_results"], extensions=["png"], remove_text=False
+)
+def test_davies_bouldin_from_results():
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
+    y = np.array([0, 1, 0, 1])
+    plot.davies_bouldin_analysis_from_results(X, y, times=None)
+
+
+@image_comparison(
+    baseline_images=["davies_bouldin_analysis_from_results"], extensions=["png"], remove_text=False
+)
+def test_davies_bouldin_from_results_unsorted():
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
+    y = np.array([0, 1, 0, 1])
+    plot.davies_bouldin_analysis_from_results(X, y, times=None)
+
+
+def test_ax_davies_bouldin():
+    clf = KMeans()
+    fig, ax = plt.subplots(1, 1)
+    out_ax = plot.davies_bouldin_analysis(X, clf, ax=ax)
+    assert ax is out_ax
+
+

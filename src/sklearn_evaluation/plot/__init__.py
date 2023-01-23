@@ -21,7 +21,9 @@ from .clustering import (
     silhouette_analysis,
     silhouette_analysis_from_results,
     calinski_harabasz_analysis,
-    calinski_harabasz_analysis_from_results
+    calinski_harabasz_analysis_from_results,
+    davies_bouldin_analysis,
+    davies_bouldin_analysis_from_results,
 )
 
 
@@ -34,7 +36,7 @@ from .cumulative_gain_lift_curve import cumulative_gain, lift_curve
 from .feature_ranking import Rank1D, Rank2D
 
 __all__ = [
-    "ElbowCurveMetrics"
+    
     "confusion_matrix",
     "feature_importances",
     "precision_recall",
@@ -54,6 +56,8 @@ __all__ = [
     "silhouette_analysis_from_results",
     "calinski_harabasz_analysis",
     "calinski_harabasz_analysis_from_results",
+    "davies_bouldin_analysis",
+    "davies_bouldin_analysis_from_results",
     "calibration_curve",
     "target_analysis",
     "scores_distribution",

@@ -34,7 +34,6 @@ from sklearn.base import clone
 from sklearn.metrics import silhouette_samples, silhouette_score, davies_bouldin_score, calinski_harabasz_score
 from sklearn.preprocessing import LabelEncoder
 from joblib import Parallel, delayed
-from sklearn_evaluation.plot.plot import AbstractComposedPlot, AbstractPlot
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
@@ -107,7 +106,7 @@ def calinski_harabasz_analysis_from_results(
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
-def DaviesBouldin_analysis(
+def davies_bouldin_analysis(
     X,
     clf,
     range_n_clusters=None,
@@ -134,7 +133,7 @@ def DaviesBouldin_analysis(
         setattr(clf, "n_clusters", n_clusters)
         cluster_labels = clf.fit_predict(X)
 
-        ax = DaviesBouldin_analysis_from_results(
+        ax = davies_bouldin_analysis_from_results(
             X, cluster_labels, figsize, cmap, text_fontsize, ax
         )
     return ax
@@ -142,7 +141,7 @@ def DaviesBouldin_analysis(
 
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
-def DaviesBouldin_analysis_from_results(
+def davies_bouldin_analysis_from_results(
     X,
     cluster_labels,
     figsize=None,
