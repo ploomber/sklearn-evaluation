@@ -45,7 +45,7 @@ def precision_recall(y_true, y_score, ax=None):
         raise ValueError("y_true and y_score are needed to plot " "Precision-Recall")
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     # get the number of classes from y_score
     y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
@@ -95,7 +95,7 @@ def _precision_recall(y_true, y_score, ax=None):
     average_precision = average_precision_score(y_true, y_score)
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     ax.plot(
         recall,
@@ -131,7 +131,7 @@ def _precision_recall_multi(y_true, y_score, ax=None):
     avg_prec = average_precision_score(y_true, y_score, average="micro")
 
     if ax is None:
-        ax = plt.gca()
+        _, ax = plt.subplots()
 
     ax.plot(
         recall,

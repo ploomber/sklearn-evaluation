@@ -27,16 +27,18 @@ SOFTWARE.
 """
 
 import pytest
+import sys
 import numpy as np
 from unittest.mock import Mock
 import matplotlib.pyplot as plt
 from matplotlib.testing.decorators import image_comparison
 
 from sklearn.tree import DecisionTreeClassifier
-from sklearn.cluster import KMeans, MiniBatchKMeans
+from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
+from ploomber_core.warnings import PloomberDeprecationWarning
 
 
 def convert_labels_into_string(y_true):
@@ -63,23 +65,36 @@ def test_n_clusters_in_clf():
         plot.elbow_curve(X, clf)
 
 
-def test_plot_elbow_curve_n_clusters_future_warning():
-    clf = KMeans()
-    with pytest.warns(
-        FutureWarning,
-        match="elbow_curve will change its signature."
-        " Please use range_n_clusters instead of n_cluster",
-    ):
-        plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+def test_score_in_clf_error():
+    clf = SpectralClustering()
+    with pytest.raises(AttributeError):
+        plot.elbow_curve(X, clf)
 
 
-def test_plot_elbow_curve_n_clusters_attribute_error():
-    clf = KMeans()
-    with pytest.raises(
-        AttributeError,
-        match="n_cluster attribute is deprecated. Please use only range_n_clusters.",
-    ):
-        plot.elbow_curve(X, clf, range_n_clusters=range(1, 10), n_clusters=range(1, 10))
+try:
+    from sklearn.cluster import BisectingKMeans
+except ImportError:
+    pass
+
+
+@pytest.mark.parametrize(
+    "clf",
+    [
+        KMeans(),
+        MiniBatchKMeans(),
+        pytest.param(
+            "bisect",
+            marks=pytest.mark.skipif(
+                sys.version_info > (3, 7),
+                reason="scikit 1.1 not supported by Python 3.7",
+            ),
+        ),
+    ],
+)
+def test_score_methods_in_clf(clf):
+    if clf == "bisect":
+        clf = BisectingKMeans()
+    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
 
 
 def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
@@ -115,6 +130,19 @@ def test_elbow_curve():
     clf = KMeans()
 
     plot.elbow_curve(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
+
+
+def test_elbow_curve_deprecation():
+    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
+    clf = KMeans(n_init=10)
+
+    match = (
+        "'n_clusters' was renamed to 'range_n_clusters' in version 0.9. "
+        "'n_clusters' will be removed in 0.10"
+    )
+
+    with pytest.warns(PloomberDeprecationWarning, match=match):
+        plot.elbow_curve(X, clf, n_clusters=range(1, 4), show_cluster_time=False)
 
 
 @image_comparison(

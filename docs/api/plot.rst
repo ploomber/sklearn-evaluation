@@ -1,6 +1,24 @@
 ``sklearn_evaluation.plot``
 ===========================
 
+The Plot API supports both functional and object-oriented (OOP) interfaces. While the functional 
+API allows you to quickly generate out-of-the-box plots and is the easiest to get started with, 
+the OOP API offers more flexibility to compare models using a simple synatx, i.e, plot1 + plot2; 
+or to customize the style and elements in the plot.
+
+
+Object Oriented API
+*******************
+
+
+ConfusionMatrix
+---------------
+.. autoclass:: sklearn_evaluation.plot.ConfusionMatrix
+
+ROC
+---
+.. autofunction:: sklearn_evaluation.plot.ROC
+
 ClassificationReport
 --------------------
 .. autoclass:: sklearn_evaluation.plot.ClassificationReport
@@ -15,6 +33,12 @@ Rank2D
 .. autoclass:: sklearn_evaluation.plot.Rank2D
     :members: feature_ranks, feature_ranks_custom_algorithm
 
+
+
+Functional API
+**************
+
+
 calibration_curve
 -----------------
 .. autofunction:: sklearn_evaluation.plot.calibration_curve
@@ -26,10 +50,6 @@ classification_report
 confusion_matrix
 ----------------
 .. autofunction:: sklearn_evaluation.plot.confusion_matrix
-
-ConfusionMatrix
----------------
-.. autoclass:: sklearn_evaluation.plot.ConfusionMatrix
 
 cumulative_gain
 ---------------
@@ -86,12 +106,6 @@ residuals
 roc
 ---
 .. autofunction:: sklearn_evaluation.plot.roc
-
-
-ROC
----
-.. autofunction:: sklearn_evaluation.plot.ROC
-
 
 scores_distribution
 -------------------

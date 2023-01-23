@@ -34,6 +34,8 @@ def roc(y_true, y_score, ax=None):
     first column in y_score must contain the scores for class 0,
     second column for class 1 and so on.
 
+    .. seealso:: :class:`ROC`
+
     Examples
     --------
     .. plot:: ../examples/roc.py
@@ -94,26 +96,27 @@ def _plot_roc(fpr, tpr, ax, label=None):
     return ax
 
 
-def _generate_plot_from_fpr_tpr_lists(fpr, tpr, ax, labels=None):
+def _generate_plot_from_fpr_tpr_lists(fpr, tpr, ax, label=None):
     """
     Draws a plot for every list of values i.e tpr[i] and fpr[i].
     """
     for i in range(len(fpr)):
         fpr_ = fpr[i]
         tpr_ = tpr[i]
-        label = labels[i] if labels is not None and len(labels) > 0 else None
-        _plot_roc(fpr_, tpr_, ax, label=label)
+        label_ = label[i] if label is not None and len(label) > 0 else None
+        _plot_roc(fpr_, tpr_, ax, label=label_)
 
 
 class ROCAdd(AbstractComposedPlot):
-    """
-    Generate a new plot with overlapping ROC curves (roc1 + roc2)
+    """Generate a new plot with overlapping ROC curves (roc1 + roc2)
 
     Parameters
     ----------
-    a : ROC plot
+    a : ROC
+        ROC plot
 
-    b : ROC plot
+    b : ROC
+        ROC plot
 
     Examples
     --------
@@ -122,6 +125,7 @@ class ROCAdd(AbstractComposedPlot):
     Notes
     -----
     .. versionadded:: 0.8.4
+
     """
 
     def __init__(self, a, b):
@@ -135,15 +139,15 @@ class ROCAdd(AbstractComposedPlot):
         if ax is None:
             _, ax = plt.subplots()
 
-        _generate_plot_from_fpr_tpr_lists(a.fpr, a.tpr, ax, labels=a.labels)
+        _generate_plot_from_fpr_tpr_lists(a.fpr, a.tpr, ax, label=a.label)
 
         # mark the added curve with 2
-        if b.labels is not None and len(b.labels) > 0:
-            b_labels = [label + " 2" for label in b.labels]
+        if b.label is not None and len(b.label) > 0:
+            b_label = [label + " 2" for label in b.label]
         else:
-            b_labels = ["ROC curve 2"]
+            b_label = ["ROC curve 2"]
 
-        _generate_plot_from_fpr_tpr_lists(b.fpr, b.tpr, ax, labels=b_labels)
+        _generate_plot_from_fpr_tpr_lists(b.fpr, b.tpr, ax, label=b_label)
 
         self.ax_ = ax
         self.figure_ = ax.figure
@@ -154,6 +158,7 @@ class ROCAdd(AbstractComposedPlot):
 class ROC(AbstractPlot):
     """
     Plot ROC curve
+
     Parameters
     ----------
     fpr : ndarray of shape (>2,), list of lists or list of numbers
@@ -164,11 +169,13 @@ class ROC(AbstractPlot):
         Increasing true positive rates such that element `i` is the true
         positive rate of predictions with score >= `thresholds[i]`.
 
-    labels : list of str, default: None
+    label : list of str, default: None
         Set curve labels
 
     ax: matplotlib Axes, default: None
         Axes object to draw the plot onto, otherwise uses current Axes
+
+    .. seealso:: :func:`roc`
 
     Examples
     --------
@@ -185,7 +192,7 @@ class ROC(AbstractPlot):
 
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
     @modify_exceptions
-    def __init__(self, fpr, tpr, labels=None, ax=None):
+    def __init__(self, fpr, tpr, label=None, ax=None):
         if fpr is None or tpr is None:
             raise TypeError("fpr and tpr must be defined.")
 
@@ -220,7 +227,7 @@ class ROC(AbstractPlot):
 
         self.fpr = fpr
         self.tpr = tpr
-        self.labels = labels
+        self.label = label
         self.ax = ax
 
     def __sub__(self):
@@ -253,7 +260,7 @@ class ROC(AbstractPlot):
         if ax is None:
             _, ax = plt.subplots()
 
-        _generate_plot_from_fpr_tpr_lists(self.fpr, self.tpr, ax, labels=self.labels)
+        _generate_plot_from_fpr_tpr_lists(self.fpr, self.tpr, ax, label=self.label)
 
         self.ax = ax
         self.figure_ = ax.figure
@@ -271,8 +278,8 @@ class ROC(AbstractPlot):
     @classmethod
     @modify_exceptions
     def from_raw_data(cls, y_true, y_score, ax=None):
-        fpr, tpr, labels = cls._calculate_plotting_data(y_true, y_score)
-        return cls(fpr, tpr, labels=labels, ax=ax).plot()
+        fpr, tpr, label = cls._calculate_plotting_data(y_true, y_score)
+        return cls(fpr, tpr, label=label, ax=ax).plot()
 
     @staticmethod
     @modify_exceptions
@@ -294,12 +301,12 @@ class ROC(AbstractPlot):
 
         tpr : list of lists with tpr values
 
-        labels : list of str for curves labels
+        label : list of str for curves label
         """
         if any((val is None for val in (y_true, y_score))):
             raise ValueError("y_true and y_score are needed to plot ROC")
 
-        labels = []
+        label = []
 
         # get the number of classes based on the shape of y_score
         y_score_is_vector = is_column_vector(y_score) or is_row_vector(y_score)
@@ -317,14 +324,19 @@ class ROC(AbstractPlot):
 
             avg_fpr, avg_tpr, _ = _roc_curve_multi(y_true_bin, y_score)
 
-            labels.append("micro-average ROC curve")
+            label.append("micro-average ROC curve")
             fpr.append(avg_fpr)
             tpr.append(avg_tpr)
 
             for i in range(n_classes):
                 fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])
 
-                labels.append("ROC curve")
+                y_true_class_i = np.unique(y_true)[i]
+
+                if not isinstance(y_true_class_i, str):
+                    y_true_class_i = i
+
+                label.append(f"(class {y_true_class_i}) ROC curve")
                 fpr.append(fpr_)
                 tpr.append(tpr_)
         else:
@@ -336,4 +348,4 @@ class ROC(AbstractPlot):
             fpr = [fpr]
             tpr = [tpr]
 
-        return fpr, tpr, labels
+        return fpr, tpr, label
