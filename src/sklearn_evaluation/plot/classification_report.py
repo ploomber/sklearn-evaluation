@@ -5,7 +5,7 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report as sk_classification_report
-from ..telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.classification import _add_values_to_matrix
 from sklearn_evaluation.util import default_heatmap

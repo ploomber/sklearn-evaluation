@@ -2,7 +2,7 @@ import json
 import sqlite3
 from glob import iglob
 
-from .NotebookIntrospector import NotebookIntrospector
+from sklearn_evaluation.nb.NotebookIntrospector import NotebookIntrospector
 
 
 class NotebookDatabase:

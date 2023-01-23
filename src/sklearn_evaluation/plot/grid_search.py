@@ -6,13 +6,13 @@ import collections
 import matplotlib.pyplot as plt
 import numpy as np
 from six import string_types
-from ..telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
 
 from ploomber_core.exceptions import modify_exceptions
 
-from ..util import (
+from sklearn_evaluation.util import (
     _group_by,
     _get_params_value,
     _mapping_to_tuple_pairs,
