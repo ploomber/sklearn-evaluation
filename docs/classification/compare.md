@@ -100,10 +100,6 @@ forest_roc = plot.ROC.from_raw_data(y_test, forest_score)
 compare = tree_roc + forest_roc
 ```
 
-```{code-cell} ipython3
-diff = forest_roc - tree_roc
-```
-
 ## Classification report
 
 *Added in sklearn-evaluation version 0.7.8*
