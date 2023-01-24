@@ -53,10 +53,7 @@ tree_pred, forest_pred = [
     for est in [DecisionTreeClassifier(), RandomForestClassifier()]
 ]
 
-tree_score, forest_score = [
-    est.fit(X_train, y_train).predict_proba(X_test)
-    for est in [DecisionTreeClassifier(), RandomForestClassifier()]
-]
+
 
 ```
 
@@ -83,6 +80,14 @@ diff = forest_cm - tree_cm
 ```
 
 ## ROC
+
+```{code-cell} ipython3
+:tags: [remove-output]
+tree_score, forest_score = [
+    est.fit(X_train, y_train).predict_proba(X_test)
+    for est in [DecisionTreeClassifier(), RandomForestClassifier()]
+]
+```
 
 ### Decision tree ROC
 
