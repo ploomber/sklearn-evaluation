@@ -156,6 +156,7 @@ def _create_report_template(evaluation_state):
 
 
 class ModelEvaluator(object):
+
     @staticmethod
     def evaluate_balance(y_true, evaluation_state):
         """
@@ -239,7 +240,7 @@ class ModelEvaluator(object):
         roc = plot.ROC.from_raw_data(y_true, y_score)
         for i in range(len(roc.fpr)):
             roc_auc = auc(roc.fpr[i], roc.tpr[i])
-            print()
+
             # todo: better check
             label = roc.label[i] if len(roc.label) > 0 else f"class {i}"
             r = re.match(r"^\(class (.)*\)", label)
@@ -276,6 +277,34 @@ class ModelEvaluator(object):
         )
         general_stats["guidelines"].append(plot.roc(y_true, y_score, ax=_gen_ax()))
         evaluation_state["general_stats"] = general_stats
+
+
+class ModelComparer(object):
+    def __init__(self, model_a, model_b):
+        self.model_a = model_a
+        self.model_b = model_b
+        self.evaluation_state = dict({"guidelines": []})
+
+    def precision_and_recall():
+        pass
+
+    def auc(self):
+        # self.evaluation_state["guidelines"]
+        # calculate roc auc of model a
+
+        roc = plot.ROC.from_raw_data(y_true, y_score)
+        for i in range(len(roc.fpr)):
+            roc_auc = auc(roc.fpr[i], roc.tpr[i])
+
+        # calculate roc auc of model b
+
+        pass
+
+    def computation():
+        pass
+
+    def callibration():
+        pass
 
 
 def evaluate_model(
@@ -318,6 +347,19 @@ def evaluate_model(
     report = Report(e, template)
     return report
 
+
+def compare_models(model_a, model_b, X_train, X_test):
+    _check_model(model_a)
+    _check_model(model_b)
+
+    mc = ModelComparer(model_a, model_b)
+
+    mc.precision_and_recall()
+
+    pass
+
+
+# validations
 
 def _check_model(model) -> None:
     """
