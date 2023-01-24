@@ -20,7 +20,7 @@ limitations under the License.
 
 import numpy as np
 import matplotlib.pyplot as plt
-from ..telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.utils.multiclass import unique_labels, type_of_target
 from ploomber_core.exceptions import modify_exceptions
 

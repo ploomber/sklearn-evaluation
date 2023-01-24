@@ -2,8 +2,12 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize, LabelBinarizer
-from ..telemetry import SKLearnEvaluationLogger
-from ..util import is_column_vector, is_row_vector, check_elements_in_range
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.util import (
+    is_column_vector,
+    is_row_vector,
+    check_elements_in_range,
+)
 from sklearn_evaluation import __version__
 import json
 from pathlib import Path
@@ -52,7 +56,7 @@ def _check_data_inputs(y_true, y_score) -> None:
 
     y_score_array = np.array(y_score)
     # allow cases such : [[0, 1], [1, 1]] or [1,0]
-    _is_y_score_valid = _is_array_like_scores(y_score_array, min_allowed_length=2)
+    _is_y_score_valid = is_array_like_scores(y_score_array, min_allowed_length=2)
 
     if not _is_y_score_valid:
         raise ValueError(
@@ -63,7 +67,7 @@ def _check_data_inputs(y_true, y_score) -> None:
 
     y_true_array = np.array(y_true)
 
-    y_true_score_like = _is_array_like_scores(y_true_array)
+    y_true_score_like = is_array_like_scores(y_true_array)
 
     if y_true_score_like:
         raise ValueError(
@@ -72,7 +76,7 @@ def _check_data_inputs(y_true, y_score) -> None:
         )
 
 
-def _is_array_like_scores(array, min_allowed_length=None) -> bool:
+def is_array_like_scores(array, min_allowed_length=None) -> bool:
     """
     Checks if array is in "scores" format
 

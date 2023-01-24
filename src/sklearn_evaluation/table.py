@@ -1,6 +1,6 @@
 from copy import copy
 
-from . import compute
+from sklearn_evaluation import compute
 
 __all__ = ["feature_importances"]
 
