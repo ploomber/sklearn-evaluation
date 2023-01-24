@@ -17,6 +17,7 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
                 "min_samples_split": [2, 4],
                 "min_samples_leaf": [1, 2],
                 "max_features": [1.0],
+
             },
             GridTypes.SMALL: {
                 "n_estimators": [50, 100, 150, 500],
@@ -38,6 +39,7 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
                 "min_samples_split": [2, 4, 8, 16, 24],
                 "min_samples_leaf": [1, 2, 4, 8, 16],
                 "max_features": [1.0, "sqrt", "log2"],
+
             },
             GridTypes.X_LARGE: {
                 "n_estimators": [50, 100, 150, 200, 300, 400, 500],
