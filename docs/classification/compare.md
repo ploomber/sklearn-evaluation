@@ -76,6 +76,28 @@ compare = tree_cm + forest_cm
 diff = forest_cm - tree_cm
 ```
 
+### Decision tree ROC
+
+```{code-cell} ipython3
+tree_roc = plot.roc(y_test, tree_pred)
+```
+
+### Random forest ROC
+
+```{code-cell} ipython3
+forest_roc = plot.roc(y_test, forest_pred)
+```
+
+### Compare ROC
+
+```{code-cell} ipython3
+compare = tree_roc + forest_roc
+```
+
+```{code-cell} ipython3
+diff = forest_roc - tree_roc
+```
+
 ## Classification report
 
 *Added in sklearn-evaluation version 0.7.8*
