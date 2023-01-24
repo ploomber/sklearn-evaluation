@@ -29,9 +29,9 @@ import pandas as pd
 ```{code-cell} ipython3
   # download dataset. Reference: https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data
   urllib.request.urlretrieve(
-      'https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv', filename='./output/heart.csv')
+      'https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv', filename='heart.csv')
 
-  data = pd.read_csv('./output/heart.csv')
+  data = pd.read_csv('heart.csv')
 
   column = 'fbs'
   X = data.drop(column, axis=1)
@@ -54,5 +54,5 @@ import pandas as pd
 ```
 
 ```{raw} html
-:file: ./output/model-evaluation-report.html
+:file: model-evaluation-report.html
 ```
