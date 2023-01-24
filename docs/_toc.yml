@@ -30,6 +30,7 @@ parts:
     - file: comparison/NotebookCollection
     - file: comparison/nbdb
     - file: comparison/report
+    - file: comparison/model_evaluation
 
   - caption: Model optimization
     chapters:
