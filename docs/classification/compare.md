@@ -82,6 +82,8 @@ compare = tree_cm + forest_cm
 diff = forest_cm - tree_cm 
 ```
 
+## ROC
+
 ### Decision tree ROC
 
 ```{code-cell} ipython3
