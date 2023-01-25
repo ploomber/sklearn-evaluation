@@ -322,3 +322,11 @@ def test_one_model_from_results_call(monkeypatch):
     monkeypatch.setattr(cl, "_silhouette_analysis_one_model", mock)
     plot.silhouette_analysis_from_results(X, cluster_labels)
     assert mock.call_count == 3
+
+
+def test_ax_length_mismatch(ploomber_value_error_message):
+    X = [[1.2, 3.4], [2.2, 4.1], [1.1, 6.5]]
+    cluster_labels = [[0, 0, 1], [0, 1, 0]]
+    fig, ax = plt.subplots(1, 1)
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.silhouette_analysis_from_results(X, cluster_labels, ax=[ax])
