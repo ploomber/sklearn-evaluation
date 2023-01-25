@@ -22,7 +22,7 @@ kernelspec:
 Requirements:
 
 ```sh
-pip install scikit-learn sklearn-evaluation ploomber ploomber-engine
+pip install scikit-learn sklearn-evaluation ploomber ploomber-engine jupysql
 ```
 
 ```{code-cell} ipython3
@@ -138,27 +138,25 @@ db.index(verbose=True, update=False);
 
 ## Querying notebooks
 
-`NotebookDatabase` uses SQLite. Here we use [SQLiteTracker](https://sklearn-evaluation.ploomber.io/en/stable/api/SQLiteTracker.html) to query our experiments.
+`NotebookDatabase` uses SQLite. Here we use [JupySQL](https://jupysql.readthedocs.io/en/latest/intro.html) to query our experiments.
 
 ```{code-cell} ipython3
-from sklearn_evaluation import SQLiteTracker
+# load jupysql magic
+%load_ext sql
 
-tracker = SQLiteTracker("nb.db")
 ```
 
 ### Best performing models
 
 ```{code-cell} ipython3
-df = tracker.query(
-    """SELECT
+%%sql sqlite:///nb.db
+SELECT
     path,
     json_extract(c, '$.model') AS model,
     json_extract(c, '$.mse') AS mse
 FROM nbs
 ORDER BY 3 ASC
-LIMIT 3""")
-
-df
+LIMIT 3
 ```
 
 *Note:* If using SQLite 3.38.0 (which ships with Python >=3.10) or higher, you can use the shorter `->>` operator:
@@ -180,22 +178,20 @@ See SQLite's [documentation](https://www.sqlite.org/json1.html#jptr) for details
 ### Average error by model type
 
 ```{code-cell} ipython3
-df = tracker.query(
-    """SELECT
+%%sql
+SELECT
     json_extract(c, '$.model') AS model,
     AVG(json_extract(c, '$.mse')) AS avg_mse
 FROM nbs
 GROUP BY 1
-ORDER BY 2 ASC""")
-
-df
+ORDER BY 2 ASC
 ```
 
 ### DecisionTree by performance
 
 ```{code-cell} ipython3
-df = tracker.query(
-    """SELECT
+%%sql
+SELECT
     json_extract(c, '$.model') AS model,
     json_extract(c, '$.mse') AS mse,
     json_extract(c, '$.params.max_depth') AS max_depth,
@@ -204,7 +200,5 @@ df = tracker.query(
 FROM nbs
 WHERE json_extract(c, '$.model') = 'sklearn.tree.DecisionTreeRegressor'
 ORDER BY mse ASC
-LIMIT 5""")
-
-df
+LIMIT 5
 ```
