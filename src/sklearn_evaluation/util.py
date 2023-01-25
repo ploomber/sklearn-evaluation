@@ -55,8 +55,20 @@ def is_column_vector(x):
     return len(x.shape) == 2 and x.shape[1] == 1
 
 
+def convert_array_to_string(array, max_length=100):
+    array_string = repr(array)[:max_length]
+    if len(array_string) > max_length - 3:
+        array_string += "..."
+
+    return array_string
+
+
 def is_row_vector(x):
     return len(x.shape) == 1
+
+
+def is_binary(array):
+    return np.isin(array, [0, 1]).all()
 
 
 def _group_by(data, criteria):

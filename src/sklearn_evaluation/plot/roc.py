@@ -7,6 +7,8 @@ from sklearn_evaluation.util import (
     is_column_vector,
     is_row_vector,
     check_elements_in_range,
+    is_binary,
+    convert_array_to_string,
 )
 from sklearn_evaluation import __version__
 import json
@@ -59,20 +61,24 @@ def _check_data_inputs(y_true, y_score) -> None:
     _is_y_score_valid = is_array_like_scores(y_score_array, min_allowed_length=2)
 
     if not _is_y_score_valid:
+        y_score_array_string = convert_array_to_string(y_score_array)
+
         raise ValueError(
             "Please check y_score values. \n"
-            f"Expected scores array-like. got: {y_score_array} \n"
+            f"Expected scores array-like. got: {y_score_array_string} \n"
             "You can generate scores with `model.predict_proba`"
         )
 
     y_true_array = np.array(y_true)
 
     y_true_score_like = is_array_like_scores(y_true_array)
+    y_true_array_string = convert_array_to_string(y_true_array)
 
     if y_true_score_like:
         raise ValueError(
             "Please check y_true values. \n"
-            f"Expected classes or one-hot encoded array-like. got: {y_true_array}"
+            "Expected classes or one-hot encoded array-like. "
+            f"got: {y_true_array_string}"
         )
 
 
@@ -104,7 +110,7 @@ def is_array_like_scores(array, min_allowed_length=None) -> bool:
         array_flatten = array.flatten()
 
         # check if array consists of 0 and 1
-        _is_binary = np.array_equal(np.unique(array_flatten), [0, 1])
+        _is_binary = is_binary(array)
 
         if _is_binary:
             _is_1d_array = len(array.shape) == 1
@@ -441,8 +447,12 @@ class ROC(AbstractPlot):
             _, n_classes = y_score.shape
 
         if n_classes > 2:
-            # convert y_true to binary format
-            y_true_bin = label_binarize(y_true, classes=np.unique(y_true))
+
+            _is_y_true_binary = is_binary(y_true)
+            if _is_y_true_binary:
+                y_true_bin = y_true
+            else:
+                y_true_bin = label_binarize(y_true, classes=np.unique(y_true))
 
             fpr = []
             tpr = []
@@ -456,7 +466,7 @@ class ROC(AbstractPlot):
             for i in range(n_classes):
                 fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])
 
-                y_true_class_i = np.unique(y_true)[i]
+                y_true_class_i = i if _is_y_true_binary else np.unique(y_true)[i]
 
                 if not isinstance(y_true_class_i, str):
                     y_true_class_i = i

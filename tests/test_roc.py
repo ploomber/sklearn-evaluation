@@ -229,6 +229,15 @@ def test_plot_roc_valid_input_binary_like_array(y_test, y_score):
     plot.ROC.from_raw_data(y_test, y_score)
 
 
+@image_comparison(baseline_images=["roc_multi"])
+def test_roc_from_raw_data_y_test_binary(roc_multi_classification_raw_data):
+    y_test, y_score = roc_multi_classification_raw_data
+
+    y_test_bin = np.zeros((y_test.size, y_test.max() + 1))
+    y_test_bin[np.arange(y_test.size), y_test] = 1
+    plot.ROC.from_raw_data(y_test_bin, y_score)
+
+
 @image_comparison(baseline_images=["roc", "roc"])
 def test_roc_from_raw_data(y):
     y_test, y_score = y
