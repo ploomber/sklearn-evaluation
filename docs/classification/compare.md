@@ -52,6 +52,9 @@ tree_pred, forest_pred = [
     est.fit(X_train, y_train).predict(X_test)
     for est in [DecisionTreeClassifier(), RandomForestClassifier()]
 ]
+
+
+
 ```
 
 ### Decision tree confusion matrix
@@ -73,7 +76,35 @@ compare = tree_cm + forest_cm
 ```
 
 ```{code-cell} ipython3
-diff = forest_cm - tree_cm
+diff = forest_cm - tree_cm 
+```
+
+## ROC
+
+```{code-cell} ipython3
+:tags: [remove-output]
+tree_score, forest_score = [
+    est.fit(X_train, y_train).predict_proba(X_test)
+    for est in [DecisionTreeClassifier(), RandomForestClassifier()]
+]
+```
+
+### Decision tree ROC
+
+```{code-cell} ipython3
+tree_roc = plot.ROC.from_raw_data(y_test, tree_score)
+```
+
+### Random forest ROC
+
+```{code-cell} ipython3
+forest_roc = plot.ROC.from_raw_data(y_test, forest_score)
+```
+
+### Compare ROC
+
+```{code-cell} ipython3
+compare = tree_roc + forest_roc
 ```
 
 ## Classification report
