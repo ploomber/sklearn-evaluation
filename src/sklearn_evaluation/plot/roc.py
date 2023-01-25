@@ -97,6 +97,10 @@ def is_array_like_scores(array, min_allowed_length=None) -> bool:
         "scores" format : [[0.1, 0.1, 0.8],
                            [0.7, 0.15, 0.15]]
 
+    min_allowed_length : int defaul=None
+        define the minimum length of the array.
+        If None accept any length.
+
     Returns
     -------
     is_scores_format bool
@@ -113,21 +117,29 @@ def is_array_like_scores(array, min_allowed_length=None) -> bool:
         _is_binary = is_binary(array)
 
         if _is_binary:
-            _is_1d_array = len(array.shape) == 1
-
-            if _is_1d_array:
-                _n_elements = len(array)
-            else:
-                _, _n_elements = array.shape
-
+            _n_elements = _get_number_of_elements(array)
             if min_allowed_length:
                 is_scores_format = _n_elements == min_allowed_length
 
         else:
-            _elements_in_range = check_elements_in_range(array_flatten, -1, 1)
-            is_scores_format = _elements_in_range
+            _are_elements_in_range = check_elements_in_range(array_flatten, -1, 1)
+            is_scores_format = _are_elements_in_range
 
     return is_scores_format
+
+
+def _get_number_of_elements(array):
+    """
+    Get the number of elements in array
+    """
+    _is_1d_array = len(array.shape) == 1
+
+    if _is_1d_array:
+        _n_elements = len(array)
+    else:
+        _, _n_elements = array.shape
+
+    return _n_elements
 
 
 @modify_exceptions
@@ -488,10 +500,13 @@ class ROC(AbstractPlot):
 
 def _preprocess_array_for_roc(array):
     """
-    https://github.com/ploomber/sklearn-evaluation/pull/221/files
-
     Binarize the array to use as valid input for plotting a
     single or a multi-class roc curve
+
+    Note : This method in not in use but can be used in other plots
+    where we don't require scores, but predictions (y_pred) i.e confusion_matrix,
+    so if the user passes data in any of the three formats, we can convert it.
+
     Parameters
     ----------
     array : array-like, shape = [n_samples] or [n_samples, 2]

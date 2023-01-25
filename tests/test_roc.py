@@ -361,13 +361,15 @@ def test_roc_multi_add_to_multi_from_raw_data(
     roc1 + roc2
 
 
-@image_comparison(baseline_images=["roc_multi_set2", "roc_multi_add_multi"])
+@image_comparison(
+    baseline_images=["roc_multi", "roc_multi_set2", "roc_multi_add_multi"]
+)
 def test_roc_multi_add_to_multi(
     roc_multi_classification_values, roc_multi_classification_raw_data_set2
 ):
     fpr1, tpr1, label = roc_multi_classification_values
     y_test_roc2, y_score_roc2 = roc_multi_classification_raw_data_set2
 
-    roc1 = plot.ROC(fpr1, tpr1, label=label)
+    roc1 = plot.ROC(fpr1, tpr1, label=label).plot()
     roc2 = plot.ROC.from_raw_data(y_test_roc2, y_score_roc2)
     roc1 + roc2

@@ -41,6 +41,9 @@ def _can_iterate(obj):
 
 
 def check_elements_in_range(array, min, max, include_min=True, inclue_max=True):
+    """
+    Checks if values in an array are within a range
+    """
     if include_min and inclue_max:
         return np.all((array >= min) & (array <= max))
     elif include_min and not inclue_max:
