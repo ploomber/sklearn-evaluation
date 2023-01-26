@@ -27,6 +27,7 @@ parts:
   - caption: Model comparison
     chapters:
     - file: comparison/SQLiteTracker
+    - file: comparison/nn_tracking
     - file: comparison/NotebookCollection
     - file: comparison/nbdb
     - file: comparison/report
