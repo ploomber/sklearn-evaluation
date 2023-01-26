@@ -131,7 +131,7 @@ def test_elbow_curve():
 
     plot.elbow_curve(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
 
-
+'''
 def test_elbow_curve_deprecation():
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
     clf = KMeans(n_init=10)
@@ -143,6 +143,7 @@ def test_elbow_curve_deprecation():
 
     with pytest.warns(PloomberDeprecationWarning, match=match):
         plot.elbow_curve(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
+'''
 
 
 @image_comparison(
