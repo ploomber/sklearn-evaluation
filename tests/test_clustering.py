@@ -107,7 +107,7 @@ def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
 def test_plot_elbow_curve_from_results_bad_input_value_error(
     ploomber_value_error_message,
 ):
-    n_clusters = range(1, 10, 2)
+    range_n_clusters = range(1, 10, 2)
     sum_of_squares = [4572.2, 470.7, 389.9, 335.1, [305.5]]
 
     with pytest.raises(ValueError, match=ploomber_value_error_message):
