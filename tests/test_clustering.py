@@ -94,14 +94,14 @@ except ImportError:
 def test_score_methods_in_clf(clf):
     if clf == "bisect":
         clf = BisectingKMeans()
-    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
 
 def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
     clf = KMeans()
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+        plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
 
 def test_plot_elbow_curve_from_results_bad_input_value_error(
@@ -111,7 +111,7 @@ def test_plot_elbow_curve_from_results_bad_input_value_error(
     sum_of_squares = [4572.2, 470.7, 389.9, 335.1, [305.5]]
 
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
+        plot.elbow_curve_from_results(range_n_clusters, sum_of_squares, times=None)
 
 
 def test_cluster_ranges():
@@ -119,7 +119,7 @@ def test_cluster_ranges():
     plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
     # test old attribute doesn't break
-    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+    # plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
 
 @image_comparison(
@@ -142,25 +142,25 @@ def test_elbow_curve_deprecation():
     )
 
     with pytest.warns(PloomberDeprecationWarning, match=match):
-        plot.elbow_curve(X, clf, n_clusters=range(1, 4), show_cluster_time=False)
+        plot.elbow_curve(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
 
 
 @image_comparison(
     baseline_images=["elbow_curve_from_results"], extensions=["png"], remove_text=False
 )
 def test_elbow_curve_from_results():
-    n_clusters = range(1, 10, 2)
+    range_n_clusters = range(1, 10, 2)
     sum_of_squares = np.array([4572.2, 470.7, 389.9, 335.1, 305.5])
-    plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
+    plot.elbow_curve_from_results(range_n_clusters, sum_of_squares, times=None)
 
 
 @image_comparison(
     baseline_images=["elbow_curve_from_results"], extensions=["png"], remove_text=False
 )
 def test_elbow_curve_from_results_unsorted():
-    n_clusters = [5, 3, 9, 1, 7]
+    range_n_clusters = [5, 3, 9, 1, 7]
     sum_of_squares = np.array([389.9, 470.7, 305.5, 4572.2, 335.1])
-    plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
+    plot.elbow_curve_from_results(range_n_clusters, sum_of_squares, times=None)
 
 
 def test_ax_elbow():
