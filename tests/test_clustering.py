@@ -39,6 +39,7 @@ from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
 
+
 def convert_labels_into_string(y_true):
     return ["A" if x == 0 else x for x in y_true]
 
