@@ -113,14 +113,6 @@ def elbow_curve(
     .. plot:: ../examples/elbow_curve.py
 
     """
-    range_n_clusters = deprecated.parameter_renamed(
-        deprecated_in="0.9",
-        remove_in="0.10",
-        old_name="n_clusters",
-        old_value=n_clusters,
-        new_name="range_n_clusters",
-        new_value=range_n_clusters,
-    )
 
     if range_n_clusters is None:
         range_n_clusters = range(1, 10, 2)
