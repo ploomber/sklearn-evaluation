@@ -94,14 +94,14 @@ except ImportError:
 def test_score_methods_in_clf(clf):
     if clf == "bisect":
         clf = BisectingKMeans()
-    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+    plot.elbow_curve(X, clf)
 
 
 def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
     clf = KMeans()
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+        plot.elbow_curve(X, clf)
 
 
 def test_plot_elbow_curve_from_results_bad_input_value_error(
@@ -116,10 +116,10 @@ def test_plot_elbow_curve_from_results_bad_input_value_error(
 
 def test_cluster_ranges():
     clf = KMeans()
-    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
+    plot.elbow_curve(X, clf)
 
     # test old attribute doesn't break
-    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+    plot.elbow_curve(X, clf)
 
 
 @image_comparison(
@@ -129,7 +129,7 @@ def test_elbow_curve():
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
     clf = KMeans()
 
-    plot.elbow_curve(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
+    plot.elbow_curve(X, clf, show_cluster_time=False)
 
 
 def test_elbow_curve_deprecation():
@@ -142,7 +142,7 @@ def test_elbow_curve_deprecation():
     )
 
     with pytest.warns(PloomberDeprecationWarning, match=match):
-        plot.elbow_curve(X, clf, n_clusters=range(1, 4), show_cluster_time=False)
+        plot.elbow_curve(X, clf, show_cluster_time=False)
 
 
 @image_comparison(
