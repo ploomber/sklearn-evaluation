@@ -8,6 +8,7 @@ from sklearn_evaluation.report.report import Report
 from jinja2 import Template
 from sklearn_evaluation.report.serialize import figure2html
 from sklearn_evaluation.evaluator import _gen_ax
+import time
 
 
 class Range(object):
@@ -155,6 +156,88 @@ def _create_report_template(evaluation_state):
     )
 
 
+def _create_compare_models_report_template(evaluation_state):
+    title = "Compare models"
+    print(evaluation_state)
+
+    template = Template(
+        """
+<html>
+  <head>
+      <style>
+        .model-evaluation-container {
+            font-family: Arial, Helvetica, sans-serif;
+            text-align: left;
+            width: fit-content;
+            margin: 50px auto;
+        }
+
+        .block {
+            margin-bottom: 50px
+        }
+
+        .nobull {
+            list-style-type: none;
+        }
+
+        ul li {
+            margin-bottom: 10px;
+        }
+
+        </style>
+
+    </head>
+  <body>
+    <div class="model-evaluation-container">
+        <div>
+            <h1>{{title}}</h1>
+
+            <div class="block">
+
+                <ul>
+                    <li class="nobull"><h2>Report</h2></li>
+                    {% for guideline in evaluation_state["guidelines"] %}
+
+                        {% if guideline is string %}
+                            <li>{{guideline}}</li>
+                        {% else %}
+                            <p>{{figure2html(guideline.get_figure())}}</p>
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+
+            </div>
+
+
+        </div>
+    </div>
+  </body>
+</html>
+    """
+    )
+    return template.render(
+        title=title, evaluation_state=evaluation_state, figure2html=figure2html
+    )
+
+
+def _get_roc_auc(y_test, y_score):
+    roc_auc = []
+    roc = plot.ROC.from_raw_data(y_test, y_score)
+    for i in range(len(roc.fpr)):
+        roc_auc.append(auc(roc.fpr[i], roc.tpr[i]))
+
+    return roc_auc
+
+
+def _get_model_computation_time(model, X_test):
+    start = time.time()
+    model.predict(X_test)
+    end = time.time()
+    eval_time = end-start  # in seconds
+
+    return eval_time
+
+
 class ModelEvaluator(object):
 
     @staticmethod
@@ -279,7 +362,7 @@ class ModelEvaluator(object):
         evaluation_state["general_stats"] = general_stats
 
 
-class ModelComparer(object):
+class ModelsComparer(object):
     def __init__(self, model_a, model_b):
         self.model_a = model_a
         self.model_b = model_b
@@ -288,23 +371,37 @@ class ModelComparer(object):
     def precision_and_recall():
         pass
 
-    def auc(self):
-        # self.evaluation_state["guidelines"]
-        # calculate roc auc of model a
+    def auc(self, X_test, y_test):
+        auc_state = dict()
 
-        roc = plot.ROC.from_raw_data(y_true, y_score)
-        for i in range(len(roc.fpr)):
-            roc_auc = auc(roc.fpr[i], roc.tpr[i])
+        y_score_a = self.model_a.predict_proba(X_test)
+        roc_auc_model_a = _get_roc_auc(y_test, y_score_a)
 
-        # calculate roc auc of model b
+        y_score_b = self.model_b.predict_proba(X_test)
+        roc_auc_model_b = _get_roc_auc(y_test, y_score_b)
 
-        pass
+        print("roc_auc_model_a : ", roc_auc_model_a)
+        print("roc_auc_model_b : ", roc_auc_model_b)
 
-    def computation():
-        pass
+        # auc_state["include_in_report"] = False
+        self.evaluation_state["guidelines"].append(
+            f"Model a AUC (ROC) is {roc_auc_model_a}")
+        self.evaluation_state["guidelines"].append(
+            f"Model b AUC (ROC) is {roc_auc_model_b}")
 
-    def callibration():
-        pass
+    def computation(self, X_test):
+        model_a_compute_time = _get_model_computation_time(self.model_a, X_test)
+        model_b_compute_time = _get_model_computation_time(self.model_b, X_test)
+
+        self.evaluation_state["guidelines"].append(
+            f"Model a compute time is {model_a_compute_time}")
+        self.evaluation_state["guidelines"].append(
+            f"Model b compute time is {model_b_compute_time}")
+
+    def calibration(self, X_test, y_test):
+        y_prob_a = self.model_a.predict_proba(X_test)
+        p = plot.calibration_curve([y_test], [y_prob_a], ax=_gen_ax())
+        self.evaluation_state["guidelines"].append(p)
 
 
 def evaluate_model(
@@ -348,18 +445,24 @@ def evaluate_model(
     return report
 
 
-def compare_models(model_a, model_b, X_train, X_test):
+def compare_models(model_a, model_b, X_train, X_test, y_test):
     _check_model(model_a)
     _check_model(model_b)
 
-    mc = ModelComparer(model_a, model_b)
+    models_comparer = ModelsComparer(model_a, model_b)
 
-    mc.precision_and_recall()
+    # mc.precision_and_recall(X_test, y_true)
+    models_comparer.auc(X_test, y_test)
+    models_comparer.computation(X_test)
+    models_comparer.calibration(X_test, y_test)
 
-    pass
-
+    e = EvaluatorHTMLSerializer(None)
+    template = _create_compare_models_report_template(models_comparer.evaluation_state)
+    report = Report(e, template)
+    return report
 
 # validations
+
 
 def _check_model(model) -> None:
     """
