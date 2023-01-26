@@ -38,7 +38,6 @@ from joblib import Parallel, delayed
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
-# from ploomber_core import deprecated
 
 
 def _generate_axes(cluster, figsize, ax):
