@@ -121,7 +121,7 @@ def test_cluster_ranges():
     # test old attribute doesn't break
     # plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
-
+ 
 @image_comparison(
     baseline_images=["elbow_curve"], extensions=["png"], remove_text=False
 )
