@@ -68,7 +68,6 @@ def elbow_curve(
     n_jobs=1,
     show_cluster_time=True,
     ax=None,
-    n_clusters="deprecated",
 ):
     """Plots elbow curve of different values of K of a clustering algorithm.
 
