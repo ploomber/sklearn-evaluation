@@ -1,6 +1,5 @@
 from sklearn.cluster import KMeans
 from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
 
 from sklearn_evaluation import plot
 
@@ -16,4 +15,3 @@ X, y = make_blobs(
 
 kmeans = KMeans(random_state=1, n_init=5)
 plot.silhouette_analysis(X, kmeans, range_n_clusters=[3])
-plt.show()

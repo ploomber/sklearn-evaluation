@@ -3,4 +3,5 @@ jupytext
 papermill
 seaborn
 ploomber
+ploomber-engine
 jupysql
