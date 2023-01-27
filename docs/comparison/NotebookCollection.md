@@ -18,7 +18,7 @@ The `.ipynb` format is capable of storing tables and charts in a standalone file
 ```{code-cell} ipython3
 import urllib.request
 
-import papermill as pm
+from ploomber_engine import execute_notebook
 import jupytext
 
 from sklearn_evaluation import NotebookCollection
@@ -68,7 +68,7 @@ files = [f'{i}.ipynb' for i in ids]
 
 # execute notebooks using papermill
 for f, p in zip(files, params):
-    pm.execute_notebook('train.ipynb', output_path=f, parameters=p)
+    execute_notebook('train.ipynb', output_path=f, parameters=p, progress_bar=False)
 ```
 
 To use `NotebookCollection`, we pass a a list of paths, and optionally, ids for each notebook (uses paths by default).
