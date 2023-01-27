@@ -2,7 +2,7 @@ from pathlib import Path
 
 import jupytext
 import nbformat
-import papermill as pm
+from ploomber_engine import execute_notebook
 import pytest
 
 
@@ -19,7 +19,7 @@ def save_notebook(nb_str, path, execute=True, parameters=None):
     nbformat.write(nb, path)
 
     if execute:
-        pm.execute_notebook(str(path), str(path), parameters=parameters or {})
+        execute_notebook(str(path), str(path), parameters=parameters or {})
 
     return str(path)
 
