@@ -38,7 +38,7 @@ JB = [
 
 TEST = [
     "jupytext",
-    "papermill",
+    "ploomber-engine",
     "ipykernel",
     "pytest",
     # need to pin this version because pytest 4 breaks matplotlib image
