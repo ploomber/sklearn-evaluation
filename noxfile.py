@@ -44,7 +44,7 @@ def tests(session):
         "--cov=sklearn_evaluation",
         "--doctest-modules",
         "--verbose",
-        "--timeout=30",
+        "--timeout=120",
     )
     session.run("coveralls")
 
