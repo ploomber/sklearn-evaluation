@@ -6,7 +6,7 @@
 - [API Change] A new figure and axes is created (via `plt.subplots()`) when calling a plotting method with `ax=None`. Previously, the current axes was used (via `plt.gca()`) ([#211](https://github.com/ploomber/sklearn-evaluation/pull/211))
 - [Fix] Validating input elbow curve model has "score" method [#146] 
 - [Fix] Adds class labels for multi class roc plot (#209)
-- [Doc] Fixed ROC curves plots to show properly.
+- [Fix] Fixed ROC curves plots to show properly.
 - [API Change] `silhouette_analysis_from_results` function now accepts a list of cluster labels [#213](https://github.com/ploomber/sklearn-evaluation/pull/213)
 
 ## 0.9.0 (2023-01-13)
