@@ -22,11 +22,14 @@ kernelspec:
 Requirements:
 
 ```sh
-pip install scikit-learn sklearn-evaluation ploomber ploomber-engine jupysql
+pip install scikit-learn sklearn-evaluation ploomber ploomber-engine jupysql nbformat jupytext
 ```
 
 ```{code-cell} ipython3
 from pathlib import Path
+
+import jupytext
+import nbformat
 
 from ploomber.products import File
 from ploomber_engine import execute_notebook
@@ -38,63 +41,71 @@ from sklearn.model_selection import ParameterGrid
 # to create SQLite database
 from sklearn_evaluation import NotebookDatabase
 ```
-
 ## Code
 
-`NotebookDatabase` indexes the output of tagged cells. In this example, we're using `.ipynb` notebook files (and show cell tags using `# %% tags=["some-tag"]`), [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
-
-<b>data.ipynb</b>
+NotebookDatabase indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using # %% tags=["some-tag"]). We convert these scripts to notebooks using jupytext and nbformat, but the same concept applies for notebooks (.ipynb)— see here to learn how to tag cells in .ipynb files.
 
 ```{code-cell} ipython3
+# data loading script
+data = """
+# %% tags=["parameters"]
+upstream = None
+product = None
+
+# %%
 from sklearn import datasets
-```
-```
+
+# %%
 ca_housing = datasets.fetch_california_housing(as_frame=True)
 df = ca_housing['frame']
 df.to_csv('data.csv', index=False)
-```
+"""
 
-<b>model.ipynb</b>
-```
+# model fitting script
+model = """
 # %% tags=["parameters"]
 model = None
 params = None
-```
-```
+
+# %%
 import importlib
 
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
-```
-```
+
+# %%
 df = pd.read_csv('data.csv')
-```
-```
+
+# %%
 X = df.drop('MedHouseVal', axis='columns')
 y = df.MedHouseVal
-```
-```
+
+# %%
 X_train, X_test, y_train, y_test = train_test_split(X,
                                                     y,
                                                     test_size=0.33,
                                                     random_state=0)
-```
-```
+
 # %% tags=["model"]
 mod, _, attr = model.rpartition('.')
 reg = getattr(importlib.import_module(mod), attr)(**params)
 reg.fit(X_train, y_train)
 print(model)
-```
-```
+
 # %% tags=["params"]
 print(reg.get_params())
-```
-```
+
 # %% tags=["mse"]
 y_pred = reg.predict(X_test)
 mean_squared_error(y_test, y_pred)
+"""
+
+data_nb = jupytext.reads(data, fmt='py:percent')
+model_nb = jupytext.reads(model, fmt='py:percent')
+
+nbformat.write(data_nb, 'data.ipynb')
+nbformat.write(model_nb, 'model.ipynb')
 ```
 
 ## Executing notebooks
@@ -111,6 +122,9 @@ experiments = {
 
 ## executes data.ipynb, creates output.ipynb and data.csv
 execute_notebook(Path('data.ipynb'), File('output.ipynb'))
+
+p = Path('output/models')
+p.mkdir(parents=True, exist_ok=True)
 
 # generate one task per set of parameter
 for model, grid in experiments.items():
