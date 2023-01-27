@@ -4,3 +4,4 @@ papermill
 seaborn
 ploomber
 jupysql
+scikit-learn==1.2.0
