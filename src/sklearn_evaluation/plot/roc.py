@@ -279,7 +279,7 @@ class ROC(AbstractPlot):
     @modify_exceptions
     def from_raw_data(cls, y_true, y_score, ax=None):
         fpr, tpr, label = cls._calculate_plotting_data(y_true, y_score)
-        return cls(fpr, tpr, label=label, ax=ax).plot()
+        return cls(fpr, tpr, label=label, ax=ax).plot(ax)
 
     @staticmethod
     @modify_exceptions
