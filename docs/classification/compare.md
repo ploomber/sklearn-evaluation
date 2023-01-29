@@ -25,6 +25,7 @@ Learn how to easily compare plots from different models.
 ```{code-cell} ipython3
 import matplotlib
 from sklearn import datasets
+from sklearn.linear_model import LogisticRegression
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
@@ -83,16 +84,16 @@ diff = forest_cm - tree_cm
 
 ```{code-cell} ipython3
 :tags: [remove-output]
-tree_score, forest_score = [
+logistic_score, forest_score = [
     est.fit(X_train, y_train).predict_proba(X_test)
-    for est in [DecisionTreeClassifier(), RandomForestClassifier()]
+    for est in [LogisticRegression(), RandomForestClassifier()]
 ]
 ```
 
-### Decision tree ROC
+### Decision logistic ROC
 
 ```{code-cell} ipython3
-tree_roc = plot.ROC.from_raw_data(y_test, tree_score)
+logistic_roc = plot.ROC.from_raw_data(y_test, logistic_score)
 ```
 
 ### Random forest ROC
@@ -104,7 +105,7 @@ forest_roc = plot.ROC.from_raw_data(y_test, forest_score)
 ### Compare ROC
 
 ```{code-cell} ipython3
-compare = tree_roc + forest_roc
+compare = logistic_roc + forest_roc
 ```
 
 ## Classification report
