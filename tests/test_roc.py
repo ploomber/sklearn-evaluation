@@ -5,6 +5,9 @@ from sklearn_evaluation import plot, __version__
 from functools import partial
 import sys
 from matplotlib.testing.decorators import image_comparison as _image_comparison
+import numpy as np
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split
 
 # older versions of Python are not compatible with the latest version of
 # matplotlib, which leads to image differences. We increase the tolerance in
@@ -16,6 +19,9 @@ image_comparison = partial(
     extensions=["png"],
 )
 
+fpr = [0.0, 0.2, 0.4, 0.4, 0.6, 1.0]
+tpr = [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]
+
 
 @pytest.fixture
 def y():
@@ -26,6 +32,40 @@ def y():
             [0.5, 0.6, 0.7, 0.8, 0.9, 0.9, 0.8, 0.1, 0.1, 0.3],
         ]
     ).T
+    return y_test, y_score
+
+
+@pytest.fixture
+def roc_multi_classification_raw_data(target_analysis_multiclass):
+    X_train, X_test, y_train, y_test = target_analysis_multiclass
+    classifier = LogisticRegression()
+    y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
+
+    return y_test, y_score
+
+
+@pytest.fixture
+def roc_multi_classification_raw_data_set2():
+    from sklearn.datasets import load_iris
+
+    iris = load_iris()
+    X, y = iris.data, iris.target
+    y = iris.target_names[y]
+
+    random_state = np.random.RandomState(0)
+    n_samples, n_features = X.shape
+
+    X = np.concatenate([X, random_state.randn(n_samples, 200 * n_features)], axis=1)
+    (
+        X_train,
+        X_test,
+        y_train,
+        y_test,
+    ) = train_test_split(X, y, test_size=0.5, stratify=y, random_state=0)
+
+    classifier = LogisticRegression()
+    y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
+
     return y_test, y_score
 
 
@@ -102,9 +142,11 @@ def test_roc_dump_multi(tmp_directory, roc_multi_classification_raw_data):
     assert roc._get_data() == roc2._get_data()
 
 
-def test_roc_sub_not_implemented_error(roc_values):
-    fpr, tpr = roc_values
-
+@pytest.mark.parametrize(
+    "fpr, tpr",
+    [(fpr, tpr)],
+)
+def test_roc_sub_not_implemented_error(fpr, tpr):
     roc = plot.ROC(fpr, tpr)
 
     with pytest.raises(NotImplementedError) as excinfo:
@@ -258,10 +300,12 @@ def test_roc_y_score_vector(y):
     plot.ROC.from_raw_data(y_test, y_score)
 
 
+@pytest.mark.parametrize(
+    "fpr, tpr",
+    [(fpr, tpr)],
+)
 @image_comparison(baseline_images=["roc", "roc"])
-def test_roc(roc_values):
-    fpr, tpr = roc_values
-
+def test_roc(fpr, tpr):
     # test when list is given
     roc = plot.ROC(fpr, tpr)
     roc.plot()
@@ -313,34 +357,41 @@ def test_roc_add_to_roc_from_raw_data(y):
     roc1 + roc2
 
 
+@pytest.mark.parametrize(
+    "fpr, tpr",
+    [(fpr, tpr)],
+)
 @image_comparison(baseline_images=["roc_add_roc"])
-def test_roc_add_to_roc(roc_values):
-    fpr1, tpr1 = roc_values
-
+def test_roc_add_to_roc(fpr, tpr):
     fpr2 = [0.0, 0.2, 0.4, 0.4, 0.6, 0.8, 1.0]
     tpr2 = [0.0, 0.2, 0.4, 0.8, 0.8, 1.0, 1.0]
 
-    roc1 = plot.ROC(fpr1, tpr1)
+    roc1 = plot.ROC(fpr, tpr)
     roc2 = plot.ROC(fpr2, tpr2)
 
     roc1 + roc2
 
 
+@pytest.mark.parametrize(
+    "fpr, tpr",
+    [(fpr, tpr)],
+)
 @image_comparison(baseline_images=["roc_add_multi"])
-def test_roc_add_to_multi(roc_values, roc_multi_classification_values):
-    fpr1, tpr1 = roc_values
+def test_roc_add_to_multi(fpr, tpr, roc_multi_classification_values):
     fpr2, tpr2, label = roc_multi_classification_values
 
-    roc1 = plot.ROC(fpr1, tpr1)
+    roc1 = plot.ROC(fpr, tpr)
     roc2 = plot.ROC(fpr2, tpr2, label=label)
     roc1 + roc2
 
 
+@pytest.mark.parametrize(
+    "fpr2, tpr2",
+    [(fpr, tpr)],
+)
 @image_comparison(baseline_images=["multi_add_roc"])
-def test_roc_multi_add_to_roc(roc_values, roc_multi_classification_values):
+def test_roc_multi_add_to_roc(fpr2, tpr2, roc_multi_classification_values):
     fpr1, tpr1, label = roc_multi_classification_values
-
-    fpr2, tpr2 = roc_values
 
     roc1 = plot.ROC(fpr1, tpr1, label=label)
     roc2 = plot.ROC(fpr2, tpr2)

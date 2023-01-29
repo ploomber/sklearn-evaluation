@@ -3,8 +3,6 @@ import sys
 import os
 from pathlib import Path
 
-import numpy as np
-from sklearn.linear_model import LogisticRegression
 import pytest
 
 # These are fixtures to get the same configuration that matplotlib uses
@@ -167,40 +165,6 @@ def target_analysis_multiclass():
 
 
 @pytest.fixture
-def roc_multi_classification_raw_data(target_analysis_multiclass):
-    X_train, X_test, y_train, y_test = target_analysis_multiclass
-    classifier = LogisticRegression()
-    y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
-
-    return y_test, y_score
-
-
-@pytest.fixture
-def roc_multi_classification_raw_data_set2():
-    from sklearn.datasets import load_iris
-
-    iris = load_iris()
-    X, y = iris.data, iris.target
-    y = iris.target_names[y]
-
-    random_state = np.random.RandomState(0)
-    n_samples, n_features = X.shape
-
-    X = np.concatenate([X, random_state.randn(n_samples, 200 * n_features)], axis=1)
-    (
-        X_train,
-        X_test,
-        y_train,
-        y_test,
-    ) = train_test_split(X, y, test_size=0.5, stratify=y, random_state=0)
-
-    classifier = LogisticRegression()
-    y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
-
-    return y_test, y_score
-
-
-@pytest.fixture
 def regression_data():
     from sklearn.linear_model import LinearRegression
 
@@ -341,14 +305,6 @@ def roc_multi_classification_values():
         labels.append(f"(class {i}) ROC curve")
 
     return fpr, tpr, labels
-
-
-@pytest.fixture
-def roc_values():
-    fpr = [0.0, 0.2, 0.4, 0.4, 0.6, 1.0]
-    tpr = [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]
-
-    return fpr, tpr
 
 
 @pytest.fixture
