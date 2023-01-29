@@ -425,7 +425,7 @@ class ROC(AbstractPlot):
         _check_data_inputs(y_true, y_score)
 
         fpr, tpr, label = cls._calculate_plotting_data(y_true, y_score)
-        return cls(fpr, tpr, label=label, ax=ax).plot()
+        return cls(fpr, tpr, label=label, ax=ax).plot(ax)
 
     @staticmethod
     @modify_exceptions
