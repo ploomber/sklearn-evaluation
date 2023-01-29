@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 0.10.1dev
+
 ## 0.10.0 (2023-01-29)
 
 - [API Change] A new figure and axes is created (via `plt.subplots()`) when calling a plotting method with `ax=None`. Previously, the current axes was used (via `plt.gca()`) ([#211](https://github.com/ploomber/sklearn-evaluation/pull/211))
