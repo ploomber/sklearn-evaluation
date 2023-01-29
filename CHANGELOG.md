@@ -8,6 +8,7 @@
 - [Fix] Adds class labels for multi class roc plot (#209)
 - [Fix] Fixed ROC curves plots to show properly.
 - [API Change] `silhouette_analysis_from_results` function now accepts a list of cluster labels [#213](https://github.com/ploomber/sklearn-evaluation/pull/213)
+- [API Change] Removed `n_clusters` from `elbow_curve` (#247)
 
 ## 0.9.0 (2023-01-13)
 
