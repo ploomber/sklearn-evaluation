@@ -293,7 +293,7 @@ class ModelComparer(ModelHeuristics):
                 self._get_calculate_failed_error("calibration", "model a", exc=exc))
 
         try:
-            y_prob_b = self.model_a.predict_proba(X_test)
+            y_prob_b = self.model_b.predict_proba(X_test)
             p = plot.calibration_curve([y_true], [y_prob_b], ax=_gen_ax())
             calibration_section.append_guideline(p)
         except Exception as exc:
