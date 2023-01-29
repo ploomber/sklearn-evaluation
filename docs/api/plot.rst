@@ -59,6 +59,8 @@ elbow_curve
 -----------
 .. autofunction:: sklearn_evaluation.plot.elbow_curve
 
+.. _elbow-curve-from-results-label:
+
 elbow_curve_from_results
 ------------------------
 .. autofunction:: sklearn_evaluation.plot.elbow_curve_from_results
@@ -114,6 +116,8 @@ scores_distribution
 silhouette_analysis
 -------------------
 .. autofunction:: sklearn_evaluation.plot.silhouette_analysis
+
+.. _silhouette-analysis-from-results-label:
 
 silhouette_analysis_from_results
 --------------------------------

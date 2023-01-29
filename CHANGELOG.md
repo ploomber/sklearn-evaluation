@@ -1,11 +1,14 @@
 # CHANGELOG
-
 ## 0.10.0dev
 - [Feature] Adds `RandomForestClassifierGrid`
 - [Fix] Uses existing labels in multi ROC curve (#225)
 - [API Change] A new figure and axes is created (via `plt.subplots()`) when calling a plotting method with `ax=None`. Previously, the current axes was used (via `plt.gca()`) ([#211](https://github.com/ploomber/sklearn-evaluation/pull/211))
 - [Fix] Validating input elbow curve model has "score" method [#146] 
 - [Fix] Adds class labels for multi class roc plot (#209)
+- [Fix] Fixed ROC curves plots to show properly.
+- [API Change] `silhouette_analysis_from_results` function now accepts a list of cluster labels [#213](https://github.com/ploomber/sklearn-evaluation/pull/213)
+- [API Change] Removed `n_clusters` from `elbow_curve` (#247)
+- [Fix] `setup.py` fix due to change in setuptools 67.0.0
 
 ## 0.9.0 (2023-01-13)
 

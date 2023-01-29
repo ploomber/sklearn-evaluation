@@ -54,13 +54,11 @@ Elbow curve helps to identify the point at which the plot starts to become paral
 plot.elbow_curve(X, kmeans, range_n_clusters=range(1, 30))
 ```
 
-##### Elbow curve from results
+```{eval-rst}
+.. tip::
 
-```{code-cell} ipython3
-import numpy as np
-n_clusters = range(1, 10, 2)
-sum_of_squares = np.array([4572.2, 470.7, 389.9, 335.1, 305.5])
-plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
+   If you want to train the models yourself, you can use :ref:`elbow-curve-from-results-label` to plot.
+
 ```
 
 ##### Silhouette plot
@@ -71,23 +69,9 @@ The below plot shows that n_clusters value of 3, 5 and 6 are a bad pick for the 
 silhouette = plot.silhouette_analysis(X, kmeans)
 ```
 
-##### Silhouette plot from cluster labels
+```{eval-rst}
+.. tip::
 
-```{code-cell} ipython3
-X, y = datasets.make_blobs(
-    n_samples=500,
-    n_features=2,
-    centers=4,
-    cluster_std=1,
-    center_box=(-10.0, 10.0),
-    shuffle=True,
-    random_state=1,
-)
+   If you want to train the models yourself, you can use :ref:`silhouette-analysis-from-results-label` to plot.
 
-kmeans = KMeans(n_clusters=4, random_state=1, n_init=5)
-cluster_labels = kmeans.fit_predict(X)
-```
-
-```{code-cell} ipython3
-silhouette = plot.silhouette_analysis_from_results(X, cluster_labels)
 ```

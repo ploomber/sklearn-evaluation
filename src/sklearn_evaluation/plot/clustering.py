@@ -38,9 +38,24 @@ from joblib import Parallel, delayed
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
-from ploomber_core import deprecated
 
-# TODO: add unit test
+
+def _generate_axes(cluster, figsize, ax):
+    if ax is not None:
+        if not isinstance(ax, list):
+            ax = [ax]
+        if len(cluster) != len(ax):
+            raise ValueError(
+                f"Received lengths, cluster : {len(cluster)},"
+                f"axes : {len(ax)}."
+                f"Number of axes passed should match number of clusters"
+            )
+    else:
+        ax = []
+        for i in range(len(cluster)):
+            _, axes = plt.subplots(1, 1, figsize=figsize)
+            ax.append(axes)
+    return ax
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
@@ -52,7 +67,6 @@ def elbow_curve(
     n_jobs=1,
     show_cluster_time=True,
     ax=None,
-    n_clusters="deprecated",
 ):
     """Plots elbow curve of different values of K of a clustering algorithm.
 
@@ -87,25 +101,11 @@ def elbow_curve(
     ax: matplotlib Axes
         Axes containing the plot
 
-    Notes
-    -----
-    .. deprecated:: 0.9
-        ``n_clusters`` renamed to ``range_n_clusters`` and will be removed in version
-        0.10
-
     Examples
     --------
     .. plot:: ../examples/elbow_curve.py
 
     """
-    range_n_clusters = deprecated.parameter_renamed(
-        deprecated_in="0.9",
-        remove_in="0.10",
-        old_name="n_clusters",
-        old_value=n_clusters,
-        new_name="range_n_clusters",
-        new_value=range_n_clusters,
-    )
 
     if range_n_clusters is None:
         range_n_clusters = range(1, 10, 2)
@@ -139,9 +139,13 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     """
     Same as `elbow_curve`, but it takes the number of clusters and sum of
     squares as inputs. Useful if you want to train the models yourself.
+
+    Examples
+    --------
+    .. plot:: ../examples/elbow_curve_from_results.py
+
     """
-    # TODO: unit test this
-    # TODO: also test with unsorted input
+
     idx = np.argsort(n_clusters)
     n_clusters = np.array(n_clusters)[idx]
     sum_of_squares = np.array(sum_of_squares)[idx]
@@ -183,6 +187,7 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
 def silhouette_analysis(
     X,
     clf,
@@ -262,13 +267,16 @@ def silhouette_analysis(
             "Cannot plot silhouette analysis ."
         )
 
-    for n_clusters in range_n_clusters:
-        _, ax = plt.subplots(1, 1, figsize=figsize)
+    # if no ax is passed by user generate new plot
+    # for each model
+
+    ax = _generate_axes(range_n_clusters, figsize, ax)
+
+    for ax, n_clusters in zip(ax, range_n_clusters):
         clf = clone(clf)
         setattr(clf, "n_clusters", n_clusters)
         cluster_labels = clf.fit_predict(X)
-
-        ax = silhouette_analysis_from_results(
+        _silhouette_analysis_one_model(
             X, cluster_labels, metric, figsize, cmap, text_fontsize, ax
         )
     return ax
@@ -276,7 +284,7 @@ def silhouette_analysis(
 
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
-def silhouette_analysis_from_results(
+def _silhouette_analysis_one_model(
     X,
     cluster_labels,
     metric="euclidean",
@@ -286,12 +294,7 @@ def silhouette_analysis_from_results(
     ax=None,
 ):
     """
-    Same as `silhouette_plot` but takes cluster_labels as input.
-    Useful if you want to train the model yourself
-
-    Notes
-    -----
-    .. versionadded:: 0.8.3
+    Generate silhouette plot for one value of n_cluster.
     """
     cluster_labels = np.asarray(cluster_labels)
 
@@ -364,4 +367,37 @@ def silhouette_analysis_from_results(
 
     ax.tick_params(labelsize=text_fontsize)
     ax.legend(loc="best", fontsize=text_fontsize)
+    return ax
+
+
+@SKLearnEvaluationLogger.log(feature="plot")
+@modify_exceptions
+def silhouette_analysis_from_results(
+    X,
+    cluster_labels,
+    metric="euclidean",
+    figsize=None,
+    cmap="nipy_spectral",
+    text_fontsize="medium",
+    ax=None,
+):
+    """
+    Same as `silhouette_plot` but takes list of cluster_labels as input.
+    Useful if you want to train the model yourself
+
+    Examples
+    --------
+    .. plot:: ../examples/silhouette_plot_from_results.py
+
+    """
+
+    # if no ax is passed by user generate new plot
+    # for each model
+
+    ax = _generate_axes(cluster_labels, figsize, ax)
+
+    for ax, label in zip(ax, cluster_labels):
+        _silhouette_analysis_one_model(
+            X, label, metric, figsize, cmap, text_fontsize, ax
+        )
     return ax

@@ -38,7 +38,6 @@ from sklearn.cluster import KMeans, MiniBatchKMeans, SpectralClustering
 from sklearn.datasets import load_iris as load_data
 from sklearn_evaluation import plot
 import sklearn_evaluation.plot.clustering as cl
-from ploomber_core.warnings import PloomberDeprecationWarning
 
 
 def convert_labels_into_string(y_true):
@@ -94,24 +93,24 @@ except ImportError:
 def test_score_methods_in_clf(clf):
     if clf == "bisect":
         clf = BisectingKMeans()
-    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+    plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
 
 def test_plot_elbow_curve_bad_input_value_error(ploomber_value_error_message):
     X = np.array([[1, 2], [1, 4], [1, 0], [10, 2], [10, 4], [10, 0]])
     clf = KMeans()
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+        plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
 
 def test_plot_elbow_curve_from_results_bad_input_value_error(
     ploomber_value_error_message,
 ):
-    n_clusters = range(1, 10, 2)
+    range_n_clusters = range(1, 10, 2)
     sum_of_squares = [4572.2, 470.7, 389.9, 335.1, [305.5]]
 
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
+        plot.elbow_curve_from_results(range_n_clusters, sum_of_squares, times=None)
 
 
 def test_cluster_ranges():
@@ -119,7 +118,7 @@ def test_cluster_ranges():
     plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
     # test old attribute doesn't break
-    plot.elbow_curve(X, clf, n_clusters=range(1, 10))
+    # plot.elbow_curve(X, clf, range_n_clusters=range(1, 10))
 
 
 @image_comparison(
@@ -132,35 +131,22 @@ def test_elbow_curve():
     plot.elbow_curve(X, clf, range_n_clusters=range(1, 4), show_cluster_time=False)
 
 
-def test_elbow_curve_deprecation():
-    X = np.array([[1, 2], [1, 4], [1, 0], [10, 2]])
-    clf = KMeans(n_init=10)
-
-    match = (
-        "'n_clusters' was renamed to 'range_n_clusters' in version 0.9. "
-        "'n_clusters' will be removed in 0.10"
-    )
-
-    with pytest.warns(PloomberDeprecationWarning, match=match):
-        plot.elbow_curve(X, clf, n_clusters=range(1, 4), show_cluster_time=False)
-
-
 @image_comparison(
     baseline_images=["elbow_curve_from_results"], extensions=["png"], remove_text=False
 )
 def test_elbow_curve_from_results():
-    n_clusters = range(1, 10, 2)
+    range_n_clusters = range(1, 10, 2)
     sum_of_squares = np.array([4572.2, 470.7, 389.9, 335.1, 305.5])
-    plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
+    plot.elbow_curve_from_results(range_n_clusters, sum_of_squares, times=None)
 
 
 @image_comparison(
     baseline_images=["elbow_curve_from_results"], extensions=["png"], remove_text=False
 )
 def test_elbow_curve_from_results_unsorted():
-    n_clusters = [5, 3, 9, 1, 7]
+    range_n_clusters = [5, 3, 9, 1, 7]
     sum_of_squares = np.array([389.9, 470.7, 305.5, 4572.2, 335.1])
-    plot.elbow_curve_from_results(n_clusters, sum_of_squares, times=None)
+    plot.elbow_curve_from_results(range_n_clusters, sum_of_squares, times=None)
 
 
 def test_ax_elbow():
@@ -188,10 +174,7 @@ def test_n_jobs():
 )
 def test_plot_silhouette():
     clf = KMeans(random_state=10)
-    # original = plt.rcParams["figure.figsize"]
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf)
-    # plt.rcParams["figure.figsize"] = original
 
 
 @image_comparison(
@@ -201,7 +184,6 @@ def test_plot_silhouette():
 )
 def test_plot_silhouette_with_cluster_range():
     clf = KMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[4, 5])
 
 
@@ -215,7 +197,6 @@ def test_plot_silhouette_with_cluster_range():
 )
 def test_plot_silhouette_with_minibatchkmeans():
     clf = MiniBatchKMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[4, 5])
 
 
@@ -224,7 +205,6 @@ def test_plot_silhouette_with_minibatchkmeans():
 )
 def test_cmap():
     clf = KMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[2], cmap="Spectral")
 
 
@@ -233,53 +213,32 @@ def test_cmap():
 )
 def test_metric():
     clf = KMeans(random_state=10)
-    plt.rcParams["figure.figsize"] = (18, 7)
     plot.silhouette_analysis(X, clf, range_n_clusters=[6], metric="cosine")
 
 
-def test_string_classes():
-    clf = KMeans()
-    cluster_labels = clf.fit_predict(X)
-    plot.silhouette_analysis_from_results(X, convert_labels_into_string(cluster_labels))
-
-
-@image_comparison(
-    baseline_images=["silhouette_plot_array_like"],
-    extensions=["png"],
-    remove_text=False,
-)
 def test_array_like():
-    plot.silhouette_analysis_from_results(X.tolist(), y.tolist())
-
-
-@image_comparison(
-    baseline_images=["silhouette_plot_array_like_string_label"],
-    extensions=["png"],
-    remove_text=False,
-)
-def test_array_like_string():
-    plot.silhouette_analysis_from_results(X.tolist(), convert_labels_into_string(y))
+    clf = KMeans()
+    plot.silhouette_analysis(X.tolist(), clf)
 
 
 def test_ax_silhouette():
     clf = KMeans()
-    cluster_labels = clf.fit_predict(X)
-    plot.silhouette_analysis_from_results(X, cluster_labels)
-    fig, ax = plt.subplots(1, 1)
-    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels)
-    assert ax is not out_ax
-    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels, ax=ax)
-    assert ax is out_ax
+    ax = []
+    for i in range(5):
+        fig, axes = plt.subplots(1, 1)
+        ax.append(axes)
+    out_ax = plot.silhouette_analysis(X, clf)
+    for axes in ax:
+        assert axes is not out_ax
+    out_ax = plot.silhouette_analysis(X, clf, ax=ax)
+    assert ax[-1] is out_ax
 
 
 def test_ax_params():
-    clf = KMeans(n_clusters=8)
-    cluster_labels = clf.fit_predict(X)
-    out_ax = plot.silhouette_analysis_from_results(
-        X, cluster_labels, text_fontsize="large"
-    )
-    assert out_ax.get_title() == "Silhouette Analysis (n_clusters=8)"
-    assert out_ax.get_ylim() == (0.0, 250.0)
+    clf = KMeans(n_clusters=6)
+    out_ax = plot.silhouette_analysis(X, clf, text_fontsize="large")
+    assert out_ax.get_title() == "Silhouette Analysis (n_clusters=6)"
+    assert out_ax.get_ylim() == (0.0, 230.0)
 
 
 def test_invalid_clusterer():
@@ -288,18 +247,72 @@ def test_invalid_clusterer():
         plot.silhouette_analysis(X, clf)
 
 
-def test_silhouette_analysis_from_results_value_error(ploomber_value_error_message):
+def test_silhouette_analysis_value_error(ploomber_value_error_message):
+    clf = KMeans()
     with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
-        plot.silhouette_analysis_from_results([], y.tolist())
+        plot.silhouette_analysis([], clf)
 
     assert "Expected 2D array, got 1D array" in str(e.value)
 
 
-def test_from_results_call(monkeypatch):
+def test_from_one_model_call(monkeypatch):
     mock = Mock()
-    monkeypatch.setattr(cl, "silhouette_analysis_from_results", mock)
+    monkeypatch.setattr(cl, "_silhouette_analysis_one_model", mock)
     clf = KMeans()
-    fig, ax = plt.subplots(1, 1)
-    ax = plot.silhouette_analysis(X, clf, range_n_clusters=[2, 3], ax=ax)
+    fig, ax1 = plt.subplots(1, 1)
+    fig, ax2 = plt.subplots(1, 1)
+    plot.silhouette_analysis(X, clf, range_n_clusters=[2, 3], ax=[ax1, ax2])
     assert mock.call_count == 2
-    assert mock.return_value == ax
+
+
+@image_comparison(
+    baseline_images=[
+        "silhouette_analysis_from_results_cluster_five",
+        "silhouette_analysis_from_results_cluster_six",
+    ],
+    extensions=["png"],
+    remove_text=False,
+)
+def test_silhouette_plot_from_results():
+    cluster_labels = [
+        KMeans(random_state=10, n_clusters=5).fit_predict(X),
+        KMeans(random_state=10, n_clusters=6).fit_predict(X),
+    ]
+
+    plot.silhouette_analysis_from_results(X, cluster_labels)
+
+
+def test_silhouette_analysis_from_results_value_error(ploomber_value_error_message):
+    with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
+        plot.silhouette_analysis_from_results([], [y.tolist()])
+
+    assert "Expected 2D array, got 1D array" in str(e.value)
+
+
+def test_ax_silhouette_from_results():
+    X = [[1.2, 3.4], [2.2, 4.1], [1.1, 6.5]]
+    cluster_labels = [[0, 0, 1], [0, 1, 0]]
+    fig, ax1 = plt.subplots(1, 1)
+    fig, ax2 = plt.subplots(1, 1)
+    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels)
+    assert ax1 is not out_ax
+    assert ax2 is not out_ax
+    out_ax = plot.silhouette_analysis_from_results(X, cluster_labels, ax=[ax1, ax2])
+    assert ax2 is out_ax
+
+
+def test_one_model_from_results_call(monkeypatch):
+    X = [[1.2, 3.4], [2.2, 4.1], [1.1, 6.5]]
+    cluster_labels = [[0, 0, 1], [0, 1, 0], [0, 0, 0]]
+    mock = Mock()
+    monkeypatch.setattr(cl, "_silhouette_analysis_one_model", mock)
+    plot.silhouette_analysis_from_results(X, cluster_labels)
+    assert mock.call_count == 3
+
+
+def test_ax_length_mismatch(ploomber_value_error_message):
+    X = [[1.2, 3.4], [2.2, 4.1], [1.1, 6.5]]
+    cluster_labels = [[0, 0, 1], [0, 1, 0]]
+    fig, ax = plt.subplots(1, 1)
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.silhouette_analysis_from_results(X, cluster_labels, ax=[ax])

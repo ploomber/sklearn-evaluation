@@ -38,7 +38,7 @@ JB = [
 
 TEST = [
     "jupytext",
-    "papermill",
+    "ploomber-engine",
     "ipykernel",
     "pytest",
     # need to pin this version because pytest 4 breaks matplotlib image
@@ -75,7 +75,7 @@ setup(
     classifiers=[],
     include_package_data=True,
     install_requires=[
-        "ploomber-core>=0.2.*",
+        "ploomber-core>=0.2",
         # compute metrics
         "scikit-learn",
         # plotting
