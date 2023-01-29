@@ -94,6 +94,10 @@ metrics_at_thresholds
 ---------------------
 .. autofunction:: sklearn_evaluation.plot.metrics_at_thresholds
 
+pca
+---
+.. autofunction:: sklearn_evaluation.plot.pca
+
 precision_at_proportions
 ------------------------
 .. autofunction:: sklearn_evaluation.plot.precision_at_proportions

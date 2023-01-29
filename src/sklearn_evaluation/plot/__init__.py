@@ -39,6 +39,7 @@ from sklearn_evaluation.plot.cumulative_gain_lift_curve import (
     lift_curve,
 )
 from sklearn_evaluation.plot.feature_ranking import Rank1D, Rank2D
+from sklearn_evaluation.plot.pca import pca
 
 __all__ = [
     "confusion_matrix",
@@ -70,4 +71,5 @@ __all__ = [
     "Rank1D",
     "Rank2D",
     "cooks_distance",
+    "pca",
 ]

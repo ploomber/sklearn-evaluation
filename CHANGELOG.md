@@ -3,6 +3,8 @@
 ## 0.10.1dev
 
 - [Feature] Adds 'plot.PrecisionRecall' api [#189]
+- [Feature] Adds plot.pca
+- [Doc] User guide on PCA
 
 ## 0.10.0 (2023-01-29)
 
