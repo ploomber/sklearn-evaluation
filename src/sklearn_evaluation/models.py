@@ -5,22 +5,28 @@ import re
 from sklearn_evaluation.evaluator import _gen_ax
 from sklearn_evaluation import plot
 from sklearn_evaluation.model_heuristics.utils import (
-    check_array_balance, get_model_computation_time, get_roc_auc, Range)
+    check_array_balance,
+    get_model_computation_time,
+    get_roc_auc,
+    Range,
+)
 from sklearn_evaluation.model_heuristics.model_heuristics import ModelHeuristics
 
 
-class ReportSection():
+class ReportSection:
     """
     Section to include in report
     """
 
     def __init__(self, key, include_in_report=True):
-        self.report_section = dict({
-            "guidelines": [],
-            "title": key.replace("_", " "),
-            "include_in_report": include_in_report,
-            "is_ok": False
-        })
+        self.report_section = dict(
+            {
+                "guidelines": [],
+                "title": key.replace("_", " "),
+                "include_in_report": include_in_report,
+                "is_ok": False,
+            }
+        )
         self.key = key
 
     def append_guideline(self, guideline):
@@ -30,7 +36,7 @@ class ReportSection():
         Parameters
         ----------
         guideline : str
-            The guideline to add         
+            The guideline to add
         """
         self.report_section["guidelines"].append(guideline)
 
@@ -58,8 +64,7 @@ class ModelEvaluator(ModelHeuristics):
     Generates model evaluation report
     """
 
-    def __init__(self,
-                 model):
+    def __init__(self, model):
         self.model = model
         super().__init__()
 
@@ -88,7 +93,7 @@ class ModelEvaluator(ModelHeuristics):
 
     def evaluate_accuracy(self, y_true, y_pred_test):
         """
-        Measures how many labels the 
+        Measures how many labels the
         model got right out of the total number of predictions
         """
         accuracy_threshold = 0.9
@@ -149,7 +154,8 @@ class ModelEvaluator(ModelHeuristics):
 
             if auc_threshold_low_range.in_range(roc_auc):
                 auc_section.append_guideline(
-                    f"Area under curve is low for {class_name}")
+                    f"Area under curve is low for {class_name}"
+                )
                 class_roc = plot.ROC(roc.fpr[i], roc.tpr[i], label=[label]).plot().ax
                 auc_section.append_guideline(class_roc)
 
@@ -202,7 +208,8 @@ class ModelComparer(ModelHeuristics):
 
         except Exception as exc:
             percision_recall_section.append_guideline(
-                self._get_calculate_failed_error("percision_recall", "model a", exc=exc))
+                self._get_calculate_failed_error("percision_recall", "model A", exc=exc)
+            )
 
         try:
             y_prob_b = self.model_b.predict_proba(X_test)
@@ -211,13 +218,14 @@ class ModelComparer(ModelHeuristics):
 
         except Exception as exc:
             percision_recall_section.append_guideline(
-                self._get_calculate_failed_error("percision_recall", "model b", exc=exc))
+                self._get_calculate_failed_error("percision_recall", "model B", exc=exc)
+            )
 
         self._add_section_to_report(percision_recall_section)
 
     def auc(self, X_test, y_true):
         """
-        Compares models roc auc  
+        Compares models roc auc
         """
         auc_section = ReportSection("auc")
 
@@ -226,28 +234,30 @@ class ModelComparer(ModelHeuristics):
             roc_auc_model_a = get_roc_auc(y_true, y_score_a)
 
             if len(roc_auc_model_a) > 1:
-                auc_section.append_guideline(
-                    f"Model a AUC (ROC) are {roc_auc_model_a}")
+                auc_section.append_guideline(f"Model A AUC (ROC) are {roc_auc_model_a}")
             else:
                 auc_section.append_guideline(
-                    f"Model a AUC (ROC) is {roc_auc_model_a[0]}")
+                    f"Model A AUC (ROC) is {roc_auc_model_a[0]}"
+                )
         except Exception as exc:
             auc_section.append_guideline(
-                self._get_calculate_failed_error("auc", "model a", exc=exc))
+                self._get_calculate_failed_error("auc", "model A", exc=exc)
+            )
 
         try:
             y_score_b = self.model_b.predict_proba(X_test)
             roc_auc_model_b = get_roc_auc(y_true, y_score_b)
 
             if len(roc_auc_model_b) > 1:
-                auc_section.append_guideline(
-                    f"Model b AUC (ROC) are {roc_auc_model_b}")
+                auc_section.append_guideline(f"Model B AUC (ROC) are {roc_auc_model_b}")
             else:
                 auc_section.append_guideline(
-                    f"Model b AUC (ROC) is {roc_auc_model_b[0]}")
+                    f"Model B AUC (ROC) is {roc_auc_model_b[0]}"
+                )
         except Exception as exc:
             auc_section.append_guideline(
-                self._get_calculate_failed_error("auc", "model b", exc=exc))
+                self._get_calculate_failed_error("auc", "model B", exc=exc)
+            )
 
         self._add_section_to_report(auc_section)
 
@@ -261,20 +271,26 @@ class ModelComparer(ModelHeuristics):
         model_b_compute_time = get_model_computation_time(self.model_b, X_test)
 
         compute_time_diff_threshold = 1  # 1 second
-        is_significant_time_diff = abs(
-            model_a_compute_time - model_b_compute_time) >= compute_time_diff_threshold
+        is_significant_time_diff = (
+            abs(model_a_compute_time - model_b_compute_time)
+            >= compute_time_diff_threshold
+        )
         if is_significant_time_diff:
             if model_a_compute_time > model_b_compute_time:
                 computation_section.append_guideline(
-                    f"Model A is a lot more computational expensive")
+                    "Model A is a lot more computational expensive"
+                )
             else:
                 computation_section.append_guideline(
-                    f"Model B is a lot more computational expensive")
+                    "Model B is a lot more computational expensive"
+                )
 
         computation_section.append_guideline(
-            f"Model a compute time is {model_a_compute_time} (ms)")
+            f"Model A compute time is {model_a_compute_time} (seconds)"
+        )
         computation_section.append_guideline(
-            f"Model b compute time is {model_b_compute_time} (ms)")
+            f"Model B compute time is {model_b_compute_time} (seconds)"
+        )
 
         self._add_section_to_report(computation_section)
 
@@ -290,7 +306,8 @@ class ModelComparer(ModelHeuristics):
             calibration_section.append_guideline(p)
         except Exception as exc:
             calibration_section.append_guideline(
-                self._get_calculate_failed_error("calibration", "model a", exc=exc))
+                self._get_calculate_failed_error("calibration", "model A", exc=exc)
+            )
 
         try:
             y_prob_b = self.model_b.predict_proba(X_test)
@@ -298,7 +315,8 @@ class ModelComparer(ModelHeuristics):
             calibration_section.append_guideline(p)
         except Exception as exc:
             calibration_section.append_guideline(
-                self._get_calculate_failed_error("calibration", "model b", exc=exc))
+                self._get_calculate_failed_error("calibration", "model B", exc=exc)
+            )
 
         self._add_section_to_report(calibration_section)
 
@@ -316,12 +334,7 @@ class ModelComparer(ModelHeuristics):
         self._add_section_to_report(combined_confusion_matrix_section)
 
 
-def evaluate_model(
-    y_true,
-    y_pred,
-    model,
-    y_score=None
-):
+def evaluate_model(y_true, y_pred, model, y_score=None):
     _check_model(model)
     _check_inputs(y_true, y_pred)
     me = ModelEvaluator(model)

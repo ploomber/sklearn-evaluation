@@ -6,7 +6,7 @@ from sklearn.metrics import auc
 
 class Range(object):
     """
-    Set float range 
+    Set float range
     """
 
     def __init__(self, min, max):
@@ -41,6 +41,7 @@ def check_array_balance(array) -> bool:
 
 # Model comparer utils
 
+
 def get_roc_auc(y_test, y_score) -> list:
     """
     Returns list of roc auc
@@ -60,5 +61,5 @@ def get_model_computation_time(model, X_test) -> float:
     start = time.time()
     model.predict(X_test)
     end = time.time()
-    eval_time = end-start  # in seconds
+    eval_time = end - start  # in seconds
     return eval_time

@@ -41,7 +41,7 @@ class ModelHeuristics(abc.ABC):
 
     def __init__(self):
         """
-        Initialize ModelHeuristics 
+        Initialize ModelHeuristics
         """
         self.evaluation_state = dict()
 
@@ -52,7 +52,7 @@ class ModelHeuristics(abc.ABC):
         Parameters
         ----------
         section : ReportSection
-            The section to include      
+            The section to include
         """
         self.evaluation_state[section.key] = section.get_dict()
 
@@ -77,7 +77,7 @@ class ModelHeuristics(abc.ABC):
         """
         guideline = f"Failed to calculate {key} for {model_name}"
         if exc:
-            exc_message = getattr(exc, 'message', repr(exc))
+            exc_message = getattr(exc, "message", repr(exc))
             guideline += f"\nWith message : {exc_message}"
 
         return guideline
@@ -114,13 +114,15 @@ class ModelHeuristics(abc.ABC):
                 {% for key in evaluation_state.keys() %}
                     {% if evaluation_state[key]["include_in_report"] %}
                     <ul>
-                        <li class="nobull"><h2 class="capitalize">{{evaluation_state[key]["title"]}}</h2></li>
+                        <li class="nobull"><h2 class="capitalize">
+                        {{evaluation_state[key]["title"]}}</h2></li>
                         {% for guideline in evaluation_state[key]["guidelines"] %}
 
                             {% if guideline is string %}
                                 <li>{{guideline}}</li>
                             {% else %}
-                                <p class="display-inline-block">{{figure2html(guideline.get_figure())}}</p>
+                                <p class="display-inline-block">
+                                {{figure2html(guideline.get_figure())}}</p>
                             {% endif %}
                         {% endfor %}
                     </ul>
@@ -138,7 +140,7 @@ class ModelHeuristics(abc.ABC):
             title=title,
             evaluation_state=self.evaluation_state,
             figure2html=figure2html,
-            style=self._report_css_style
+            style=self._report_css_style,
         )
 
         report = Report(e, template)
