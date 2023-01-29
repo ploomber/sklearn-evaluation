@@ -5,7 +5,6 @@ from sklearn_evaluation import plot, __version__
 from functools import partial
 import sys
 from matplotlib.testing.decorators import image_comparison as _image_comparison
-import numpy as np
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 
