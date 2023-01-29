@@ -90,7 +90,7 @@ logistic_score, forest_score = [
 ]
 ```
 
-### Decision logistic ROC
+### Logistic regression ROC
 
 ```{code-cell} ipython3
 logistic_roc = plot.ROC.from_raw_data(y_test, logistic_score)
