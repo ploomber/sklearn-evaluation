@@ -1,13 +1,18 @@
 # CHANGELOG
-## 0.10.0dev
-- [Feature] Adds `RandomForestClassifierGrid`
-- [Fix] Uses existing labels in multi ROC curve (#225)
+
+## 0.10.1dev
+
+## 0.10.0 (2023-01-29)
+
 - [API Change] A new figure and axes is created (via `plt.subplots()`) when calling a plotting method with `ax=None`. Previously, the current axes was used (via `plt.gca()`) ([#211](https://github.com/ploomber/sklearn-evaluation/pull/211))
-- [Fix] Validating input elbow curve model has "score" method [#146] 
-- [Fix] Adds class labels for multi class roc plot (#209)
-- [Fix] Fixed ROC curves plots to show properly.
 - [API Change] `silhouette_analysis_from_results` function now accepts a list of cluster labels [#213](https://github.com/ploomber/sklearn-evaluation/pull/213)
-- [API Change] Removed `n_clusters` from `elbow_curve` (#247)
+- [API Change] Removed `n_clusters` from `elbow_curve` ([#247](https://github.com/ploomber/sklearn-evaluation/issues/247))
+- [Feature] Adds `RandomForestClassifierGrid`
+- [Fix] Validates `plot.ROC` inputs ([#98](https://github.com/ploomber/sklearn-evaluation/issues/98))
+- [Fix] Uses existing labels in multi ROC curve ([#225](https://github.com/ploomber/sklearn-evaluation/issues/225))
+- [Fix] Validating input elbow curve model has "score" method [#146]
+- [Fix] Adds class labels for multi class roc plot ([#209](https://github.com/ploomber/sklearn-evaluation/issues/209))
+- [Fix] Fixed ROC curves plots to show properly.
 - [Fix] `setup.py` fix due to change in setuptools 67.0.0
 
 ## 0.9.0 (2023-01-13)
@@ -27,7 +32,7 @@
 ## 0.8.5 (2022-12-29)
 
 - Fixes to `plot.elbow_curve`: no longer hardcoding figure size,
-    random seed for model, also showing `n_clusters` in title
+  random seed for model, also showing `n_clusters` in title
 - Fixes error when passing array to `table.feature_importances` ([#144](https://github.com/ploomber/sklearn-evaluation/issues/144))
 - Adds clustering quick start
 
@@ -49,14 +54,14 @@
 - Adds `plot.target_analysis`
 - Adds bulk insert to `SQliteTracker` via `.insert_many`
 - `SQliteTracker.{get_parameters_keys, get_sample_query}` support
-    extracting keys from nested JSON objects
+  extracting keys from nested JSON objects
 
 ## 0.8.2 (2022-11-24)
 
 - `plot.ConfusionMatrix` and `plot.ClassifictionReport` can be
-    serialized/unserialized with `.dump`/ `.from_dump`
+  serialized/unserialized with `.dump`/ `.from_dump`
 - Adds `Experiment` class to easily create new experiments from
-    `SQLiteTracker` using `.new_experiment()`
+  `SQLiteTracker` using `.new_experiment()`
 - Adds `Experiment.log_classification_report`
 - Adds `Experiment.log_confusion_matrix`
 - Adds `Experiment.log_figure`
@@ -66,27 +71,27 @@
 - Adds docstring examples to `SQLiteTracker` and `Experiment`
 - Updates `SQliteTracker` tutorial
 - Fixes error when querying experiments using `SQliteTracker` whose
-    UUID was all numbers (e.g., `"1234"`)
+  UUID was all numbers (e.g., `"1234"`)
 
 ## 0.8.1 (2022-11-16)
 
 - Adds `plot.residuals` and `plot.prediction_error` for evaluating
-    regression models
+  regression models
 
 ## 0.8 (2022-11-15)
 
 - `SQliteTracker.get_sample_query` generates a query compatible with
-    older SQLite versions that do not support the `->` operator
+  older SQLite versions that do not support the `->` operator
 - `SQliteTracker` creates shorter experiment IDs
 - Fixes whitespace in generated HTML when generating tab views and in
-    `SQLTracker` results when `as_frame=False`
+  `SQLTracker` results when `as_frame=False`
 
 ## 0.7.9 (2022-11-14)
 
 - Adds `as_frame` argument to `SQLiteTracker`
 - Adds `SQLiteTracker.upsert`
 - Allow overwriting records in `SQLiteTracker.update` with
-    `allow_overwrite=True`
+  `allow_overwrite=True`
 - Adds `SQliteTracker.get_sample_query`
 - Adds `SQliteTracker.get_parameters_keys`
 
@@ -95,12 +100,12 @@
 - Adds `plot.scores_distribution`
 - Adds `plot.classification_report`
 - Fixes `plot.calibration_curve` error that scaled probabilities
-    before plotting
+  before plotting
 
 ## 0.7.7 (2022-11-01)
 
 - `plot.calibration_curve` allows plotting curves with different
-    sample sizes
+  sample sizes
 
 ## 0.7.6 (2022-11-01)
 
@@ -131,7 +136,7 @@
 
 - `NotebookDatabase`: makes `path` the primary key
 - `NotebookDatabase`: `.index()` uses path to see if the notebook has
-    been indexed
+  been indexed
 - `NotebookDatabase`: adds `update` to `.index()`
 
 ## 0.6.1 (2022-08-13)
@@ -151,7 +156,7 @@
 ## 0.5.8 (2022-04-16)
 
 - Fixes an error in `plot.grid_search` when parameters grid has a
-    single parameter
+  single parameter
 
 ## 0.5.7 (2021-10-17)
 
@@ -160,12 +165,12 @@
 ## 0.5.6 (2021-06-26)
 
 - Fixes error that caused grid search plot to fail when a parameter
-    had a `None` value ([#40](https://github.com/ploomber/sklearn-evaluation/issues/40))
+  had a `None` value ([#40](https://github.com/ploomber/sklearn-evaluation/issues/40))
 
 ## 0.5.5 (2021-03-28)
 
 - Adds missing dependency (`IPython`), required by
-    `NotebookIntrospector`
+  `NotebookIntrospector`
 
 ## 0.5.4 (2020-12-28)
 
@@ -176,12 +181,12 @@
 
 - `DataSelector` copies input steps to prevent mutating input params
 - Simplifies `NotebookInstrospector` API and adds first implementation
-    of `NotebookCollection`
+  of `NotebookCollection`
 
 ## 0.5.2 (2020-10-02)
 
 - Adds SQLiteTracker for tracking ML experiments using a SQlite
-    backend
+  backend
 - Adds NotebookIntrospector [Experimental]
 - Migrates tests to `nox`
 - Adds DataSelector

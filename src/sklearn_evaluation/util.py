@@ -5,6 +5,7 @@ from collections.abc import Iterable
 from collections import defaultdict
 from itertools import product
 from six import string_types
+import numpy as np
 
 
 def isiter(obj):
@@ -39,12 +40,38 @@ def _can_iterate(obj):
     return is_iterable and not is_string
 
 
+def check_elements_in_range(array, min, max, include_min=True, inclue_max=True):
+    """
+    Checks if values in an array are within a range
+    """
+    if include_min and inclue_max:
+        return np.all((array >= min) & (array <= max))
+    elif include_min and not inclue_max:
+        return np.all((array >= min) & (array < max))
+    elif not include_min and inclue_max:
+        return np.all((array > min) & (array <= max))
+    else:
+        return np.all((array > min) & (array < max))
+
+
 def is_column_vector(x):
     return len(x.shape) == 2 and x.shape[1] == 1
 
 
+def convert_array_to_string(array, max_length=100):
+    array_string = repr(array)[:max_length]
+    if len(array_string) > max_length - 3:
+        array_string += "..."
+
+    return array_string
+
+
 def is_row_vector(x):
     return len(x.shape) == 1
+
+
+def is_binary(array):
+    return np.isin(array, [0, 1]).all()
 
 
 def _group_by(data, criteria):
