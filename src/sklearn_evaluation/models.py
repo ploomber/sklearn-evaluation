@@ -1,321 +1,136 @@
 from sklearn.metrics import accuracy_score
 from sklearn.metrics import confusion_matrix, auc
 import numpy as np
-from sklearn_evaluation import plot
 import re
-from sklearn_evaluation.report.serialize import EvaluatorHTMLSerializer
-from sklearn_evaluation.report.report import Report
-from jinja2 import Template
-from sklearn_evaluation.report.serialize import figure2html
 from sklearn_evaluation.evaluator import _gen_ax
-import time
+from sklearn_evaluation import plot
+from sklearn_evaluation.model_heuristics.utils import (
+    check_array_balance, get_model_computation_time, get_roc_auc, Range)
+from sklearn_evaluation.model_heuristics.model_heuristics import ModelHeuristics
 
 
-class Range(object):
-    def __init__(self, min, max):
-        self.min = min
-        self.max = max
-
-    def in_range(self, n) -> bool:
-        return self.min <= n and self.max >= n
-
-
-def _check_array_balance(array) -> bool:
-    classes, counts = np.unique(array, return_counts=True)
-    n_classes = len(classes)
-    n_values = len(array)
-    expected_balance = 1 / n_classes
-
-    weights = list(map(lambda count: count / n_values, counts))
-    balance_threshold = 0.05
-    expected_range = Range(
-        expected_balance - balance_threshold, expected_balance + balance_threshold
-    )
-
-    return all(expected_range.in_range(w) for w in weights)
-
-
-def _create_report_template(evaluation_state):
-    title = "Model evaluation"
-    print(evaluation_state)
-
-    template = Template(
-        """
-<html>
-  <head>
-      <style>
-        .model-evaluation-container {
-            font-family: Arial, Helvetica, sans-serif;
-            text-align: left;
-            width: fit-content;
-            margin: 50px auto;
-        }
-
-        .block {
-            margin-bottom: 50px
-        }
-
-        .nobull {
-            list-style-type: none;
-        }
-
-        ul li {
-            margin-bottom: 10px;
-        }
-
-        </style>
-
-    </head>
-  <body>
-    <div class="model-evaluation-container">
-        <div>
-            <h1>{{title}}</h1>
-
-            <div class="block">
-
-                {% if not evaluation_state["balance"]["is_ok"] %}
-                <ul>
-                    <li class="nobull"><h2>Balance</h2></li>
-                    {% for guideline in evaluation_state["balance"]["guidelines"] %}
-
-                        {% if guideline is string %}
-                            <li>{{guideline}}</li>
-                        {% else %}
-                            <p>{{figure2html(guideline.get_figure())}}</p>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-
-                {% endif %}
-
-            </div>
-
-            <div class="block">
-
-                {% if not evaluation_state["accuracy"]["is_ok"] %}
-                <ul>
-                    <li class="nobull"><h2>Accuracy</h2></li>
-                    {% for guideline in evaluation_state["accuracy"]["guidelines"] %}
-
-                        {% if guideline is string %}
-                            <li>{{guideline}}</li>
-                        {% else %}
-                            <p>{{figure2html(guideline.get_figure())}}</p>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-
-                {% endif %}
-
-            </div>
-
-            <div class="block">
-
-                {% if not evaluation_state["auc"]["is_ok"] %}
-                <ul>
-                    <li class="nobull"><h2>AUC</h2></li>
-                    {% for guideline in evaluation_state["auc"]["guidelines"] %}
-
-                        {% if guideline is string %}
-                            <li>{{guideline}}</li>
-                        {% else %}
-                            <p>{{figure2html(guideline.get_figure())}}</p>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-
-                {% endif %}
-            </div>
-
-
-            <div class="block">
-
-                <ul>
-                <li class="nobull"><h2>General Stats</h2></li>
-                {% for guideline in evaluation_state["general_stats"]["guidelines"] %}
-
-                    {% if guideline is string %}
-                        <li>{{guideline}}</li>
-                    {% else %}
-                        <p>{{figure2html(guideline.get_figure())}}</p>
-                    {% endif %}
-                {% endfor %}
-                </ul>
-
-            </div>
-
-
-        </div>
-    </div>
-  </body>
-</html>
+class ReportSection():
     """
-    )
-    return template.render(
-        title=title, evaluation_state=evaluation_state, figure2html=figure2html
-    )
-
-
-def _create_compare_models_report_template(evaluation_state):
-    title = "Compare models"
-    print(evaluation_state)
-
-    template = Template(
-        """
-<html>
-  <head>
-      <style>
-        .model-evaluation-container {
-            font-family: Arial, Helvetica, sans-serif;
-            text-align: left;
-            width: fit-content;
-            margin: 50px auto;
-        }
-
-        .block {
-            margin-bottom: 50px
-        }
-
-        .nobull {
-            list-style-type: none;
-        }
-
-        ul li {
-            margin-bottom: 10px;
-        }
-
-        </style>
-
-    </head>
-  <body>
-    <div class="model-evaluation-container">
-        <div>
-            <h1>{{title}}</h1>
-
-            <div class="block">
-
-                <ul>
-                    <li class="nobull"><h2>Report</h2></li>
-                    {% for guideline in evaluation_state["guidelines"] %}
-
-                        {% if guideline is string %}
-                            <li>{{guideline}}</li>
-                        {% else %}
-                            <p>{{figure2html(guideline.get_figure())}}</p>
-                        {% endif %}
-                    {% endfor %}
-                </ul>
-
-            </div>
-
-
-        </div>
-    </div>
-  </body>
-</html>
+    Section to include in report
     """
-    )
-    return template.render(
-        title=title, evaluation_state=evaluation_state, figure2html=figure2html
-    )
 
+    def __init__(self, key, include_in_report=True):
+        self.report_section = dict({
+            "guidelines": [],
+            "title": key.replace("_", " "),
+            "include_in_report": include_in_report,
+            "is_ok": False
+        })
+        self.key = key
 
-def _get_roc_auc(y_test, y_score):
-    roc_auc = []
-    roc = plot.ROC.from_raw_data(y_test, y_score)
-    for i in range(len(roc.fpr)):
-        roc_auc.append(auc(roc.fpr[i], roc.tpr[i]))
-
-    return roc_auc
-
-
-def _get_model_computation_time(model, X_test):
-    start = time.time()
-    model.predict(X_test)
-    end = time.time()
-    eval_time = end-start  # in seconds
-
-    return eval_time
-
-
-class ModelEvaluator(object):
-
-    @staticmethod
-    def evaluate_balance(y_true, evaluation_state):
+    def append_guideline(self, guideline):
         """
-        Return guidelines
-        """
-        balance_state = dict()
-        guidelines = []
+        Add guideline to section
 
-        # y_true
-        is_balanced = _check_array_balance(y_true)
+        Parameters
+        ----------
+        guideline : str
+            The guideline to add         
+        """
+        self.report_section["guidelines"].append(guideline)
+
+    def get_dict(self) -> dict:
+        """
+        Return dict of the section
+        """
+        return self.report_section
+
+    def set_is_ok(self, is_ok):
+        """
+        Set if the reported test is valid
+        """
+        self.report_section["is_ok"] = is_ok
+
+    def set_include_in_report(self, include):
+        """
+        Set if should include this section in the report
+        """
+        self.report_section["include_in_report"] = include
+
+
+class ModelEvaluator(ModelHeuristics):
+    """
+    Generates model evaluation report
+    """
+
+    def __init__(self,
+                 model):
+        self.model = model
+        super().__init__()
+
+    def evaluate_balance(self, y_true):
+        """
+        Checks if model is balanced
+        """
+        balance_section = ReportSection("balance")
+
+        is_balanced = check_array_balance(y_true)
 
         if is_balanced:
-            balance_state["is_ok"] = True
-            guidelines.append("your model is balanced")
+            balance_section.set_is_ok(True)
+            balance_section.append_guideline("your model is balanced")
         else:
-            balance_state["is_ok"] = False
+            balance_section.set_is_ok(False)
             p = plot.target_analysis(y_true)
-            guidelines.append("Your test set is highly imbalanced")
-            guidelines.append(p)
-            guidelines.append(
+            balance_section.append_guideline("Your test set is highly imbalanced")
+            balance_section.append_guideline(p)
+            balance_section.append_guideline(
                 "To tackle this, check out this "
                 "<a href='https://ploomber.io/blog/' target='_blank'>guide</a>"
             )
 
-        balance_state["guidelines"] = guidelines
-        evaluation_state["balance"] = balance_state
+        self._add_section_to_report(balance_section)
 
-    @staticmethod
-    def evaluate_accuracy(y_test, y_pred_test, evaluation_state):
+    def evaluate_accuracy(self, y_true, y_pred_test):
         """
-        This score measures how many labels the
+        Measures how many labels the 
         model got right out of the total number of predictions
         """
         accuracy_threshold = 0.9
-        accuracy_state = dict()
+        accuracy_section = ReportSection("accuracy")
+        accuracy = accuracy_score(y_true, y_pred_test)
 
-        guidelines = []
-        accuracy = accuracy_score(y_test, y_pred_test)
+        balance = self.evaluation_state["balance"]
 
-        balance = evaluation_state["balance"]
-
-        guidelines.append(f"Accuracy is {accuracy}")
+        accuracy_section.append_guideline(f"Accuracy is {accuracy}")
         if accuracy >= accuracy_threshold:
             if balance["is_ok"]:
-                accuracy_state["is_ok"] = True
-                guidelines.append("You model is accurate")
+                accuracy_section.append_guideline["is_ok"] = True
+                accuracy_section.append_guideline("You model is accurate")
             else:
-                accuracy_state["is_ok"] = False
-                guidelines.append(
+                accuracy_section.set_is_ok(False)
+                accuracy_section.append_guideline(
                     "Please note your model is unbalanced, "
                     "so high accuracy could be misleading"
                 )
 
-        accuracy_state["guidelines"] = guidelines
-        evaluation_state["accuracy"] = accuracy_state
+        self._add_section_to_report(accuracy_section)
 
-    @staticmethod
-    def evaluate_confusion_matrix(y_true, y_pred, evaluation_state):
+    def evaluate_confusion_matrix(y_true, y_pred):
         """
-        How many of a classifier's predictions were correct,
+        Checks how many of a classifier's predictions were correct,
         and when incorrect, where the classifier got confused
         """
+        # TODO: Implement
         cm = confusion_matrix(y_true, y_pred)
 
         # normalize
         cm = cm.astype("float") / cm.sum(axis=1)[:, np.newaxis]
 
-        # go check values
-        # diagonal = np.diagonal(cm)
+        # TODO: Evaluate model by confusion matrix
+        diagonal = np.diagonal(cm)  # noqa
 
-    @staticmethod
-    def evaluate_auc(y_true, y_score, evaluation_state):
-        """ """
-        auc_state = dict()
-        auc_state["is_ok"] = False
-        guidelines = []
+    def evaluate_auc(self, y_true, y_score):
+        """
+        Checks if roc auc is in acceptable range
+        """
+        auc_section = ReportSection("auc")
+
         auc_threshold_low_range = Range(0, 0.6)
         auc_threshold_acceptable_range = Range(0.7, 0.8)
 
@@ -330,138 +145,221 @@ class ModelEvaluator(object):
             if r:
                 class_name = r[0].replace("(", "").replace(")", "")
             else:
-                class_name = label  # f"class {i}"
+                class_name = label
 
             if auc_threshold_low_range.in_range(roc_auc):
-                guidelines.append(f"Your area under {class_name} curve is low")
+                auc_section.append_guideline(
+                    f"Area under curve is low for {class_name}")
                 class_roc = plot.ROC(roc.fpr[i], roc.tpr[i], label=[label]).plot().ax
-                guidelines.append(class_roc)
+                auc_section.append_guideline(class_roc)
 
-                guidelines.append(
+                auc_section.append_guideline(
                     "To tackle this, check out this "
                     "<a href='https://ploomber.io/blog/' target='_blank'>guide</a>"
                 )
             elif auc_threshold_acceptable_range.in_range(roc_auc):
-                auc_state["is_ok"] = True
-                guidelines.append(f"AUC FOR CLASS {class_name} IS ACCEPTABLE")
+                auc_section.set_is_ok(True)
+                auc_section.set_include_in_report(False)
             else:
-                auc_state["is_ok"] = True
-                guidelines.append(f"AUC FOR CLASS {class_name} IS EXECLLENT")
+                auc_section.set_is_ok(True)
+                auc_section.set_include_in_report(False)
 
-        auc_state["guidelines"] = guidelines
-        evaluation_state["auc"] = auc_state
+        self._add_section_to_report(auc_section)
 
-    @staticmethod
-    def generate_general_stats(y_true, y_pred, y_score, evaluation_state):
-        general_stats = dict({"guidelines": []})
+    def generate_general_stats(self, y_true, y_pred, y_score):
+        """
+        Include general stats in the report
+        """
+        general_section = ReportSection("general_stats")
 
-        general_stats["guidelines"].append(
+        general_section.append_guideline(
             plot.confusion_matrix(y_true, y_pred, ax=_gen_ax())
         )
-        general_stats["guidelines"].append(plot.roc(y_true, y_score, ax=_gen_ax()))
-        evaluation_state["general_stats"] = general_stats
+        general_section.append_guideline(plot.roc(y_true, y_score, ax=_gen_ax()))
+        self._add_section_to_report(general_section)
 
 
-class ModelsComparer(object):
+class ModelComparer(ModelHeuristics):
+    """
+    Compares models and generate report
+    """
+
     def __init__(self, model_a, model_b):
         self.model_a = model_a
         self.model_b = model_b
-        self.evaluation_state = dict({"guidelines": []})
+        super().__init__()
 
-    def precision_and_recall():
-        pass
+    def precision_and_recall(self, X_test, y_true):
+        """
+        Calculates precision and recall for each of the models
+        """
+        percision_recall_section = ReportSection("percision_recall")
 
-    def auc(self, X_test, y_test):
-        auc_state = dict()
+        try:
+            y_prob_a = self.model_a.predict_proba(X_test)
+            p = plot.precision_recall(y_true, y_prob_a, ax=_gen_ax())
+            percision_recall_section.append_guideline(p)
 
-        y_score_a = self.model_a.predict_proba(X_test)
-        roc_auc_model_a = _get_roc_auc(y_test, y_score_a)
+        except Exception as exc:
+            percision_recall_section.append_guideline(
+                self._get_calculate_failed_error("percision_recall", "model a", exc=exc))
 
-        y_score_b = self.model_b.predict_proba(X_test)
-        roc_auc_model_b = _get_roc_auc(y_test, y_score_b)
+        try:
+            y_prob_b = self.model_b.predict_proba(X_test)
+            p = plot.precision_recall(y_true, y_prob_b, ax=_gen_ax())
+            percision_recall_section.append_guideline(p)
 
-        print("roc_auc_model_a : ", roc_auc_model_a)
-        print("roc_auc_model_b : ", roc_auc_model_b)
+        except Exception as exc:
+            percision_recall_section.append_guideline(
+                self._get_calculate_failed_error("percision_recall", "model b", exc=exc))
 
-        # auc_state["include_in_report"] = False
-        self.evaluation_state["guidelines"].append(
-            f"Model a AUC (ROC) is {roc_auc_model_a}")
-        self.evaluation_state["guidelines"].append(
-            f"Model b AUC (ROC) is {roc_auc_model_b}")
+        self._add_section_to_report(percision_recall_section)
+
+    def auc(self, X_test, y_true):
+        """
+        Compares models roc auc  
+        """
+        auc_section = ReportSection("auc")
+
+        try:
+            y_score_a = self.model_a.predict_proba(X_test)
+            roc_auc_model_a = get_roc_auc(y_true, y_score_a)
+
+            if len(roc_auc_model_a) > 1:
+                auc_section.append_guideline(
+                    f"Model a AUC (ROC) are {roc_auc_model_a}")
+            else:
+                auc_section.append_guideline(
+                    f"Model a AUC (ROC) is {roc_auc_model_a[0]}")
+        except Exception as exc:
+            auc_section.append_guideline(
+                self._get_calculate_failed_error("auc", "model a", exc=exc))
+
+        try:
+            y_score_b = self.model_b.predict_proba(X_test)
+            roc_auc_model_b = get_roc_auc(y_true, y_score_b)
+
+            if len(roc_auc_model_b) > 1:
+                auc_section.append_guideline(
+                    f"Model b AUC (ROC) are {roc_auc_model_b}")
+            else:
+                auc_section.append_guideline(
+                    f"Model b AUC (ROC) is {roc_auc_model_b[0]}")
+        except Exception as exc:
+            auc_section.append_guideline(
+                self._get_calculate_failed_error("auc", "model b", exc=exc))
+
+        self._add_section_to_report(auc_section)
 
     def computation(self, X_test):
-        model_a_compute_time = _get_model_computation_time(self.model_a, X_test)
-        model_b_compute_time = _get_model_computation_time(self.model_b, X_test)
+        """
+        Compares models compute time
+        """
+        computation_section = ReportSection("computation")
 
-        self.evaluation_state["guidelines"].append(
-            f"Model a compute time is {model_a_compute_time}")
-        self.evaluation_state["guidelines"].append(
-            f"Model b compute time is {model_b_compute_time}")
+        model_a_compute_time = get_model_computation_time(self.model_a, X_test)
+        model_b_compute_time = get_model_computation_time(self.model_b, X_test)
 
-    def calibration(self, X_test, y_test):
-        y_prob_a = self.model_a.predict_proba(X_test)
-        p = plot.calibration_curve([y_test], [y_prob_a], ax=_gen_ax())
-        self.evaluation_state["guidelines"].append(p)
+        compute_time_diff_threshold = 1  # 1 second
+        is_significant_time_diff = abs(
+            model_a_compute_time - model_b_compute_time) >= compute_time_diff_threshold
+        if is_significant_time_diff:
+            if model_a_compute_time > model_b_compute_time:
+                computation_section.append_guideline(
+                    f"Model A is a lot more computational expensive")
+            else:
+                computation_section.append_guideline(
+                    f"Model B is a lot more computational expensive")
+
+        computation_section.append_guideline(
+            f"Model a compute time is {model_a_compute_time} (ms)")
+        computation_section.append_guideline(
+            f"Model b compute time is {model_b_compute_time} (ms)")
+
+        self._add_section_to_report(computation_section)
+
+    def calibration(self, X_test, y_true):
+        """
+        Compares models calibration
+        """
+        calibration_section = ReportSection("calibration")
+
+        try:
+            y_prob_a = self.model_a.predict_proba(X_test)
+            p = plot.calibration_curve([y_true], [y_prob_a], ax=_gen_ax())
+            calibration_section.append_guideline(p)
+        except Exception as exc:
+            calibration_section.append_guideline(
+                self._get_calculate_failed_error("calibration", "model a", exc=exc))
+
+        try:
+            y_prob_b = self.model_a.predict_proba(X_test)
+            p = plot.calibration_curve([y_true], [y_prob_b], ax=_gen_ax())
+            calibration_section.append_guideline(p)
+        except Exception as exc:
+            calibration_section.append_guideline(
+                self._get_calculate_failed_error("calibration", "model b", exc=exc))
+
+        self._add_section_to_report(calibration_section)
+
+    def add_combined_cm(self, X_test, y_true):
+        combined_confusion_matrix_section = ReportSection("combined_confusion_matrix")
+
+        y_score_a = self.model_a.predict(X_test)
+        y_score_b = self.model_b.predict(X_test)
+
+        model_a_cm = plot.ConfusionMatrix.from_raw_data(y_true, y_score_a)
+        model_b_cm = plot.ConfusionMatrix.from_raw_data(y_true, y_score_b)
+
+        combined = model_a_cm + model_b_cm
+        combined_confusion_matrix_section.append_guideline(combined.plot())
+        self._add_section_to_report(combined_confusion_matrix_section)
 
 
 def evaluate_model(
     y_true,
     y_pred,
     model,
-    y_score=None,
-    X_train=None,
-    y_train=None,
-    X_test=None,
-    y_test=None,
+    y_score=None
 ):
-
-    # validate if inputs are ok
     _check_model(model)
-    # TODO: if optional args given test them.
-    # skip for now
     _check_inputs(y_true, y_pred)
-
-    # start model evaluation
-    evaluation_state = dict()
+    me = ModelEvaluator(model)
 
     # check imbalance
-    ModelEvaluator.evaluate_balance(y_true, evaluation_state)
+    me.evaluate_balance(y_true)
 
     # accuracy score
-    ModelEvaluator.evaluate_accuracy(y_true, y_pred, evaluation_state)
-
-    # confusion matrix
-    # ModelEvaluator.evaluate_confusion_matrix(y_true, y_pred, evaluation_state)
+    me.evaluate_accuracy(y_true, y_pred)
 
     # auc
-    ModelEvaluator.evaluate_auc(y_true, y_score, evaluation_state)
+    me.evaluate_auc(y_true, y_score)
 
     # add general stats
-    ModelEvaluator.generate_general_stats(y_true, y_pred, y_score, evaluation_state)
+    me.generate_general_stats(y_true, y_pred, y_score)
 
-    e = EvaluatorHTMLSerializer(None)
-    template = _create_report_template(evaluation_state)
-    report = Report(e, template)
+    report = me.create_report("Model evaluation")
     return report
 
 
-def compare_models(model_a, model_b, X_train, X_test, y_test):
+def compare_models(model_a, model_b, X_train, X_test, y_true):
     _check_model(model_a)
     _check_model(model_b)
 
-    models_comparer = ModelsComparer(model_a, model_b)
+    mc = ModelComparer(model_a, model_b)
 
-    # mc.precision_and_recall(X_test, y_true)
-    models_comparer.auc(X_test, y_test)
-    models_comparer.computation(X_test)
-    models_comparer.calibration(X_test, y_test)
+    mc.precision_and_recall(X_test, y_true)
 
-    e = EvaluatorHTMLSerializer(None)
-    template = _create_compare_models_report_template(models_comparer.evaluation_state)
-    report = Report(e, template)
+    mc.auc(X_test, y_true)
+
+    mc.computation(X_test)
+
+    mc.calibration(X_test, y_true)
+
+    mc.add_combined_cm(X_test, y_true)
+
+    report = mc.create_report("Compare models")
     return report
-
-# validations
 
 
 def _check_model(model) -> None:
@@ -472,6 +370,8 @@ def _check_model(model) -> None:
     ~~~~~~
     ModelNotSupported or ValueError?
     """
+    # TODO: Implement
+    pass
 
 
 def _check_inputs(y_true, y_pred) -> None:
@@ -482,3 +382,6 @@ def _check_inputs(y_true, y_pred) -> None:
     ~~~~~~
     ModelNotSupported or ValueError?
     """
+    # TODO: Implement
+    # TODO: If optional args given test them
+    pass
