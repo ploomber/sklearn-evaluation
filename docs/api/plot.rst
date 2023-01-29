@@ -28,6 +28,11 @@ ClassificationReport
 --------------------
 .. autoclass:: sklearn_evaluation.plot.ClassificationReport
 
+CalibrationCurve
+----------------
+.. autoclass:: sklearn_evaluation.plot.CalibrationCurve
+    :members:
+
 Rank1D
 ------
 .. autoclass:: sklearn_evaluation.plot.Rank1D

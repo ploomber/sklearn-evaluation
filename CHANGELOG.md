@@ -1,7 +1,11 @@
 # CHANGELOG
 
 ## 0.11.1dev
+
 - [Feature] Improves composed ROC plots so that different curves are more easily identifiable
+- [Feature] Adds `plot.CalibrationCurve` object-oriented API
+- [Doc] User Guide on Probability Calibration
+
 ## 0.11.0 (2023-01-31)
 
 - [API Change] `ax` parameter removed from ROC constructor ([#255](https://github.com/ploomber/sklearn-evaluation/issues/255))

@@ -35,3 +35,15 @@ class TestMissingInput(TestCase):
     def test_precision_at_proportions(self):
         with self.assertRaisesRegex(ValueError, "needed to plot"):
             plot.precision_at_proportions(None, [1, 0])
+
+    def test_calibration_curve(self):
+        with self.assertRaisesRegex(ValueError, "needed to plot"):
+            plot.calibration_curve(None, None)
+
+    def test_calibration_curve_from_raw_data(self):
+        with self.assertRaisesRegex(ValueError, "needed to plot"):
+            plot.CalibrationCurve.from_raw_data(None, None)
+
+    def test_calibration_curve_constructor(self):
+        with self.assertRaisesRegex(ValueError, "needed to plot"):
+            plot.CalibrationCurve(None, None).plot()
