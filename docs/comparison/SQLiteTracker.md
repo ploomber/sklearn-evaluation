@@ -178,6 +178,9 @@ SELECT uuid,
        json_extract(parameters, '$.confusion_matrix') AS cm,
        json_extract(parameters, '$.roc') AS roc
 FROM experiments
+WHERE accuracy IS NOT NULL
+AND cm IS NOT NULL
+AND roc IS NOT NULL
 ORDER BY created DESC
 LIMIT 2
 """, as_frame=False, render_plots=True)
@@ -205,7 +208,7 @@ With a side-by-side comparison, it might be hard to spot the model performance d
 
 ```{code-cell} ipython3
 # get the uuids for the latest 2 experiments
-uuid1, uuid2 = tracker.recent(2).index
+uuid1, uuid2 = results.get("uuid")
 
 # get the experiments
 one = tracker.get(uuid1)
