@@ -9,7 +9,7 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.classification import _add_values_to_matrix
 from sklearn_evaluation.util import default_heatmap
-from sklearn_evaluation.plot.plot import Plot
+from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from sklearn_evaluation.plot import _matrix
 from sklearn_evaluation import __version__
 from ploomber_core.exceptions import modify_exceptions
@@ -28,22 +28,50 @@ def _classification_report_add(first, second, keys, target_names, ax):
     ax.set(title="Classification report (compare)", xlabel="Metric", ylabel="Class")
 
 
-class ClassificationReportSub(Plot):
+class ClassificationReportSub(AbstractComposedPlot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
-        self.figure = plt.figure()
-        ax = self.figure.add_subplot()
-        _classification_report_plot(matrix - matrix_another, keys, target_names, ax)
+        self.matrix = matrix
+        self.matrix_another = matrix_another
+        self.keys = keys
+        self.target_names = target_names
+
+    def plot(self, ax=None):
+        if ax is None:
+            _, ax = plt.subplots()
+
+        _classification_report_plot(
+            self.matrix - self.matrix_another, self.keys, self.target_names, ax
+        )
         ax.set(title="Classification report (difference)")
 
+        self.ax_ = ax
+        self.figure_ = ax.figure
 
-class ClassificationReportAdd(Plot):
+        return self
+
+
+class ClassificationReportAdd(AbstractComposedPlot):
     def __init__(self, matrix, matrix_another, keys, target_names) -> None:
-        self.figure = plt.figure()
-        self.ax = self.figure.add_subplot()
-        _classification_report_add(matrix, matrix_another, keys, target_names, self.ax)
+        self.matrix = matrix
+        self.matrix_another = matrix_another
+        self.keys = keys
+        self.target_names = target_names
+
+    def plot(self, ax=None):
+        if ax is None:
+            _, ax = plt.subplots()
+
+        _classification_report_add(
+            self.matrix, self.matrix_another, self.keys, self.target_names, ax
+        )
+
+        self.ax_ = ax
+        self.figure_ = ax.figure
+
+        return self
 
 
-class ClassificationReport(Plot):
+class ClassificationReport(AbstractPlot):
     """
     .. seealso:: :func:`classification_report`
 
@@ -72,9 +100,6 @@ class ClassificationReport(Plot):
                 stacklevel=2,
             )
 
-        self.figure = plt.figure()
-        ax = self.figure.add_subplot()
-
         if matrix is not None and matrix is not False:
             self.matrix = matrix
             self.keys = keys
@@ -88,19 +113,28 @@ class ClassificationReport(Plot):
                 zero_division=zero_division,
             )
 
+    def plot(self, ax=None):
+        if ax is None:
+            _, ax = plt.subplots()
+
         _classification_report_plot(self.matrix, self.keys, self.target_names, ax)
+
+        self.ax_ = ax
+        self.figure_ = ax.figure
+
+        return self
 
     @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-sub")
     def __sub__(self, other):
         return ClassificationReportSub(
             self.matrix, other.matrix, self.keys, target_names=self.target_names
-        )
+        ).plot()
 
     @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-add")
     def __add__(self, other):
         return ClassificationReportAdd(
             self.matrix, other.matrix, keys=self.keys, target_names=self.target_names
-        )
+        ).plot()
 
     def _get_data(self):
         return {
