@@ -1,4 +1,3 @@
-from warnings import warn
 from pathlib import Path
 import json
 
@@ -83,35 +82,14 @@ class ClassificationReport(AbstractPlot):
     @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-init")
     def __init__(
         self,
-        y_true,
-        y_pred,
+        matrix,
+        keys,
         *,
         target_names=None,
-        sample_weight=None,
-        zero_division=0,
-        matrix=None,
-        keys=None
     ):
-        if y_true is not None and matrix is None:
-            warn(
-                "ClassificationReport will change its signature in version 0.10"
-                ", please use ClassificationReport.from_raw_data",
-                FutureWarning,
-                stacklevel=2,
-            )
-
-        if matrix is not None and matrix is not False:
-            self.matrix = matrix
-            self.keys = keys
-            self.target_names = target_names
-        else:
-            self.matrix, self.keys, self.target_names = _classification_report(
-                y_true,
-                y_pred,
-                target_names=target_names,
-                sample_weight=sample_weight,
-                zero_division=zero_division,
-            )
+        self.matrix = matrix
+        self.keys = keys
+        self.target_names = target_names
 
     def plot(self, ax=None):
         if ax is None:
@@ -152,8 +130,6 @@ class ClassificationReport(AbstractPlot):
             matrix=np.array(data["matrix"]),
             keys=data["keys"],
             target_names=data["target_names"],
-            y_true=None,
-            y_pred=None,
         )
 
     @classmethod
@@ -161,25 +137,25 @@ class ClassificationReport(AbstractPlot):
     def from_raw_data(
         cls, y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0
     ):
-        # pass matrix=False so we don't emit the future warning
-        return cls(
+        matrix, keys, target_names = _classification_report(
             y_true,
             y_pred,
             target_names=target_names,
             sample_weight=sample_weight,
             zero_division=zero_division,
-            matrix=False,
-            keys=False,
+        )
+        return cls(
+            matrix=matrix,
+            keys=keys,
+            target_names=target_names,
         )
 
     @classmethod
     def _from_data(cls, target_names, matrix, keys):
         return cls(
-            y_true=None,
-            y_pred=None,
-            target_names=target_names,
             matrix=np.array(matrix),
             keys=keys,
+            target_names=target_names,
         )
 
 

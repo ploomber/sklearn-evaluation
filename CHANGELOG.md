@@ -6,6 +6,7 @@
 - [Feature] Adds `plot.pca`
 - [Doc] User guide on PCA
 - [API Change] `ax` parameter removed from ROC constructor (#255)
+- [API Change] Applies deprecation to `plot.ClassificationReport` (should've been applied in `0.10.0`)
 
 ## 0.10.0 (2023-01-29)
 
