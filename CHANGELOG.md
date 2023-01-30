@@ -5,6 +5,7 @@
 - [Feature] Adds `plot.PrecisionRecall` object-oriented API [#189]
 - [Feature] Adds `plot.pca`
 - [Doc] User guide on PCA
+- [Fix] 'ax' parameter removed from ROC ([#255](https://github.com/ploomber/sklearn-evaluation/issues/255))
 
 ## 0.10.0 (2023-01-29)
 
