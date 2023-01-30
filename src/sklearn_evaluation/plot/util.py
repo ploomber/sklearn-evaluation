@@ -51,7 +51,7 @@ def no_display_plots():
     >>> from sklearn_evaluation.plot.util import no_display_plots
     >>> import matplotlib.pyplot as plt
     >>> with no_display_plots():
-    >>>     plt.plot([1, 2, 3])
+    ...     ax = plt.plot([1, 2, 3])
 
     """
     if plt.isinteractive():
