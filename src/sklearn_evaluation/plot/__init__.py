@@ -10,7 +10,7 @@ from sklearn_evaluation.plot.classification import (
 )
 
 from sklearn_evaluation.plot.roc import roc, ROC
-from sklearn_evaluation.plot.precision_recall import precision_recall
+from sklearn_evaluation.plot.precision_recall import precision_recall, PrecisionRecall
 from sklearn_evaluation.plot.grid_search import grid_search
 from sklearn_evaluation.plot.validation_curve import validation_curve
 from sklearn_evaluation.plot.learning_curve import learning_curve
@@ -21,6 +21,7 @@ from sklearn_evaluation.plot.clustering import (
     silhouette_analysis,
     silhouette_analysis_from_results,
 )
+
 from sklearn_evaluation.plot.regression import (
     residuals,
     prediction_error,
@@ -43,6 +44,7 @@ from sklearn_evaluation.plot.pca import pca
 __all__ = [
     "confusion_matrix",
     "feature_importances",
+    "PrecisionRecall",
     "precision_recall",
     "roc",
     "ROC",

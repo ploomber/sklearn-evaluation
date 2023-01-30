@@ -4,6 +4,7 @@ import os
 from pathlib import Path
 
 import pytest
+import numpy as np
 
 # These are fixtures to get the same configuration that matplotlib uses
 # to run tests with pytest. Note that importing other fixtures from that
@@ -186,3 +187,50 @@ def ploomber_value_error_message():
     )
 
     return COMMUNITY
+
+
+@pytest.fixture(scope="session")
+def precision_recall_binary_classification():
+    y_true = np.array([0, 0, 0, 1, 1, 1, 0])
+    y_score = np.array(
+        [
+            [0.58, 0.42],
+            [0.69, 0.38],
+            [0.62, 0.38],
+            [0.32, 0.68],
+            [0.17, 0.83],
+            [0.19, 0.81],
+            [0.85, 0.15],
+        ]
+    )
+    return y_true, y_score
+
+
+@pytest.fixture(scope="session")
+def precision_recall_multiclass_classification_set_one():
+    y_true = np.array([1, 1, 2, 0, 0])
+    y_score = np.array(
+        [
+            [0.18, 0.43, 0.39],
+            [0.37, 0.48, 0.15],
+            [0.19, 0.17, 0.64],
+            [0.29, 0.11, 0.6],
+            [0.19, 0.12, 0.69],
+        ]
+    )
+    return y_true, y_score
+
+
+@pytest.fixture(scope="session")
+def precision_recall_multiclass_classification_set_two():
+    y_true = np.array([1, 1, 2, 0, 0])
+    y_score = np.array(
+        [
+            [0.0, 1.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 0.0, 1.0],
+        ]
+    )
+    return y_true, y_score

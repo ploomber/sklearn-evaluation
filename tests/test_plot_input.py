@@ -20,6 +20,14 @@ class TestMissingInput(TestCase):
         with self.assertRaisesRegex(ValueError, "needed to plot"):
             plot.precision_recall(None, None)
 
+    def test_precision_recall_from_raw_data(self):
+        with self.assertRaisesRegex(ValueError, "needed to plot"):
+            plot.PrecisionRecall.from_raw_data(None, None)
+
+    def test_precision_recall_constructor(self):
+        with self.assertRaisesRegex(ValueError, "needed to plot"):
+            plot.PrecisionRecall(None, None, None).plot()
+
     def test_feature_importances(self):
         with self.assertRaisesRegex(ValueError, "needed to plot"):
             plot.feature_importances(None)
