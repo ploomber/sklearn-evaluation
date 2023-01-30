@@ -1,12 +1,12 @@
 # CHANGELOG
 
-## 0.10.1dev
+## 0.11.0dev
 
 - [Feature] Adds `plot.PrecisionRecall` object-oriented API [#189]
 - [Feature] Adds `plot.pca`
 - [Doc] User guide on PCA
 - [API Change] `ax` parameter removed from ROC constructor (#255)
-- [API Change] Applies deprecation to `plot.ClassificationReport` (should've been applied in `0.10.0`)
+- [API Change] Applies deprecation to `plot.ClassificationReport`
 
 ## 0.10.0 (2023-01-29)
 
