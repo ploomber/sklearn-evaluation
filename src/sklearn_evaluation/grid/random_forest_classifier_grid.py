@@ -1,6 +1,7 @@
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn_evaluation import plot
+from sklearn_evaluation.plot.roc import is_array_like_scores
 from sklearn_evaluation.grid.classifier_grid import AbstractClassifierGrid, GridTypes
 from sklearn.utils.validation import check_consistent_length
 import warnings
@@ -167,6 +168,13 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         """
         X_test, y_test = self._prepare_test_data_for_plotting()
         y_pred = self.grid_search_cv_.best_estimator_.predict(X_test)
+
+        y_pred = self.grid_search_cv_.predict_proba(X_test)
+
+        if self._is_test_data_given():
+            if not is_array_like_scores(y_pred):
+                y_pred = self.grid_search_cv_.predict_proba(X_test)
+
         return plot.roc(y_test, y_pred)
 
     @SKLearnEvaluationLogger.log("RandomForestClassifierGrid-feature-importances")
@@ -229,15 +237,18 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         y_test : array-like of shape (n_samples,)
             The target variable for supervised learning problems.
         """
-        if not hasattr(self, "X_test") or not hasattr(self, "y_test"):
+        if self._is_test_data_given():
+            X_test = self.X_test
+            y_test = self.y_test
+        else:
             self._show_no_test_data_provided_warning()
             X_test = self.X
             y_test = self.y
-        else:
-            X_test = self.X_test
-            y_test = self.y_test
 
         return X_test, y_test
+
+    def _is_test_data_given(self):
+        return hasattr(self, "X_test") and hasattr(self, "y_test")
 
     def _validate_test_data(self, X_test, y_test) -> None:
         """

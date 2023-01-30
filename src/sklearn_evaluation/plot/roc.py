@@ -1,14 +1,145 @@
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
-from sklearn.preprocessing import label_binarize
+from sklearn.preprocessing import label_binarize, LabelBinarizer
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
-from sklearn_evaluation.util import is_column_vector, is_row_vector
+from sklearn_evaluation.util import (
+    is_column_vector,
+    is_row_vector,
+    check_elements_in_range,
+    is_binary,
+    convert_array_to_string,
+)
 from sklearn_evaluation import __version__
 import json
 from pathlib import Path
 from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from ploomber_core.exceptions import modify_exceptions
+
+
+def _check_data_inputs(y_true, y_score) -> None:
+    """
+    Checks if data inputs are valid and supported for generating ROC with sklearn
+
+    Parameters
+    ----------
+    y_true : array-like, shape = [n_samples]
+        Correct target values (ground truth).
+
+        e.g
+
+        "classes" format : [0, 1, 2, 0, 1, ...]
+        or ['virginica', 'versicolor', 'virginica', 'setosa', ...]
+
+        one-hot encoded classes : [[0, 0, 1],
+                                   [1, 0, 0]]
+
+    y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
+        classification or [n_samples, n_classes] for multiclass
+        Target scores (estimator predictions).
+
+        e.g
+
+        "scores" format : [[0.1, 0.1, 0.8],
+                           [0.7, 0.15, 0.15]]
+
+    Returns
+    -------
+    None
+
+    Raises
+    ------
+    ValueError
+        If any of the inputs is invalid
+
+    """
+    if any((val is None for val in (y_true, y_score))):
+        raise ValueError("y_true and y_score are needed to plot ROC")
+
+    y_score_array = np.array(y_score)
+    # allow cases such : [[0, 1], [1, 1]] or [1,0]
+    _is_y_score_valid = is_array_like_scores(y_score_array, min_allowed_length=2)
+
+    if not _is_y_score_valid:
+        y_score_array_string = convert_array_to_string(y_score_array)
+
+        raise ValueError(
+            "Please check y_score values. \n"
+            f"Expected scores array-like. got: {y_score_array_string} \n"
+            "You can generate scores with `model.predict_proba`"
+        )
+
+    y_true_array = np.array(y_true)
+
+    y_true_score_like = is_array_like_scores(y_true_array)
+    y_true_array_string = convert_array_to_string(y_true_array)
+
+    if y_true_score_like:
+        raise ValueError(
+            "Please check y_true values. \n"
+            "Expected classes or one-hot encoded array-like. "
+            f"got: {y_true_array_string}"
+        )
+
+
+def is_array_like_scores(array, min_allowed_length=None) -> bool:
+    """
+    Checks if array is in "scores" format
+
+    Parameters
+    ----------
+    array : array-like, shape = [n_samples] or [n_samples, 2] for binary
+        classification or [n_samples, n_classes] for multiclass
+        Target scores (estimator predictions).
+
+        e.g
+
+        "scores" format : [[0.1, 0.1, 0.8],
+                           [0.7, 0.15, 0.15]]
+
+    min_allowed_length : int defaul=None
+        define the minimum length of the array.
+        If None accept any length.
+
+    Returns
+    -------
+    is_scores_format bool
+
+    """
+    is_scores_format = False
+
+    is_numeric = np.issubdtype(array.dtype, np.number)
+
+    if is_numeric:
+        array_flatten = array.flatten()
+
+        # check if array consists of 0 and 1
+        _is_binary = is_binary(array)
+
+        if _is_binary:
+            _n_elements = _get_number_of_elements(array)
+            if min_allowed_length:
+                is_scores_format = _n_elements == min_allowed_length
+
+        else:
+            _are_elements_in_range = check_elements_in_range(array_flatten, -1, 1)
+            is_scores_format = _are_elements_in_range
+
+    return is_scores_format
+
+
+def _get_number_of_elements(array):
+    """
+    Get the number of elements in array
+    """
+    _is_1d_array = len(array.shape) == 1
+
+    if _is_1d_array:
+        _n_elements = len(array)
+    else:
+        _, _n_elements = array.shape
+
+    return _n_elements
 
 
 @modify_exceptions
@@ -20,9 +151,22 @@ def roc(y_true, y_score, ax=None):
     y_true : array-like, shape = [n_samples]
         Correct target values (ground truth).
 
+        e.g
+
+        "classes" format : [0, 1, 2, 0, 1, ...]
+        or ['virginica', 'versicolor', 'virginica', 'setosa', ...]
+
+        one-hot encoded classes : [[0, 0, 1],
+                                   [1, 0, 0]]
+
     y_score : array-like, shape = [n_samples] or [n_samples, 2] for binary
         classification or [n_samples, n_classes] for multiclass
         Target scores (estimator predictions).
+
+        e.g
+
+        "scores" format : [[0.1, 0.1, 0.8],
+                           [0.7, 0.15, 0.15]]
 
     ax: matplotlib Axes, default: None
         Axes object to draw the plot onto, otherwise uses current Axes
@@ -278,8 +422,10 @@ class ROC(AbstractPlot):
     @classmethod
     @modify_exceptions
     def from_raw_data(cls, y_true, y_score, ax=None):
+        _check_data_inputs(y_true, y_score)
+
         fpr, tpr, label = cls._calculate_plotting_data(y_true, y_score)
-        return cls(fpr, tpr, label=label, ax=ax).plot()
+        return cls(fpr, tpr, label=label, ax=ax).plot(ax)
 
     @staticmethod
     @modify_exceptions
@@ -303,9 +449,6 @@ class ROC(AbstractPlot):
 
         label : list of str for curves label
         """
-        if any((val is None for val in (y_true, y_score))):
-            raise ValueError("y_true and y_score are needed to plot ROC")
-
         label = []
 
         # get the number of classes based on the shape of y_score
@@ -316,8 +459,12 @@ class ROC(AbstractPlot):
             _, n_classes = y_score.shape
 
         if n_classes > 2:
-            # convert y_true to binary format
-            y_true_bin = label_binarize(y_true, classes=np.unique(y_true))
+
+            _is_y_true_binary = is_binary(y_true)
+            if _is_y_true_binary:
+                y_true_bin = y_true
+            else:
+                y_true_bin = label_binarize(y_true, classes=np.unique(y_true))
 
             fpr = []
             tpr = []
@@ -331,7 +478,7 @@ class ROC(AbstractPlot):
             for i in range(n_classes):
                 fpr_, tpr_, _ = roc_curve(y_true_bin[:, i], y_score[:, i])
 
-                y_true_class_i = np.unique(y_true)[i]
+                y_true_class_i = i if _is_y_true_binary else np.unique(y_true)[i]
 
                 if not isinstance(y_true_class_i, str):
                     y_true_class_i = i
@@ -349,3 +496,42 @@ class ROC(AbstractPlot):
             tpr = [tpr]
 
         return fpr, tpr, label
+
+
+def _preprocess_array_for_roc(array):
+    """
+    Binarize the array to use as valid input for plotting a
+    single or a multi-class roc curve
+
+    Note : This method in not in use but can be used in other plots
+    where we don't require scores, but predictions (y_pred) i.e confusion_matrix,
+    so if the user passes data in any of the three formats, we can convert it.
+
+    Parameters
+    ----------
+    array : array-like, shape = [n_samples] or [n_samples, 2]
+        The input array for the roc function
+        array([0, 1, 2, 1, 0])
+        array([[0, 0, 1],
+               [1, 0, 0]])
+        array([[0.1, 0.1, 0.8],
+               [0.7, 0.15, 0.15]])
+    Returns
+    -------
+    binarized_array : ndarray of shape (n_classes,)
+        An input array that is valid for roc
+    """
+    is_array_binary = np.isin(array, [0, 1]).all()
+
+    binarized_array = array
+
+    if not is_array_binary:
+        should_binarize = array.dtype.type is np.str_ or np.any(
+            (array < 0) | (array > 1)
+        )
+
+        if should_binarize:
+            label_binarizer = LabelBinarizer().fit(array)
+            binarized_array = label_binarizer.transform(array)
+
+    return binarized_array

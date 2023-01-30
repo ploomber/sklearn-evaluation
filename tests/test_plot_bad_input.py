@@ -18,9 +18,15 @@ def test_plot_confusion_matrixe_bad_input_value_error(ploomber_value_error_messa
         plot.confusion_matrix(None, [1, 0])
 
 
-def test_plot_precision_recalle_bad_input_value_error(ploomber_value_error_message):
+def test_plot_precision_recall_bad_input_value_error(ploomber_value_error_message):
     with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.precision_recall(None, None)
+
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.PrecisionRecall.from_raw_data(None, None)
+
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.PrecisionRecall(None, None, None)
 
 
 def test_plot_precision_at_proportionse_bad_input_value_error(

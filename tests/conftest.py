@@ -3,9 +3,8 @@ import sys
 import os
 from pathlib import Path
 
-import numpy as np
-from sklearn.linear_model import LogisticRegression
 import pytest
+import numpy as np
 
 # These are fixtures to get the same configuration that matplotlib uses
 # to run tests with pytest. Note that importing other fixtures from that
@@ -167,40 +166,6 @@ def target_analysis_multiclass():
 
 
 @pytest.fixture
-def roc_multi_classification_raw_data(target_analysis_multiclass):
-    X_train, X_test, y_train, y_test = target_analysis_multiclass
-    classifier = LogisticRegression()
-    y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
-
-    return y_test, y_score
-
-
-@pytest.fixture
-def roc_multi_classification_raw_data_set2():
-    from sklearn.datasets import load_iris
-
-    iris = load_iris()
-    X, y = iris.data, iris.target
-    y = iris.target_names[y]
-
-    random_state = np.random.RandomState(0)
-    n_samples, n_features = X.shape
-
-    X = np.concatenate([X, random_state.randn(n_samples, 200 * n_features)], axis=1)
-    (
-        X_train,
-        X_test,
-        y_train,
-        y_test,
-    ) = train_test_split(X, y, test_size=0.5, stratify=y, random_state=0)
-
-    classifier = LogisticRegression()
-    y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
-
-    return y_test, y_score
-
-
-@pytest.fixture
 def regression_data():
     from sklearn.linear_model import LinearRegression
 
@@ -215,143 +180,6 @@ def regression_data():
 
 
 @pytest.fixture
-def roc_multi_classification_values():
-    roc_rates_n_classes = [
-        {
-            "fpr": [
-                0.0,
-                0.0,
-                0.11764705882352941,
-                0.11764705882352941,
-                0.23529411764705882,
-                0.23529411764705882,
-                1.0,
-            ],
-            "tpr": [
-                0.0,
-                0.3333333333333333,
-                0.3333333333333333,
-                0.6666666666666666,
-                0.6666666666666666,
-                1.0,
-                1.0,
-            ],
-        },
-        {
-            "fpr": [
-                0.0,
-                0.0,
-                0.058823529411764705,
-                0.058823529411764705,
-                0.17647058823529413,
-                0.17647058823529413,
-                1.0,
-            ],
-            "tpr": [
-                0.0,
-                0.3333333333333333,
-                0.3333333333333333,
-                0.6666666666666666,
-                0.6666666666666666,
-                1.0,
-                1.0,
-            ],
-        },
-        {
-            "fpr": [
-                0.0,
-                0.0,
-                0.0,
-                0.26666666666666666,
-                0.26666666666666666,
-                0.7333333333333333,
-                0.7333333333333333,
-                1.0,
-            ],
-            "tpr": [0.0, 0.2, 0.6, 0.6, 0.8, 0.8, 1.0, 1.0],
-        },
-        {
-            "fpr": [0.0, 0.0, 0.0, 0.13333333333333333, 0.13333333333333333, 1.0],
-            "tpr": [0.0, 0.2, 0.4, 0.4, 1.0, 1.0],
-        },
-        {"fpr": [0.0, 0.0, 0.0, 1.0], "tpr": [0.0, 0.25, 1.0, 1.0]},
-    ]
-
-    avg_fpr = [
-        0.0,
-        0.0,
-        0.0,
-        0.0125,
-        0.0125,
-        0.0375,
-        0.0375,
-        0.0625,
-        0.0625,
-        0.075,
-        0.075,
-        0.0875,
-        0.0875,
-        0.125,
-        0.125,
-        0.15,
-        0.15,
-        0.2125,
-        0.2125,
-        0.35,
-        0.35,
-        0.6,
-        0.6,
-        1.0,
-    ]
-    avg_tpr = [
-        0.0,
-        0.05,
-        0.35,
-        0.35,
-        0.4,
-        0.4,
-        0.5,
-        0.5,
-        0.55,
-        0.55,
-        0.6,
-        0.6,
-        0.65,
-        0.65,
-        0.7,
-        0.7,
-        0.75,
-        0.75,
-        0.8,
-        0.8,
-        0.95,
-        0.95,
-        1.0,
-        1.0,
-    ]
-
-    fpr = [avg_fpr]
-    tpr = [avg_tpr]
-    labels = ["micro-average ROC curve"]
-
-    for i in range(len(roc_rates_n_classes)):
-        fpr_tpr = roc_rates_n_classes[i]
-        fpr.append(fpr_tpr["fpr"])
-        tpr.append(fpr_tpr["tpr"])
-        labels.append(f"(class {i}) ROC curve")
-
-    return fpr, tpr, labels
-
-
-@pytest.fixture
-def roc_values():
-    fpr = [0.0, 0.2, 0.4, 0.4, 0.6, 1.0]
-    tpr = [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]
-
-    return fpr, tpr
-
-
-@pytest.fixture
 def ploomber_value_error_message():
     COMMUNITY = (
         "\nIf you need help solving this "
@@ -359,3 +187,50 @@ def ploomber_value_error_message():
     )
 
     return COMMUNITY
+
+
+@pytest.fixture(scope="session")
+def precision_recall_binary_classification():
+    y_true = np.array([0, 0, 0, 1, 1, 1, 0])
+    y_score = np.array(
+        [
+            [0.58, 0.42],
+            [0.69, 0.38],
+            [0.62, 0.38],
+            [0.32, 0.68],
+            [0.17, 0.83],
+            [0.19, 0.81],
+            [0.85, 0.15],
+        ]
+    )
+    return y_true, y_score
+
+
+@pytest.fixture(scope="session")
+def precision_recall_multiclass_classification_set_one():
+    y_true = np.array([1, 1, 2, 0, 0])
+    y_score = np.array(
+        [
+            [0.18, 0.43, 0.39],
+            [0.37, 0.48, 0.15],
+            [0.19, 0.17, 0.64],
+            [0.29, 0.11, 0.6],
+            [0.19, 0.12, 0.69],
+        ]
+    )
+    return y_true, y_score
+
+
+@pytest.fixture(scope="session")
+def precision_recall_multiclass_classification_set_two():
+    y_true = np.array([1, 1, 2, 0, 0])
+    y_score = np.array(
+        [
+            [0.0, 1.0, 0.0],
+            [0.0, 1.0, 0.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 0.0, 1.0],
+            [0.0, 0.0, 1.0],
+        ]
+    )
+    return y_true, y_score

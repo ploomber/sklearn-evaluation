@@ -73,7 +73,7 @@ print(table.feature_importances(est))
 Now, let’s see how to generate two of the most common plots for evaluating classifiers: Precision-Recall and ROC.
 
 ```{code-cell} ipython3
-plot.precision_recall(y_true, y_score)
+plot.PrecisionRecall.from_raw_data(y_true, y_score)
 ```
 
 ```{code-cell} ipython3
