@@ -42,6 +42,7 @@ def tests(session):
         "examples/",
         "--cov=sklearn_evaluation",
         "--doctest-modules",
+        "--durations-min=5",
     )
     session.run("coveralls")
 
