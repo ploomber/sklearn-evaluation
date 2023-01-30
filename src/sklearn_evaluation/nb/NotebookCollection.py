@@ -26,7 +26,7 @@ class NotebookCollection(Mapping):
     """Compare output from a collection of notebooks
 
     To access output, notebooks must tag the cells (one tag per cell). For
-    instructions on tagging cells, `see this <https://papermill.readthedocs.io/en/latest/usage-parameterize.html>`_ # noqa
+    instructions on tagging cells, `see this <https://papermill.readthedocs.io/en/latest/usage-parameterize.html>`_
 
     :doc:`Click here <../comparison/NotebookCollection>` to see the user guide.
 
@@ -39,7 +39,7 @@ class NotebookCollection(Mapping):
         List of ids (one per notebook), if None, paths are used as identifiers,
         if 'filenames', the file name is extracted from each path and used
         as identifier (ignores extension)
-    """
+    """ # noqa
 
     @SKLearnEvaluationLogger.log(
         feature="NotebookCollection", action="init-NotebookCollection"
