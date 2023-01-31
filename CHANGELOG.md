@@ -1,12 +1,14 @@
 # CHANGELOG
 
-## 0.11.0dev
+## 0.11.1dev
 
+## 0.11.0 (2023-01-31)
+
+- [API Change] `ax` parameter removed from ROC constructor ([#255](https://github.com/ploomber/sklearn-evaluation/issues/255))
+- [API Change] Applies deprecation to `plot.ClassificationReport`
 - [Feature] Adds `plot.PrecisionRecall` object-oriented API [#189]
 - [Feature] Adds `plot.pca`
 - [Doc] User guide on PCA
-- [API Change] `ax` parameter removed from ROC constructor (#255)
-- [API Change] Applies deprecation to `plot.ClassificationReport`
 
 ## 0.10.0 (2023-01-29)
 
@@ -20,7 +22,6 @@
 - [Fix] Adds class labels for multi class roc plot ([#209](https://github.com/ploomber/sklearn-evaluation/issues/209))
 - [Fix] Fixed ROC curves plots to show properly.
 - [Fix] `setup.py` fix due to change in setuptools 67.0.0
-
 
 ## 0.9.0 (2023-01-13)
 
