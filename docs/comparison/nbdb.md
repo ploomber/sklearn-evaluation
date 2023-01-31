@@ -22,7 +22,7 @@ kernelspec:
 Requirements:
 
 ```sh
-pip install scikit-learn sklearn-evaluation ploomber ploomber-engine jupysql jupytext
+pip install scikit-learn sklearn-evaluation ploomber ploomber-engine jupysql
 ```
 
 ```{code-cell} ipython3
