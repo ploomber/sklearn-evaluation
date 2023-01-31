@@ -18,6 +18,8 @@
 - [Fix] Adds class labels for multi class roc plot ([#209](https://github.com/ploomber/sklearn-evaluation/issues/209))
 - [Fix] Fixed ROC curves plots to show properly.
 - [Fix] `setup.py` fix due to change in setuptools 67.0.0
+- [API Change] `ax` parameter removed from ROC constructor (#255)
+
 
 ## 0.9.0 (2023-01-13)
 
