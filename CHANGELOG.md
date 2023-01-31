@@ -1,7 +1,11 @@
 # CHANGELOG
 
-## 0.10.1dev
+## 0.11.1dev
 
+## 0.11.0 (2023-01-31)
+
+- [API Change] `ax` parameter removed from ROC constructor ([#255](https://github.com/ploomber/sklearn-evaluation/issues/255))
+- [API Change] Applies deprecation to `plot.ClassificationReport`
 - [Feature] Adds `plot.PrecisionRecall` object-oriented API [#189]
 - [Feature] Adds `plot.pca`
 - [Doc] User guide on PCA
