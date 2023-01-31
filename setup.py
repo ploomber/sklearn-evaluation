@@ -91,6 +91,7 @@ setup(
         "nbformat",
         # notebook compare
         "ipython",
+        # notebook collection uses this for formatting
         "black",
         # extracting injected parameters from notebooks
         "parso",
