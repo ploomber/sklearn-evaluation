@@ -65,7 +65,7 @@ jobs:
   release:
     runs-on: ubuntu-latest
     if: github.ref_name == 'master' && startsWith(github.event.head_commit.message, '[release]')
-    needs: [test, check]
+    needs: [unit, check]
     steps:
       - uses: actions/checkout@v2
       - name: Set up Python ${{ matrix.python-version }}
