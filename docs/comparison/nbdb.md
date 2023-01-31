@@ -22,7 +22,7 @@ kernelspec:
 Requirements:
 
 ```sh
-pip install scikit-learn sklearn-evaluation ploomber ploomber-engine jupysql nbformat jupytext
+pip install scikit-learn sklearn-evaluation ploomber ploomber-engine jupysql jupytext
 ```
 
 ```{code-cell} ipython3
@@ -32,7 +32,6 @@ import jupytext
 import nbformat
 
 from ploomber.products import File
-from ploomber_engine import execute_notebook
 from ploomber_engine.tracking import track_execution
 
 # to produce parameter grid
@@ -43,15 +42,11 @@ from sklearn_evaluation import NotebookDatabase
 ```
 ## Code
 
-NotebookDatabase indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using # %% tags=["some-tag"]). We convert these scripts to notebooks using jupytext and nbformat, but the same concept applies for notebooks (.ipynb)— see here to learn how to tag cells in .ipynb files.
+`NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`). We convert these scripts to notebooks for `Notebook Database` using `jupytext` and `nbformat` , but the same concept applies for user-created notebooks (`.ipynb`)— [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
 
 ```{code-cell} ipython3
 # data loading script
 data = """
-# %% tags=["parameters"]
-upstream = None
-product = None
-
 # %%
 from sklearn import datasets
 
@@ -110,9 +105,13 @@ nbformat.write(model_nb, 'model.ipynb')
 
 ## Executing notebooks
 
-Using [ploomber-engine](https://ploomber-engine.readthedocs.io/en/latest/quick-start.html), each experiment will create an output `.ipynb` file.
+Using the `execute_notebook` method from [ploomber-engine](https://ploomber-engine.readthedocs.io/en/latest/quick-start.html), each experiment will create an output `.ipynb` file.
 
 ```{code-cell} ipython3
+:tags: ["hide-output"]
+
+from ploomber_engine import execute_notebook
+
 experiments = {
     'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),
     'sklearn.linear_model.Lasso': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])),
