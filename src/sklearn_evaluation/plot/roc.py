@@ -196,7 +196,8 @@ def _set_ax_settings(ax):
     ax.set_xlabel("False Positive Rate")
     ax.set_ylabel("True Positive Rate")
     ax.set_title("ROC")
-    ax.legend(loc='best', fontsize = 8)
+    ax.legend(loc="best", fontsize=8)
+
 
 def _roc_curve_multi(y_true, y_score):
     """Compute micro-average ROC curve"""
@@ -292,7 +293,9 @@ class ROCAdd(AbstractComposedPlot):
         else:
             b_label = ["ROC curve 2"]
 
-        _generate_plot_from_fpr_tpr_lists(b.fpr, b.tpr, ax, label=b_label, linestyle='dotted')
+        _generate_plot_from_fpr_tpr_lists(
+            b.fpr, b.tpr, ax, label=b_label, linestyle="dotted"
+        )
 
         self.ax_ = ax
         self.figure_ = ax.figure
@@ -403,7 +406,7 @@ class ROC(AbstractPlot):
     def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
-        
+
         _generate_plot_from_fpr_tpr_lists(self.fpr, self.tpr, ax, label=self.label)
 
         self.ax = ax
@@ -425,7 +428,7 @@ class ROC(AbstractPlot):
         _check_data_inputs(y_true, y_score)
 
         fpr, tpr, label = cls._calculate_plotting_data(y_true, y_score)
-        
+
         return cls(fpr, tpr, label=label).plot(ax)
 
     @staticmethod
