@@ -16,6 +16,7 @@ from sklearn_evaluation.nb.NotebookCollection import (
     HTMLMapping,
 )
 from sklearn_evaluation import plot
+from sklearn_evaluation.plot.util import no_display_plots
 
 minor = sqlite3.sqlite_version.split(".")[1]
 
@@ -627,27 +628,28 @@ def is_plot(obj):
 
 
 def unserialize_plot(obj, return_instance=False):
-    if is_str(obj):
-        obj = json.loads(obj)
+    with no_display_plots():
+        if is_str(obj):
+            obj = json.loads(obj)
 
-    class_name = obj.pop("class", None)
-    obj.pop("version", None)
+        class_name = obj.pop("class", None)
+        obj.pop("version", None)
 
-    mod, _, attribute = class_name.rpartition(".")
-    class_ = getattr(importlib.import_module(mod), attribute)
-    instance = class_._from_data(**obj)
+        mod, _, attribute = class_name.rpartition(".")
+        class_ = getattr(importlib.import_module(mod), attribute)
+        instance = class_._from_data(**obj)
 
-    return instance if return_instance else _to_html(instance)
+        return instance if return_instance else _to_html(instance)
 
 
 def _to_html(instance):
-
     try:
         # keep backward compatibility with old base class (Plot)
         return instance._repr_html_()
     except AttributeError:
         # new base class (AbstractPlot)
         instance.plot()
+
         return instance.to_html()
 
 

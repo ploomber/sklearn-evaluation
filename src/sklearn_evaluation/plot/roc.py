@@ -336,7 +336,7 @@ class ROC(AbstractPlot):
 
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
     @modify_exceptions
-    def __init__(self, fpr, tpr, label=None, ax=None):
+    def __init__(self, fpr, tpr, label=None):
         if fpr is None or tpr is None:
             raise TypeError("fpr and tpr must be defined.")
 
@@ -372,7 +372,6 @@ class ROC(AbstractPlot):
         self.fpr = fpr
         self.tpr = tpr
         self.label = label
-        self.ax = ax
 
     def __sub__(self):
         raise NotImplementedError("Not applicable for ROC")
@@ -425,7 +424,7 @@ class ROC(AbstractPlot):
         _check_data_inputs(y_true, y_score)
 
         fpr, tpr, label = cls._calculate_plotting_data(y_true, y_score)
-        return cls(fpr, tpr, label=label, ax=ax).plot(ax)
+        return cls(fpr, tpr, label=label).plot(ax)
 
     @staticmethod
     @modify_exceptions

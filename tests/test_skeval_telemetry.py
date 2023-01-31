@@ -1,7 +1,10 @@
 import pytest
+import numpy as np
 from unittest.mock import Mock, call
+
 from ploomber_core.telemetry import telemetry
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+from sklearn_evaluation.plot.pca import pca
 
 MOCK_API_KEY = "phc_P1dsjk20bijsabdaib2eu"
 
@@ -109,4 +112,19 @@ def test_logger_with_errors(mock_telemetry, action, feature, x, y, kwargs):
 
     mock_telemetry.assert_has_calls(
         [call("sklearn-evaluation-error", metadata=expected_metadata)]
+    )
+
+
+def test_pca(mock_telemetry):
+
+    pca(np.array([[1, 3, 2], [3, 0, 6]]))
+    function_arguments = dict(
+        {"y": None, "target_names": None, "n_components": 2, "colors": None, "ax": None}
+    )
+    expected_metadata = dict(
+        {"action": "pca", "feature": "plot", "args": function_arguments}
+    )
+
+    mock_telemetry.assert_has_calls(
+        [call("sklearn-evaluation", metadata=expected_metadata)]
     )

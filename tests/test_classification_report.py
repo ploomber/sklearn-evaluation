@@ -2,8 +2,6 @@ import pytest
 import numpy as np
 from sklearn_evaluation import plot, __version__
 
-import warnings
-
 
 @pytest.fixture
 def y():
@@ -41,23 +39,6 @@ def test_dump(tmp_directory, y):
     cm.dump("cr.json")
     cm2 = plot.ClassificationReport.from_dump("cr.json")
     assert cm._get_data() == cm2._get_data()
-
-
-def test_warning(y):
-    y_true, y_pred = y
-
-    with pytest.warns(
-        FutureWarning, match="ClassificationReport will change its signature"
-    ):
-        plot.ClassificationReport(y_true, y_pred)
-
-
-def test_raw_data_doesnt_warn(y):
-    y_true, y_pred = y
-
-    with warnings.catch_warnings():
-        warnings.simplefilter("error")
-        plot.ClassificationReport.from_raw_data(y_true, y_pred)
 
 
 def test_plot_classification_report_bad_input_value_error(

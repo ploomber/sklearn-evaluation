@@ -38,6 +38,10 @@ parts:
     - file: optimization/grid_search
     - file: optimization/feature_ranking
 
+  - caption: Dimensionality Reduction
+    chapters:
+    - file: dimensionality_reduction/pca
+
   - caption: API Reference
     chapters:
     - file: api/plot

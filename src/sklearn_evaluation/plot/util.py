@@ -1,5 +1,6 @@
-from decorator import decorator
+from contextlib import contextmanager
 
+from decorator import decorator
 import matplotlib.pyplot as plt
 
 from sklearn_evaluation import util
@@ -39,3 +40,27 @@ def requires_properties(properties):
         return func(*args, **kwargs)
 
     return _requires_properties
+
+
+@contextmanager
+def no_display_plots():
+    """Turn off matplotlib interactive plotting
+
+    Examples
+    --------
+    >>> from sklearn_evaluation.plot.util import no_display_plots
+    >>> import matplotlib.pyplot as plt
+    >>> with no_display_plots():
+    ...     ax = plt.plot([1, 2, 3])
+
+    """
+    if plt.isinteractive():
+        plt.ioff()
+
+        try:
+            yield
+        finally:
+            plt.close("all")
+            plt.ion()
+    else:
+        yield
