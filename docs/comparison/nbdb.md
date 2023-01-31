@@ -29,7 +29,6 @@ pip install scikit-learn sklearn-evaluation ploomber ploomber-engine jupysql
 from pathlib import Path
 
 import jupytext
-import nbformat
 
 from ploomber.products import File
 from ploomber_engine.tracking import track_execution
@@ -42,7 +41,7 @@ from sklearn_evaluation import NotebookDatabase
 ```
 ## Code
 
-`NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`). We convert these scripts to notebooks for `Notebook Database` using `jupytext` and `nbformat` , but the same concept applies for user-created notebooks (`.ipynb`)— [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
+`NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`). We convert these scripts to notebooks for `Notebook Database` using `jupytext`, but the same concept applies for user-created notebooks (`.ipynb`)— [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
 
 ```{code-cell} ipython3
 # data loading script
@@ -99,8 +98,8 @@ mean_squared_error(y_test, y_pred)
 data_nb = jupytext.reads(data, fmt='py:percent')
 model_nb = jupytext.reads(model, fmt='py:percent')
 
-nbformat.write(data_nb, 'data.ipynb')
-nbformat.write(model_nb, 'model.ipynb')
+jupytext.write(data_nb, 'data.ipynb')
+jupytext.write(model_nb, 'model.ipynb')
 ```
 
 ## Executing notebooks
