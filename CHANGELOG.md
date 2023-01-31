@@ -5,7 +5,6 @@
 - [Feature] Adds `plot.PrecisionRecall` object-oriented API [#189]
 - [Feature] Adds `plot.pca`
 - [Doc] User guide on PCA
-- [API Change] `ax` parameter removed from ROC constructor (#255)
 
 ## 0.10.0 (2023-01-29)
 
