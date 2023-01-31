@@ -72,6 +72,5 @@ report = evaluate_model(y_test, y_pred, model=model, y_score=y_score)
 ## Display the report
 
 ```{code-cell} ipython3
-from IPython.display import HTML
-HTML(report._repr_html_())
+report
 ```

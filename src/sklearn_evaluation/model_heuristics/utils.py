@@ -54,7 +54,7 @@ def get_roc_auc(y_test, y_score) -> list:
     return roc_auc
 
 
-def get_model_computation_time(model, X_test) -> float:
+def get_model_prediction_time(model, X_test) -> float:
     """
     Returns model predict time in seconds
     """

@@ -6,7 +6,7 @@ from sklearn_evaluation.evaluator import _gen_ax
 from sklearn_evaluation import plot
 from sklearn_evaluation.model_heuristics.utils import (
     check_array_balance,
-    get_model_computation_time,
+    get_model_prediction_time,
     get_roc_auc,
     Range,
 )
@@ -200,11 +200,14 @@ class ModelComparer(ModelHeuristics):
         Calculates precision and recall for each of the models
         """
         percision_recall_section = ReportSection("percision_recall")
+        pr_a = None
+        pr_b = None
 
         try:
             y_prob_a = self.model_a.predict_proba(X_test)
-            p = plot.precision_recall(y_true, y_prob_a, ax=_gen_ax())
-            percision_recall_section.append_guideline(p)
+            pr_a = plot.PrecisionRecall.from_raw_data(y_true, y_prob_a)
+
+            percision_recall_section.append_guideline(pr_a.ax_)
 
         except Exception as exc:
             percision_recall_section.append_guideline(
@@ -213,13 +216,18 @@ class ModelComparer(ModelHeuristics):
 
         try:
             y_prob_b = self.model_b.predict_proba(X_test)
-            p = plot.precision_recall(y_true, y_prob_b, ax=_gen_ax())
-            percision_recall_section.append_guideline(p)
+            pr_b = plot.PrecisionRecall.from_raw_data(y_true, y_prob_b)
+            percision_recall_section.append_guideline(pr_b.ax_)
 
         except Exception as exc:
             percision_recall_section.append_guideline(
                 self._get_calculate_failed_error("percision_recall", "model B", exc=exc)
             )
+
+        if pr_a and pr_b:
+            pr_combined = pr_a + pr_b
+            percision_recall_section.append_guideline("Combined PR")
+            percision_recall_section.append_guideline(pr_combined.ax_)
 
         self._add_section_to_report(percision_recall_section)
 
@@ -263,12 +271,12 @@ class ModelComparer(ModelHeuristics):
 
     def computation(self, X_test):
         """
-        Compares models compute time
+        Compares models prediction compute time
         """
-        computation_section = ReportSection("computation")
+        computation_section = ReportSection("prediction_time")
 
-        model_a_compute_time = get_model_computation_time(self.model_a, X_test)
-        model_b_compute_time = get_model_computation_time(self.model_b, X_test)
+        model_a_compute_time = get_model_prediction_time(self.model_a, X_test)
+        model_b_compute_time = get_model_prediction_time(self.model_b, X_test)
 
         compute_time_diff_threshold = 1  # 1 second
         is_significant_time_diff = (
@@ -333,6 +341,26 @@ class ModelComparer(ModelHeuristics):
         combined_confusion_matrix_section.append_guideline(combined.plot())
         self._add_section_to_report(combined_confusion_matrix_section)
 
+    def add_combined_pr(self, X_test, y_true):
+        combined_pr_section = ReportSection("combined_pr")
+
+        try:
+            y_prob_a = self.model_a.predict_proba(X_test)
+            pr_a = plot.PrecisionRecall.from_raw_data(y_true, y_prob_a)
+
+            y_prob_b = self.model_b.predict_proba(X_test)
+            pr_b = plot.PrecisionRecall.from_raw_data(y_true, y_prob_b)
+            pr_combined = pr_a + pr_b
+            combined_pr_section.append_guideline(pr_combined.ax_)
+
+            self._add_section_to_report(combined_pr_section)
+
+        except Exception as exc:
+            combined_pr_section.append_guideline(
+                self._get_calculate_failed_error(
+                    "percision_recall", "model A or model B", exc=exc)
+            )
+
 
 def evaluate_model(y_true, y_pred, model, y_score=None):
     _check_model(model)
@@ -370,6 +398,8 @@ def compare_models(model_a, model_b, X_train, X_test, y_true):
     mc.calibration(X_test, y_true)
 
     mc.add_combined_cm(X_test, y_true)
+
+    # mc.add_combined_pr(X_test, y_true)
 
     report = mc.create_report("Compare models")
     return report

@@ -93,6 +93,5 @@ report = compare_models(model_a, model_b, X_train, X_test, y_test)
 You can embed your report or save it locally using `report.save("report.html")`
 
 ```{code-cell} ipython3
-from IPython.display import HTML
-HTML(report._repr_html_())
+report
 ```
