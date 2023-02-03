@@ -83,9 +83,15 @@ def calibration_curve(
 
     Examples
     --------
+
+    Plot a Calibration Curve:
+
     .. plot:: ../examples/calibration_curve.py
 
+    Plot a Calibration Curve with different sample sizes:
+
     .. plot:: ../examples/calibration_curve_diff_sample_size.py
+
     """
     if not isinstance(probabilities, list):
         raise ValueError("`probabilities` does not contain a list.")
@@ -185,7 +191,11 @@ def scores_distribution(y_scores, n_bins=5, ax=None):
 
     Examples
     --------
+
+    Plot a Predictions Distribution Histogram for binary classification:
+
     .. plot:: ../examples/scores_distribution.py
+
     """
     if ax is None:
         _, ax = plt.subplots()

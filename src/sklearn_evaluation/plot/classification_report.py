@@ -76,7 +76,11 @@ class ClassificationReport(AbstractPlot):
 
     Examples
     --------
+
+    Plot a Classification Report:
+
     .. plot:: ../examples/ClassificationReport.py
+
     """
 
     @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-init")
@@ -241,7 +245,12 @@ def classification_report(
 
     Examples
     --------
+
+    Plot a Classification Report for binary classification:
+
     .. plot:: ../examples/classification_report.py
+
+    Plot a Classification Report for multi-class classification:
 
     .. plot:: ../examples/classification_report_multiclass.py
 

@@ -8,6 +8,7 @@ import numpy as np
 
 from sklearn_evaluation import plot
 
+# load data
 digits = load_digits()
 X, y = digits.data, digits.target
 
@@ -32,5 +33,6 @@ train_sizes, train_scores, test_scores = learning_curve(
     estimator, X, y, cv=cv, n_jobs=1, train_sizes=train_sizes
 )
 
+# plot learning curve
 plot.learning_curve(train_scores, test_scores, train_sizes)
 plt.show()

@@ -7,6 +7,7 @@ from sklearn.model_selection import validation_curve
 
 from sklearn_evaluation import plot
 
+# load data
 digits = load_digits()
 X, y = digits.data, digits.target
 
@@ -23,6 +24,7 @@ train_scores, test_scores = validation_curve(
     n_jobs=1,
 )
 
+# plot validation curve for "gamma" hyperparameter
 plot.validation_curve(train_scores, test_scores, param_range, param_name, semilogx=True)
 plt.show()
 
@@ -39,6 +41,7 @@ train_scores, test_scores = validation_curve(
     n_jobs=1,
 )
 
+# plot validation curve for "n_estimators" hyperparameter
 plot.validation_curve(
     train_scores, test_scores, param_range, param_name, semilogx=False
 )

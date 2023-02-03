@@ -78,6 +78,9 @@ class ConfusionMatrix(AbstractPlot):
 
     Examples
     --------
+
+    Plot and Compare Confusion Matrix for multiple classifiers:
+
     .. plot:: ../examples/confusion_matrix_oop.py
 
     Notes
@@ -206,6 +209,9 @@ def confusion_matrix(
 
     Examples
     --------
+
+    Plot a Confusion Matrix for binary classifier:
+
     .. plot:: ../examples/confusion_matrix.py
 
     """
@@ -335,6 +341,9 @@ def feature_importances(
 
     Examples
     --------
+
+    Plot Feature Importances:
+
     .. plot:: ../examples/feature_importances.py
 
     """

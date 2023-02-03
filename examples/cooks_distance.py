@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from sklearn.datasets import make_regression
 from sklearn_evaluation import plot
 
+# generate data
 X, y = make_regression(
     n_samples=100,
     n_features=14,
@@ -12,5 +13,6 @@ X, y = make_regression(
     random_state=637,
 )
 
+# plot cooks distance
 plot.cooks_distance(X, y)
 plt.show()

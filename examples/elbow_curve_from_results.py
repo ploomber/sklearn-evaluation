@@ -6,6 +6,7 @@ from sklearn.datasets import make_blobs
 
 from sklearn_evaluation import plot
 
+# generate data
 X, _ = make_blobs(n_samples=100, centers=3, n_features=5, random_state=0)
 
 n_clusters = range(1, 30)
@@ -18,4 +19,6 @@ for i in n_clusters:
     cluster_times.append(time.time() - start)
 
 sum_of_squares = np.absolute(sum_of_squares)
+
+# plot the elbow curve from the results
 plot.elbow_curve_from_results(n_clusters, sum_of_squares, cluster_times)

@@ -17,9 +17,11 @@ def make_dataset(n_samples):
     return train_test_split(X, y, test_size=0.33, random_state=0)
 
 
+# sample size 1k
 X_train, X_test, y_train, y_test1 = make_dataset(n_samples=1000)
 probs1 = LogisticRegression().fit(X_train, y_train).predict_proba(X_test)
 
+# sample size 10k
 X_train, X_test, y_train, y_test2 = make_dataset(n_samples=10000)
 probs2 = LogisticRegression().fit(X_train, y_train).predict_proba(X_test)
 
