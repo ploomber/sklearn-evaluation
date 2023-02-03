@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.11.1dev
-
+- [Feature] Improves composed ROC plots so that different curves are more easily identifiable
 ## 0.11.0 (2023-01-31)
 
 - [API Change] `ax` parameter removed from ROC constructor ([#255](https://github.com/ploomber/sklearn-evaluation/issues/255))

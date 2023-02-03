@@ -194,7 +194,7 @@ def roc(y_true, y_score, ax=None):
 
 
 def _set_ax_settings(ax):
-    ax.plot([0, 1], [0, 1], "k--")
+    ax.plot([0, 1], [0, 1], 'k:')
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel("False Positive Rate")
@@ -208,7 +208,7 @@ def _roc_curve_multi(y_true, y_score):
     return roc_curve(y_true.ravel(), y_score.ravel())
 
 
-def _plot_roc(fpr, tpr, ax, label=None):
+def _plot_roc(fpr, tpr, ax, label=None, linestyle=None):
     """
     Plot ROC curve
 
@@ -238,13 +238,14 @@ def _plot_roc(fpr, tpr, ax, label=None):
 
     label = label or "ROC curve"
 
-    ax.plot(fpr, tpr, label=(f"{label} (area = {roc_auc:0.2f})"))
+    ax.plot(fpr, tpr, label=(f"{label} (area = {roc_auc:0.2f})"), linestyle=linestyle)
 
     _set_ax_settings(ax)
+
     return ax
 
 
-def _generate_plot_from_fpr_tpr_lists(fpr, tpr, ax, label=None):
+def _generate_plot_from_fpr_tpr_lists(fpr, tpr, ax, label=None, linestyle=None):
     """
     Draws a plot for every list of values i.e tpr[i] and fpr[i].
     """
@@ -252,7 +253,8 @@ def _generate_plot_from_fpr_tpr_lists(fpr, tpr, ax, label=None):
         fpr_ = fpr[i]
         tpr_ = tpr[i]
         label_ = label[i] if label is not None and len(label) > 0 else None
-        _plot_roc(fpr_, tpr_, ax, label=label_)
+
+        _plot_roc(fpr_, tpr_, ax, label=label_, linestyle=linestyle)
 
 
 class ROCAdd(AbstractComposedPlot):
@@ -296,7 +298,9 @@ class ROCAdd(AbstractComposedPlot):
         else:
             b_label = ["ROC curve 2"]
 
-        _generate_plot_from_fpr_tpr_lists(b.fpr, b.tpr, ax, label=b_label)
+        _generate_plot_from_fpr_tpr_lists(
+            b.fpr, b.tpr, ax, label=b_label, linestyle="dashed"
+        )
 
         self.ax_ = ax
         self.figure_ = ax.figure
@@ -436,6 +440,7 @@ class ROC(AbstractPlot):
         _check_data_inputs(y_true, y_score)
 
         fpr, tpr, label = cls._calculate_plotting_data(y_true, y_score)
+
         return cls(fpr, tpr, label=label).plot(ax)
 
     @staticmethod
