@@ -190,13 +190,13 @@ def roc(y_true, y_score, ax=None):
 
 
 def _set_ax_settings(ax):
-    ax.plot([0, 1], [0, 1], "k--")
+    ax.plot([0, 1], [0, 1], linestyle='dotted')
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel("False Positive Rate")
     ax.set_ylabel("True Positive Rate")
     ax.set_title("ROC")
-    ax.legend(loc="best", fontsize=8)
+    ax.legend(loc="best")
 
 
 def _roc_curve_multi(y_true, y_score):
@@ -294,7 +294,7 @@ class ROCAdd(AbstractComposedPlot):
             b_label = ["ROC curve 2"]
 
         _generate_plot_from_fpr_tpr_lists(
-            b.fpr, b.tpr, ax, label=b_label, linestyle="dotted"
+            b.fpr, b.tpr, ax, label=b_label, linestyle="dashed"
         )
 
         self.ax_ = ax
