@@ -190,7 +190,7 @@ def roc(y_true, y_score, ax=None):
 
 
 def _set_ax_settings(ax):
-    ax.plot([0, 1], [0, 1], linestyle='dotted')
+    ax.plot([0, 1], [0, 1], 'k:')
     ax.set_xlim([0.0, 1.0])
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel("False Positive Rate")
