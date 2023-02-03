@@ -85,6 +85,9 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
 
     Examples
     --------
+
+    Plot the Target Analysis:
+
     .. plot:: ../examples/target_analysis.py
 
     Notes

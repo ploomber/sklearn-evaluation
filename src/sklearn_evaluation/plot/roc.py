@@ -182,7 +182,11 @@ def roc(y_true, y_score, ax=None):
 
     Examples
     --------
+
+    Plot a ROC Curve for binary classification:
+
     .. plot:: ../examples/roc.py
+
     """
     # support old API
     r = ROC.from_raw_data(y_true, y_score, ax=ax)
@@ -264,6 +268,7 @@ class ROCAdd(AbstractComposedPlot):
 
     Examples
     --------
+
     .. plot:: ../../examples/roc_add.py
 
     Notes
@@ -323,9 +328,16 @@ class ROC(AbstractPlot):
 
     Examples
     --------
+
+    Plot a ROC Curve for binary classification:
+
     .. plot:: ../examples/roc_binary_classification.py
 
+    Compare ROC Curves of two binary classifiers:
+
     .. plot:: ../examples/roc_comparison.py
+
+    Plot a ROC Curve for multi-class classification:
 
     .. plot:: ../examples/roc_multi_classification.py
 

@@ -24,8 +24,10 @@ est.fit(X_train, y_train)
 y_pred = est.predict(X_test)
 y_true = y_test
 
+# plot normalized confusion matrix
 confusion_matrix(y_true, y_pred, normalize=True)
 plt.show()
 
+# plot non-normalized confusion matrix
 confusion_matrix(y_true, y_pred)
 plt.show()

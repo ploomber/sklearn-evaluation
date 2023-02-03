@@ -63,6 +63,9 @@ def residuals(y_true, y_pred, ax=None):
 
     Examples
     --------
+
+    Plot a Residuals Scatter plot:
+
     .. plot:: ../examples/residuals.py
 
     """
@@ -105,6 +108,9 @@ def prediction_error(y_true, y_pred, ax=None):
 
     Examples
     --------
+
+    Plot a Prediction Error Scatter plot:
+
     .. plot:: ../examples/prediction_error.py
 
     """
@@ -162,6 +168,9 @@ def cooks_distance(X, y, ax=None):
 
     Examples
     --------
+
+    Plot a Cook's Distance Bar plot:
+
     .. plot:: ../examples/cooks_distance.py
 
     Notes

@@ -36,6 +36,8 @@ def validation_curve(
     Examples
     --------
 
+    Plot a Validation Curve:
+
     .. plot:: ../examples/validation_curve.py
 
     """

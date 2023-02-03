@@ -3,6 +3,7 @@ from sklearn_evaluation.plot import Rank2D
 
 from sklearn.datasets import load_breast_cancer as load_data
 
+# load some data
 X, y = load_data(return_X_y=True)
 
 features = [
@@ -38,6 +39,7 @@ features = [
     "worst fractal dimension",
 ]
 
+# plot feature rankings
 rank2d = Rank2D(features=features, figsize=(14, 14))
 rank2d.feature_ranks(X)
 plt.show()
