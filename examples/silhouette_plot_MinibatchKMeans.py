@@ -1,7 +1,6 @@
 from sklearn.cluster import MiniBatchKMeans
 
 from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
 
 from sklearn_evaluation import plot
 

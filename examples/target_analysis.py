@@ -3,7 +3,6 @@ from sklearn.model_selection import train_test_split
 
 from sklearn_evaluation import plot
 
-import matplotlib.pyplot as plt
 
 # load a dataset
 iris = load_iris()

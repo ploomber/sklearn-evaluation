@@ -2,7 +2,6 @@ from sklearn.datasets import load_diabetes
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn_evaluation import plot
-import matplotlib.pyplot as plt
 
 # load data
 X, y = load_diabetes(return_X_y=True)

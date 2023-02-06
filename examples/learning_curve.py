@@ -3,7 +3,6 @@ from sklearn import model_selection
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.datasets import load_digits
-import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn_evaluation import plot

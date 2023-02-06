@@ -3,7 +3,6 @@ from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from sklearn_evaluation.plot import confusion_matrix
 
-import matplotlib.pyplot as plt
 
 from matplotlib import style
 
