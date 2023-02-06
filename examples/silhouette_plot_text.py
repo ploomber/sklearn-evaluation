@@ -49,4 +49,3 @@ kmeans = KMeans(
 plot.silhouette_analysis(
     X_lsa, kmeans, range_n_clusters=[2, 3, 4, 5, 6], metric="cosine"
 )
-plt.show()

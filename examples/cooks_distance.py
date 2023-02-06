@@ -15,4 +15,3 @@ X, y = make_regression(
 
 # plot cooks distance
 plot.cooks_distance(X, y)
-plt.show()

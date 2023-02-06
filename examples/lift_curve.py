@@ -18,4 +18,3 @@ y_probas = model.predict_proba(X_test)
 
 # plot lift curve
 lift_curve(y_test, y_probas)
-plt.show()

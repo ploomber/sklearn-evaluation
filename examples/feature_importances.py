@@ -16,8 +16,6 @@ model.fit(X_train, y_train)
 
 # plot all features
 ax = plot.feature_importances(model)
-plt.show()
 
 # only top 5
 plot.feature_importances(model, top_n=5)
-plt.show()

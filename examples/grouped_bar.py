@@ -18,4 +18,3 @@ records = [
 
 ax = plt.gca()
 bar_groups(records, ax)
-plt.show()

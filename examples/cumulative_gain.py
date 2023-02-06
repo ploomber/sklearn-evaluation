@@ -18,4 +18,3 @@ y_probas = model.predict_proba(X_test)
 
 # plot cumulative gain curve
 cumulative_gain(y_test, y_probas)
-plt.show()

@@ -31,4 +31,3 @@ probs2 = LogisticRegression().fit(X_train, y_train).predict_proba(X_test)
 plot.calibration_curve(
     [y_test1, y_test2], [probs1, probs2], clf_names=["1k samples", "10k samples"]
 )
-plt.show()

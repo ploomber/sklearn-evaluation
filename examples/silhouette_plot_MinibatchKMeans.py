@@ -22,4 +22,3 @@ kmeans = MiniBatchKMeans(
 
 # plot silhouette analysis
 plot.silhouette_analysis(X, kmeans, range_n_clusters=[3, 4])
-plt.show()

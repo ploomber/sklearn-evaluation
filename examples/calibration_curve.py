@@ -36,4 +36,3 @@ clf_names = [
 
 # plot calibration curve
 plot.calibration_curve(y_test, probabilities, clf_names)
-plt.show()

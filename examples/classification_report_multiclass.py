@@ -20,4 +20,3 @@ y_pred = est.predict(X_test)
 
 # plot classification report for multi-class classification
 plot.classification_report(y_test, y_pred)
-plt.show()

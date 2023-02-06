@@ -12,8 +12,6 @@ reg = LinearRegression()
 reg.fit(X_train, y_train)
 
 y_pred = reg.predict(X_test)
-y_true = y_test
 
 # plot residuals
-plot.residuals(y_true, y_pred)
-plt.show()
+plot.residuals(y_test, y_pred)

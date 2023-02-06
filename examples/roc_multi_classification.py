@@ -25,5 +25,4 @@ classifier = LogisticRegression()
 y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
 
 # plot roc curve
-roc = plot.ROC.from_raw_data(y_test, y_score)
-roc
+plot.ROC.from_raw_data(y_test, y_score)

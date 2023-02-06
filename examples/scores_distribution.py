@@ -21,4 +21,3 @@ y_scores = clf.fit(X_train, y_train).predict_proba(X_test)
 
 # plot scores distribution
 plot.scores_distribution(y_scores[:, 1], n_bins=10)
-plt.show()

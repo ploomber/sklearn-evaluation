@@ -19,4 +19,3 @@ y_probas = model.predict_proba(X_test)
 
 # plot the KS statistic
 ks_statistic(y_test, y_probas)
-plt.show()

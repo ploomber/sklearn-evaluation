@@ -19,4 +19,3 @@ y_true = y_test
 
 # plot confusion matrix
 plot.confusion_matrix(y_true, y_pred)
-plt.show()

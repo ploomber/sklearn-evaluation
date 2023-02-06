@@ -18,4 +18,3 @@ y_pred = est.predict(X_test)
 
 # plot classification report for binary classification
 plot.classification_report(y_test, y_pred, target_names=["Not spam", "Spam"])
-plt.show()

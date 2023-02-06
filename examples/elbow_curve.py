@@ -10,4 +10,3 @@ kmeans = KMeans(random_state=1, n_init=5)
 
 # plot elbow curve
 plot.elbow_curve(X, kmeans, range_n_clusters=range(1, 30))
-plt.show()
