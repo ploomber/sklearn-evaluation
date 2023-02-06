@@ -2,7 +2,6 @@ from sklearn.datasets import load_diabetes
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn_evaluation import plot
-import matplotlib.pyplot as plt
 
 # load data
 X, y = load_diabetes(return_X_y=True)
@@ -14,8 +13,6 @@ reg = LinearRegression()
 reg.fit(X_train, y_train)
 
 y_pred = reg.predict(X_test)
-y_true = y_test
 
 # plot prediction error
-plot.prediction_error(y_true, y_pred)
-plt.show()
+plot.prediction_error(y_test, y_pred)

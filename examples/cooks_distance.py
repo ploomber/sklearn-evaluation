@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn.datasets import make_regression
 from sklearn_evaluation import plot
 
@@ -15,4 +14,3 @@ X, y = make_regression(
 
 # plot cooks distance
 plot.cooks_distance(X, y)
-plt.show()

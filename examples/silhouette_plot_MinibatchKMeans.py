@@ -1,7 +1,6 @@
 from sklearn.cluster import MiniBatchKMeans
 
 from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
 
 from sklearn_evaluation import plot
 
@@ -22,4 +21,3 @@ kmeans = MiniBatchKMeans(
 
 # plot silhouette analysis
 plot.silhouette_analysis(X, kmeans, range_n_clusters=[3, 4])
-plt.show()

@@ -5,11 +5,9 @@ from sklearn.model_selection import train_test_split
 from sklearn_evaluation import plot
 
 # generate data
-data = datasets.make_classification(
+X, y = datasets.make_classification(
     n_samples=2000, n_features=6, n_informative=4, class_sep=0.1
 )
-X = data[0]
-y = data[1]
 
 # split data into train and test
 X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2)

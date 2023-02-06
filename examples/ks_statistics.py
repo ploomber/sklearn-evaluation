@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_breast_cancer as load_data
@@ -19,4 +18,3 @@ y_probas = model.predict_proba(X_test)
 
 # plot the KS statistic
 ks_statistic(y_test, y_probas)
-plt.show()

@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.ensemble import RandomForestClassifier
@@ -36,4 +35,3 @@ clf_names = [
 
 # plot calibration curve
 plot.calibration_curve(y_test, probabilities, clf_names)
-plt.show()

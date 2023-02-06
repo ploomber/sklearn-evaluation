@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -16,8 +15,6 @@ model.fit(X_train, y_train)
 
 # plot all features
 ax = plot.feature_importances(model)
-plt.show()
 
 # only top 5
 plot.feature_importances(model, top_n=5)
-plt.show()

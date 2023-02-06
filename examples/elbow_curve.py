@@ -1,6 +1,5 @@
 from sklearn.cluster import KMeans
 from sklearn.datasets import make_blobs
-import matplotlib.pyplot as plt
 
 from sklearn_evaluation import plot
 
@@ -10,4 +9,3 @@ kmeans = KMeans(random_state=1, n_init=5)
 
 # plot elbow curve
 plot.elbow_curve(X, kmeans, range_n_clusters=range(1, 30))
-plt.show()

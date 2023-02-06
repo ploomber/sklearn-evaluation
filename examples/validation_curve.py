@@ -45,4 +45,3 @@ train_scores, test_scores = validation_curve(
 plot.validation_curve(
     train_scores, test_scores, param_range, param_name, semilogx=False
 )
-plt.show()

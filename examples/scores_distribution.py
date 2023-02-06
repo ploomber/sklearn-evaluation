@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 from sklearn.linear_model import LogisticRegression
@@ -21,4 +20,3 @@ y_scores = clf.fit(X_train, y_train).predict_proba(X_test)
 
 # plot scores distribution
 plot.scores_distribution(y_scores[:, 1], n_bins=10)
-plt.show()

@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -18,4 +17,3 @@ y_pred = est.predict(X_test)
 
 # plot classification report for binary classification
 plot.classification_report(y_test, y_pred, target_names=["Not spam", "Spam"])
-plt.show()

@@ -1,4 +1,3 @@
-import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
@@ -19,4 +18,3 @@ y_true = y_test
 
 # plot confusion matrix
 plot.confusion_matrix(y_true, y_pred)
-plt.show()
