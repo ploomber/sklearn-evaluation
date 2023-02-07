@@ -26,7 +26,7 @@ probs2 = LogisticRegression().fit(X_train, y_train).predict_proba(X_test)
 
 # if you want plot probability curves for different sample sizes, pass
 # a list with the true labels per each element in the probabilities
-# argyment
-plot.calibration_curve(
-    [y_test1, y_test2], [probs1, probs2], clf_names=["1k samples", "10k samples"]
+# argument
+plot.CalibrationCurve.from_raw_data(
+    [y_test1, y_test2], [probs1, probs2], label=["1k samples", "10k samples"]
 )

@@ -5,6 +5,7 @@ from unittest.mock import Mock, call
 from ploomber_core.telemetry import telemetry
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.pca import pca
+from sklearn_evaluation.plot.calibration import CalibrationCurve
 
 MOCK_API_KEY = "phc_P1dsjk20bijsabdaib2eu"
 
@@ -127,4 +128,61 @@ def test_pca(mock_telemetry):
 
     mock_telemetry.assert_has_calls(
         [call("sklearn-evaluation", metadata=expected_metadata)]
+    )
+
+
+def test_calibration_curve(mock_telemetry):
+
+    CalibrationCurve([0.5, 0.9], [0.45, 0.89], label=["Classifier 1"]).plot()
+    function_arguments = dict({"label": ["Classifier 1"], "cmap": "nipy_spectral"})
+    expected_metadata = dict(
+        {
+            "action": "calibration-curve-init",
+            "feature": "plot",
+            "args": function_arguments,
+        }
+    )
+    mock_telemetry.assert_has_calls(
+        [call("sklearn-evaluation", metadata=expected_metadata)]
+    )
+
+
+def test_calibration_curve_add(mock_telemetry):
+
+    cc1 = CalibrationCurve([0.5, 0.9], [0.45, 0.89], label=["Classifier 1"]).plot()
+    cc2 = CalibrationCurve([0.49, 0.92], [0.52, 0.88], label=["Classifier 2"]).plot()
+    cc1 + cc2
+    function_arguments_one = dict({"label": ["Classifier 1"], "cmap": "nipy_spectral"})
+    expected_metadata_one = dict(
+        {
+            "action": "calibration-curve-init",
+            "feature": "plot",
+            "args": function_arguments_one,
+        }
+    )
+
+    function_arguments_two = dict({"label": ["Classifier 2"], "cmap": "nipy_spectral"})
+    expected_metadata_two = dict(
+        {
+            "action": "calibration-curve-init",
+            "feature": "plot",
+            "args": function_arguments_two,
+        }
+    )
+
+    function_arguments_add = dict({"cmaps": ["nipy_spectral", "nipy_spectral"]})
+    expected_metadata_add = dict(
+        {
+            "action": "calibration-curve-add-init",
+            "feature": "plot",
+            "args": function_arguments_add,
+        }
+    )
+
+    mock_telemetry.assert_has_calls(
+        [
+            call("sklearn-evaluation", metadata=expected_metadata_one),
+            call("sklearn-evaluation", metadata=expected_metadata_two),
+            call("sklearn-evaluation", metadata=expected_metadata_add),
+        ]
     )

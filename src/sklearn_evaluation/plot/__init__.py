@@ -28,7 +28,11 @@ from sklearn_evaluation.plot.regression import (
     cooks_distance,
 )
 from sklearn_evaluation.plot.target_analysis import target_analysis
-from sklearn_evaluation.plot.calibration import calibration_curve, scores_distribution
+from sklearn_evaluation.plot.calibration import (
+    calibration_curve,
+    CalibrationCurve,
+    scores_distribution,
+)
 from sklearn_evaluation.plot.classification_report import (
     classification_report,
     ClassificationReport,
@@ -42,6 +46,9 @@ from sklearn_evaluation.plot.feature_ranking import Rank1D, Rank2D
 from sklearn_evaluation.plot.pca import pca
 
 __all__ = [
+    "calibration_curve",
+    "CalibrationCurve",
+    "scores_distribution",
     "confusion_matrix",
     "feature_importances",
     "PrecisionRecall",
@@ -62,7 +69,6 @@ __all__ = [
     "silhouette_analysis_from_results",
     "calibration_curve",
     "target_analysis",
-    "scores_distribution",
     "classification_report",
     "ClassificationReport",
     "ks_statistic",
