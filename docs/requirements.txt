@@ -5,3 +5,5 @@ seaborn
 ploomber
 ploomber-engine
 jupysql
+keras
+tensorflow
