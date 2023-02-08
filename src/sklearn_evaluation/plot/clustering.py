@@ -103,6 +103,9 @@ def elbow_curve(
 
     Examples
     --------
+
+    Plot the Elbow Curve:
+
     .. plot:: ../examples/elbow_curve.py
 
     """
@@ -142,6 +145,9 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
 
     Examples
     --------
+
+    Plot the Elbow Curve from the results:
+
     .. plot:: ../examples/elbow_curve_from_results.py
 
     """
@@ -249,6 +255,9 @@ def silhouette_analysis(
 
     Examples
     --------
+
+    Plot the Silhouette Analysis:
+
     .. plot:: ../examples/silhouette_plot_basic.py
 
     Notes
@@ -387,6 +396,9 @@ def silhouette_analysis_from_results(
 
     Examples
     --------
+
+    Plot the Silhouette Analysis from the results:
+
     .. plot:: ../examples/silhouette_plot_from_results.py
 
     """

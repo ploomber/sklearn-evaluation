@@ -184,6 +184,9 @@ def ks_statistic(
 
     Examples
     --------
+
+    Plot a KS Statistic plot:
+
     .. plot:: ../examples/ks_statistics.py
 
     Notes

@@ -61,6 +61,8 @@ def grid_search(
     Examples
     --------
 
+    Plot the results of grid search:
+
     .. plot:: ../examples/grid_search.py
 
     """

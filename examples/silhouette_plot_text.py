@@ -1,6 +1,5 @@
 import numpy as np
 from time import time
-import matplotlib.pyplot as plt
 from sklearn_evaluation import plot
 from sklearn.cluster import KMeans
 
@@ -49,4 +48,3 @@ kmeans = KMeans(
 plot.silhouette_analysis(
     X_lsa, kmeans, range_n_clusters=[2, 3, 4, 5, 6], metric="cosine"
 )
-plt.show()

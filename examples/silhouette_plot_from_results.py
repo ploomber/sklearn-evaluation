@@ -3,6 +3,7 @@ from sklearn.datasets import make_blobs
 
 from sklearn_evaluation import plot
 
+# generate data
 X, y = make_blobs(
     n_samples=500,
     n_features=2,
@@ -23,5 +24,5 @@ cluster_labels.append(kmeans.fit_predict(X))
 kmeans = KMeans(n_clusters=5, n_init=5)
 cluster_labels.append(kmeans.fit_predict(X))
 
-
+# plot silhouette analysis from provided list of cluster labels
 plot.silhouette_analysis_from_results(X, cluster_labels)

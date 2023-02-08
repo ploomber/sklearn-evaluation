@@ -1,6 +1,13 @@
 # CHANGELOG
 
-## 0.11.1dev
+## 0.11.2dev
+
+## 0.11.1 (2023-02-07)
+
+- [Feature] Improves composed ROC plots so that different curves are more easily identifiable
+- [Feature] Adds `plot.CalibrationCurve` object-oriented API
+- [Doc] User Guide on Probability Calibration
+- [Doc] User Guide on real-time tracking
 
 ## 0.11.0 (2023-01-31)
 

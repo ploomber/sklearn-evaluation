@@ -117,7 +117,12 @@ class PrecisionRecall(AbstractPlot):
 
     Examples
     --------
+
+    Plot a Precision-Recall Curve:
+
     .. plot:: ../examples/precision_recall_oop.py
+
+    Compare Precision-Recall Curves of two classifiers:
 
     .. plot:: ../examples/precision_recall_add.py
 
@@ -354,7 +359,15 @@ def precision_recall(y_true, y_score, ax=None):
 
     Examples
     --------
+
+    Plot a Precision-Recall Curve for binary classification:
+
     .. plot:: ../examples/precision_recall.py
+
+    Plot a Precision-Recall Curve for multi-class classification:
+
+    .. plot:: ../examples/precision_recall_multiclass.py
+
     """
 
     return PrecisionRecall.from_raw_data(y_true, y_score).ax_

@@ -5,7 +5,7 @@ from sklearn import datasets
 
 from sklearn_evaluation.plot import grid_search
 
-
+# load data
 iris = datasets.load_iris()
 
 
@@ -18,6 +18,7 @@ parameters = {
 est = RandomForestClassifier()
 clf = GridSearchCV(est, parameters, cv=5)
 
+# generate some data
 X, y = datasets.make_classification(1000, 10, n_informative=5, class_sep=0.7)
 clf.fit(X, y)
 

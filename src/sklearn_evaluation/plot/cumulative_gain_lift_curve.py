@@ -138,6 +138,9 @@ def cumulative_gain(
 
     Examples
     --------
+
+    Plot the Cumulative Gains of a binary classifier:
+
     .. plot:: ../examples/cumulative_gain.py
 
     Notes
@@ -227,6 +230,9 @@ def lift_curve(
 
     Examples
     --------
+
+    Plot the Lift Curve for a binary classifier:
+
     .. plot:: ../examples/lift_curve.py
 
     Notes

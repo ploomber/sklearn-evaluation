@@ -31,6 +31,8 @@ def learning_curve(train_scores, test_scores, train_sizes, ax=None):
     Examples
     --------
 
+    Plot a Learning Curve:
+
     .. plot:: ../examples/learning_curve.py
 
     """

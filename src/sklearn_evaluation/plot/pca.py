@@ -79,6 +79,9 @@ def pca(X, y=None, target_names=None, n_components=2, colors=None, ax=None):
 
     Examples
     --------
+
+    Plot PCA of 3 components:
+
     .. plot:: ../examples/pca.py
 
     """
