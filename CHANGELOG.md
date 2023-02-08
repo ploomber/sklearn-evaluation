@@ -1,7 +1,7 @@
 # CHANGELOG
 
 ## 0.11.2dev
-- [Doc] Object Oriented API guide includes `from_raw_data` methods under each model (#271)
+- [Doc] Object oriented API guide includes `from_raw_data` methods under each model (#271)
 
 ## 0.11.1 (2023-02-07)
 
