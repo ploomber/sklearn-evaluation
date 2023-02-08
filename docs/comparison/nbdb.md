@@ -116,7 +116,7 @@ experiments = {
 }
 
 ## executes data.ipynb, creates output.ipynb and data.csv
-execute_notebook(Path('data.ipynb'), File('output.ipynb'))
+execute_notebook(Path('data.ipynb'), 'output.ipynb')
 
 p = Path('output/models')
 p.mkdir(parents=True, exist_ok=True)
@@ -125,7 +125,7 @@ p.mkdir(parents=True, exist_ok=True)
 for model, grid in experiments.items():
     for i, params in enumerate(grid):
         name = f'{model}-{i}'
-        task = execute_notebook(Path('model.ipynb'), Path(File(f'output/models/{name}.ipynb')), parameters=dict(model=model, params=params))
+        task = execute_notebook(Path('model.ipynb'), Path(f'output/models/{name}.ipynb'), parameters=dict(model=model, params=params))
 
 ```
 ## Indexing notebooks
