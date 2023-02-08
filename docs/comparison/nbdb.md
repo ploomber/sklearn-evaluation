@@ -22,17 +22,13 @@ kernelspec:
 Requirements:
 
 ```sh
-pip install scikit-learn sklearn-evaluation ploomber jupysql
+pip install sklearn-evaluation ploomber-engine
 ```
 
 ```{code-cell} ipython3
 from pathlib import Path
 
-# to train models in parallel
-from ploomber import DAG
-from ploomber.tasks import NotebookRunner
-from ploomber.products import File
-from ploomber.executors import Parallel, Serial
+import jupytext
 
 # to produce parameter grid
 from sklearn.model_selection import ParameterGrid
@@ -40,35 +36,27 @@ from sklearn.model_selection import ParameterGrid
 # to create SQLite database
 from sklearn_evaluation import NotebookDatabase
 ```
-
 ## Code
 
-`NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`), but the same concept applies for notebooks (`.ipynb`), [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
+`NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`). We convert these scripts to notebooks using `jupytext`, but the same concept applies for user-created notebooks (`.ipynb`)— [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
 
 ```{code-cell} ipython3
 # data loading script
 data = """
-# %% tags=["parameters"]
-upstream = None
-product = None
-
 # %%
 from sklearn import datasets
 
 # %%
 ca_housing = datasets.fetch_california_housing(as_frame=True)
 df = ca_housing['frame']
-df.to_csv(product['data'], index=False)
+df.to_csv('data.csv', index=False)
 """
-Path('data.py').write_text(data)
 
 # model fitting script
 model = """
 # %% tags=["parameters"]
 model = None
 params = None
-upstream = None
-product = None
 
 # %%
 import importlib
@@ -78,7 +66,7 @@ from sklearn.model_selection import train_test_split
 from sklearn.metrics import mean_squared_error
 
 # %%
-df = pd.read_csv(upstream['data']['data'])
+df = pd.read_csv('data.csv')
 
 # %%
 X = df.drop('MedHouseVal', axis='columns')
@@ -103,15 +91,22 @@ print(reg.get_params())
 y_pred = reg.predict(X_test)
 mean_squared_error(y_test, y_pred)
 """
-Path('model.py').write_text(model)
+
+data_nb = jupytext.reads(data, fmt='py:percent')
+model_nb = jupytext.reads(model, fmt='py:percent')
+
+jupytext.write(data_nb, 'data.ipynb')
+jupytext.write(model_nb, 'model.ipynb')
 ```
 
-## Pipeline declaration
+## Executing notebooks
 
-Create a pipeline using [Ploomber](https://docs.ploomber.io/en/latest/). Each experiment will create an output `.ipynb` file.
+Using the `execute_notebook` method from [ploomber-engine](https://ploomber-engine.readthedocs.io/en/latest/quick-start.html), each experiment will create an output `.ipynb` file.
 
 ```{code-cell} ipython3
-dag = DAG()
+:tags: ["hide-output"]
+
+from ploomber_engine import execute_notebook
 
 experiments = {
     'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),
@@ -120,36 +115,19 @@ experiments = {
     'sklearn.linear_model.ElasticNet': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
 }
 
-papermill_params=dict(engine_name='embedded', progress_bar=False)
+## executes data.ipynb, creates output.ipynb and data.csv
+execute_notebook(Path('data.ipynb'), 'output.ipynb')
 
-# the embedded engine is more reliable
-task_data = NotebookRunner(Path('data.py'), {'nb': File('output/data.html'), 'data': File('output/data.csv')},
-               dag=dag, papermill_params=papermill_params)
+p = Path('output/models')
+p.mkdir(parents=True, exist_ok=True)
 
 # generate one task per set of parameter
 for model, grid in experiments.items():
     for i, params in enumerate(grid):
         name = f'{model}-{i}'
-        task = NotebookRunner(Path('model.py'), File(f'output/models/{name}.ipynb'), dag=dag, name=name,
-                       papermill_params=papermill_params,
-                       params=dict(model=model, params=params))
-        task_data >> task
+        task = execute_notebook(Path('model.ipynb'), Path(f'output/models/{name}.ipynb'), parameters=dict(model=model, params=params))
+
 ```
-
-## Pipeline execution
-
-```{code-cell} ipython3
-# total experiments to run
-len(dag)
-```
-
-```{code-cell} ipython3
-:tags: ["hide-output"]
-
-# run experiments
-dag.build(force=True)
-```
-
 ## Indexing notebooks
 
 ```{code-cell} ipython3
@@ -174,6 +152,7 @@ db.index(verbose=True, update=False);
 ```{code-cell} ipython3
 # load jupysql magic
 %load_ext sql
+
 ```
 
 ### Best performing models
