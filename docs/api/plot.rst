@@ -23,7 +23,7 @@ PrecisionRecall
 
 ROC
 ---
-.. autofunction:: sklearn_evaluation.plot.ROC
+.. autoclass:: sklearn_evaluation.plot.ROC
     :members:
 
 ClassificationReport
