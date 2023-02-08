@@ -30,9 +30,6 @@ from pathlib import Path
 
 import jupytext
 
-from ploomber.products import File
-from ploomber_engine.tracking import track_execution
-
 # to produce parameter grid
 from sklearn.model_selection import ParameterGrid
 
@@ -41,7 +38,7 @@ from sklearn_evaluation import NotebookDatabase
 ```
 ## Code
 
-`NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`). We convert these scripts to notebooks for `Notebook Database` using `jupytext`, but the same concept applies for user-created notebooks (`.ipynb`)— [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
+`NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`). We convert these scripts to notebooks using `jupytext`, but the same concept applies for user-created notebooks (`.ipynb`)— [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
 
 ```{code-cell} ipython3
 # data loading script
