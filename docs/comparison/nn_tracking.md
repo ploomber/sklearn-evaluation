@@ -22,29 +22,30 @@ This tutorial demonstrates training a small network on the Fashion MNIST dataset
 ## Create the experiment tracker
 
 ```{code-cell} ipython3
-:tags: ["hide-cell"]
+:tags: [hide-cell]
 
 from pathlib import Path
 
-db = Path('nn_experiments.db')
+db = Path("nn_experiments.db")
 if db.exists():
     db.unlink()
 ```
-    
+
 ```{code-cell} ipython3
 from sklearn_evaluation import SQLiteTracker
- 
-tracker = SQLiteTracker('nn_experiments.db')
+
+tracker = SQLiteTracker("nn_experiments.db")
 experiment = tracker.new_experiment()
 uuid = experiment.uuid
 ```
 
 ## MNIST Dataset
 
-Fashion-MNIST is a dataset of Zalando's article images—consisting of a training set of 60,000 examples and a test set of 10,000 examples. Each example is a 28x28 grayscale image, associated with a label from 10 classes. 
+Fashion-MNIST is a dataset of Zalando's article images—consisting of a training set of 60,000 examples and a test set of 10,000 examples. Each example is a 28x28 grayscale image, associated with a label from 10 classes.
 
 ```{code-cell} ipython3
-:tags: ["hide-output"]
+:tags: [hide-output]
+
 import tensorflow as tf
 
 fashion_mnist = tf.keras.datasets.fashion_mnist
@@ -55,7 +56,9 @@ fashion_mnist = tf.keras.datasets.fashion_mnist
 # create a validation set
 from sklearn.model_selection import train_test_split
 
-train_images, val_images, train_labels, val_labels = train_test_split(train_images, train_labels, test_size=0.2)
+train_images, val_images, train_labels, val_labels = train_test_split(
+    train_images, train_labels, test_size=0.2
+)
 ```
 
 ```{code-cell} ipython3
@@ -98,42 +101,50 @@ Define a callback that will track the metrics during the training, and log in th
 
 ```{code-cell} ipython3
 class TrackLossandAccuracyCallback(tf.keras.callbacks.Callback):
-    
     def on_epoch_end(self, epoch, logs=None):
         loss.append(logs["loss"])
         val_loss.append(logs["val_loss"])
         accuracy.append(logs["accuracy"])
         val_accuracy.append(logs["val_accuracy"])
-        tracker.upsert(uuid, {"loss": loss, 
-                              "accuracy": accuracy, 
-                              "val_loss": val_loss, 
-                              "val_accuracy": val_accuracy}
-                      )
+        tracker.upsert(
+            uuid,
+            {
+                "loss": loss,
+                "accuracy": accuracy,
+                "val_loss": val_loss,
+                "val_accuracy": val_accuracy,
+            },
+        )
 ```
 
 ```{code-cell} ipython3
-model = tf.keras.Sequential([
-    tf.keras.layers.Flatten(input_shape=(28, 28)),
-    tf.keras.layers.Dense(128, activation='relu'),
-    tf.keras.layers.Dense(10)
-])
+model = tf.keras.Sequential(
+    [
+        tf.keras.layers.Flatten(input_shape=(28, 28)),
+        tf.keras.layers.Dense(128, activation="relu"),
+        tf.keras.layers.Dense(10),
+    ]
+)
 ```
 
 ```{code-cell} ipython3
-model.compile(optimizer='adam',
-              loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
-              metrics=['accuracy']
-             )
+model.compile(
+    optimizer="adam",
+    loss=tf.keras.losses.SparseCategoricalCrossentropy(from_logits=True),
+    metrics=["accuracy"],
+)
 ```
 
 ```{code-cell} ipython3
 epoch_count = 10
-history = model.fit(train_images, 
-                    train_labels, 
-                    validation_data=(val_images, val_labels), 
-                    epochs=epoch_count, 
-                    verbose=0, 
-                    callbacks=[TrackLossandAccuracyCallback()])
+history = model.fit(
+    train_images,
+    train_labels,
+    validation_data=(val_images, val_labels),
+    epochs=epoch_count,
+    verbose=0,
+    callbacks=[TrackLossandAccuracyCallback()],
+)
 ```
 
 ## Track metrics while training
@@ -145,7 +156,8 @@ While the training is ongoing, you may visualize the metrics plot by opening ano
 Query the experiment with SQL:
 
 ```{code-cell} ipython3
-results = tracker.query("""
+results = tracker.query(
+    """
 SELECT
     uuid,
     json_extract(parameters, '$.accuracy') as accuracy,
@@ -153,7 +165,8 @@ SELECT
     json_extract(parameters, '$.val_accuracy') as val_accuracy,
     json_extract(parameters, '$.val_loss') as val_loss
     FROM experiments
-""")
+"""
+)
 ```
 
 Extract and plot the relevant metrics against epochs:
@@ -166,22 +179,22 @@ val_accuracy = json.loads(results["val_accuracy"].to_list()[0])
 training_loss = json.loads(results["loss"].to_list()[0])
 val_loss = json.loads(results["val_loss"].to_list()[0])
 
-epoch_range = range(1, len(training_accuracy)+1)
+epoch_range = range(1, len(training_accuracy) + 1)
 ```
 
 ```{code-cell} ipython3
-fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14,6))                            
-ax1.plot(epoch_range, training_loss, color="#725BD0", linestyle="--", label='Train')
-ax1.plot(epoch_range, val_loss, color="#725BD0", linestyle="-", label='Validation')
-ax1.set_xlabel('Epoch')
-ax1.set_ylabel('Loss')
-ax1.legend(loc='best')
+fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(14, 6))
+ax1.plot(epoch_range, training_loss, color="#725BD0", linestyle="--", label="Train")
+ax1.plot(epoch_range, val_loss, color="#725BD0", linestyle="-", label="Validation")
+ax1.set_xlabel("Epoch")
+ax1.set_ylabel("Loss")
+ax1.legend(loc="best")
 ax1.grid()
 
 ax2.plot(epoch_range, training_accuracy, color="#BA2932", linestyle="--", label="Train")
 ax2.plot(epoch_range, val_accuracy, color="#BA2932", linestyle="-", label="Validation")
-ax2.set_xlabel('Epoch')
-ax2.set_ylabel('Accuracy')
-ax2.legend(loc='best')
+ax2.set_xlabel("Epoch")
+ax2.set_ylabel("Accuracy")
+ax2.legend(loc="best")
 ax2.grid()
 ```

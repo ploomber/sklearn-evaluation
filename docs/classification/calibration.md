@@ -42,13 +42,19 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
 
 X, y = make_classification(
-    n_samples=20000, n_features=4, n_informative=2, n_redundant=2, class_sep=0.7, random_state=0)
+    n_samples=20000,
+    n_features=4,
+    n_informative=2,
+    n_redundant=2,
+    class_sep=0.7,
+    random_state=0,
+)
 
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.33, random_state=0
 )
 
-svc = make_pipeline(StandardScaler(), SVC(gamma='auto', probability=True))
+svc = make_pipeline(StandardScaler(), SVC(gamma="auto", probability=True))
 svc_probas = svc.fit(X_train, y_train).predict_proba(X_test)
 
 lr = LogisticRegression()
@@ -90,18 +96,31 @@ Logistic Regression returns well calibrated predictions by default. In contrast,
 
 ```{code-cell} ipython3
 import matplotlib.pyplot as plt
+
 fig, axs = plt.subplots(2, 2, figsize=(14, 11))
-plot.scores_distribution(svc_probas[:, 1], n_bins=10, 
-                                          title="SVC", color="#F5D065", ax=axs[0,0])
+plot.scores_distribution(
+    svc_probas[:, 1], n_bins=10, title="SVC", color="#F5D065", ax=axs[0, 0]
+)
 
-plot.scores_distribution(rf_probas[:, 1], n_bins=10, 
-                                          title="Random Forest", color="#30AEE6", ax=axs[0,1])
+plot.scores_distribution(
+    rf_probas[:, 1], n_bins=10, title="Random Forest", color="#30AEE6", ax=axs[0, 1]
+)
 
-plot.scores_distribution(lr_probas[:, 1], n_bins=10, 
-                                          title="Logistic Regression", color="#E568EE",ax=axs[1,0])
+plot.scores_distribution(
+    lr_probas[:, 1],
+    n_bins=10,
+    title="Logistic Regression",
+    color="#E568EE",
+    ax=axs[1, 0],
+)
 
-plot.scores_distribution(nb_probas[:, 1], n_bins=10, 
-                                          title="Gaussian Naive Bayes", color="#5BAF69", ax=axs[1,1])
+plot.scores_distribution(
+    nb_probas[:, 1],
+    n_bins=10,
+    title="Gaussian Naive Bayes",
+    color="#5BAF69",
+    ax=axs[1, 1],
+)
 ```
 
 Gaussian Naive Bayes tends to push probabilities to 0 or 1 (note the counts in the histograms). There aren't many observations in the 0.2 to 0.8 region. Logistic regression has good support all along the 0.0 to 1.0 area. SVC and Random Forest also tend to push probabilities toward 0.0 and 1.0 however support in the 0.2 to 0.8 region is better than Gaussian Naive Bayes.

@@ -36,9 +36,11 @@ Let's see an example. Our example plot takes a list of elements and it produces 
 ```{code-cell} ipython3
 from sklearn_evaluation.plot._example import MyBar
 
-bar = MyBar.from_raw_data(["banana", "banana", "apple", "pineapple", "apple"],
-                           color="lightblue",
-                           name="first experiment")
+bar = MyBar.from_raw_data(
+    ["banana", "banana", "apple", "pineapple", "apple"],
+    color="lightblue",
+    name="first experiment",
+)
 ```
 
 The constructor must take aggregated data. End-users do not typically call the constructor directly; however, it's still part of the public API. Unlike our `from_raw_data`, the constructor takes aggregated data (the counts):
@@ -100,8 +102,7 @@ MyBar.from_dump("bar.json")
 ```{code-cell} ipython3
 from sklearn_evaluation.plot._example import my_bar
 
-result = my_bar(["banana", "banana", "apple", "pineapple", "apple"],
-                color="lightblue")
+result = my_bar(["banana", "banana", "apple", "pineapple", "apple"], color="lightblue")
 ```
 
 ```{code-cell} ipython3
@@ -198,7 +199,6 @@ Go to `result_images/{test_file_name}/{baseline_image_name}.png` and check if th
 For example tests, see `tests/test_bar.py`
 
 +++
-
 
 ### Documentation
 

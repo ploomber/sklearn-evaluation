@@ -21,13 +21,13 @@ from sklearn_evaluation import plot
 
 import matplotlib.pyplot as plt
 
-data = datasets.make_classification(n_samples=200, n_features=10,
-                                    n_informative=5, class_sep=0.7)
+data = datasets.make_classification(
+    n_samples=200, n_features=10, n_informative=5, class_sep=0.7
+)
 X = data[0]
 y = data[1]
 # shuffle and split training and test sets
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=.5,
-                                                    random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.5, random_state=0)
 est = RandomForestClassifier(n_estimators=10)
 est.fit(X_train, y_train)
 y_true = y_test
@@ -49,13 +49,14 @@ sklearn-evaluation uses whatever configuration matplotlib has, if you want to ch
 
 ```{code-cell} ipython3
 import matplotlib.style
+
 matplotlib.style.available
 ```
 
 Then change the style using
 
 ```{code-cell} ipython3
-matplotlib.style.use('ggplot')
+matplotlib.style.use("ggplot")
 ```
 
 Let's see how a ROC curve looks with the new style:
@@ -65,7 +66,7 @@ plot.roc(y_true, y_score)
 ```
 
 ```{code-cell} ipython3
-matplotlib.style.use('classic')
+matplotlib.style.use("classic")
 ```
 
 ## Saving plots
@@ -73,12 +74,13 @@ matplotlib.style.use('classic')
 ```{code-cell} ipython3
 ax = plot.roc(y_true, y_score)
 fig = ax.get_figure()
-fig.savefig('my-roc-curve.png')
+fig.savefig("my-roc-curve.png")
 ```
 
 ```{code-cell} ipython3
 import os
-os.remove('my-roc-curve.png')
+
+os.remove("my-roc-curve.png")
 ```
 
 ## Comparing several models with one plot
@@ -87,7 +89,7 @@ os.remove('my-roc-curve.png')
 fig, ax = plt.subplots()
 plot.roc(y_true, y_score, ax=ax)
 plot.roc(y_true, y_score2, ax=ax)
-ax.legend(['Model 1', 'Baseline', 'Model 2'])
+ax.legend(["Model 1", "Baseline", "Model 2"])
 ```
 
 ## Grid Plots
@@ -96,13 +98,13 @@ ax.legend(['Model 1', 'Baseline', 'Model 2'])
 fig, (ax1, ax2) = plt.subplots(2, 1, sharex=True)
 plot.roc(y_true, y_score, ax=ax1)
 plot.roc(y_true, y_score2, ax=ax2)
-ax1.legend(['Model 1'])
-ax2.legend(['Model 2'])
+ax1.legend(["Model 1"])
+ax2.legend(["Model 2"])
 ```
 
 ## Customizing plots
 
 ```{code-cell} ipython3
 ax = plot.roc(y_true, y_score)
-ax.set_title('This is a custom title')
+ax.set_title("This is a custom title")
 ```

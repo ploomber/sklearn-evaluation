@@ -18,7 +18,6 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
 from sklearn_evaluation import plot, table
-import matplotlib.pyplot as plt
 ```
 
 sklearn-evluation has two main modules for evaluating classifiers: [sklearn_evaluation.plot](../api/plot.rst) and [sklearn_evaluation.table](../api/table.rst), let’s see an example of how to use them.
@@ -26,8 +25,7 @@ sklearn-evluation has two main modules for evaluating classifiers: [sklearn_eval
 First, let’s load some data and split it in training and test set.
 
 ```{code-cell} ipython3
-data = datasets.make_classification(200, 10, n_informative=5,
-                                    class_sep=0.65)
+data = datasets.make_classification(200, 10, n_informative=5, class_sep=0.65)
 ```
 
 ```{code-cell} ipython3
