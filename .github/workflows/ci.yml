@@ -26,8 +26,12 @@ jobs:
       shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
+        # run flake8 on .py files
         pip install flake8
         flake8
+        # run flake8 on notebooks (.ipynb, .md, etc)
+        pip install jupytext nbqa
+        nbqa flake8 .
 
     - name: Run tests
       env:

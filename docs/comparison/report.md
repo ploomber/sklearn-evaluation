@@ -18,7 +18,6 @@ kernelspec:
 We can also use the [sklearn_evaluation.ClassifierEvaluator](../api/evaluator.rst) class to pack the results from our estimator. This way we can generate plots and tables without having to pass the parameters over and over again. If we are evaluating more than one model at a time this also gives us a way to keep it organized. Furthermore, the ClassifierEvaluator class offers a way to create HTML reports from our model results.
 
 ```{code-cell} ipython3
-import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import train_test_split
 from sklearn import datasets
@@ -42,15 +41,15 @@ est.fit(X_train, y_train)
 y_pred = est.predict(X_test)
 y_score = est.predict_proba(X_test)
 feature_list = range(4)
-target_names = ['setosa', 'versicolor', 'virginica']
+target_names = ["setosa", "versicolor", "virginica"]
 ```
 
 Now that we have everything we need, let’s pack our results using ClassifierEvaluator, every parameter is optional.
 
 ```{code-cell} ipython3
-ce = ClassifierEvaluator(est, y_test, y_pred, y_score,
-                 feature_list, target_names,
-                 estimator_name='RF')
+ce = ClassifierEvaluator(
+    est, y_test, y_pred, y_score, feature_list, target_names, estimator_name="RF"
+)
 ```
 
 We can use most of the functions in plot and table directly from the ClassifierEvaluator object, let’s see how to plot a confusion matrix.

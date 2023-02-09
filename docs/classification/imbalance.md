@@ -21,12 +21,10 @@ It's essential to understand the class imbalance before implementing any resampl
 
 ```{code-cell} ipython3
 import matplotlib
-import matplotlib.pyplot as plt
 from sklearn.datasets import make_classification
 from sklearn.model_selection import train_test_split
 
 from sklearn_evaluation import plot
-from sklearn import datasets
 ```
 
 ```{code-cell} ipython3
@@ -36,12 +34,17 @@ matplotlib.rcParams["font.size"] = 18
 
 ```{code-cell} ipython3
 X, y = make_classification(
-    n_samples=1000, n_features=5, n_informative=3, n_classes=2, 
+    n_samples=1000,
+    n_features=5,
+    n_informative=3,
+    n_classes=2,
     # Set label 0 for  97% and 1 for rest 3% of observations
-    weights=[0.85], 
+    weights=[0.85],
 )
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=42
+)
 ```
 
 ##### Balance Mode

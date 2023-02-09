@@ -36,6 +36,7 @@ from sklearn.model_selection import ParameterGrid
 # to create SQLite database
 from sklearn_evaluation import NotebookDatabase
 ```
+
 ## Code
 
 `NotebookDatabase` indexes the output of tagged cells. In this example, we're using Python scripts (and tag cells using `# %% tags=["some-tag"]`). We convert these scripts to notebooks using `jupytext`, but the same concept applies for user-created notebooks (`.ipynb`)— [see here](https://docs.ploomber.io/en/latest/user-guide/faq_index.html#parameterizing-notebooks) to learn how to tag cells in `.ipynb` files.
@@ -92,11 +93,11 @@ y_pred = reg.predict(X_test)
 mean_squared_error(y_test, y_pred)
 """
 
-data_nb = jupytext.reads(data, fmt='py:percent')
-model_nb = jupytext.reads(model, fmt='py:percent')
+data_nb = jupytext.reads(data, fmt="py:percent")
+model_nb = jupytext.reads(model, fmt="py:percent")
 
-jupytext.write(data_nb, 'data.ipynb')
-jupytext.write(model_nb, 'model.ipynb')
+jupytext.write(data_nb, "data.ipynb")
+jupytext.write(model_nb, "model.ipynb")
 ```
 
 ## Executing notebooks
@@ -104,37 +105,53 @@ jupytext.write(model_nb, 'model.ipynb')
 Using the `execute_notebook` method from [ploomber-engine](https://ploomber-engine.readthedocs.io/en/latest/quick-start.html), each experiment will create an output `.ipynb` file.
 
 ```{code-cell} ipython3
-:tags: ["hide-output"]
+:tags: [hide-output]
 
 from ploomber_engine import execute_notebook
 
 experiments = {
-    'sklearn.tree.DecisionTreeRegressor': ParameterGrid(dict(criterion=['squared_error', 'friedman_mse'], splitter=['best', 'random'], max_depth=[3, 5])),
-    'sklearn.linear_model.Lasso': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])),
-    'sklearn.linear_model.Ridge':ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
-    'sklearn.linear_model.ElasticNet': ParameterGrid(dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])), 
+    "sklearn.tree.DecisionTreeRegressor": ParameterGrid(
+        dict(
+            criterion=["squared_error", "friedman_mse"],
+            splitter=["best", "random"],
+            max_depth=[3, 5],
+        )
+    ),
+    "sklearn.linear_model.Lasso": ParameterGrid(
+        dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])
+    ),
+    "sklearn.linear_model.Ridge": ParameterGrid(
+        dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])
+    ),
+    "sklearn.linear_model.ElasticNet": ParameterGrid(
+        dict(alpha=[1.0, 2.0, 3.0], fit_intercept=[True, False])
+    ),
 }
 
-## executes data.ipynb, creates output.ipynb and data.csv
-execute_notebook(Path('data.ipynb'), 'output.ipynb')
+# executes data.ipynb, creates output.ipynb and data.csv
+execute_notebook(Path("data.ipynb"), "output.ipynb")
 
-p = Path('output/models')
+p = Path("output/models")
 p.mkdir(parents=True, exist_ok=True)
 
 # generate one task per set of parameter
 for model, grid in experiments.items():
     for i, params in enumerate(grid):
-        name = f'{model}-{i}'
-        task = execute_notebook(Path('model.ipynb'), Path(f'output/models/{name}.ipynb'), parameters=dict(model=model, params=params))
-
+        name = f"{model}-{i}"
+        task = execute_notebook(
+            Path("model.ipynb"),
+            Path(f"output/models/{name}.ipynb"),
+            parameters=dict(model=model, params=params),
+        )
 ```
+
 ## Indexing notebooks
 
 ```{code-cell} ipython3
-:tags: ["hide-output"]
+:tags: [hide-output]
 
 # initialize db with notebooks in the outputs directory
-db = NotebookDatabase('nb.db', 'output/models/*.ipynb')
+db = NotebookDatabase("nb.db", "output/models/*.ipynb")
 
 # Note: pass update=True if you want to update the database if
 # the output notebook changes
@@ -152,7 +169,6 @@ db.index(verbose=True, update=False);
 ```{code-cell} ipython3
 # load jupysql magic
 %load_ext sql
-
 ```
 
 ### Best performing models

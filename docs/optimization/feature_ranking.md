@@ -20,11 +20,7 @@ Feature ranking allows to evaluate single features or pairs of features using a 
 
 ```{code-cell} ipython3
 import matplotlib
-import pandas as pd
-import numpy as np
-import matplotlib.pyplot as plt
 from sklearn.datasets import load_iris as load_data
-from sklearn.datasets import make_classification
 from sklearn_evaluation.plot import Rank1D, Rank2D
 ```
 
@@ -35,7 +31,12 @@ matplotlib.rcParams["font.size"] = 18
 
 ```{code-cell} ipython3
 X, y = load_data(return_X_y=True)
-features = ['sepal length (cm)', 'sepal width (cm)', 'petal length (cm)', 'petal width (cm)']
+features = [
+    "sepal length (cm)",
+    "sepal width (cm)",
+    "petal length (cm)",
+    "petal width (cm)",
+]
 ```
 
 ##### Rank 1D
