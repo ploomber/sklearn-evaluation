@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.11.2dev
+- [Doc] Object oriented API guide includes appropriate methods under each model (#271)
 
 ## 0.11.1 (2023-02-07)
 
