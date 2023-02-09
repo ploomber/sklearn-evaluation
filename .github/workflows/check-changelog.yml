@@ -1,0 +1,30 @@
+name: check-changelog
+
+on: [pull_request]
+
+jobs:
+  # check that the changelog has been modified. If not, post a message to the PR
+  check-changelog:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v3
+      - name: Check PR
+        id: changelog
+        continue-on-error: true
+        run: |
+
+          # check if changelog has been modified
+          git fetch origin $GITHUB_BASE_REF:$GITHUB_BASE_REF --depth 1
+          git --no-pager diff --name-only --diff-filter=ACMRT $GITHUB_BASE_REF | grep CHANGELOG.md
+
+      - uses: actions/github-script@v5
+        if: steps.changelog.outcome == 'failure'
+        with:
+          github-token: ${{secrets.GITHUB_TOKEN}}
+          script: |
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: 'A heads up that the CHANGELOG has not been updated for this PR! [Guidelines.](https://github.com/ploomber/contributing/blob/main/CONTRIBUTING.md#changelog)'
+            })
