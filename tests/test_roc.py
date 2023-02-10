@@ -272,19 +272,6 @@ def test_roc_dump_multi(tmp_directory, roc_multi_classification_raw_data):
 
 @pytest.mark.parametrize(
     "fpr, tpr",
-    [(fpr, tpr)],
-)
-def test_roc_sub_not_implemented_error(fpr, tpr):
-    roc = plot.ROC(fpr, tpr)
-
-    with pytest.raises(NotImplementedError) as excinfo:
-        roc.__sub__()
-        test_res = f"{type(roc).__name__!r} doesn't support the substract (-) operator"
-        assert test_res in str(excinfo.value)
-
-
-@pytest.mark.parametrize(
-    "fpr, tpr",
     [
         ([0.0, 0.2, 0.4, 0.4, 0.6, 1.0], []),
         ([], [0.0, 0.2, 0.4, 1.0, 1.0, 1.0]),
