@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -30,10 +30,8 @@ import pandas as pd
 # download dataset
 # Reference: https://www.kaggle.com/datasets/mirichoi0218/insurance
 
-url = (
-    "https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/"
-    "master/insurance.csv"
-)
+
+url = "https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/master/insurance.csv"  # noqa
 urllib.request.urlretrieve(url, filename="insurance.csv")
 
 data = pd.read_csv("insurance.csv")

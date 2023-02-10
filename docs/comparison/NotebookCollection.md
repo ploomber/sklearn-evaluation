@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -28,10 +28,7 @@ Let's first generate a few notebooks, we have a `train.py` script that trains a 
 
 ```{code-cell} ipython3
 # download script
-url = (
-    "https://raw.githubusercontent.com/ploomber/sklearn-evaluation/master/"
-    "docs-assets/nb-collection/train.py"
-)
+url = "https://raw.githubusercontent.com/ploomber/sklearn-evaluation/master/docs-assets/nb-collection/train.py"  # noqa
 urllib.request.urlretrieve(url, filename="train.py")
 
 # convert
