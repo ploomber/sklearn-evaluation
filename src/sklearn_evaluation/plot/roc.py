@@ -389,9 +389,6 @@ class ROC(AbstractPlot):
         self.tpr = tpr
         self.label = label
 
-    def __sub__(self):
-        raise NotImplementedError("Not applicable for ROC")
-
     @SKLearnEvaluationLogger.log(feature="plot", action="roc-add")
     def __add__(self, other):
         roc_add_result = ROCAdd(self, other)
