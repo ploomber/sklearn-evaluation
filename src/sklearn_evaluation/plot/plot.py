@@ -68,7 +68,7 @@ class AbstractPlot(abc.ABC):
         compares this plot and ``another`` plot.
         """
         raise NotImplementedError(
-            f"{type(self).__name__!r} doesn't support the substract (-) operator"
+            f"{type(self).__name__!r} doesn't support the add (+) operator"
         )
 
     def __sub__(self, another):
@@ -77,7 +77,7 @@ class AbstractPlot(abc.ABC):
         compares the difference between this plot and ``another`` plot.
         """
         raise NotImplementedError(
-            f"{type(self).__name__!r} doesn't support the add (+) operator"
+            f"{type(self).__name__!r} doesn't support the substract (-) operator"
         )
 
     @classmethod

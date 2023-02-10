@@ -282,11 +282,6 @@ class CalibrationCurve(AbstractPlot):
             cmaps=[self.cmap, another.cmap],
         ).plot()
 
-    def __sub__(self, another):
-        raise NotImplementedError(
-            f"{type(self).__name__!r} doesn't support the substract (-) operator"
-        )
-
     @classmethod
     def _from_data(cls):
         pass

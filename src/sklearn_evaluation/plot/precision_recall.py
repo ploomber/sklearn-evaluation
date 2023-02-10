@@ -211,11 +211,6 @@ class PrecisionRecall(AbstractPlot):
             labels=[self.label, another.label],
         ).plot()
 
-    def __sub__(self, another):
-        raise NotImplementedError(
-            f"{type(self).__name__!r} doesn't support the substract (-) operator"
-        )
-
     @classmethod
     @modify_exceptions
     def from_raw_data(cls, y_true, y_score, *, label=None):

@@ -279,7 +279,8 @@ def test_roc_sub_not_implemented_error(fpr, tpr):
 
     with pytest.raises(NotImplementedError) as excinfo:
         roc.__sub__()
-        assert "Not applicable for ROC" in str(excinfo.value)
+        test_res = f"{type(roc).__name__!r} doesn't support the substract (-) operator"
+        assert test_res in str(excinfo.value)
 
 
 @pytest.mark.parametrize(
