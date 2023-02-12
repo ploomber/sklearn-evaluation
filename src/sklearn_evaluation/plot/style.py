@@ -16,9 +16,8 @@ def tmp_theme(ax=None, coloring=True, ax_style=True):
 
         if coloring:
             _set_default_plot_colors()
-            cmap = get_cmap()
+            cmap = get_and_register_cmap()
             theme['cmap'] = cmap
-
         yield theme
 
     finally:
@@ -76,12 +75,16 @@ def _set_default_ax_style(ax=None):
     ax.tick_params(right=False, top=False)
 
 
-def get_cmap():
+def get_and_register_cmap():
     _material_ui_colors = [
         "#00B0FF",
         "#f8fdff",
     ]
-
     cmap = LinearSegmentedColormap.from_list(
         'material_cmap', _material_ui_colors)
-    return truncate_colormap(cmap, 0, 1)
+    cmap = truncate_colormap(cmap, 0, 1)
+
+    if cmap.name not in plt.colormaps():
+        mpl.colormaps.register(cmap)
+        plt.rcParams['image.cmap'] = cmap.name
+    return cmap
