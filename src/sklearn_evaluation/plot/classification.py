@@ -17,6 +17,7 @@ from sklearn_evaluation.util import is_column_vector, is_row_vector, default_hea
 from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from sklearn_evaluation.plot import _matrix
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme
 
 
 class ConfusionMatrixSub(AbstractComposedPlot):
@@ -26,13 +27,16 @@ class ConfusionMatrixSub(AbstractComposedPlot):
         self.cm = cm
         self.target_names = target_names
 
-    def plot(self, ax=None):
+    @apply_theme(ax_style=False)
+    def plot(self, ax=None, **theme):
         if ax is None:
             _, ax = plt.subplots()
 
+        cmap = theme['cmap'] if theme else default_heatmap()
+
         _plot_cm(
             self.cm,
-            cmap=default_heatmap(),
+            cmap=cmap,
             ax=ax,
             target_names=self.target_names,
             normalize=False,
@@ -49,11 +53,14 @@ class ConfusionMatrixAdd(AbstractComposedPlot):
         self.b = b
         self.target_names = target_names
 
-    def plot(self, ax=None):
+    @apply_theme(ax_style=False)
+    def plot(self, ax=None, **theme):
         if ax is None:
             _, ax = plt.subplots()
 
-        _matrix.add(self.a, self.b, ax, invert_axis=True)
+        cmap = theme['cmap'] if theme else None
+
+        _matrix.add(self.a, self.b, ax, invert_axis=True, cmap=cmap)
 
         tick_marks = np.arange(len(self.target_names))
         ax.set_xticks(tick_marks)
@@ -97,9 +104,13 @@ class ConfusionMatrix(AbstractPlot):
         self.normalize = normalize
         self.cmap = _confusion_matrix_init_defaults(cmap=cmap)
 
-    def plot(self, ax=None):
+    @apply_theme(ax_style=False)
+    def plot(self, ax=None, **theme):
         if ax is None:
             _, ax = plt.subplots()
+
+        if theme:
+            self.cmap = theme['cmap']
 
         _plot_cm(self.cm, self.cmap, ax, self.target_names, self.normalize)
 

@@ -281,7 +281,7 @@ class ROCAdd(AbstractComposedPlot):
         self.a = a
         self.b = b
 
-    @apply_theme
+    @apply_theme()
     def plot(self, ax=None):
         a = self.a
         b = self.b
@@ -414,7 +414,7 @@ class ROC(AbstractPlot):
             "tpr": tpr,
         }
 
-    @apply_theme
+    @apply_theme()
     def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
