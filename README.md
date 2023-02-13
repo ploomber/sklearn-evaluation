@@ -18,9 +18,9 @@
   |
   <a href="https://sklearn-evaluation.ploomber.io">Docs</a>
   |
-  <a href="https://ploomber.io/">Blog</a>
+  <a href="https://ploomber.io/blog">Blog</a>
   |
-  <a href="https://www.ploomber.io">Website</a>
+  <a href="https://ploomber.io">Website</a>
   |
   <a href="https://www.youtube.com/channel/UCaIS5BMlmeNQE4-Gn0xTDXQ">YouTube</a>
 </p>

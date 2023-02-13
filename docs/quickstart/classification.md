@@ -27,22 +27,22 @@ In steps 4 & 5 the real value of sklearn-evaluation comes to fruition as we get 
 
 ```{code-cell} ipython3
 import pandas as pd
-import numpy as np
 import seaborn as sns
-import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 from sklearn import tree
 from sklearn.neighbors import KNeighborsClassifier
-from sklearn.metrics import confusion_matrix, accuracy_score, classification_report
+from sklearn.metrics import accuracy_score, classification_report
 from sklearn_evaluation import plot, table
-# Based on https://github.com/Adeyinka-hub/Machine-Learning-2/blob/master/Penguin%20Dataset.ipynb
+
+# Based on
+# https://github.com/Adeyinka-hub/Machine-Learning-2/blob/master/Penguin%20Dataset.ipynb
 ```
 
 ## Load the dataset
 
 ```{code-cell} ipython3
-df = sns.load_dataset('penguins')
+df = sns.load_dataset("penguins")
 
 # Review a sample of the data
 df.head(5)
@@ -59,20 +59,22 @@ It's all in a single cell since this isn't too relevant to the tool itself.
 df.isnull().sum()
 df.dropna(inplace=True)
 Y = df.species
-Y = Y.map({'Adelie': 0, 'Chinstrap':1, 'Gentoo':2})
-df.drop('species', inplace=True, axis=1)
-se=pd.get_dummies(df['sex'], drop_first=True) 
+Y = Y.map({"Adelie": 0, "Chinstrap": 1, "Gentoo": 2})
+df.drop("species", inplace=True, axis=1)
+se = pd.get_dummies(df["sex"], drop_first=True)
 df = pd.concat([df, se], axis=1)
-df.drop('sex', axis=1, inplace=True)
+df.drop("sex", axis=1, inplace=True)
 le = LabelEncoder()
-df['island']= le.fit_transform(df['island']) 
+df["island"] = le.fit_transform(df["island"])
 ```
 
 # Decision Tree Classifier
 
 ```{code-cell} ipython3
 X = df
-X_train, X_test, y_train, y_test = train_test_split(X, Y, test_size=0.3, random_state=40)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, Y, test_size=0.3, random_state=40
+)
 
 
 dtc = tree.DecisionTreeClassifier()
@@ -84,7 +86,7 @@ print("Acc on test data: {:,.3f}".format(dtc.score(X_test, y_test)))
 
 ```{code-cell} ipython3
 y_test
-{'Adelie': 0, 'Chinstrap':1, 'Gentoo':2}
+{"Adelie": 0, "Chinstrap": 1, "Gentoo": 2}
 ```
 
 ## Evaluate our model
@@ -112,7 +114,7 @@ print(table.feature_importances(dtc, feature_names=list(dtc.feature_names_in_)))
 
 KNN = KNeighborsClassifier()
 KNN.fit(X_train, y_train)
-y_pred_knn= KNN.predict(X_test)
+y_pred_knn = KNN.predict(X_test)
 print(accuracy_score(y_test, y_pred_knn))
 print(classification_report(y_test, y_pred_knn))
 knn_cm = plot.confusion_matrix(y_test, y_pred_knn)

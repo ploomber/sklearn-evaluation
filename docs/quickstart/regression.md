@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -25,12 +25,16 @@ Let's import the required libraries and read the dataset.
 
 ```{code-cell} ipython3
 import urllib.request
-import pandas as pd 
+import pandas as pd
 
-# download dataset. Reference: https://www.kaggle.com/datasets/mirichoi0218/insurance
-urllib.request.urlretrieve('https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/master/insurance.csv', filename='insurance.csv')
+# download dataset
+# Reference: https://www.kaggle.com/datasets/mirichoi0218/insurance
 
-data = pd.read_csv('insurance.csv')
+
+url = "https://raw.githubusercontent.com/stedy/Machine-Learning-with-R-datasets/master/insurance.csv"  # noqa
+urllib.request.urlretrieve(url, filename="insurance.csv")
+
+data = pd.read_csv("insurance.csv")
 ```
 
 ## Analyse the dataset
@@ -44,17 +48,17 @@ Transform non-numerical labels to numerical labels.
 ```{code-cell} ipython3
 from sklearn.preprocessing import LabelEncoder
 
-#sex
+# sex
 le = LabelEncoder()
-le.fit(data.sex.drop_duplicates()) 
+le.fit(data.sex.drop_duplicates())
 data.sex = le.transform(data.sex)
 
 # smoker or not
-le.fit(data.smoker.drop_duplicates()) 
+le.fit(data.smoker.drop_duplicates())
 data.smoker = le.transform(data.smoker)
 
-#region
-le.fit(data.region.drop_duplicates()) 
+# region
+le.fit(data.region.drop_duplicates())
 data.region = le.transform(data.region)
 ```
 
@@ -63,7 +67,7 @@ Let's visualise the correlation among the variables.
 ```{code-cell} ipython3
 import seaborn as sns
 
-sns.heatmap(data.corr(), annot=True,cmap='cool')
+sns.heatmap(data.corr(), annot=True, cmap="cool")
 ```
 
 A strong correlation is observed with the smoking aspect of the patient. Now let's train a linear regression model on the data.
@@ -77,11 +81,11 @@ from sklearn.metrics import r2_score
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 
-X = data.drop(['charges'], axis = 1)
+X = data.drop(["charges"], axis=1)
 y = data.charges
 
 X_train, X_test, y_train, y_test = train_test_split(X, y, random_state=0)
-model = LinearRegression().fit(X_train,y_train)
+model = LinearRegression().fit(X_train, y_train)
 ```
 
 ```{code-cell} ipython3
@@ -117,6 +121,7 @@ The best fit line represents the trend in the actual predicted outcomes.
 The closer the best fit and the identity lines, the better the correlation between the predicted and the actual outcome.
 
 From the below plot we can see there is a fairly small deviation between the best fit and the identity lines, hence the model performance is good.
+
 ```{code-cell} ipython3
 plot.prediction_error(y_test, y_pred)
 ```
@@ -132,5 +137,5 @@ The following guidelines will help you understand how to deal with outliers:
 - The outlying data point may be a natural variation in the dataset. It should not be removed unless a thorough investigation is done.
 
 ```{code-cell} ipython3
-plot.cooks_distance(X,y)
+plot.cooks_distance(X, y)
 ```

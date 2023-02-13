@@ -37,13 +37,17 @@ matplotlib.rcParams["font.size"] = 18
 
 ```{code-cell} ipython3
 # Generate a dataset with low class_sep value
-X, y = make_classification(n_samples=1000,
-                           n_features=20,
-                           n_informative=10,
-                           class_sep=0.8,
-                           n_classes=2,
-                           random_state=0)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+X, y = make_classification(
+    n_samples=1000,
+    n_features=20,
+    n_informative=10,
+    class_sep=0.8,
+    n_classes=2,
+    random_state=0,
+)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=123
+)
 model = LogisticRegression(random_state=101)
 model = model.fit(X_train, y_train)
 ```
@@ -58,13 +62,15 @@ plt.show()
 
 ```{code-cell} ipython3
 X, y = load_data(return_X_y=True)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=123)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=123
+)
 
 # Create classifier instance
 lr = LogisticRegression(max_iter=2000)
 
 # Fit the model
-lr.fit(X_train,y_train)
+lr.fit(X_train, y_train)
 y_probas = lr.predict_proba(X_test)
 ```
 
