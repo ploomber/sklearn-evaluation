@@ -39,7 +39,7 @@ class NotebookCollection(Mapping):
         List of ids (one per notebook), if None, paths are used as identifiers,
         if 'filenames', the file name is extracted from each path and used
         as identifier (ignores extension)
-    """ # noqa
+    """  # noqa
 
     @SKLearnEvaluationLogger.log(
         feature="NotebookCollection", action="init-NotebookCollection"

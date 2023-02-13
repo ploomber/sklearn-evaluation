@@ -3,11 +3,11 @@ from sklearn import model_selection
 from sklearn.naive_bayes import GaussianNB
 from sklearn.svm import SVC
 from sklearn.datasets import load_digits
-import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn_evaluation import plot
 
+# load data
 digits = load_digits()
 X, y = digits.data, digits.target
 
@@ -21,7 +21,6 @@ train_sizes, train_scores, test_scores = learning_curve(
     estimator, X, y, cv=cv, n_jobs=1, train_sizes=train_sizes
 )
 plot.learning_curve(train_scores, test_scores, train_sizes)
-plt.show()
 
 # SVC is more expensive so we do a lower number of CV iterations:
 cv = model_selection.ShuffleSplit(digits.data.shape[0], test_size=0.2, random_state=0)
@@ -32,5 +31,5 @@ train_sizes, train_scores, test_scores = learning_curve(
     estimator, X, y, cv=cv, n_jobs=1, train_sizes=train_sizes
 )
 
+# plot learning curve
 plot.learning_curve(train_scores, test_scores, train_sizes)
-plt.show()

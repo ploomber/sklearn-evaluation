@@ -45,6 +45,17 @@ def test_plot_calibration_curve_bad_input_value_error(
     with pytest.raises(ValueError, match=ploomber_value_error_message):
         plot.calibration_curve(bad_y_true, probabilities, clf_names)
 
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.CalibrationCurve.from_raw_data([1], 1)
+
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.CalibrationCurve.from_raw_data([[1, 0]], [0.5, 0.5])
+
+    with pytest.raises(ValueError, match=ploomber_value_error_message):
+        plot.CalibrationCurve.from_raw_data(
+            [[1, 0], [0, 0]], [0.5, 0.5], label=["Classifier 1"]
+        )
+
 
 def test_plot_feature_importances_bad_input_value_error(ploomber_value_error_message):
     from examples.feature_importances import model

@@ -15,6 +15,7 @@ from matplotlib.testing.conftest import (  # noqa
     mpl_image_comparison_parameters,
 )
 from sklearn.ensemble import RandomForestClassifier
+from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
@@ -234,3 +235,58 @@ def precision_recall_multiclass_classification_set_two():
         ]
     )
     return y_true, y_score
+
+
+@pytest.fixture(scope="session")
+def calibration_curve_raw_data():
+    X, y = datasets.make_classification(
+        n_samples=7000, n_features=2, n_informative=2, n_redundant=0, random_state=0
+    )
+    X_train, X_test, y_train, y_test = train_test_split(
+        X, y, test_size=0.33, random_state=0
+    )
+
+    rf = RandomForestClassifier(random_state=0)
+    lr = LogisticRegression(random_state=0)
+
+    rf_probas = rf.fit(X_train, y_train).predict_proba(X_test)
+    lr_probas = lr.fit(X_train, y_train).predict_proba(X_test)
+
+    probabilities = [rf_probas, lr_probas]
+
+    clf_names = ["Random Forest", "Logistic Regression"]
+
+    return y_test, probabilities, clf_names
+
+
+@pytest.fixture(scope="session")
+def calibration_curve_plot_metrics_data():
+
+    mean_predicted_value_one = [
+        [0.02024768, 0.29093366, 0.46554422, 0.68282258, 0.91699482]
+    ]
+
+    fraction_of_positives_one = [
+        [0.06147722, 0.33673219, 0.57870748, 0.79467742, 0.94041451]
+    ]
+
+    clf_names_one = ["Random Forest"]
+
+    mean_predicted_value_two = [
+        [0.03392278, 0.3362952, 0.50780503, 0.81189161, 0.89122685]
+    ]
+
+    fraction_of_positives_two = [
+        [0.04212573, 0.39193548, 0.51515152, 0.805575345, 0.99522876]
+    ]
+
+    clf_names_two = ["Logistic Regression"]
+
+    return (
+        mean_predicted_value_one,
+        fraction_of_positives_one,
+        clf_names_one,
+        mean_predicted_value_two,
+        fraction_of_positives_two,
+        clf_names_two,
+    )

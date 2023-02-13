@@ -1,7 +1,6 @@
 docs/reference/*.json
 docs/_build
 
-.nox
 *.ipynb
 *.metadata
 *.db

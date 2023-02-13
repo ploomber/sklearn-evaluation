@@ -2,8 +2,10 @@ import numpy as np
 from sklearn.datasets import load_iris
 from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import train_test_split
+
 from sklearn_evaluation import plot
 
+# load data
 iris = load_iris()
 X, y = iris.data, iris.target
 y = iris.target_names[y]
@@ -22,7 +24,5 @@ X = np.concatenate([X, random_state.randn(n_samples, 200 * n_features)], axis=1)
 classifier = LogisticRegression()
 y_score = classifier.fit(X_train, y_train).predict_proba(X_test)
 
-
-roc = plot.ROC.from_raw_data(y_test, y_score)
-
-roc
+# plot roc curve
+plot.ROC.from_raw_data(y_test, y_score)

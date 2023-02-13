@@ -160,7 +160,7 @@ def _flatten_list(elements):
 def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
     """
     http://stackoverflow.com/questions/18926031/how-to-extract-a-subset-of-a-colormap-as-a-new-colormap-in-matplotlib
-    """ # noqa
+    """  # noqa
     import matplotlib.colors as colors
     import numpy as np
 

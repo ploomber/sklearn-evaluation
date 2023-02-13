@@ -14,6 +14,7 @@ Object Oriented API
 ConfusionMatrix
 ---------------
 .. autoclass:: sklearn_evaluation.plot.ConfusionMatrix
+    :members:
 
 PrecisionRecall
 ----------------
@@ -22,11 +23,18 @@ PrecisionRecall
 
 ROC
 ---
-.. autofunction:: sklearn_evaluation.plot.ROC
+.. autoclass:: sklearn_evaluation.plot.ROC
+    :members:
 
 ClassificationReport
 --------------------
 .. autoclass:: sklearn_evaluation.plot.ClassificationReport
+    :members:
+
+CalibrationCurve
+----------------
+.. autoclass:: sklearn_evaluation.plot.CalibrationCurve
+    :members:
 
 Rank1D
 ------

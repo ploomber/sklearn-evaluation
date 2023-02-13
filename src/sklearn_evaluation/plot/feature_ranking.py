@@ -234,6 +234,9 @@ class Rank1D(RankD):
 
     Examples
     ---------
+
+    Visualize the Feature Rankings:
+
     .. plot:: ../examples/feature_ranking_1D.py
 
     Notes
@@ -338,6 +341,9 @@ class Rank2D(RankD):
 
     Examples
     ----------
+
+    Visualize the Feature Rankings by Pairwise Comparison:
+
     .. plot:: ../examples/feature_ranking_2D.py
 
     Notes

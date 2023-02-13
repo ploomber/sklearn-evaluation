@@ -22,7 +22,6 @@ from sklearn.datasets import load_diabetes
 from sklearn.linear_model import LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn_evaluation import plot
-import matplotlib.pyplot as plt
 ```
 
 ## Fetch Data
@@ -83,14 +82,12 @@ Create a dataset with strong outliers.
 
 ```{code-cell} ipython3
 from sklearn.datasets import make_regression
-X, y = make_regression(n_samples=100, 
-                                 n_features=6, 
-                                 n_informative=5, 
-                                 n_targets=1, 
-                                 bias=100.0,
-                                 noise=30.0)
+
+X, y = make_regression(
+    n_samples=100, n_features=6, n_informative=5, n_targets=1, bias=100.0, noise=30.0
+)
 ```
 
 ```{code-cell} ipython3
-plot.cooks_distance(X,y)
+plot.cooks_distance(X, y)
 ```

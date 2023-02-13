@@ -18,9 +18,9 @@
   |
   <a href="https://sklearn-evaluation.ploomber.io">Docs</a>
   |
-  <a href="https://ploomber.io/">Blog</a>
+  <a href="https://ploomber.io/blog">Blog</a>
   |
-  <a href="https://www.ploomber.io">Website</a>
+  <a href="https://ploomber.io">Website</a>
   |
   <a href="https://www.youtube.com/channel/UCaIS5BMlmeNQE4-Gn0xTDXQ">YouTube</a>
 </p>
@@ -29,7 +29,7 @@ Machine learning model evaluation made easy: plots, tables, HTML reports, experi
 
 Supports Python 3.7 and higher. Tested on Linux, macOS and Windows.
 
-*Note:* Recent versions likely work on Python 3.6, however, `0.8.2` was the latest version we tested with Python 3.6.
+*Note:* Recent versions likely work on Python 3.6; however, `0.8.2` was the latest version tested with such Python version.
 
 <p align="center">
   <a href="https://binder.ploomber.io/v2/gh/ploomber/sklearn-evaluation/master?urlpath=lab/tree/docs/quickstart/classification.md"> <img src="_static/get-started.svg" alt="Get Started"> </a>

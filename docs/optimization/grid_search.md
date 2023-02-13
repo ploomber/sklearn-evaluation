@@ -18,7 +18,6 @@ A common practice in Machine Learning is to train several models with different 
 sklearn-evaluation includes a plotting function to evaluate grid search results, this way we can see how the model performs when changing one (or two) hyperparameter(s) by keeping the rest constant.
 
 ```{code-cell} ipython3
-import matplotlib.pyplot as plt
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.model_selection import GridSearchCV
 from sklearn import datasets
@@ -28,8 +27,9 @@ from sklearn_evaluation import plot
 First, let’s load some data.
 
 ```{code-cell} ipython3
-data = datasets.make_classification(n_samples=200, n_features=10,
-                                    n_informative=4, class_sep=0.5)
+data = datasets.make_classification(
+    n_samples=200, n_features=10, n_informative=4, class_sep=0.5
+)
 
 X = data[0]
 y = data[1]
@@ -39,9 +39,9 @@ Now, we need to define which hyperparameter sets we want to include in the grid 
 
 ```{code-cell} ipython3
 hyperparameters = {
-    'n_estimators': [1, 10, 50, 100],
-    'criterion': ['gini', 'entropy'],
-    'max_features': ['sqrt', 'log2'],
+    "n_estimators": [1, 10, 50, 100],
+    "criterion": ["gini", "entropy"],
+    "max_features": ["sqrt", "log2"],
 }
 ```
 
@@ -60,21 +60,26 @@ grid_scores = clf.cv_results_
 To generate the plot, we need to pass the grid_scores and the parameter(s) to change, let’s see how the number of trees in the Random Forest affects the performance of the model.
 
 ```{code-cell} ipython3
-plot.grid_search(clf.cv_results_, change='n_estimators', kind='bar')
+plot.grid_search(clf.cv_results_, change="n_estimators", kind="bar")
 ```
 
 We can also subset the grid scores to plot by using the subset parameter (note that the hyperparameter in change can also appear in subset).
 
 ```{code-cell} ipython3
-plot.grid_search(clf.cv_results_, change='n_estimators',
-                 subset={'n_estimators': [10, 50, 100],
-                         'criterion': 'gini'},
-                 kind='bar')
+plot.grid_search(
+    clf.cv_results_,
+    change="n_estimators",
+    subset={"n_estimators": [10, 50, 100], "criterion": "gini"},
+    kind="bar",
+)
 ```
 
 To evaluate the effect of two hyperparameters, we pass the two of them in change, note that for this to work we need to subset the grid scores to match only one group. In this case we’ll plot n_estimators and criterion, so we need to subset max_features to one single value.
 
 ```{code-cell} ipython3
-plot.grid_search(clf.cv_results_, change=('n_estimators', 'criterion'),
-                 subset={'max_features': 'sqrt'})
+plot.grid_search(
+    clf.cv_results_,
+    change=("n_estimators", "criterion"),
+    subset={"max_features": "sqrt"},
+)
 ```
