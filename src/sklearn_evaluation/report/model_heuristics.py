@@ -5,21 +5,78 @@ from sklearn_evaluation.report.serialize import figure2html
 import abc
 
 
+class ReportSection:
+    """
+    Section to include in report
+    """
+
+    def __init__(self, key, include_in_report=True):
+        self.report_section = dict(
+            {
+                "guidelines": [],
+                "title": key.replace("_", " "),
+                "include_in_report": include_in_report,
+                "is_ok": False,
+            }
+        )
+        self.key = key
+
+    def append_guideline(self, guideline):
+        """
+        Add guideline to section
+
+        Parameters
+        ----------
+        guideline : str
+            The guideline to add
+        """
+        self.report_section["guidelines"].append(guideline)
+
+    def get_dict(self) -> dict:
+        """
+        Return dict of the section
+        """
+        return self.report_section
+
+    def set_is_ok(self, is_ok):
+        """
+        Set if the reported test is valid
+        """
+        self.report_section["is_ok"] = is_ok
+
+    def set_include_in_report(self, include):
+        """
+        Set if should include this section in the report
+        """
+        self.report_section["include_in_report"] = include
+
+
 class ModelHeuristics(abc.ABC):
     """
     Base class for generating model heuristics and reports
     """
 
     _report_css_style = """
+    h1 {
+        font-size: 2.25em;
+        margin-bottom: 0;
+    }
+
+    h2 {
+        font-size: 1.25em;
+    }
+
     .model-evaluation-container {
-        font-family: Arial, Helvetica, sans-serif;
+        font-family: Helvetica, sans-serif, Arial;
         text-align: left;
         width: fit-content;
         margin: 50px auto;
     }
 
     .block {
-        margin-bottom: 50px
+        margin-bottom: 0px;
+        border-bottom: 1px solid #e5e4e4;
+        padding: 0.75em 0;
     }
 
     .nobull {
@@ -28,6 +85,14 @@ class ModelHeuristics(abc.ABC):
 
     ul li {
         margin-bottom: 10px;
+    }
+
+    ul {
+        padding: 0;
+    }
+
+    ul li:not(.nobull) {
+        margin-left: 1em;
     }
 
     .display-inline-block {
@@ -110,8 +175,8 @@ class ModelHeuristics(abc.ABC):
         <div>
             <h1>{{title}}</h1>
 
-            <div class="block">
                 {% for key in evaluation_state.keys() %}
+                <div class="block">
                     {% if evaluation_state[key]["include_in_report"] %}
                     <ul>
                         <li class="nobull"><h2 class="capitalize">
@@ -127,9 +192,8 @@ class ModelHeuristics(abc.ABC):
                         {% endfor %}
                     </ul>
                     {% endif %}
-
+                </div>
                 {% endfor %}
-            </div>
 
         </div>
     </div>
@@ -145,3 +209,9 @@ class ModelHeuristics(abc.ABC):
 
         report = Report(e, template)
         return report
+
+    def _get_model_name(self, model) -> str:
+        """
+        Returns model name
+        """
+        return model.__class__.__name__

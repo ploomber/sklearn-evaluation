@@ -11,7 +11,10 @@ kernelspec:
   name: python3
 ---
 
-# Model evaluation
+# Report: Evaluation
+
+```{versionadded} 0.11.2
+```
 
 +++
 

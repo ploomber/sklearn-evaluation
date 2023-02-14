@@ -16,6 +16,8 @@ parts:
     - file: classification/imbalance
     - file: classification/grid_search
     - file: classification/calibration
+    - file: classification/report_evaluation
+    - file: classification/report_comparison
 
   - caption: Regression
     chapters:
@@ -32,8 +34,6 @@ parts:
     - file: comparison/NotebookCollection
     - file: comparison/nbdb
     - file: comparison/report
-    - file: comparison/model_evaluation
-    - file: comparison/model_comparison
 
   - caption: Model optimization
     chapters:

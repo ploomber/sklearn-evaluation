@@ -4,59 +4,20 @@ import numpy as np
 import re
 from sklearn_evaluation.evaluator import _gen_ax
 from sklearn_evaluation import plot
-from sklearn_evaluation.model_heuristics.utils import (
+from sklearn_evaluation.report.util import (
     check_array_balance,
     get_model_prediction_time,
     get_roc_auc,
     Range,
+    validate_args_not_none,
 )
-from sklearn_evaluation.model_heuristics.model_heuristics import ModelHeuristics
+from sklearn_evaluation.report import ModelHeuristics, ReportSection
 
+COMMUNITY_LINK = "https://ploomber.io/community"
 
-class ReportSection:
-    """
-    Section to include in report
-    """
-
-    def __init__(self, key, include_in_report=True):
-        self.report_section = dict(
-            {
-                "guidelines": [],
-                "title": key.replace("_", " "),
-                "include_in_report": include_in_report,
-                "is_ok": False,
-            }
-        )
-        self.key = key
-
-    def append_guideline(self, guideline):
-        """
-        Add guideline to section
-
-        Parameters
-        ----------
-        guideline : str
-            The guideline to add
-        """
-        self.report_section["guidelines"].append(guideline)
-
-    def get_dict(self) -> dict:
-        """
-        Return dict of the section
-        """
-        return self.report_section
-
-    def set_is_ok(self, is_ok):
-        """
-        Set if the reported test is valid
-        """
-        self.report_section["is_ok"] = is_ok
-
-    def set_include_in_report(self, include):
-        """
-        Set if should include this section in the report
-        """
-        self.report_section["include_in_report"] = include
+COMMUNITY = ("If you need help understanding these stats, " +
+             "send us a message on <a href='{COMMUNITY_LINK}'" +
+             "target='_blank'>slack</a>")
 
 
 class ModelEvaluator(ModelHeuristics):
@@ -68,6 +29,7 @@ class ModelEvaluator(ModelHeuristics):
         self.model = model
         super().__init__()
 
+    @validate_args_not_none
     def evaluate_balance(self, y_true):
         """
         Checks if model is balanced
@@ -84,38 +46,45 @@ class ModelEvaluator(ModelHeuristics):
             p = plot.target_analysis(y_true)
             balance_section.append_guideline("Your test set is highly imbalanced")
             balance_section.append_guideline(p)
-            balance_section.append_guideline(
-                "To tackle this, check out this "
-                "<a href='https://ploomber.io/blog/' target='_blank'>guide</a>"
-            )
+            balance_section.append_guideline(COMMUNITY)
 
         self._add_section_to_report(balance_section)
 
+    @validate_args_not_none
     def evaluate_accuracy(self, y_true, y_pred_test):
         """
         Measures how many labels the
         model got right out of the total number of predictions
         """
-        accuracy_threshold = 0.9
         accuracy_section = ReportSection("accuracy")
-        accuracy = accuracy_score(y_true, y_pred_test)
 
-        balance = self.evaluation_state["balance"]
+        try:
+            accuracy_threshold = 0.9
+            accuracy = accuracy_score(y_true, y_pred_test)
 
-        accuracy_section.append_guideline(f"Accuracy is {accuracy}")
-        if accuracy >= accuracy_threshold:
-            if balance["is_ok"]:
-                accuracy_section.append_guideline["is_ok"] = True
-                accuracy_section.append_guideline("You model is accurate")
-            else:
-                accuracy_section.set_is_ok(False)
-                accuracy_section.append_guideline(
-                    "Please note your model is unbalanced, "
-                    "so high accuracy could be misleading"
+            accuracy_section.append_guideline(f"Accuracy is {accuracy}")
+            if accuracy >= accuracy_threshold:
+                if "balance" in self.evaluation_state:
+                    balance = self.evaluation_state["balance"]
+                    if balance["is_ok"]:
+                        accuracy_section.append_guideline["is_ok"] = True
+                        accuracy_section.append_guideline("You model is accurate")
+                    else:
+                        accuracy_section.set_is_ok(False)
+                        accuracy_section.append_guideline(
+                            "Please note your model is unbalanced, "
+                            "so high accuracy could be misleading"
+                        )
+        except Exception as exc:
+            accuracy_section.append_guideline(
+                self._get_calculate_failed_error(
+                    "evaluate_accuracy", self.model.__class__.__name__, exc=exc
                 )
+            )
 
         self._add_section_to_report(accuracy_section)
 
+    @validate_args_not_none
     def evaluate_confusion_matrix(y_true, y_pred):
         """
         Checks how many of a classifier's predictions were correct,
@@ -130,10 +99,15 @@ class ModelEvaluator(ModelHeuristics):
         # TODO: Evaluate model by confusion matrix
         diagonal = np.diagonal(cm)  # noqa
 
+    @validate_args_not_none
     def evaluate_auc(self, y_true, y_score):
         """
         Checks if roc auc is in acceptable range
         """
+
+        if y_true is None or y_score is None:
+            return
+
         auc_section = ReportSection("auc")
 
         auc_threshold_low_range = Range(0, 0.6)
@@ -158,11 +132,7 @@ class ModelEvaluator(ModelHeuristics):
                 )
                 class_roc = plot.ROC(roc.fpr[i], roc.tpr[i], label=[label]).plot().ax
                 auc_section.append_guideline(class_roc)
-
-                auc_section.append_guideline(
-                    "To tackle this, check out this "
-                    "<a href='https://ploomber.io/blog/' target='_blank'>guide</a>"
-                )
+                auc_section.append_guideline(COMMUNITY)
             elif auc_threshold_acceptable_range.in_range(roc_auc):
                 auc_section.set_is_ok(True)
                 auc_section.set_include_in_report(False)
@@ -172,6 +142,7 @@ class ModelEvaluator(ModelHeuristics):
 
         self._add_section_to_report(auc_section)
 
+    @validate_args_not_none
     def generate_general_stats(self, y_true, y_pred, y_score):
         """
         Include general stats in the report
@@ -195,6 +166,7 @@ class ModelComparer(ModelHeuristics):
         self.model_b = model_b
         super().__init__()
 
+    @validate_args_not_none
     def precision_and_recall(self, X_test, y_true):
         """
         Calculates precision and recall for each of the models
@@ -205,23 +177,27 @@ class ModelComparer(ModelHeuristics):
 
         try:
             y_prob_a = self.model_a.predict_proba(X_test)
-            pr_a = plot.PrecisionRecall.from_raw_data(y_true, y_prob_a)
+            pr_a = plot.PrecisionRecall.from_raw_data(
+                y_true, y_prob_a, label=self._get_model_name(self.model_a))
 
             percision_recall_section.append_guideline(pr_a.ax_)
 
         except Exception as exc:
             percision_recall_section.append_guideline(
-                self._get_calculate_failed_error("percision_recall", "model A", exc=exc)
+                self._get_calculate_failed_error(
+                    "percision_recall", self._get_model_name(self.model_a), exc=exc)
             )
 
         try:
             y_prob_b = self.model_b.predict_proba(X_test)
-            pr_b = plot.PrecisionRecall.from_raw_data(y_true, y_prob_b)
+            pr_b = plot.PrecisionRecall.from_raw_data(
+                y_true, y_prob_b, label=self._get_model_name(self.model_b))
             percision_recall_section.append_guideline(pr_b.ax_)
 
         except Exception as exc:
             percision_recall_section.append_guideline(
-                self._get_calculate_failed_error("percision_recall", "model B", exc=exc)
+                self._get_calculate_failed_error(
+                    "percision_recall", self._get_model_name(self.model_b), exc=exc)
             )
 
         if pr_a and pr_b:
@@ -231,6 +207,7 @@ class ModelComparer(ModelHeuristics):
 
         self._add_section_to_report(percision_recall_section)
 
+    @validate_args_not_none
     def auc(self, X_test, y_true):
         """
         Compares models roc auc
@@ -242,14 +219,16 @@ class ModelComparer(ModelHeuristics):
             roc_auc_model_a = get_roc_auc(y_true, y_score_a)
 
             if len(roc_auc_model_a) > 1:
-                auc_section.append_guideline(f"Model A AUC (ROC) are {roc_auc_model_a}")
+                auc_section.append_guideline(
+                    f"{self._get_model_name(self.model_a)} AUC (ROC) are {roc_auc_model_a}")
             else:
                 auc_section.append_guideline(
-                    f"Model A AUC (ROC) is {roc_auc_model_a[0]}"
+                    f"{self._get_model_name(self.model_a)} AUC (ROC) is {roc_auc_model_a[0]}"
                 )
         except Exception as exc:
             auc_section.append_guideline(
-                self._get_calculate_failed_error("auc", "model A", exc=exc)
+                self._get_calculate_failed_error(
+                    "auc", {self._get_model_name(self.model_a)}, exc=exc)
             )
 
         try:
@@ -257,18 +236,21 @@ class ModelComparer(ModelHeuristics):
             roc_auc_model_b = get_roc_auc(y_true, y_score_b)
 
             if len(roc_auc_model_b) > 1:
-                auc_section.append_guideline(f"Model B AUC (ROC) are {roc_auc_model_b}")
+                auc_section.append_guideline(
+                    f"{self._get_model_name(self.model_b)} AUC (ROC) are {roc_auc_model_b}")
             else:
                 auc_section.append_guideline(
-                    f"Model B AUC (ROC) is {roc_auc_model_b[0]}"
+                    f"{self._get_model_name(self.model_b)} AUC (ROC) is {roc_auc_model_b[0]}"
                 )
         except Exception as exc:
             auc_section.append_guideline(
-                self._get_calculate_failed_error("auc", "model B", exc=exc)
+                self._get_calculate_failed_error(
+                    "auc", {self._get_model_name(self.model_b)}, exc=exc)
             )
 
         self._add_section_to_report(auc_section)
 
+    @validate_args_not_none
     def computation(self, X_test):
         """
         Compares models prediction compute time
@@ -286,22 +268,23 @@ class ModelComparer(ModelHeuristics):
         if is_significant_time_diff:
             if model_a_compute_time > model_b_compute_time:
                 computation_section.append_guideline(
-                    "Model A is a lot more computational expensive"
+                    f"{self._get_model_name(self.model_a)} is a lot more computational expensive"
                 )
             else:
                 computation_section.append_guideline(
-                    "Model B is a lot more computational expensive"
+                    f"{self._get_model_name(self.model_b)} is a lot more computational expensive"
                 )
 
         computation_section.append_guideline(
-            f"Model A compute time is {model_a_compute_time} (seconds)"
+            f"{self._get_model_name(self.model_a)} compute time is {model_a_compute_time} (seconds)"
         )
         computation_section.append_guideline(
-            f"Model B compute time is {model_b_compute_time} (seconds)"
+            f"{self._get_model_name(self.model_b)} compute time is {model_b_compute_time} (seconds)"
         )
 
         self._add_section_to_report(computation_section)
 
+    @validate_args_not_none
     def calibration(self, X_test, y_true):
         """
         Compares models calibration
@@ -310,24 +293,33 @@ class ModelComparer(ModelHeuristics):
 
         try:
             y_prob_a = self.model_a.predict_proba(X_test)
-            p = plot.calibration_curve([y_true], [y_prob_a], ax=_gen_ax())
+            p = plot.CalibrationCurve.from_raw_data([y_true], [y_prob_a],
+                                                    label=[self._get_model_name(
+                                                        self.model_a)],
+                                                    ).ax_
             calibration_section.append_guideline(p)
         except Exception as exc:
             calibration_section.append_guideline(
-                self._get_calculate_failed_error("calibration", "model A", exc=exc)
+                self._get_calculate_failed_error(
+                    "calibration", self._get_model_name(self.model_a), exc=exc)
             )
 
         try:
             y_prob_b = self.model_b.predict_proba(X_test)
-            p = plot.calibration_curve([y_true], [y_prob_b], ax=_gen_ax())
+            p = plot.CalibrationCurve.from_raw_data([y_true], [y_prob_b],
+                                                    label=[self._get_model_name(
+                                                        self.model_b)],
+                                                    ).ax_
             calibration_section.append_guideline(p)
         except Exception as exc:
             calibration_section.append_guideline(
-                self._get_calculate_failed_error("calibration", "model B", exc=exc)
+                self._get_calculate_failed_error(
+                    "calibration", self._get_model_name(self.model_b), exc=exc)
             )
 
         self._add_section_to_report(calibration_section)
 
+    @validate_args_not_none
     def add_combined_cm(self, X_test, y_true):
         combined_confusion_matrix_section = ReportSection("combined_confusion_matrix")
 
@@ -341,6 +333,7 @@ class ModelComparer(ModelHeuristics):
         combined_confusion_matrix_section.append_guideline(combined.plot())
         self._add_section_to_report(combined_confusion_matrix_section)
 
+    @validate_args_not_none
     def add_combined_pr(self, X_test, y_true):
         combined_pr_section = ReportSection("combined_pr")
 
@@ -358,11 +351,12 @@ class ModelComparer(ModelHeuristics):
         except Exception as exc:
             combined_pr_section.append_guideline(
                 self._get_calculate_failed_error(
-                    "percision_recall", "model A or model B", exc=exc)
+                    "percision_recall", f"{self._get_model_name(self.model_a)} or {self._get_model_name(self.model_b)}", exc=exc
+                )
             )
 
 
-def evaluate_model(y_true, y_pred, model, y_score=None):
+def evaluate_model(model, y_true, y_pred, y_score=None):
     _check_model(model)
     _check_inputs(y_true, y_pred)
     me = ModelEvaluator(model)
@@ -379,7 +373,7 @@ def evaluate_model(y_true, y_pred, model, y_score=None):
     # add general stats
     me.generate_general_stats(y_true, y_pred, y_score)
 
-    report = me.create_report("Model evaluation")
+    report = me.create_report(f"Model evaluation - {model.__class__.__name__}")
     return report
 
 
@@ -401,7 +395,8 @@ def compare_models(model_a, model_b, X_train, X_test, y_true):
 
     # mc.add_combined_pr(X_test, y_true)
 
-    report = mc.create_report("Compare models")
+    report = mc.create_report(
+        f"Compare models - {mc._get_model_name(model_a)} vs {mc._get_model_name(model_b)}")
     return report
 
 
@@ -413,8 +408,8 @@ def _check_model(model) -> None:
     ~~~~~~
     ModelNotSupported or ValueError?
     """
-    # TODO: Implement
-    pass
+    if model is None:
+        raise ValueError("Model is none")
 
 
 def _check_inputs(y_true, y_pred) -> None:

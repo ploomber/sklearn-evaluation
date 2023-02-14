@@ -11,11 +11,14 @@ kernelspec:
   name: python3
 ---
 
-# Model comparison
+# Report: Comparison
+
+```{versionadded} 0.11.2
+```
 
 +++
 
-In this tutorial we will demonstrate how to quickly train, test and compare two models in order to find which one performs better.
+In this tutorial, we will demonstrate how to quickly train, test and compare two models to find which performs better.
 
 We'll be using the heart disease dataset and compare `RandomForestClassifier` to `DecisionTreeClassifier`.
 
@@ -49,7 +52,7 @@ X_train, X_test, y_train, y_test = train_test_split(
 
 ```
 
-## Model A
+## Random forest
 
 For our first model we will use the RandomForestClassifier
 
@@ -62,7 +65,7 @@ model_a = RandomForestClassifier()
 model_a.fit(X_train, y_train)
 ```
 
-## Model B
+## Decision tree
 
 The second model will be based on the DecisionTreeClassifier
 
