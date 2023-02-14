@@ -35,10 +35,11 @@ urllib.request.urlretrieve(
     filename="heart.csv",
 )
 
-data = pd.read_csv('heart.csv')
+data = pd.read_csv("heart.csv")
 ```
 
-## Prepare the data 
+## Prepare the data
+
 ```{code-cell} ipython3
 column = "target"
 X = data.drop(column, axis=1)
@@ -47,7 +48,6 @@ y = data[column]
 X_train, X_test, y_train, y_test = train_test_split(
     X, y, test_size=0.2, random_state=2023
 )
-
 ```
 
 ## Random forest
@@ -58,6 +58,7 @@ For our first model we will use the RandomForestClassifier
 :tags: [remove-output]
 
 from sklearn.ensemble import RandomForestClassifier
+
 model_a = RandomForestClassifier()
 model_a.fit(X_train, y_train)
 ```
@@ -70,6 +71,7 @@ The second model will be based on the DecisionTreeClassifier
 :tags: [remove-output]
 
 from sklearn.tree import DecisionTreeClassifier
+
 model_b = DecisionTreeClassifier()
 model_b.fit(X_train, y_train)
 ```
@@ -83,6 +85,7 @@ Please note that our report will be more detailed as we provide more parameters.
 :tags: [remove-output]
 
 from sklearn_evaluation.models import compare_models
+
 report = compare_models(model_a, model_b, X_test, y_test)
 ```
 

@@ -23,6 +23,7 @@ In this guide, we'll show you how to easily generate a report with everything yo
 We'll use the heart disease dataset, you can download it from <a href="https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data" target="_blank">here</a>.
 
 ## Download the data
+
 ```{code-cell} ipython3
 import urllib.request
 import pandas as pd
@@ -33,7 +34,7 @@ urllib.request.urlretrieve(
     filename="heart.csv",
 )
 
-data = pd.read_csv('heart.csv')
+data = pd.read_csv("heart.csv")
 ```
 
 ## Prepare the data
@@ -41,12 +42,13 @@ data = pd.read_csv('heart.csv')
 ```{code-cell} ipython3
 from sklearn.model_selection import train_test_split
 
-column = 'fbs'
+column = "fbs"
 X = data.drop(column, axis=1)
 y = data[column]
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=2023)
+    X, y, test_size=0.2, random_state=2023
+)
 ```
 
 ## Define the model
