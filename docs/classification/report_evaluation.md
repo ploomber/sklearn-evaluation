@@ -20,7 +20,7 @@ kernelspec:
 
 We use different metrics to estimate a machine learning model's performance, and to understand its strengths and weaknesses.
 
-In this guide, we'll show you how to easily generate a report with everything your need in one place using our `evaluate_model`.
+In this guide, we'll show you how to easily generate a report with everything your need in one place using our [`evaluate_models`](../api/plot.rst).
 
 We'll use the heart disease dataset, you can download it from <a href="https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data" target="_blank">here</a>.
 
@@ -69,7 +69,7 @@ y_score = model.predict_proba(X_test)
 
 from sklearn_evaluation.models import evaluate_model
 
-report = evaluate_model(y_test, y_pred, model=model, y_score=y_score)
+report = evaluate_model(model, y_test, y_pred, y_score=y_score)
 ```
 
 ## Display the report

@@ -57,12 +57,12 @@ class ModelHeuristics(abc.ABC):
     """
 
     _report_css_style = """
-    h1 {
+    .model-evaluation-container h1 {
         font-size: 2.25em;
         margin-bottom: 0;
     }
 
-    h2 {
+    .model-evaluation-container h2 {
         font-size: 1.25em;
     }
 
@@ -73,33 +73,33 @@ class ModelHeuristics(abc.ABC):
         margin: 50px auto;
     }
 
-    .block {
+    .model-evaluation-container .block {
         margin-bottom: 0px;
         border-bottom: 1px solid #e5e4e4;
         padding: 0.75em 0;
     }
 
-    .nobull {
+    .model-evaluation-container .nobull {
         list-style-type: none;
     }
 
-    ul li {
+    .model-evaluation-container ul li {
         margin-bottom: 10px;
     }
 
-    ul {
+    .model-evaluation-container ul {
         padding: 0;
     }
 
-    ul li:not(.nobull) {
+    .model-evaluation-container ul li:not(.nobull) {
         margin-left: 1em;
     }
 
-    .display-inline-block {
+    .model-evaluation-container .display-inline-block {
         display: inline-block;
     }
 
-    .capitalize {
+    .model-evaluation-container .capitalize {
         text-transform: capitalize;
     }
     """

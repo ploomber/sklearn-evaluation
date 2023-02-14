@@ -80,7 +80,7 @@ model_b.fit(X_train, y_train)
 
 ## Compare models
 
-Now, let's use the `compare_models` function and generate our report.
+Now, let's use the [`compare_models`](../api/plot.rst) function and generate our report.
 Please note that our report will be more detailed as we provide more parameters.
 
 ```{code-cell} ipython3
@@ -88,7 +88,7 @@ Please note that our report will be more detailed as we provide more parameters.
 
 from sklearn_evaluation.models import compare_models
 
-report = compare_models(model_a, model_b, X_train, X_test, y_test)
+report = compare_models(model_a, model_b, X_test, y_test)
 ```
 
 ## Display the report

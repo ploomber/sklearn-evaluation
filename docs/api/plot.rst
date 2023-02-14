@@ -152,3 +152,11 @@ validation_curve
 cooks_distance
 --------------
 .. autofunction:: sklearn_evaluation.plot.cooks_distance
+
+report_evaluation
+-----------------
+.. autofunction:: sklearn_evaluation.models.evaluate_model
+
+report_comparison
+-----------------
+.. autofunction:: sklearn_evaluation.models.compare_models

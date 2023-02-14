@@ -424,7 +424,7 @@ def evaluate_model(model, y_true, y_pred, y_score=None):
     Parameters
     -----------
     model : estimator
-        An estimator to evaluate
+        An estimator to evaluate.
 
     y_true : array-like
         Correct target values (ground truth).
@@ -434,6 +434,17 @@ def evaluate_model(model, y_true, y_pred, y_score=None):
 
     y_score : array-like, default None
         Target scores (estimator predictions).
+
+    Examples
+    --------
+
+    Generate evaluation report for RandomForestClassifier
+
+    .. plot:: ../examples/report_evaluation.py
+
+    Notes
+    -----
+    .. versionadded:: 0.11.2
     """
     _check_model(model)
     me = ModelEvaluator(model)
@@ -461,10 +472,10 @@ def compare_models(model_a, model_b, X_test, y_true):
     Parameters
     -----------
     model_a : estimator
-        An estimator to compare
+        An estimator to compare.
 
     model_b : estimator
-        An estimator to compare
+        An estimator to compare.
 
     X_test : array-like of shape (n_samples, n_features)
         Training data, where `n_samples` is the number of samples
@@ -472,6 +483,17 @@ def compare_models(model_a, model_b, X_test, y_true):
 
     y_true : array-like
         Correct target values (ground truth).
+
+    Examples
+    --------
+
+    Compare DecisionTreeClassifier and RandomForestClassifier
+
+    .. plot:: ../examples/report_comparison.py
+
+    Notes
+    -----
+    .. versionadded:: 0.11.2
     """
     _check_model(model_a)
     _check_model(model_b)
