@@ -59,4 +59,8 @@ parts:
     - file: reference/community
     - file: reference/developer
     - file: reference/developer-api
+  
+  - caption: Tutorials
+    chapters:
+    - file: tutorials/underfitting_overfitting
 
