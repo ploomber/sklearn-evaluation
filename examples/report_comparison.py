@@ -1,4 +1,3 @@
-from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn_evaluation.models import compare_models
