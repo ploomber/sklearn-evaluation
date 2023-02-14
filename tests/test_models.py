@@ -47,9 +47,9 @@ def _get_classifier_model_values(model, data, column="fbs"):
     "model, skip_y_pred",
     [
         [RandomForestClassifier(), False],
-        # [DecisionTreeClassifier(), False],
-        # [LogisticRegression(), False],
-        # [LinearRegression(), True],
+        [DecisionTreeClassifier(), False],
+        [LogisticRegression(), False],
+        [LinearRegression(), True],
     ],
 )
 def test_evaluate_model(heart_dataset, model, skip_y_pred, tmp_directory):
@@ -89,7 +89,7 @@ def test_compare_models(heart_dataset, tmp_directory):
     model_b = DecisionTreeClassifier()
     model_b.fit(X_train, y_train)
 
-    report = compare_models(model_a, model_b, X_train, X_test, y_test)
+    report = compare_models(model_a, model_b, X_test, y_test)
     report.save("example-compare-report.html")
 
 
