@@ -5,18 +5,21 @@ from sklearn.model_selection import train_test_split
 from sklearn_evaluation.models import evaluate_model
 
 urllib.request.urlretrieve(
-    'https://raw.githubusercontent.com/sharmaroshan/' +
-    'Heart-UCI-Dataset/master/heart.csv', filename='heart.csv')
+    "https://raw.githubusercontent.com/sharmaroshan/"
+    + "Heart-UCI-Dataset/master/heart.csv",
+    filename="heart.csv",
+)
 
-data = pd.read_csv('heart.csv')
+data = pd.read_csv("heart.csv")
 
 
-column = 'fbs'
+column = "fbs"
 X = data.drop(column, axis=1)
 y = data[column]
 
 X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=2023)
+    X, y, test_size=0.2, random_state=2023
+)
 
 
 model = RandomForestClassifier()

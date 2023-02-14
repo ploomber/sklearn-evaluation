@@ -381,8 +381,9 @@ class ModelComparer(ModelHeuristics):
             combined_confusion_matrix_section.append_guideline(
                 self._get_calculate_failed_error(
                     "combined_confusion_matrix",
-                    f"{self._get_model_name(self.model_a)} " +
-                    f"or {self._get_model_name(self.model_b)}", exc=exc
+                    f"{self._get_model_name(self.model_a)} "
+                    + f"or {self._get_model_name(self.model_b)}",
+                    exc=exc,
                 )
             )
 

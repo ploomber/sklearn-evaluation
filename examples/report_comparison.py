@@ -4,7 +4,7 @@ from sklearn_evaluation.models import compare_models
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 
-data = pd.read_csv('heart.csv')
+data = pd.read_csv("heart.csv")
 
 column = "target"
 X = data.drop(column, axis=1)
