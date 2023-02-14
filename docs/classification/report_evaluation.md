@@ -16,8 +16,6 @@ kernelspec:
 ```{versionadded} 0.11.2
 ```
 
-+++
-
 We use different metrics to estimate a machine learning model's performance, and to understand its strengths and weaknesses.
 
 In this guide, we'll show you how to easily generate a report with everything your need in one place using our [`evaluate_models`](../api/plot.rst).
@@ -26,12 +24,14 @@ We'll use the heart disease dataset, you can download it from <a href="https://w
 
 ## Download the data
 ```{code-cell} ipython3
-
 import urllib.request
 import pandas as pd
 
 urllib.request.urlretrieve(
-    'https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv', filename='heart.csv')
+    "https://raw.githubusercontent.com/sharmaroshan/"
+    + "Heart-UCI-Dataset/master/heart.csv",
+    filename="heart.csv",
+)
 
 data = pd.read_csv('heart.csv')
 ```
@@ -39,7 +39,6 @@ data = pd.read_csv('heart.csv')
 ## Prepare the data
 
 ```{code-cell} ipython3
-
 from sklearn.model_selection import train_test_split
 
 column = 'fbs'

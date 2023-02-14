@@ -16,8 +16,6 @@ kernelspec:
 ```{versionadded} 0.11.2
 ```
 
-+++
-
 In this tutorial, we will demonstrate how to quickly train, test and compare two models to find which performs better.
 
 We'll be using the heart disease dataset and compare `RandomForestClassifier` to `DecisionTreeClassifier`.
@@ -27,21 +25,21 @@ You can download the dataset from <a href="https://www.kaggle.com/datasets/redwa
 ## Download the data
 
 ```{code-cell} ipython3
-
 import urllib.request
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
-
 urllib.request.urlretrieve(
-    'https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv', filename='heart.csv')
+    "https://raw.githubusercontent.com/sharmaroshan/"
+    + "Heart-UCI-Dataset/master/heart.csv",
+    filename="heart.csv",
+)
 
 data = pd.read_csv('heart.csv')
 ```
 
 ## Prepare the data 
 ```{code-cell} ipython3
-
 column = "target"
 X = data.drop(column, axis=1)
 y = data[column]
@@ -60,7 +58,6 @@ For our first model we will use the RandomForestClassifier
 :tags: [remove-output]
 
 from sklearn.ensemble import RandomForestClassifier
-
 model_a = RandomForestClassifier()
 model_a.fit(X_train, y_train)
 ```
@@ -73,7 +70,6 @@ The second model will be based on the DecisionTreeClassifier
 :tags: [remove-output]
 
 from sklearn.tree import DecisionTreeClassifier
-
 model_b = DecisionTreeClassifier()
 model_b.fit(X_train, y_train)
 ```
@@ -87,7 +83,6 @@ Please note that our report will be more detailed as we provide more parameters.
 :tags: [remove-output]
 
 from sklearn_evaluation.models import compare_models
-
 report = compare_models(model_a, model_b, X_test, y_test)
 ```
 
