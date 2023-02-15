@@ -37,7 +37,7 @@ tpr = [0.0, 0.2, 0.4, 0.8, 0.8, 1.0, 1.0]
     ],
 )
 def test_model_create_report_template(
-    report_title, section_title, guidelines, plots, expected_html_elements, capsys
+    report_title, section_title, guidelines, plots, expected_html_elements
 ):
     mh = ModelHeuristics()
     test_section = ReportSection(section_title)
@@ -96,7 +96,7 @@ def test_report_section_model(guidelines, plots):
 
     for i in range(len(plots)):
         plot = plots[i]
-        assert plot.__class__.__name__ == "AxesSubplot"
+        assert plot.__class__.__name__ == "Axes"
 
 
 @pytest.mark.parametrize(

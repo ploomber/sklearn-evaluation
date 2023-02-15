@@ -158,7 +158,7 @@ def test_model_evaluator_evaluate_balance(
     assert expected_guide_line in guidelines[0]
 
     if test_plot:
-        assert guidelines[1].__class__.__name__ == "AxesSubplot"
+        assert guidelines[1].__class__.__name__ == "Axes"
 
 
 @pytest.mark.parametrize(
@@ -184,7 +184,7 @@ def test_model_evaluator_accuracy(
     assert expected_guide_line in guidelines[0]
 
     if test_plot:
-        assert guidelines[1].__class__.__name__ == "AxesSubplot"
+        assert guidelines[1].__class__.__name__ == "Axes"
 
 
 @pytest.mark.parametrize(
@@ -210,7 +210,7 @@ def test_model_evaluator_auc(
     assert expected_guide_line in guidelines[0]
 
     if test_plot:
-        assert guidelines[1].__class__.__name__ == "AxesSubplot"
+        assert guidelines[1].__class__.__name__ == "Axes"
 
 
 @pytest.mark.parametrize(
@@ -232,5 +232,5 @@ def test_model_evaluator_generate_general_stats(heart_dataset, model):
     assert key in me.evaluation_state
     guidelines = me.evaluation_state[key]["guidelines"]
 
-    assert guidelines[0].__class__.__name__ == "AxesSubplot"
-    assert guidelines[1].__class__.__name__ == "AxesSubplot"
+    assert guidelines[0].__class__.__name__ == "Axes"
+    assert guidelines[1].__class__.__name__ == "Axes"
