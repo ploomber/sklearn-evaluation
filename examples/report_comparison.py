@@ -1,8 +1,15 @@
 import pandas as pd
+import urllib.request
 from sklearn.model_selection import train_test_split
 from sklearn_evaluation.models import compare_models
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
+
+urllib.request.urlretrieve(
+    "https://raw.githubusercontent.com/sharmaroshan/"
+    + "Heart-UCI-Dataset/master/heart.csv",
+    filename="heart.csv",
+)
 
 data = pd.read_csv("heart.csv")
 
