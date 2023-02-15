@@ -33,33 +33,6 @@ As a result, it performs poorly on new, unseen data. There are a few signs that 
 2. The model's performance flattens or starts to decrease after a certain point in the training process.
 3. The model's complexity is significantly greater than the complexity of the problem.
 
-
-```{code-cell} ipython3
-from sklearn.datasets import load_diabetes
-from sklearn.linear_model import LogisticRegression
-from sklearn import model_selection
-from sklearn.model_selection import learning_curve
-
-import numpy as np
-
-from sklearn_evaluation import plot
-```
-
-```{code-cell} ipython3
-diabetes = load_diabetes()
-X, y = diabetes.data, diabetes.target
-```
-
-```{code-cell} ipython3
-cv = model_selection.ShuffleSplit(diabetes.data.shape[0], test_size=0.2, random_state=0)
-estimator = LogisticRegression()
-train_sizes = np.linspace(0.1, 1.0, 5)
-train_sizes, train_scores, test_scores = learning_curve(
-    estimator, X, y, cv=cv, train_sizes=train_sizes
-)
-plot.learning_curve(train_scores, test_scores, train_sizes)
-```
-
 ## Underfitting
 
 Underfitting happens when our model cannot capture the underlying patterns in the training data.
@@ -69,12 +42,6 @@ There are a few signs that a model may be underfitting:
 1. The model's performance on the training data is significantly worse than expected or worse than a simple baseline model.
 2. The model's performance on the validation/test data is not much better than random guessing.
 3. The model's complexity is significantly lower than the complexity of the problem.
-
-**TODO: Add correlating learning curve**
-
-```{code-cell} ipython3
-
-```
 
 ## Detection
 
@@ -86,9 +53,40 @@ If there is a large gap between the train and validation curve, we are overfitti
 ### Diagnosing Underfitting with Learning Curve
 If we see that the training score is consistently and particularly low, we are underfitting.
 
+Let's create a model that produces a learning curve that is significantly underfit.
+
+```{code-cell} ipython3
+from sklearn.model_selection import learning_curve, train_test_split
+from sklearn.linear_model import LogisticRegression
+from sklearn.datasets import make_classification
+
+import matplotlib.pyplot as plt
+import numpy as np
+
+from sklearn_evaluation import plot
+```
+
+To start, we'll create dummy data that has a small sample size and few features:
+
+```{code-cell} ipython3
+data = make_classification(n_samples=40, n_features=6, n_informative=2, n_redundant=2, flip_y=0.5, n_classes=2, class_sep=0.2, random_state=0)
+X, y = data[0], data[1]
+```
+
+And use a less complex model:
+
+```{code-cell} ipython3
+estimator = LogisticRegression()
+train_sizes = np.linspace(0.1, 1.0, 5)
+train_sizes, train_scores, test_scores = learning_curve(
+    estimator, X, y, train_sizes=train_sizes
+)
+plot.learning_curve(train_scores, test_scores, train_sizes)
+```
+
 ## How to solve it?
 
-Here, we can see a few ways in which we can improve our performance. As some solutions can help with both and some are relevant only to one set of issues, we'll seperate the methods into 2 sections.
+We can see both of the learning curve results above are not ideal. Let's discuss a few ways in which we can improve our performance. As some solutions can help with both and some are relevant only to one set of issues, we'll seperate the methods into 2 sections.
 
 ### Overfitting
 1) Increase your dataset's size through augmentation. Applying transformations to or reworking existing data can greatly improve your algorithm.
@@ -106,4 +104,6 @@ early stopping, cross-validation, ensemble methods
 Some other methods may include:
 
 increasing the model's complexity, ensemble methods, hyperparameter tuning, transfer learning
+
+Let's 
 
