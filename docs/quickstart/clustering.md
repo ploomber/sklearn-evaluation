@@ -43,17 +43,9 @@ X, y = make_blobs(
 Visualizing high-dimensional data is difficult. A common approach is to reduce its dimensionality using PCA; this losses some information but can help us visualize the clusters. Let's run PCA on our data and plot it:
 
 ```{code-cell} ipython3
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
+from sklearn_evaluation import plot
 
-pca = PCA(n_components=2)
-X_pca = pca.fit_transform(X)
-
-plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y)
-plt.grid()
-plt.title("Data in PCA space")
-plt.xlabel("First principal component")
-_ = plt.ylabel("Second principal component")
+_ = plot.pca(X, y, n_components=2)
 ```
 
 We can see the clusters in our synthetic data. However, the clusters won't be as transparent when using real-world datasets as in our example dataset.
