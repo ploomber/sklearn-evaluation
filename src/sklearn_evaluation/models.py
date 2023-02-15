@@ -246,7 +246,7 @@ class ModelComparer(ModelHeuristics):
             if len(roc_auc_model_a) > 1:
                 auc_section.append_guideline(
                     f"{self._get_model_name(self.model_a)} "
-                    + f"AUC (ROC) are {roc_auc_model_a}"
+                    + f"AUC (ROC) : {roc_auc_model_a}"
                 )
             else:
                 auc_section.append_guideline(
@@ -256,7 +256,7 @@ class ModelComparer(ModelHeuristics):
         except AttributeError as exc:
             auc_section.append_guideline(
                 self._get_calculate_failed_error(
-                    "auc", {self._get_model_name(self.model_a)}, exc=exc
+                    "auc", self._get_model_name(self.model_a), exc=exc
                 )
             )
 
@@ -266,8 +266,8 @@ class ModelComparer(ModelHeuristics):
 
             if len(roc_auc_model_b) > 1:
                 auc_section.append_guideline(
-                    f"{self._get_model_name(self.model_b)} AUC "
-                    + "(ROC) are {roc_auc_model_b}"
+                    f"{self._get_model_name(self.model_b)} "
+                    + f"AUC (ROC) : {roc_auc_model_b}"
                 )
             else:
                 auc_section.append_guideline(
@@ -277,7 +277,7 @@ class ModelComparer(ModelHeuristics):
         except AttributeError as exc:
             auc_section.append_guideline(
                 self._get_calculate_failed_error(
-                    "auc", {self._get_model_name(self.model_b)}, exc=exc
+                    "auc", self._get_model_name(self.model_b), exc=exc
                 )
             )
 
@@ -405,17 +405,17 @@ class ModelComparer(ModelHeuristics):
             pr_combined = pr_a + pr_b
             combined_pr_section.append_guideline(pr_combined.ax_)
 
-            self._add_section_to_report(combined_pr_section)
-
         except Exception as exc:
             combined_pr_section.append_guideline(
                 self._get_calculate_failed_error(
                     "percision_recall",
                     f"{self._get_model_name(self.model_a)} "
-                    + "or {self._get_model_name(self.model_b)}",
+                    + f"or {self._get_model_name(self.model_b)}",
                     exc=exc,
                 )
             )
+
+        self._add_section_to_report(combined_pr_section)
 
 
 def evaluate_model(model, y_true, y_pred, y_score=None):
