@@ -152,7 +152,7 @@ class ClassificationReport(AbstractPlot):
             matrix=matrix,
             keys=keys,
             target_names=target_names,
-        )
+        ).plot()
 
     @classmethod
     def _from_data(cls, target_names, matrix, keys):
