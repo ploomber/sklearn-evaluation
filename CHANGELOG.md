@@ -2,6 +2,7 @@
 
 ## 0.11.2dev
 - [Doc] Object oriented API guide includes appropriate methods under each model (#271)
+- [Doc] Quickstart clustering guide now uses `plot.pca` (#276)
 - [Doc] User Guide on micro and macro averaging
 - [Fix] Fixes an error that prevented `ClassificationReport.from_raw_data` from displaying the plot
 
