@@ -16,7 +16,7 @@ COMMUNITY_LINK = "https://ploomber.io/community"
 
 COMMUNITY = (
     "If you need help understanding these stats, "
-    + "send us a message on <a href='{COMMUNITY_LINK}'"
+    + f"send us a message on <a href='{COMMUNITY_LINK}'"
     + "target='_blank'>slack</a>"
 )
 
