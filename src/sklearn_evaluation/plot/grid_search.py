@@ -11,6 +11,7 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
 
 from ploomber_core.exceptions import modify_exceptions
+from ploomber_core.validate import keys
 
 from sklearn_evaluation.util import (
     _group_by,
@@ -20,6 +21,39 @@ from sklearn_evaluation.util import (
     _sorted_map_iter,
     _flatten_list,
 )
+
+
+def _validate_change_input(change):
+    if change is None:
+        raise ValueError(
+            (
+                "change can't be None, you need to select at least"
+                " one value to make the plot."
+            )
+        )
+
+    to_validate = change
+
+    if isinstance(change, str):
+        to_validate = [change]
+
+    for input in to_validate:
+        keys(
+            valid=[
+                "n_estimators",
+                "criterion",
+                "max_depth",
+                "max_features",
+                "min_samples_split",
+                "min_samples_leaf",
+            ],
+            passed=input,
+            name="change",
+        )
+
+
+def _validate_kind_input(kind):
+    keys(valid=["line", "bar"], passed=kind, name="kind")
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
@@ -66,13 +100,9 @@ def grid_search(
     .. plot:: ../examples/grid_search.py
 
     """
-    if change is None:
-        raise ValueError(
-            (
-                "change can't be None, you need to select at least"
-                " one value to make the plot."
-            )
-        )
+    _validate_change_input(change)
+
+    _validate_kind_input(kind)
 
     if ax is None:
         _, ax = plt.subplots()
