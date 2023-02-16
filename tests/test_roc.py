@@ -291,7 +291,6 @@ def test_roc_sub_not_implemented_error(fpr, tpr):
     ],
 )
 def test_none_fpr_or_tpr_error(fpr, tpr, ploomber_value_error_message):
-
     with pytest.raises(ValueError, match=ploomber_value_error_message) as excinfo:
         plot.ROC(fpr, tpr)
     assert "fpr and tpr must not be empty" in str(excinfo.value)
@@ -306,7 +305,6 @@ def test_none_fpr_or_tpr_error(fpr, tpr, ploomber_value_error_message):
     ],
 )
 def test_empty_fpr_or_tpr_error(fpr, tpr):
-
     with pytest.raises(TypeError) as excinfo:
         plot.ROC(fpr, tpr)
     assert "fpr and tpr must be defined" in str(excinfo.value)

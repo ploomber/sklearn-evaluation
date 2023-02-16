@@ -1,7 +1,7 @@
 import pytest
 from sklearn_evaluation.report import ModelHeuristics, ReportSection
 from sklearn_evaluation import plot
-from sklearn_evaluation.report.util import validate_args_not_none
+from sklearn_evaluation.report.util import run_if_args_are_not_none
 
 fpr = [0.0, 0.2, 0.4, 0.4, 0.6, 0.8, 1.0]
 tpr = [0.0, 0.2, 0.4, 0.8, 0.8, 1.0, 1.0]
@@ -103,8 +103,8 @@ def test_report_section_model(guidelines, plots):
     "a, b, expected",
     [[1, None, None], [1, 1, True], [None, None, None], [None, 1, None]],
 )
-def test_validate_args_not_none(a, b, expected):
-    @validate_args_not_none
+def test_run_if_args_are_not_none(a, b, expected):
+    @run_if_args_are_not_none
     def func(a, b):
         return True
 

@@ -1,8 +1,4 @@
 from jinja2 import Environment, PackageLoader
-import time
-import numpy as np
-from sklearn_evaluation import plot
-from sklearn.metrics import auc
 
 
 def jinja_env():
@@ -28,54 +24,10 @@ class Range(object):
         return self.min <= n and self.max >= n
 
 
-# Model evaluator utils
-def check_array_balance(array) -> bool:
+def run_if_args_are_not_none(func):
     """
-    Check if array is balanced
-    """
-    classes, counts = np.unique(array, return_counts=True)
-    n_classes = len(classes)
-    n_values = len(array)
-    expected_balance = 1 / n_classes
-
-    weights = list(map(lambda count: count / n_values, counts))
-    balance_threshold = 0.05
-    expected_range = Range(
-        expected_balance - balance_threshold, expected_balance + balance_threshold
-    )
-
-    return all(expected_range.in_range(w) for w in weights)
-
-
-# Model comparer utils
-
-
-def get_roc_auc(y_test, y_score) -> list:
-    """
-    Returns list of roc auc
-    """
-    roc_auc = []
-    roc = plot.ROC.from_raw_data(y_test, y_score)
-    for i in range(len(roc.fpr)):
-        roc_auc.append(auc(roc.fpr[i], roc.tpr[i]))
-
-    return roc_auc
-
-
-def get_model_prediction_time(model, X_test) -> float:
-    """
-    Returns model predict time in seconds
-    """
-    start = time.time()
-    model.predict(X_test)
-    end = time.time()
-    eval_time = end - start  # in seconds
-    return eval_time
-
-
-def validate_args_not_none(func):
-    """
-    Decorator to validate no None args passed
+    Runs a function only if given args are not none.
+    Doesn't raise an error.
     """
 
     def wrapper(*args, **kw):

@@ -63,8 +63,26 @@ def test_model_evaluator_functions_with_none_inputs():
     me.evaluate_accuracy(None, None)
     me.evaluate_auc(None)
     me.generate_general_stats(None)
+    me.evaluate_precision_and_recall(None, None)
+    me.evaluate_auc(None, None)
+    me.get_model_prediction_time(None)
+    me.evaluate_calibration(None, None)
 
     assert len(me.evaluation_state.keys()) == 0
+
+
+@pytest.mark.parametrize(
+    "model, expected_name",
+    [
+        [RandomForestClassifier(), "RandomForestClassifier"],
+        [DecisionTreeClassifier(), "DecisionTreeClassifier"],
+        [LogisticRegression(), "LogisticRegression"],
+        [LinearRegression(), "LinearRegression"],
+    ],
+)
+def test_get_model_name(model, expected_name):
+    me = ModelEvaluator(model)
+    assert me._get_model_name(model) == expected_name
 
 
 def test_model_evaluator_evaluate_model_with_none_inputs(heart_dataset):

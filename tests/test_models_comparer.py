@@ -40,19 +40,19 @@ def test_compare_models(heart_dataset, tmp_directory):
         [
             LinearRegression(),
             DecisionTreeClassifier(),
-            ["Failed to calculate percision_recall for LinearRegression"],
+            ["Failed to calculate precision_recall for LinearRegression"],
             1,
         ],
         [
             LinearRegression(),
             LinearRegression(),
-            ["Failed to calculate percision_recall for LinearRegression"],
+            ["Failed to calculate precision_recall for LinearRegression"],
             0,
         ],
         [
             RandomForestClassifier(),
             LinearRegression(),
-            ["Failed to calculate percision_recall for LinearRegression"],
+            ["Failed to calculate precision_recall for LinearRegression"],
             1,
         ],
     ],
@@ -68,7 +68,7 @@ def test_precision_and_recall(
     mc = ModelComparer(model_a, model_b)
     mc.precision_and_recall(X_test, y_test)
     _test_model_results(
-        mc, "percision_recall", expected_guidelines, number_of_expected_plots
+        mc, "precision_recall", expected_guidelines, number_of_expected_plots
     )
 
 
@@ -129,9 +129,7 @@ def test_auc(
 
     mc = ModelComparer(model_a, model_b)
     mc.auc(X_test, y_test)
-    _test_model_results(
-        mc, "auc", expected_guidelines, number_of_expected_plots
-    )
+    _test_model_results(mc, "auc", expected_guidelines, number_of_expected_plots)
 
 
 @pytest.mark.parametrize(
@@ -193,7 +191,7 @@ def test_auc(
 def test_computation(
     heart_dataset, model_a, model_b, expected_guidelines, number_of_expected_plots
 ):
-    X_train, X_test, y_train, y_test = _get_split_data(heart_dataset)
+    X_train, X_test, y_train, _ = _get_split_data(heart_dataset)
 
     model_a.fit(X_train, y_train)
     model_b.fit(X_train, y_train)
@@ -299,19 +297,19 @@ def test_combined_cm(
         [
             LinearRegression(),
             DecisionTreeClassifier(),
-            ["Failed to calculate percision_recall"],
+            ["Failed to calculate precision_recall"],
             0,
         ],
         [
             LinearRegression(),
             LinearRegression(),
-            ["Failed to calculate percision_recall"],
+            ["Failed to calculate precision_recall"],
             0,
         ],
         [
             RandomForestClassifier(),
             LinearRegression(),
-            ["Failed to calculate percision_recall"],
+            ["Failed to calculate precision_recall"],
             0,
         ],
     ],
@@ -331,9 +329,7 @@ def test_combined_pr(
     )
 
 
-def _test_model_results(
-    mc, key, expected_guidelines, number_of_expected_plots
-):
+def _test_model_results(mc, key, expected_guidelines, number_of_expected_plots):
     assert key in mc.evaluation_state
     guidelines = mc.evaluation_state[key]["guidelines"]
 
