@@ -10,6 +10,7 @@ from sklearn_evaluation.report.util import (
 from sklearn_evaluation.report import ModelHeuristics, ReportSection
 import time
 import numpy as np
+from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 COMMUNITY_LINK = "https://ploomber.io/community"
 
@@ -464,6 +465,7 @@ class ModelComparer(ModelHeuristics):
         self._add_section_to_report(combined_pr_section)
 
 
+@SKLearnEvaluationLogger.log(feature="report", action="evaluate_model")
 def evaluate_model(model, y_true, y_pred, y_score=None):
     """
     Evaluates a given model and generates an HTML report
@@ -514,6 +516,7 @@ def evaluate_model(model, y_true, y_pred, y_score=None):
     return report
 
 
+@SKLearnEvaluationLogger.log(feature="report", action="compare_models")
 def compare_models(model_a, model_b, X_test, y_true):
     """
     Compares two models and generates an HTML report
