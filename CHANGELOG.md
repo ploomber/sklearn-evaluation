@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.11.2dev
+- [Fix] Adds input validation with suggestions to `plot.grid_search` (#53)
 - [Doc] Object oriented API guide includes appropriate methods under each model (#271)
 - [Doc] Quickstart clustering guide now uses `plot.pca` (#276)
 - [Doc] User Guide on micro and macro averaging
