@@ -439,6 +439,8 @@ def evaluate_model(model, y_true, y_pred, y_score=None):
     Examples
     --------
 
+    .. seealso:: :ref:`Report: Evaluation`
+
     Generate evaluation report for RandomForestClassifier
 
     .. plot:: ../examples/report_evaluation.py
@@ -487,6 +489,7 @@ def compare_models(model_a, model_b, X_test, y_true):
 
     Examples
     --------
+    .. seealso:: :ref:`Report: Comparison`
 
     Compare DecisionTreeClassifier and RandomForestClassifier
 
