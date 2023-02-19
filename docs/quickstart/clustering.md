@@ -28,12 +28,14 @@ Let's generate some sample data with 5 clusters; note that in most real-world us
 ```{code-cell} ipython3
 from sklearn.datasets import make_blobs
 
-X, y = make_blobs(n_samples=1000,
-                  centers=5,
-                  n_features=20,
-                  random_state=0,
-                  cluster_std=3,
-                  center_box=(-10, 10))
+X, y = make_blobs(
+    n_samples=1000,
+    centers=5,
+    n_features=20,
+    random_state=0,
+    cluster_std=3,
+    center_box=(-10, 10),
+)
 ```
 
 ## Visualizing clusters
@@ -41,17 +43,9 @@ X, y = make_blobs(n_samples=1000,
 Visualizing high-dimensional data is difficult. A common approach is to reduce its dimensionality using PCA; this losses some information but can help us visualize the clusters. Let's run PCA on our data and plot it:
 
 ```{code-cell} ipython3
-import matplotlib.pyplot as plt
-from sklearn.decomposition import PCA
+from sklearn_evaluation import plot
 
-pca = PCA(n_components=2)
-X_pca = pca.fit_transform(X)
-
-plt.scatter(X_pca[:, 0], X_pca[:, 1], c=y)
-plt.grid()
-plt.title("Data in PCA space")
-plt.xlabel("First principal component")
-_ = plt.ylabel("Second principal component")
+_ = plot.pca(X, y, n_components=2)
 ```
 
 We can see the clusters in our synthetic data. However, the clusters won't be as transparent when using real-world datasets as in our example dataset.
@@ -73,22 +67,29 @@ import pandas as pd
 from sklearn.cluster import KMeans
 from sklearn import metrics
 
+
 def score(X, n_clusters):
     model = KMeans(n_init="auto", n_clusters=n_clusters, random_state=1)
     model.fit(X)
     predicted = model.predict(X)
-    return {"n_clusters": n_clusters,
-            "silhouette_score": metrics.silhouette_score(X, predicted),
-            "calinski_harabasz_score": metrics.calinski_harabasz_score(X, predicted),
-            "davies_bouldin_score": metrics.davies_bouldin_score(X, predicted)}
+    return {
+        "n_clusters": n_clusters,
+        "silhouette_score": metrics.silhouette_score(X, predicted),
+        "calinski_harabasz_score": metrics.calinski_harabasz_score(X, predicted),
+        "davies_bouldin_score": metrics.davies_bouldin_score(X, predicted),
+    }
 
 
-df_metrics = pd.DataFrame(score(X, n_clusters) for n_clusters in (2, 3, 4, 5, 6, 7, 8, 9, 10))
+df_metrics = pd.DataFrame(
+    score(X, n_clusters) for n_clusters in (2, 3, 4, 5, 6, 7, 8, 9, 10)
+)
 df_metrics.set_index("n_clusters", inplace=True)
 
-(df_metrics.style
- .highlight_max(subset=["silhouette_score", "calinski_harabasz_score"], color="lightgreen")
- .highlight_min(subset=["davies_bouldin_score"], color="lightgreen"))
+(
+    df_metrics.style.highlight_max(
+        subset=["silhouette_score", "calinski_harabasz_score"], color="lightgreen"
+    ).highlight_min(subset=["davies_bouldin_score"], color="lightgreen")
+)
 ```
 
 All three metrics have their *best* value when `n_clusters=5`. We know this is the best value since our data has 5 clusters; however, when using real datasets, you might find that these metrics might not agree, so it's advisable to understand how each metric is computed and choose the best one for your project.
@@ -111,7 +112,6 @@ The elbow curve will plot the sum of squared errors for a different number of cl
 
 ```{code-cell} ipython3
 from sklearn_evaluation import plot
-from sklearn import cluster
 
 model = KMeans(n_init="auto", random_state=1)
 ```

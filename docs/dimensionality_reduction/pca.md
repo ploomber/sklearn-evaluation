@@ -50,6 +50,7 @@ X, y = load_data(return_X_y=True)
 
 ```{code-cell} ipython3
 from sklearn_evaluation import plot
+
 plot.pca(X, y, target_names=["Setosa", "Versicolor", "Virginica"], n_components=3)
 ```
 
@@ -64,30 +65,33 @@ plot.pca(X, y, target_names=["Setosa", "Versicolor", "Virginica"], n_components=
 
 ```{code-cell} ipython3
 from sklearn.datasets import make_classification
+
 X, y = make_classification(10000, n_features=5, n_informative=3, class_sep=0.5)
 ```
 
 ```{code-cell} ipython3
-import time
 from sklearn.neighbors import KNeighborsClassifier
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state=1) 
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=1)
 knn = KNeighborsClassifier(n_neighbors=7)
 knn.fit(X_train, y_train)
-print("Accuracy before PCA:", knn.score(X_test, y_test)) 
+print("Accuracy before PCA:", knn.score(X_test, y_test))
 ```
 
 Now let's apply PCA on the data and retrain a model. We can see that the results with PCA are as good as without PCA. Accuracy is similar with lesser dimensions.
 
 ```{code-cell} ipython3
 from sklearn.decomposition import PCA
-pca=PCA(n_components=3)
-X_new=pca.fit_transform(X)
-X_train_new, X_test_new, y_train, y_test = train_test_split(X_new, y, test_size = 0.3, random_state=1)
+
+pca = PCA(n_components=3)
+X_new = pca.fit_transform(X)
+X_train_new, X_test_new, y_train, y_test = train_test_split(
+    X_new, y, test_size=0.3, random_state=1
+)
 ```
 
 ```{code-cell} ipython3
 knn = KNeighborsClassifier(n_neighbors=7)
-knn.fit(X_train_new,y_train)
-print("Accuracy after PCA:", knn.score(X_test_new, y_test)) 
+knn.fit(X_train_new, y_train)
+print("Accuracy after PCA:", knn.score(X_test_new, y_test))
 ```

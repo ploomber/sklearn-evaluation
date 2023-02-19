@@ -24,12 +24,16 @@ Here we are going to use the HeartDiseasesUCI dataset.
 
 ```{code-cell} ipython3
 import urllib.request
-import pandas as pd 
+import pandas as pd
 
-# download dataset. Reference: https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data
-urllib.request.urlretrieve('https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv', filename='heart.csv')
+# download dataset
+# Reference: https://www.kaggle.com/datasets/redwankarimsony/heart-disease-data
+urllib.request.urlretrieve(
+    "https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv",
+    filename="heart.csv",
+)
 
-data = pd.read_csv('heart.csv')
+data = pd.read_csv("heart.csv")
 
 data.head()
 ```
@@ -37,9 +41,9 @@ data.head()
 ## Specify variables
 
 ```{code-cell} ipython3
-X = data.drop('target', axis = 1)
+X = data.drop("target", axis=1)
 
-y = data['target']
+y = data["target"]
 ```
 
 ## Split the data
@@ -47,7 +51,9 @@ y = data['target']
 ```{code-cell} ipython3
 from sklearn.model_selection import train_test_split
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 2023)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.3, random_state=2023
+)
 ```
 
 ## Initialize the model
@@ -60,7 +66,7 @@ For this example we will use a tiny grid.
 ```{code-cell} ipython3
 from sklearn_evaluation.grid import RandomForestClassifierGrid
 
-model = RandomForestClassifierGrid(grid='tiny')
+model = RandomForestClassifierGrid(grid="tiny")
 ```
 
 ## Train all models
@@ -68,7 +74,6 @@ model = RandomForestClassifierGrid(grid='tiny')
 ```{code-cell} ipython3
 model.fit(X_train, y_train)
 ```
-
 
 # Evaluate
 

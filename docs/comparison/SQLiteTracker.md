@@ -24,7 +24,6 @@ This tutorial will walk you through the features with a Machine Learning use cas
 ```{code-cell} ipython3
 from pathlib import Path
 
-import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression
@@ -36,7 +35,7 @@ from sklearn.metrics import accuracy_score, RocCurveDisplay
 
 ```{code-cell} ipython3
 # delete our example database, if any
-db = Path('my_experiments.db')
+db = Path("my_experiments.db")
 
 if db.exists():
     db.unlink()
@@ -47,12 +46,14 @@ if db.exists():
 
 from sklearn_evaluation import SQLiteTracker
 
-tracker = SQLiteTracker('my_experiments.db')
+tracker = SQLiteTracker("my_experiments.db")
 ```
 
 ```{code-cell} ipython3
 X, y = datasets.make_classification(200, 10, n_informative=5, class_sep=0.65)
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.33, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.33, random_state=42
+)
 
 models = [RandomForestClassifier(), LogisticRegression(), DecisionTreeClassifier()]
 ```
@@ -64,16 +65,15 @@ models = [RandomForestClassifier(), LogisticRegression(), DecisionTreeClassifier
 
 for m in models:
     model = type(m).__name__
-    print(f'Fitting {model}')
-
+    print(f"Fitting {model}")
 
     experiment = tracker.new_experiment()
     m.fit(X_train, y_train)
     y_pred = m.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
-    
+
     # log a dictionary with log_dict
-    experiment.log_dict({'accuracy': acc, 'model': model, **m.get_params()})
+    experiment.log_dict({"accuracy": acc, "model": model, **m.get_params()})
 ```
 
 Or use `.log(key, value)` to log individual values:
@@ -87,8 +87,8 @@ acc = accuracy_score(y_test, y_pred)
 experiment = tracker.new_experiment()
 
 # log individual values
-experiment.log('accuracy', acc)
-experiment.log('model', type(svc).__name__)
+experiment.log("accuracy", acc)
+experiment.log("model", type(svc).__name__)
 
 _ = experiment.log_dict(svc.get_params())
 ```
@@ -120,13 +120,15 @@ print(tracker.get_sample_query())
 To execute a query, use `.query()`:
 
 ```{code-cell} ipython3
-ordered = tracker.query("""
+ordered = tracker.query(
+    """
 SELECT uuid,
        json_extract(parameters, '$.model') AS model,
        json_extract(parameters, '$.accuracy') AS accuracy
 FROM experiments
 ORDER BY accuracy DESC
-""")
+"""
+)
 ordered
 ```
 
@@ -143,21 +145,25 @@ You can log a confusion matrix and classification reports:
 ```{code-cell} ipython3
 %%capture
 
+
 def fit(model):
     model.fit(X_train, y_train)
     y_pred = model.predict(X_test)
     acc = accuracy_score(y_test, y_pred)
     experiment = tracker.new_experiment()
-    experiment.log_dict({'accuracy': acc, 'model': type(model).__name__, **model.get_params()})
-    
-    # log plots     
+    experiment.log_dict(
+        {"accuracy": acc, "model": type(model).__name__, **model.get_params()}
+    )
+
+    # log plots
     experiment.log_confusion_matrix(y_test, y_pred)
     experiment.log_classification_report(y_test, y_pred)
-    
+
     # log generic matplotlib figure
     roc = RocCurveDisplay.from_estimator(model, X_test, y_test)
-    experiment.log_figure('roc', roc.figure_)
-    
+    experiment.log_figure("roc", roc.figure_)
+
+
 fit(model=RandomForestClassifier(n_estimators=100))
 fit(model=RandomForestClassifier(n_estimators=10))
 ```
@@ -171,7 +177,8 @@ tracker.recent(2)
 The `.query()` method also allows rendering plots in the table view:
 
 ```{code-cell} ipython3
-results = tracker.query("""
+results = tracker.query(
+    """
 SELECT uuid,
        json_extract(parameters, '$.model') AS model,
        json_extract(parameters, '$.accuracy') AS accuracy,
@@ -183,7 +190,10 @@ AND cm IS NOT NULL
 AND roc IS NOT NULL
 ORDER BY created DESC
 LIMIT 2
-""", as_frame=False, render_plots=True)
+""",
+    as_frame=False,
+    render_plots=True,
+)
 
 results
 ```
@@ -246,18 +256,20 @@ However, note that plot combination (`plot1 + plot2` and `plot1 - plot2`) is onl
 ## Adding comments
 
 ```{code-cell} ipython3
-one.comment('This is some comment')
+one.comment("This is some comment")
 ```
 
 ```{code-cell} ipython3
-tracker.query("""
+tracker.query(
+    """
 SELECT uuid,
        comment,
        json_extract(parameters, '$.model') AS model,
        json_extract(parameters, '$.accuracy') AS accuracy
 FROM experiments
 WHERE comment is not NULL
-""")
+"""
+)
 ```
 
 ## Pandas integration
@@ -285,13 +297,15 @@ df
 You can also use the `.query()` method with `as_frame=True` (default value) to get a `pandas.DataFrame`
 
 ```{code-cell} ipython3
-df = tracker.query("""
+df = tracker.query(
+    """
 SELECT uuid,
        json_extract(parameters, '$.model') AS model,
        json_extract(parameters, '$.accuracy') AS accuracy
 FROM experiments
 ORDER BY accuracy DESC
 LIMIT 3
-""")
+"""
+)
 df
 ```
