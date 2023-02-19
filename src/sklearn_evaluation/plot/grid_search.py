@@ -23,7 +23,7 @@ from sklearn_evaluation.util import (
 )
 
 
-def _validate_change_input(change):
+def _validate_change_input(change, valid):
     if change is None:
         raise ValueError(
             (
@@ -39,21 +39,14 @@ def _validate_change_input(change):
 
     for input in to_validate:
         keys(
-            valid=[
-                "n_estimators",
-                "criterion",
-                "max_depth",
-                "max_features",
-                "min_samples_split",
-                "min_samples_leaf",
-            ],
+            valid=valid,
             passed=input,
             name="change",
         )
 
 
-def _validate_kind_input(kind):
-    keys(valid=["line", "bar"], passed=kind, name="kind")
+def _validate_kind_input(kind, valid):
+    keys(valid, passed=kind, name="kind")
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
@@ -100,9 +93,7 @@ def grid_search(
     .. plot:: ../examples/grid_search.py
 
     """
-    _validate_change_input(change)
-
-    _validate_kind_input(kind)
+    _validate_kind_input(kind, ["line", "bar"])
 
     if ax is None:
         _, ax = plt.subplots()
@@ -126,22 +117,23 @@ def grid_search(
         )
     ]
 
+    # get a set with all the parameters
+    valid_change_params = set(grid_scores[0].parameters.keys())
+    _validate_change_input(change, list(valid_change_params))
+
     if isinstance(change, string_types) or len(change) == 1:
-        return _grid_search_single(grid_scores, change, subset, kind, ax, sort)
+        return _grid_search_single(grid_scores, change, subset, kind, ax, sort, valid_change_params)
     elif len(change) == 2:
         return _grid_search_double(grid_scores, change, subset, cmap, ax, sort)
     else:
         raise ValueError("change must have length 1 or 2 or be a string")
 
 
-def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
+def _grid_search_single(grid_scores, change, subset, kind, ax, sort, params):
     # the logic of this function is to group the grid scores acording
     # to certain rules and subsequently remove the elements that we are
     # not interested in, until we have only the elements that the user
     # wants to plot
-
-    # get a set with all the parameters
-    params = set(grid_scores[0].parameters.keys())
 
     # remove parameter to vary from the list
     # since we are not filtering on that parameter

@@ -131,9 +131,7 @@ def test_double_ignores_kind_bar(grid_search_3_params):
     [
         ["some_n_estimators", ["n_estimators"]],
         ["erion", ["criterion"]],
-        ["max_feas", ["max_depth", "max_features"]],
-        ["min_samp", ["min_samples_split"]],
-        [("min_samples_leaf123"), ["min_samples_leaf"]],
+        ["max_feas", ["max_features"]],
         [("some_n_estimators", "n_estimators", "criterion"), ["n_estimators"]],
         [("n_estimators1", "criterion1"), ["n_estimators", "criterion"]],
         [("n_estimators1", ""), ["n_estimators"]],
@@ -187,7 +185,6 @@ def test_invalid_kind_param_without_suggestions(grid_search_3_params, kind):
         )
 
     assert "Did you mean" not in str(e.value)
-
 
 # API tests
 
