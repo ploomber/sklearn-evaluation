@@ -122,7 +122,9 @@ def grid_search(
     _validate_change_input(change, list(valid_change_params))
 
     if isinstance(change, string_types) or len(change) == 1:
-        return _grid_search_single(grid_scores, change, subset, kind, ax, sort, valid_change_params)
+        return _grid_search_single(
+            grid_scores, change, subset, kind, ax, sort, valid_change_params
+        )
     elif len(change) == 2:
         return _grid_search_double(grid_scores, change, subset, cmap, ax, sort)
     else:
