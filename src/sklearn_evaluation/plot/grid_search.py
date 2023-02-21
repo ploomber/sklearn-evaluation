@@ -127,6 +127,10 @@ def grid_search(
 
 @apply_theme()
 def _grid_search_single(grid_scores, change, subset, kind, ax, sort, params):
+
+    if ax is None:
+        _, ax = plt.subplots()
+
     # the logic of this function is to group the grid scores acording
     # to certain rules and subsequently remove the elements that we are
     # not interested in, until we have only the elements that the user
