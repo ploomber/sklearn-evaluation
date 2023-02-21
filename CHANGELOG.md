@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 0.11.3dev
+
 ## 0.11.2 (2023-02-21)
 
 - [Fix] Adds input validation with suggestions to `plot.grid_search` ([#53](https://github.com/ploomber/sklearn-evaluation/issues/53))
