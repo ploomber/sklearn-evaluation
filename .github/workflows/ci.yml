@@ -1,5 +1,5 @@
 name: CI
-# test
+
 on: [push, pull_request]
 
 jobs:
@@ -13,12 +13,23 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-
-    - name: Set up Python ${{ matrix.python-version }}
+    - name: Cache conda
+      uses: actions/cache@v2
+      env:
+        # Increase this value to reset cache if etc/example-environment.yml has not changed
+        CACHE_NUMBER: 0
+      with:
+        path: ~/conda_pkgs_dir
+        key:
+          ${{ runner.os }}-conda-${{ env.CACHE_NUMBER }}-${{
+          hashFiles('setup.py') }}
+    - name: CacheSet up Python ${{ matrix.python-version }}
       uses: conda-incubator/setup-miniconda@v2
       with:
-        miniconda-version: latest
-        activate-environment: conda-env
+        activate-environment: anaconda-client-env
+        channel-priority: strict
+        environment-file: setup.py
+        use-only-tar-bz2: true
         channels: conda-forge, defaults
         python-version: ${{ matrix.python-version }}
 
