@@ -199,6 +199,7 @@ def _set_custom_ax_settings(ax):
     ax.set_xlabel("False Positive Rate")
     ax.set_ylabel("True Positive Rate")
     ax.set_title("ROC")
+    ax.legend()
 
 
 def _roc_curve_multi(y_true, y_score):

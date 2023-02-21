@@ -1,8 +1,6 @@
 import numpy as np
 from matplotlib.tri import Triangulation
 
-from sklearn_evaluation.util import default_heatmap
-
 
 def add(first, second, ax, invert_axis=False, max_=None, cmap=None):
     # Adapted from: https://stackoverflow.com/a/63531813/709975
@@ -32,8 +30,6 @@ def add(first, second, ax, invert_axis=False, max_=None, cmap=None):
     ]
     triang1 = Triangulation(xs.ravel() - 0.5, ys.ravel() - 0.5, triangles1)
     triang2 = Triangulation(xs.ravel() - 0.5, ys.ravel() - 0.5, triangles2)
-
-    cmap = cmap or default_heatmap()
 
     ax.tripcolor(triang1, first.ravel(), cmap=cmap, vmax=max_)
     ax.tripcolor(triang2, second.ravel(), cmap=cmap, vmax=max_)

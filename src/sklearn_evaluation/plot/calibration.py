@@ -35,8 +35,10 @@ from sklearn_evaluation.util import isiterofiter
 from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.plot import AbstractComposedPlot, AbstractPlot
+from sklearn_evaluation.plot.style import apply_theme, get_color_palette
 
 
+@apply_theme()
 def _set_ax_settings(ax, name):
     ax.set_title(name)
     ax.set_xlabel("Mean predicted value")
@@ -100,7 +102,12 @@ def _plot_from_metrics(mpv, fop, label, color, ax):
 
 
 def _generate_colors(cmap, n_color):
-    return [plt.cm.get_cmap(cmap)(float(i) / n_color) for i in range(n_color)]
+    if cmap:
+        colors = [plt.cm.get_cmap(cmap)(float(i) / n_color) for i in range(n_color)]
+    else:
+        colors = get_color_palette()
+
+    return colors
 
 
 class CalibrationCurve(AbstractPlot):
@@ -146,7 +153,7 @@ class CalibrationCurve(AbstractPlot):
         mean_predicted_value,
         fraction_of_positives,
         label=None,
-        cmap="nipy_spectral",
+        cmap=None,
     ):
         self.mean_predicted_value = mean_predicted_value
         self.fraction_of_positives = fraction_of_positives
@@ -191,7 +198,7 @@ class CalibrationCurve(AbstractPlot):
     @classmethod
     @modify_exceptions
     def from_raw_data(
-        cls, y_true, probabilities, *, label=None, n_bins=10, cmap="nipy_spectral"
+        cls, y_true, probabilities, *, label=None, n_bins=10, cmap=None
     ):
         """
         Plots calibration curves for a set of classifier probability estimates.
@@ -364,7 +371,6 @@ class CalibrationCurveAdd(AbstractComposedPlot):
 def calibration_curve(
     y_true, probabilities, clf_names=None, n_bins=10, cmap="nipy_spectral", ax=None
 ):
-
     """
     Plots calibration curves for a set of classifier probability estimates.
     Calibration curves help determining whether you can interpret predicted
@@ -413,9 +419,10 @@ def calibration_curve(
     ).ax_
 
 
+@apply_theme()
 @modify_exceptions
 def scores_distribution(
-    y_scores, n_bins=5, title="Predictions distribution", color="b", ax=None
+    y_scores, n_bins=5, title="Predictions distribution", color=None, ax=None
 ):
     """Generate a histogram from model's predictions
 
@@ -448,7 +455,7 @@ def scores_distribution(
     # https://github.com/scikit-learn/scikit-learn/blob/f3f51f9b611bf873bd5836748647221480071a87/sklearn/calibration.py#L989
     bins = np.linspace(0.0, 1.0, n_bins + 1)
 
-    ax.hist(y_scores, range=(0, 1), bins=bins, color=color)
+    ax.hist(y_scores, range=(0, 1), bins=bins, color=color, edgecolor="#fff")
 
     ax.set(
         title=title,

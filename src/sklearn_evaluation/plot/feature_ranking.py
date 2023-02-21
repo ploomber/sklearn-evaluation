@@ -25,6 +25,7 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 
 import matplotlib.pyplot as plt
+from sklearn_evaluation.plot.style import get_color_palette, apply_theme
 
 
 def kendalltau(X):
@@ -170,6 +171,7 @@ class RankD:
         self._derive_features_from_data(X)
         self.ranks_ = self._rank(X)
         self._draw()
+
         return self.ax
 
     @SKLearnEvaluationLogger.log(feature="plot")
@@ -196,7 +198,11 @@ class RankD:
         self._draw()
         return self.ax
 
+    def _set_default_colors(self, cmap):
+        plt.rcParams['image.cmap'] = cmap
 
+
+@apply_theme()
 class Rank1D(RankD):
     """
     Rank1D computes a score for each feature in the data set with a specific
@@ -252,11 +258,11 @@ class Rank1D(RankD):
         features=None,
         figsize=(7, 7),
         orient="h",
-        color="g",
+        color=None,
         ax=None,
     ):
         super().__init__(algorithm=algorithm, features=features, figsize=figsize, ax=ax)
-        self.color = color
+        self.color = color or get_color_palette()[0]
         self.orientation_ = orient
 
     @staticmethod
@@ -273,6 +279,7 @@ class Rank1D(RankD):
             self.algorithm.title(), len(self.features_)
         )
         self.ax.set_title(title)
+
         if self.orientation_ == "h":
             # Make the plot
             self.ax.barh(np.arange(len(self.ranks_)), self.ranks_, color=self.color)
@@ -300,9 +307,11 @@ class Rank1D(RankD):
 
         else:
             raise ValueError("Orientation must be 'h' or 'v'")
+
         return self.ax
 
 
+@apply_theme()
 class Rank2D(RankD):
     """
     Rank2D performs pairwise comparisons of each feature in the data set with
@@ -368,7 +377,8 @@ class Rank2D(RankD):
     ):
 
         super().__init__(algorithm=algorithm, features=features, figsize=figsize, ax=ax)
-        self.colormap = colormap
+
+        self._set_default_colors(colormap)
 
     @staticmethod
     def _validate_rank(ranks):
@@ -394,7 +404,8 @@ class Rank2D(RankD):
 
         # Draw the heatmap
         data = np.ma.masked_where(mask, self.ranks_)
-        mesh = self.ax.pcolormesh(data, cmap=self.colormap, vmin=-1, vmax=1)
+        # mesh = self.ax.pcolormesh(data, cmap=self.colormap, vmin=-1, vmax=1)
+        mesh = self.ax.pcolormesh(data, vmin=-1, vmax=1)
 
         # Set the Axis limits
         self.ax.set(xlim=(0, data.shape[1]), ylim=(0, data.shape[0]))

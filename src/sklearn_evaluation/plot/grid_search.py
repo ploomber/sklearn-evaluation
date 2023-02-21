@@ -11,12 +11,12 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
 
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme
 
 from sklearn_evaluation.util import (
     _group_by,
     _get_params_value,
     _mapping_to_tuple_pairs,
-    default_heatmap,
     _sorted_map_iter,
     _flatten_list,
 )
@@ -74,12 +74,6 @@ def grid_search(
             )
         )
 
-    if ax is None:
-        _, ax = plt.subplots()
-
-    if cmap is None:
-        cmap = default_heatmap()
-
     # FIXME: convert cv_results_ to the old list of namedtuples format so
     # this still works on sklearn >= 0.20. I need to refactor the code
     # so it works with the new format
@@ -104,7 +98,12 @@ def grid_search(
         raise ValueError("change must have length 1 or 2 or be a string")
 
 
+@apply_theme()
 def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
+
+    if ax is None:
+        _, ax = plt.subplots()
+
     # the logic of this function is to group the grid scores acording
     # to certain rules and subsequently remove the elements that we are
     # not interested in, until we have only the elements that the user
@@ -178,12 +177,17 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
     ax.set_title("Grid search results")
     ax.set_ylabel("Mean score")
     ax.set_xlabel(change)
-    ax.legend(loc="best")
+    ax.legend()
     ax.margins(0.05)
     return ax
 
 
+@apply_theme(ax_style="frame")
 def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
+
+    if ax is None:
+        _, ax = plt.subplots()
+
     # check that the two different parameters were passed
     if len(set(change)) == 1:
         raise ValueError("You need to pass two different parameters")

@@ -23,6 +23,7 @@ import matplotlib.pyplot as plt
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.utils.multiclass import unique_labels, type_of_target
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import get_color_palette, apply_theme
 
 
 def _validate_target(y):
@@ -40,6 +41,7 @@ def _validate_target(y):
         )
 
 
+@apply_theme()
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
@@ -98,6 +100,8 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
 
     _validate_target(y_train)
     _validate_target(y_test)
+
+    colors = get_color_palette()
     # Get the unique values from the dataset
     targets = (y_train,) if y_test is None else (y_train, y_test)
     classes_ = unique_labels(*targets)
@@ -119,6 +123,7 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
             np.arange(len(support_)),
             support_,
             color=colors if colors else "#0070FF",
+            edgecolor="#fff",
             align="center",
             width=0.5,
         )
@@ -132,7 +137,8 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
             if idx > 0:
                 index = index + bar_width
 
-            ax.bar(index, support, bar_width, color=colors[idx], label=legends[idx])
+            ax.bar(index, support, bar_width,
+                   color=colors[idx], edgecolor="#fff", label=legends[idx])
 
     ax.set_title("Class Balance for {:,} Instances".format(support_.sum()))
 
@@ -152,7 +158,7 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
 
     # Remove the vertical grid
     ax.set_axisbelow(True)
-    ax.yaxis.grid(True, color="#808080")
+    # ax.yaxis.grid(True, color="#808080")
     ax.autoscale(enable=True)
 
     if mode == "compare":

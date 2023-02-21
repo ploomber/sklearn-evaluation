@@ -13,11 +13,11 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.matplotlib import bar
 from sklearn_evaluation.metrics import precision_at
 from sklearn_evaluation import compute
-from sklearn_evaluation.util import is_column_vector, is_row_vector, default_heatmap
+from sklearn_evaluation.util import is_column_vector, is_row_vector
 from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from sklearn_evaluation.plot import _matrix
 from ploomber_core.exceptions import modify_exceptions
-from sklearn_evaluation.plot.style import apply_theme
+from sklearn_evaluation.plot.style import default_cmap
 
 
 class ConfusionMatrixSub(AbstractComposedPlot):
@@ -27,12 +27,11 @@ class ConfusionMatrixSub(AbstractComposedPlot):
         self.cm = cm
         self.target_names = target_names
 
-    @apply_theme(ax_style=False)
-    def plot(self, ax=None, **theme):
+    def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
 
-        cmap = theme['cmap'] if theme else default_heatmap()
+        cmap = default_cmap()
 
         _plot_cm(
             self.cm,
@@ -53,14 +52,11 @@ class ConfusionMatrixAdd(AbstractComposedPlot):
         self.b = b
         self.target_names = target_names
 
-    @apply_theme(ax_style=False)
-    def plot(self, ax=None, **theme):
+    def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
 
-        cmap = theme['cmap'] if theme else None
-
-        _matrix.add(self.a, self.b, ax, invert_axis=True, cmap=cmap)
+        _matrix.add(self.a, self.b, ax, invert_axis=True)
 
         tick_marks = np.arange(len(self.target_names))
         ax.set_xticks(tick_marks)
@@ -104,13 +100,9 @@ class ConfusionMatrix(AbstractPlot):
         self.normalize = normalize
         self.cmap = _confusion_matrix_init_defaults(cmap=cmap)
 
-    @apply_theme(ax_style=False)
-    def plot(self, ax=None, **theme):
+    def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
-
-        if theme:
-            self.cmap = theme['cmap']
 
         _plot_cm(self.cm, self.cmap, ax, self.target_names, self.normalize)
 
@@ -266,7 +258,7 @@ def _confusion_matrix_init_defaults(cmap):
     np.set_printoptions(precision=2)
 
     if cmap is None:
-        cmap = default_heatmap()
+        cmap = default_cmap()
 
     return cmap
 
