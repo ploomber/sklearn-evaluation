@@ -53,6 +53,7 @@ DEV = [
     "yapf",
     "twine",
     "pkgmt",
+    "pytest-xdist",
 ]
 
 ALL = DOCS + JB + TEST + DEV
