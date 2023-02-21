@@ -4,6 +4,7 @@ from functools import partial
 import pytest
 from matplotlib.testing.decorators import image_comparison as _image_comparison, cleanup
 from sklearn_evaluation import plot
+from ploomber_core.exceptions import ValidationError
 
 
 image_comparison = partial(
@@ -125,15 +126,73 @@ def test_double_ignores_kind_bar(grid_search_3_params):
     plot.grid_search(grid_search_3_params.cv_results_, change, subset, kind="bar")
 
 
+@pytest.mark.parametrize(
+    "change, expected_suggestions",
+    [
+        ["some_n_estimators", ["n_estimators"]],
+        ["erion", ["criterion"]],
+        ["max_feas", ["max_features"]],
+        [("some_n_estimators", "n_estimators", "criterion"), ["n_estimators"]],
+        [("n_estimators1", "criterion1"), ["n_estimators", "criterion"]],
+        [("n_estimators1", ""), ["n_estimators"]],
+    ],
+)
+def test_invalid_change_param_with_suggestions(
+    grid_search_3_params, change, expected_suggestions
+):
+    with pytest.raises(ValidationError) as e:
+        plot.grid_search(grid_search_3_params.cv_results_, change, kind="bar")
+
+    assert "Did you mean" in str(e.value)
+
+    for suggestion in expected_suggestions:
+        assert suggestion in str(e.value)
+
+
+@pytest.mark.parametrize(
+    "change", ["123", "a", "", ("", "a"), ("some-text", ""), ("some-text", "more")]
+)
+def test_invalid_change_param_without_suggestions(grid_search_3_params, change):
+    with pytest.raises(ValidationError) as e:
+        plot.grid_search(grid_search_3_params.cv_results_, change, kind="bar")
+
+    assert "Did you mean" not in str(e.value)
+
+
+@pytest.mark.parametrize(
+    "kind, expected_suggestions",
+    [["bar1", ["bar"]], ["liner", ["line"]], ["lien", ["line"]]],
+)
+def test_invalid_kind_param_with_suggestions(
+    grid_search_3_params, kind, expected_suggestions
+):
+    with pytest.raises(ValidationError) as e:
+        plot.grid_search(
+            grid_search_3_params.cv_results_, change="n_estimators", kind=kind
+        )
+
+    assert "Did you mean" in str(e.value)
+
+    for suggestion in expected_suggestions:
+        assert suggestion in str(e.value)
+
+
+@pytest.mark.parametrize("kind", ["donut", "pie"])
+def test_invalid_kind_param_without_suggestions(grid_search_3_params, kind):
+    with pytest.raises(ValidationError) as e:
+        plot.grid_search(
+            grid_search_3_params.cv_results_, change="n_estimators", kind=kind
+        )
+
+    assert "Did you mean" not in str(e.value)
+
 # API tests
 
 
 @cleanup
-def test_list_with_len_three_raises_exception(
-    grid_search_3_params, ploomber_value_error_message
-):
+def test_list_with_len_three_raises_exception(grid_search_3_params):
     axis = ["a", "b", "c"]
-    with pytest.raises(ValueError, match=ploomber_value_error_message):
+    with pytest.raises(ValidationError):
         plot.grid_search(grid_search_3_params.cv_results_, axis)
 
 
@@ -212,20 +271,16 @@ def test_raise_exception_when_parameter_subset_matches_more_than_one_group(
 
 
 @cleanup
-def test_raise_exception_when_parameter_does_not_exist(
-    grid_search_3_params, ploomber_value_error_message
-):
-    with pytest.raises(ValueError, match=ploomber_value_error_message):
+def test_raise_exception_when_parameter_does_not_exist(grid_search_3_params):
+    with pytest.raises(ValidationError):
         change = "this_is_not_a_parameter"
         subset = {"criterion": "gini", "max_features": "sqrt"}
         plot.grid_search(grid_search_3_params.cv_results_, change=change, subset=subset)
 
 
 @cleanup
-def test_raise_exception_when_parameter_does_not_exist_double(
-    grid_search_3_params, ploomber_value_error_message
-):
-    with pytest.raises(ValueError, match=ploomber_value_error_message):
+def test_raise_exception_when_parameter_does_not_exist_double(grid_search_3_params):
+    with pytest.raises(ValidationError):
         change = ("n_estimators", "this_is_not_a_parameter")
         subset = {"criterion": "gini", "max_features": "sqrt"}
         plot.grid_search(grid_search_3_params.cv_results_, change=change, subset=subset)

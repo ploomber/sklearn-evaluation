@@ -11,6 +11,7 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
 
 from ploomber_core.exceptions import modify_exceptions
+from ploomber_core import validate
 
 from sklearn_evaluation.util import (
     _group_by,
@@ -20,6 +21,32 @@ from sklearn_evaluation.util import (
     _sorted_map_iter,
     _flatten_list,
 )
+
+
+def _validate_change_input(change, valid):
+    if change is None:
+        raise ValueError(
+            (
+                "change can't be None, you need to select at least"
+                " one value to make the plot."
+            )
+        )
+
+    to_validate = change
+
+    if isinstance(change, str):
+        to_validate = [change]
+
+    for input in to_validate:
+        validate.keys(
+            valid=valid,
+            passed=input,
+            name="change",
+        )
+
+
+def _validate_kind_input(kind, valid):
+    validate.keys(valid, passed=kind, name="kind")
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
@@ -66,13 +93,7 @@ def grid_search(
     .. plot:: ../examples/grid_search.py
 
     """
-    if change is None:
-        raise ValueError(
-            (
-                "change can't be None, you need to select at least"
-                " one value to make the plot."
-            )
-        )
+    _validate_kind_input(kind, ["line", "bar"])
 
     if ax is None:
         _, ax = plt.subplots()
@@ -96,22 +117,25 @@ def grid_search(
         )
     ]
 
+    # get a set with all the parameters
+    valid_change_params = set(grid_scores[0].parameters.keys())
+    _validate_change_input(change, list(valid_change_params))
+
     if isinstance(change, string_types) or len(change) == 1:
-        return _grid_search_single(grid_scores, change, subset, kind, ax, sort)
+        return _grid_search_single(
+            grid_scores, change, subset, kind, ax, sort, valid_change_params
+        )
     elif len(change) == 2:
         return _grid_search_double(grid_scores, change, subset, cmap, ax, sort)
     else:
         raise ValueError("change must have length 1 or 2 or be a string")
 
 
-def _grid_search_single(grid_scores, change, subset, kind, ax, sort):
+def _grid_search_single(grid_scores, change, subset, kind, ax, sort, params):
     # the logic of this function is to group the grid scores acording
     # to certain rules and subsequently remove the elements that we are
     # not interested in, until we have only the elements that the user
     # wants to plot
-
-    # get a set with all the parameters
-    params = set(grid_scores[0].parameters.keys())
 
     # remove parameter to vary from the list
     # since we are not filtering on that parameter
