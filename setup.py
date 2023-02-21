@@ -46,6 +46,7 @@ TEST = [
     "pytest-cov",
     # TODO: update config so coveralls 3 works
     "coveralls<3",
+    "pytest-xdist",
 ]
 
 DEV = [
@@ -53,7 +54,6 @@ DEV = [
     "yapf",
     "twine",
     "pkgmt",
-    "pytest-xdist",
 ]
 
 ALL = DOCS + JB + TEST + DEV
