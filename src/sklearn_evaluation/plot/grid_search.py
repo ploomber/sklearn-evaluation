@@ -11,7 +11,7 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
 
 from ploomber_core.exceptions import modify_exceptions
-from ploomber_core.validate import keys
+from ploomber_core import validate
 
 from sklearn_evaluation.util import (
     _group_by,
@@ -38,7 +38,7 @@ def _validate_change_input(change, valid):
         to_validate = [change]
 
     for input in to_validate:
-        keys(
+        validate.keys(
             valid=valid,
             passed=input,
             name="change",
@@ -46,7 +46,7 @@ def _validate_change_input(change, valid):
 
 
 def _validate_kind_input(kind, valid):
-    keys(valid, passed=kind, name="kind")
+    validate.keys(valid, passed=kind, name="kind")
 
 
 @SKLearnEvaluationLogger.log(feature="plot")
