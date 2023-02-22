@@ -41,6 +41,7 @@ from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.plot.style import apply_theme
 
 
+@apply_theme()
 def _generate_axes(cluster, figsize, ax):
     if ax is not None:
         if not isinstance(ax, list):
