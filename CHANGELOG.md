@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.11.3dev
+- [Feature] Adds coloring scheme and style to plots (#243)
 
 ## 0.11.2 (2023-02-21)
 
