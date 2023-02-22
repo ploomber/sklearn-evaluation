@@ -63,7 +63,6 @@ jobs:
         echo "******* after ********"
         coveralls
 
-
   # run: pkgmt check
   check:
     runs-on: ubuntu-latest
