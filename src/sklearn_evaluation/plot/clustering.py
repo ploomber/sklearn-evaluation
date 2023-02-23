@@ -296,7 +296,7 @@ def silhouette_analysis(
     return ax
 
 
-@apply_theme(color_style="gradient")
+@apply_theme(cmap_style="gradient")
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def _silhouette_analysis_one_model(

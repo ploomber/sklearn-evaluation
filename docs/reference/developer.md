@@ -242,6 +242,125 @@ def my_plotting_function(y_true, y_pred, ax=None):
     pass
 ```
 
+### Styling plots
+Using our context style feature we can change matplotlib `rcParams` and easily manipulate the overall visual style of our plots. The default style features a frame with borders only on the left and bottom, and a monochromatic color scheme of one color from the material UI color palette. However, we have the ability to adjust both the cmap and the style of the chart itself using the parameters 'cmap_style' and 'ax_style'.
+
+We support 2 variants of ax styles:
+
+```
+ax_style : ["no_frame", "frame"]
+```
+
+And 2 styles of cmap:
+
+```
+cmap_style : ["monochromatic", "gradient"]
+```
+
+
+#### Examples
+
+```{code-cell} ipython3
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from sklearn_evaluation.plot.style import apply_theme
+```
+
+We will create a function called "plot_bar" that will generate a basic bar chart.
+
+```{code-cell} ipython3
+def plot_bar():
+    data = [[30, 25, 50, 20], [40, 23, 51, 17], [30, 25, 50, 20]]
+    X = np.arange(4)
+    fig = plt.figure()
+    ax = fig.add_axes([0,0,1,1])
+    
+    offset = 0
+    for i in range(len(data)):
+        ax.bar(X + offset, data[i], width = 0.25)
+        offset += 0.25
+
+plot_bar()
+```
+
+Now, add the `apply_theme` decorator to apply a style where each bar is colored with a different color from the palette.
+This is the default style of our plots.
+
+```{code-cell} ipython3
+@apply_theme()
+def plot_bar_with_default_style():
+    plot_bar()
+
+plot_bar_with_default_style()
+```
+
+We can also use `cmap` to color our plots. The default style will be a `monochromatic` coloring which is a palette in which a single color tint is used.
+
+```{code-cell} ipython3
+@apply_theme()
+def plot_bar_with_cmap():
+    data = [[30, 25, 50, 20], [40, 23, 51, 17], [30, 25, 50, 20]]
+
+    X = np.arange(4)
+    fig = plt.figure()
+    ax = fig.add_axes([0,0,1,1])
+    
+    offset = 0
+    for i in range(len(data)):
+        color = mpl.colormaps.get_cmap(None)(float(i) / len(data))
+        ax.bar(X + offset, data[i], width = 0.25, color = color)
+        offset += 0.25
+
+plot_bar_with_cmap()
+```
+
+Use `cmap` to color each bar with the `gradient` style, which is a palette of two colors gradually shift from one to another.
+
+```{code-cell} ipython3
+@apply_theme(cmap_style="gradient")
+def plot_bar_with_cmap():
+    data = [[30, 25, 50, 20], [40, 23, 51, 17], [30, 25, 50, 20]]
+    
+    X = np.arange(4)
+    fig = plt.figure()
+    ax = fig.add_axes([0,0,1,1])
+
+    offset = 0
+    for i in range(len(data)):
+        color = mpl.colormaps.get_cmap(None)(float(i) / len(data))
+        ax.bar(X + offset, data[i], width = 0.25, color = color)
+        offset += 0.25
+
+plot_bar_with_cmap()
+```
+
+We can even add a custom style on top of our style:
+
+```{code-cell} ipython3
+@apply_theme(cmap_style="gradient")
+def plot_bar_with_cmap(cmap=None):
+    data = [[30, 25, 50, 20], [40, 23, 51, 17], [30, 25, 50, 20]]
+    
+    X = np.arange(4)
+    fig = plt.figure()
+    ax = fig.add_axes([0,0,1,1])
+
+    
+    
+    offset = 0
+    for i in range(len(data)):
+        color = mpl.colormaps.get_cmap(cmap)(float(i) / len(data))
+        ax.bar(X + offset, data[i], width = 0.25, color = color)
+        offset += 0.25
+    
+    ax.grid(color = '#c6c6c6', linestyle = '--', linewidth = 0.5)
+    
+    
+plot_bar_with_cmap(cmap='viridis')
+```
+
+
 ## Guidelines (functional API)
 
 

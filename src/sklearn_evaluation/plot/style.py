@@ -6,7 +6,7 @@ from sklearn_evaluation.util import truncate_colormap
 
 
 @contextmanager
-def tmp_theme(ax_style, color_style):
+def tmp_theme(ax_style, cmap_style):
     """
     Adds a scheme coloring and styling to matplotlib plots.
 
@@ -20,8 +20,8 @@ def tmp_theme(ax_style, color_style):
 
         'frame' ax with border
 
-    color_style : str, default 'monochromatic'
-        Define which coloring style to apply.
+    cmap_style : str, default 'monochromatic'
+        Define which cmap style to apply.
 
         Availble styles:
 
@@ -30,7 +30,7 @@ def tmp_theme(ax_style, color_style):
         'gradient' a palette of two colors gradually shift from one to another
     """
     try:
-        _set_default_plot_colors(color_style)
+        _set_default_plot_colors(cmap_style)
         _set_default_rc_params(ax_style)
 
         yield
@@ -55,6 +55,11 @@ def _set_default_rc_params(ax_style):
         plt.rcParams['axes.spines.top'] = False
         plt.rcParams['ytick.right'] = False
         plt.rcParams['xtick.top'] = False
+    elif ax_style == "frame":
+        plt.rcParams['axes.spines.right'] = True
+        plt.rcParams['axes.spines.top'] = True
+        plt.rcParams['ytick.right'] = True
+        plt.rcParams['xtick.top'] = True
 
 
 def get_color_palette(n_colors=None):
@@ -78,7 +83,7 @@ def get_color_palette(n_colors=None):
     return _material_ui_colors[:n_colors]
 
 
-def apply_theme(ax_style="no_frame", color_style="monochromatic"):
+def apply_theme(ax_style="no_frame", cmap_style="monochromatic"):
     """
     Decorates plotting function and applies a visual theme to matplotlib plots.
 
@@ -92,8 +97,8 @@ def apply_theme(ax_style="no_frame", color_style="monochromatic"):
 
         'frame' ax with border
 
-    color_style : str, default 'monochromatic'
-        Define which coloring style to apply.
+    cmap_style : str, default 'monochromatic'
+        Define which cmap style to apply.
 
         Availble styles:
 
@@ -103,18 +108,18 @@ def apply_theme(ax_style="no_frame", color_style="monochromatic"):
     """
     def decorator(func):
         def wrapper_func(*args, **kwargs):
-            with tmp_theme(ax_style, color_style):
+            with tmp_theme(ax_style, cmap_style):
                 return func(*args, **kwargs)
 
         return wrapper_func
     return decorator
 
 
-def _set_default_plot_colors(color_style):
+def _set_default_plot_colors(cmap_style):
     material_ui_colors = get_color_palette()
     plt.rcParams["axes.prop_cycle"] = mpl.cycler(color=material_ui_colors)
 
-    if color_style == "gradient":
+    if cmap_style == "gradient":
         gradient_cmap()
     else:
         default_cmap()
