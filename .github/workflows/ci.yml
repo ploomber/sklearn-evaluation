@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 
 env:
-  CACHE_NUMBER: 0  # increase to reset cache manually
+  CACHE_NUMBER: 1  # increase to reset cache manually
 
 jobs:
   unit:
@@ -55,12 +55,12 @@ jobs:
         pip install --upgrade  --editable .
         python -c "import sklearn_evaluation"
         pip install --upgrade  --editable ".[all]"
-#      if: steps.cache.outputs.cache-hit != 'true'
+      if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Lint with flake8
       run: |
         # run flake8 on .py files and notebooks (.ipynb, .md, etc) 
-        pip install --upgrade flake8 jupytext nbqa
+        # pip install --upgrade flake8 jupytext nbqa
         flake8
         nbqa flake8 .
 
