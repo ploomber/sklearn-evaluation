@@ -116,7 +116,7 @@ class AbstractComposedPlot(abc.ABC):
         Must return ``self``.
         """
         pass
-    
+
     def __sub__(self, another):
         """Optional method to support the ``a - b`` operation. must return an
         ``AbstractComposedPlot`` instance. This should produce composed plot that
