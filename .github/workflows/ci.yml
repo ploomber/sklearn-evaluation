@@ -59,9 +59,7 @@ jobs:
 #      if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Lint with flake8
-      shell: bash -l {0}
       run: |
-        eval "$(conda shell.bash hook)"
         # run flake8 on .py files and notebooks (.ipynb, .md, etc) 
         flake8
         nbqa flake8 .
