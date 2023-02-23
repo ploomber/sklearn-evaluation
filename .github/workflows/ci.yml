@@ -45,6 +45,7 @@ jobs:
 
     - name: Setup environment
       run: |
+        python -m pip install --upgrade pip
         pip install flake8 jupytext nbqa
         # if we remove the --editable flag pytest throws an error, because 
         # there are two copies of the pkg (src/ and site-packages/), this is a 
