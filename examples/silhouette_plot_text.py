@@ -20,7 +20,6 @@ categories = [
 dataset = fetch_20newsgroups(
     remove=("headers", "footers", "quotes"),
     subset="all",
-    data_home=".",
     categories=categories,
     shuffle=True,
     random_state=42,
