@@ -1,8 +1,9 @@
 name: CI
 on: [push, pull_request]
 
+
 env:
-  CACHE_NUMBER: 1  # increase to reset cache manually
+  CACHE_NUMBER: 2  # increase to reset cache manually
 
 jobs:
   unit:
@@ -49,8 +50,13 @@ jobs:
       id: cache
 
     - name: Update environment
+      run: mamba env update -n my-env -f environment.yml
+      if: steps.cache.outputs.cache-hit != 'true'
+
+    - name: Check environment
       run: |
-        eval "$(conda shell.bash hook)"
+        mamba env update -n my-env --editable -f "setup.py"
+        
         pip install flake8 jupytext nbqa
         
         # if we remove the --editable flag pytest throws an error, because 
