@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 
 env:
-  CACHE_NUMBER: 2  # increase to reset cache manually
+  CACHE_NUMBER: 3  # increase to reset cache manually
 
 jobs:
   unit:
