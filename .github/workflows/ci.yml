@@ -2,7 +2,7 @@ name: CI
 on: [push, pull_request]
 
 env:
-  CACHE_NUMBER: 0  # increase to reset cache manually
+  CACHE_NUMBER: 1  # increase to reset cache manually
 
 jobs:
   unit:
