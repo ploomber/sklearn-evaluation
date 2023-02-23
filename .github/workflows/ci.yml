@@ -50,24 +50,23 @@ jobs:
       id: cache
 
     - name: Update environment
-      run: mamba env update -n my-env -f environment.yml
+      shell: bash -l {0}
+      run: |
+          mamba env update -n my-env --editable -f "setup.py"
+          pip install flake8 jupytext nbqa
       if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Check environment
+      shell: bash -l {0}
       run: |
-        mamba env update -n my-env --editable -f "setup.py"
-        
-        pip install flake8 jupytext nbqa
-        
         # if we remove the --editable flag pytest throws an error, because 
         # there are two copies of the pkg (src/ and site-packages/), this is a 
         # quick way to fix it
         # https://github.com/pytest-dev/pytest/issues/7678
 
-        pip install --editable .
+        #pip install --editable .
         python -c "import sklearn_evaluation"
-        pip install --editable ".[all]"
-      if: steps.cache.outputs.cache-hit != 'true'
+        #pip install --editable ".[all]"
 
     - name: Lint with flake8
       shell: bash -l {0}
