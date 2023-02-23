@@ -71,7 +71,7 @@ If there is a large gap between the train and validation curve, we are overfitti
 Here is an example of a learning curve with significant overfitting:
 
 ```{code-cell} ipython3
-data = make_classification(n_samples=1000, random_state=0, 
+data = make_classification(n_samples=1000, random_state=0,
     class_sep=0.2)
 X, y = data[0], data[1]
 ```
