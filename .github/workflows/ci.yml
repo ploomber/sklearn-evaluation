@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 
 env:
-  CACHE_NUMBER: 3  # increase to reset cache manually
+  CACHE_NUMBER: 4  # increase to reset cache manually
 
 jobs:
   unit:
@@ -77,9 +77,9 @@ jobs:
         # quick way to fix it
         # https://github.com/pytest-dev/pytest/issues/7678
 
-        #pip install --editable .
+        pip install --editable .
         python -c "import sklearn_evaluation"
-        #pip install --editable ".[all]"
+        pip install --editable ".[all]"
       if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Lint with flake8
