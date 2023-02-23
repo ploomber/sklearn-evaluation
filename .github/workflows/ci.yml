@@ -62,7 +62,7 @@ jobs:
     - name: Lint with flake8
       run: |
         # run flake8 on .py files and notebooks (.ipynb, .md, etc) 
-        # pip install --upgrade flake8 jupytext nbqa
+        pip install --upgrade flake8 jupytext nbqa
         flake8
         nbqa flake8 .
 
