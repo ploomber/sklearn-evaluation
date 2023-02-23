@@ -67,9 +67,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PLOOMBER_STATS_ENABLED: false
         PYTHON_VERSION: ${{ matrix.python-version }}
-      shell: bash -l {0}
       run: |
-        eval "$(conda shell.bash hook)"
 
         # run unit tests, docstrings
         # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
