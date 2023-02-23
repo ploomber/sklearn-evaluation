@@ -44,9 +44,9 @@ def horizontal(values, labels=None, sort=True, error=None, ax=None):
     y_pos = np.arange(len(values))
 
     if error is None:
-        ax.barh(y_pos, values, edgecolor="#fff")
+        ax.barh(y_pos, values)
     else:
-        ax.barh(y_pos, values, xerr=error, edgecolor="#fff")
+        ax.barh(y_pos, values, xerr=error)
 
     ax.set_yticks(y_pos)
     ax.set_yticklabels(y_pos if labels is None else labels)
@@ -83,9 +83,9 @@ def vertical(values, labels=None, sort=True, error=None, ax=None):
     x_pos = np.arange(len(values))
 
     if error is None:
-        ax.bar(x_pos, values, edgecolor="#fff")
+        ax.bar(x_pos, values)
     else:
-        ax.bar(x_pos, values, yerr=error, edgecolor="#fff")
+        ax.bar(x_pos, values, yerr=error)
 
     ax.set_xticks(x_pos)
     ax.set_xticklabels(x_pos if labels is None else labels)
@@ -122,7 +122,6 @@ class BarShifter:
             self.width,
             color=self.colors[self.i],
             ecolor=self.colors[self.i],
-            edgecolor="#fff",
             **kwargs,
         )
 

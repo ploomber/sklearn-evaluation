@@ -123,7 +123,6 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
             np.arange(len(support_)),
             support_,
             color=colors if colors else "#0070FF",
-            edgecolor="#fff",
             align="center",
             width=0.5,
         )
@@ -138,7 +137,7 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
                 index = index + bar_width
 
             ax.bar(index, support, bar_width,
-                   color=colors[idx], edgecolor="#fff", label=legends[idx])
+                   color=colors[idx], label=legends[idx])
 
     ax.set_title("Class Balance for {:,} Instances".format(support_.sum()))
 
@@ -158,7 +157,7 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
 
     # Remove the vertical grid
     ax.set_axisbelow(True)
-    # ax.yaxis.grid(True, color="#808080")
+    ax.yaxis.grid(True)
     ax.autoscale(enable=True)
 
     if mode == "compare":

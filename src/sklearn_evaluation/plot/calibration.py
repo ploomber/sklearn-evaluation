@@ -455,7 +455,7 @@ def scores_distribution(
     # https://github.com/scikit-learn/scikit-learn/blob/f3f51f9b611bf873bd5836748647221480071a87/sklearn/calibration.py#L989
     bins = np.linspace(0.0, 1.0, n_bins + 1)
 
-    ax.hist(y_scores, range=(0, 1), bins=bins, color=color, edgecolor="#fff")
+    ax.hist(y_scores, range=(0, 1), bins=bins, color=color)
 
     ax.set(
         title=title,

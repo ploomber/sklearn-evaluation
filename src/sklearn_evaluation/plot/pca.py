@@ -14,6 +14,7 @@ def _set_ax_settings(ax, ind1, ind2, targets=None):
     ax.set_ylabel(f"Principal Component {ind2}", fontsize=10)
     if targets is not None:
         ax.legend(targets)
+    ax.grid(True)
 
 
 def _validate_inputs(X, n_components, target_names, colors, ax):

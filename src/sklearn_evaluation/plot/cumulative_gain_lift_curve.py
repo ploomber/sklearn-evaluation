@@ -169,7 +169,7 @@ def cumulative_gain(
     ax.set_title("Cumulative Gains Curve", fontsize=title_fontsize)
     ax.plot(percentages, gains1, label="Class {}".format(classes[0]))
     ax.plot(percentages, gains2, label="Class {}".format(classes[1]))
-
+    ax.grid(True)
     ax.plot([0, 1], [0, 1], color='#000', linewidth=1, alpha=0.1, label="Baseline")
     ax.set_xlabel("Percentage of sample")
     ax.set_ylabel("Gain")
@@ -268,6 +268,6 @@ def lift_curve(
 
     ax.set_xlabel("Percentage of sample")
     ax.set_ylabel("Lift", fontsize=text_fontsize)
-
+    ax.grid(True)
     ax.legend(loc="lower right", fontsize=text_fontsize)
     return ax

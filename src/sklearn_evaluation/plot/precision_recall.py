@@ -23,7 +23,7 @@ def _set_ax_settings(ax, name):
     ax.set_ylim([0.0, 1.0])
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
-    ax.legend(loc="best")
+    ax.legend()
 
 
 @modify_exceptions

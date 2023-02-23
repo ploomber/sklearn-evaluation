@@ -46,6 +46,9 @@ def _set_default_rc_params(ax_style):
     # https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-default-matplotlibrc-file
     plt.rcParams['legend.fontsize'] = 10
     plt.rcParams['legend.loc'] = 'best'
+    plt.rcParams['patch.edgecolor'] = '#fff'
+    plt.rcParams['patch.force_edgecolor'] = True
+    plt.rcParams['grid.color'] = '#808080'
 
     if ax_style == "no_frame":
         plt.rcParams['axes.spines.right'] = False

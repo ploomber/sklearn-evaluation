@@ -163,6 +163,7 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
         _, ax = plt.subplots()
 
     ax.set_title("Elbow Plot")
+    ax.grid(True)
     ax.plot(n_clusters, sum_of_squares, label="Elbow")
 
     ax.set_xlabel("Number of clusters")

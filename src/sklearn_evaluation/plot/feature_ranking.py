@@ -198,9 +198,6 @@ class RankD:
         self._draw()
         return self.ax
 
-    def _set_default_colors(self, cmap):
-        plt.rcParams['image.cmap'] = cmap
-
 
 @apply_theme()
 class Rank1D(RankD):
@@ -378,7 +375,7 @@ class Rank2D(RankD):
 
         super().__init__(algorithm=algorithm, features=features, figsize=figsize, ax=ax)
 
-        self._set_default_colors(colormap)
+        self.colormap = colormap
 
     @staticmethod
     def _validate_rank(ranks):
@@ -404,8 +401,7 @@ class Rank2D(RankD):
 
         # Draw the heatmap
         data = np.ma.masked_where(mask, self.ranks_)
-        # mesh = self.ax.pcolormesh(data, cmap=self.colormap, vmin=-1, vmax=1)
-        mesh = self.ax.pcolormesh(data, vmin=-1, vmax=1)
+        mesh = self.ax.pcolormesh(data, cmap=self.colormap, vmin=-1, vmax=1)
 
         # Set the Axis limits
         self.ax.set(xlim=(0, data.shape[1]), ylim=(0, data.shape[0]))
