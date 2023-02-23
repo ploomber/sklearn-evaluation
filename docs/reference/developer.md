@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.4
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -274,12 +274,13 @@ def plot_bar():
     data = [[30, 25, 50, 20], [40, 23, 51, 17], [30, 25, 50, 20]]
     X = np.arange(4)
     fig = plt.figure()
-    ax = fig.add_axes([0,0,1,1])
-    
+    ax = fig.add_axes([0, 0, 1, 1])
+
     offset = 0
     for i in range(len(data)):
-        ax.bar(X + offset, data[i], width = 0.25)
+        ax.bar(X + offset, data[i], width=0.25)
         offset += 0.25
+
 
 plot_bar()
 ```
@@ -291,6 +292,7 @@ This is the default style of our plots.
 @apply_theme()
 def plot_bar_with_default_style():
     plot_bar()
+
 
 plot_bar_with_default_style()
 ```
@@ -304,13 +306,14 @@ def plot_bar_with_cmap():
 
     X = np.arange(4)
     fig = plt.figure()
-    ax = fig.add_axes([0,0,1,1])
-    
+    ax = fig.add_axes([0, 0, 1, 1])
+
     offset = 0
     for i in range(len(data)):
         color = mpl.colormaps.get_cmap(None)(float(i) / len(data))
-        ax.bar(X + offset, data[i], width = 0.25, color = color)
+        ax.bar(X + offset, data[i], width=0.25, color=color)
         offset += 0.25
+
 
 plot_bar_with_cmap()
 ```
@@ -321,16 +324,17 @@ Use `cmap` to color each bar with the `gradient` style, which is a palette of tw
 @apply_theme(cmap_style="gradient")
 def plot_bar_with_cmap():
     data = [[30, 25, 50, 20], [40, 23, 51, 17], [30, 25, 50, 20]]
-    
+
     X = np.arange(4)
     fig = plt.figure()
-    ax = fig.add_axes([0,0,1,1])
+    ax = fig.add_axes([0, 0, 1, 1])
 
     offset = 0
     for i in range(len(data)):
         color = mpl.colormaps.get_cmap(None)(float(i) / len(data))
-        ax.bar(X + offset, data[i], width = 0.25, color = color)
+        ax.bar(X + offset, data[i], width=0.25, color=color)
         offset += 0.25
+
 
 plot_bar_with_cmap()
 ```
@@ -341,25 +345,22 @@ We can even add a custom style on top of our style:
 @apply_theme(cmap_style="gradient")
 def plot_bar_with_cmap(cmap=None):
     data = [[30, 25, 50, 20], [40, 23, 51, 17], [30, 25, 50, 20]]
-    
+
     X = np.arange(4)
     fig = plt.figure()
-    ax = fig.add_axes([0,0,1,1])
+    ax = fig.add_axes([0, 0, 1, 1])
 
-    
-    
     offset = 0
     for i in range(len(data)):
         color = mpl.colormaps.get_cmap(cmap)(float(i) / len(data))
-        ax.bar(X + offset, data[i], width = 0.25, color = color)
+        ax.bar(X + offset, data[i], width=0.25, color=color)
         offset += 0.25
-    
-    ax.grid(color = '#c6c6c6', linestyle = '--', linewidth = 0.5)
-    
-    
-plot_bar_with_cmap(cmap='viridis')
-```
 
+    ax.grid(color="#c6c6c6", linestyle="--", linewidth=0.5)
+
+
+plot_bar_with_cmap(cmap="viridis")
+```
 
 ## Guidelines (functional API)
 
