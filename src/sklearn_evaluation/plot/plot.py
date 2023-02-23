@@ -116,9 +116,12 @@ class AbstractComposedPlot(abc.ABC):
         Must return ``self``.
         """
         pass
-
-    @abc.abstractmethod
+    
     def __sub__(self, another):
+        """Optional method to support the ``a - b`` operation. must return an
+        ``AbstractComposedPlot`` instance. This should produce composed plot that
+        compares the difference between this plot and ``another`` plot.
+        """
         raise NotImplementedError(
             f"{type(self).__name__!r} doesn't support the substract (-) operator"
         )
