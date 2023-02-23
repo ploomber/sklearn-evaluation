@@ -1,93 +1,58 @@
 name: CI
+# test
 on: [push, pull_request]
-
-#env:
-#  CACHE_NUMBER: 2  # increase to reset cache manually
-
 jobs:
   unit:
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9, '3.10', '3.11']
         os: [ubuntu-latest, windows-latest, macos-latest]
-#        include:
-#          - os: ubuntu-latest
-#            path: ~/.cache/pip
-#
-#          - os: macos-latest
-#            path: ~/Library/Caches/pip
-#
-#          - os: windows-latest
-#            path: ~\AppData\Local\pip\Cache
     runs-on: ${{ matrix.os }}
-
     steps:
-    - uses: actions/checkout@v3
-
+    - uses: actions/checkout@v2
     - name: Set up Python ${{ matrix.python-version }}
-      uses: actions/setup-python@v2
+      uses: conda-incubator/setup-miniconda@v2
       with:
+        miniconda-version: latest
+        activate-environment: conda-env
+        channels: conda-forge, defaults
         python-version: ${{ matrix.python-version }}
-
-#    - name: Set cache date
-#      run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
-
-#    - name: Set Cache
-#      uses: actions/cache@v3
-#      id: cache
-#      with:
-#        path: ${{ matrix.path }}
-#        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
-#        restore-keys: |
-#          ${{ runner.os }}-pip-
-#          ${{ runner.os }}-
-
-
-#    - name: Setup environment
-#      run: |
-#        python -m pip install --upgrade pip
-#        pip install --upgrade flake8 jupytext nbqa
-#        # if we remove the --editable flag pytest throws an error, because
-#        # there are two copies of the pkg (src/ and site-packages/), this is a
-#        # quick way to fix it
-#        # https://github.com/pytest-dev/pytest/issues/7678
-#
-#        pip install --upgrade  --editable .
-#        python -c "import sklearn_evaluation"
-#        pip install --upgrade  --editable ".[all]"
-#      if: steps.cache.outputs.cache-hit != 'true'
-
     - name: Lint with flake8
+      shell: bash -l {0}
       run: |
-        # run flake8 on .py files and notebooks (.ipynb, .md, etc) 
-        pip install --upgrade flake8 jupytext nbqa
+        eval "$(conda shell.bash hook)"
+        # run flake8 on .py files
+        pip install flake8
         flake8
+        # run flake8 on notebooks (.ipynb, .md, etc)
+        pip install jupytext nbqa
         nbqa flake8 .
-
     - name: Run tests
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PLOOMBER_STATS_ENABLED: false
         PYTHON_VERSION: ${{ matrix.python-version }}
+      shell: bash -l {0}
       run: |
-        # dependencies
-        # We can optimize this step even more by loading the whole venv:
-        # https://stackoverflow.com/questions/59127258/how-can-i-use-pip-
-        # cache-in-github-actions
+        eval "$(conda shell.bash hook)"
+        # if we remove the --editable flag pytest throws an error, because there
+        # are two copies of the pkg (src/ and site-packages/), this is a quick
+        # way to fix it
+        # https://github.com/pytest-dev/pytest/issues/7678
         pip install --editable .
         python -c "import sklearn_evaluation"
         pip install --editable ".[all]"
-        
-        # run unit tests, docstrings
+        # run unit tests
+        # docstrings
         # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
         # doctest docs: https://docs.python.org/3/library/doctest.html
         # and examples (this is a hacky way to do it since --doctest-modules will
         # first load any .py files, which are the examples, and then try to run
         # any doctests, there isn't any)
+        echo "******* before ********"
         pytest tests/ --cov=sklearn_evaluation --doctest-modules --durations-min=5 -n auto
+        echo "******* after ********"
         coveralls
-
-
   # run: pkgmt check
   check:
     runs-on: ubuntu-latest
@@ -97,7 +62,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.10'
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
