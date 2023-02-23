@@ -28,37 +28,50 @@ jobs:
     runs-on: ${{ matrix.os }}
 
     steps:
-    - uses: actions/checkout@v2
+    - uses: actions/checkout@v3
 
     - name: Set up Python ${{ matrix.python-version }}
-      uses: conda-incubator/setup-miniconda@v2
+      uses: actions/setup-python@v4
       with:
-        miniforge-variant: Mambaforge
-        miniforge-version: latest
-        activate-environment: my-env
-        use-mamba: true
-        channels: conda-forge, defaults
+        cache: 'pip' # caching pip dependencies
         python-version: ${{ matrix.python-version }}
 
     - name: Set cache date
       run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
-    - uses: actions/cache@v2
-      with:
-        path: ${{ matrix.prefix }}
-        key: ${{ matrix.label }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
-      id: cache
+#    - name: Get pip cache dir
+#      id: pip-cache
+#      run: |
+#        echo "::set-output name=dir::$(pip cache dir)"
 
-    - name: Update environment
-      shell: bash -l {0}
-      run: |
-          mamba env update -n my-env --editable -f "setup.py"
-          pip install flake8 jupytext nbqa
-      if: steps.cache.outputs.cache-hit != 'true'
+#    - name: pip cache
+#      uses: actions/cache@v2
+#      id: cache
+#      with:
+#        path: ${{ steps.pip-cache.outputs.dir }}
+#        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+#        restore-keys: |
+#          ${{ runner.os }}-pip-
+
+#    - uses: actions/cache@v2
+#      with:
+#        path: ${{ matrix.prefix }}
+#        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
+#        restore-keys: ${{ runner.os }}-pip-
+#      id: cache
+
+#    - name: Update environment
+#      shell: bash -l {0}
+#      run: |
+#          mamba env update -n my-env --editable -f "setup.py"
+#
+#      if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Check environment
       shell: bash -l {0}
       run: |
+        eval "$(conda shell.bash hook)"
+        pip install flake8 jupytext nbqa
         # if we remove the --editable flag pytest throws an error, because 
         # there are two copies of the pkg (src/ and site-packages/), this is a 
         # quick way to fix it
@@ -67,12 +80,12 @@ jobs:
         #pip install --editable .
         python -c "import sklearn_evaluation"
         #pip install --editable ".[all]"
+      if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Lint with flake8
       shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
-        pip install flake8 jupytext nbqa
         # run flake8 on .py files and notebooks (.ipynb, .md, etc) 
         flake8
         nbqa flake8 .
