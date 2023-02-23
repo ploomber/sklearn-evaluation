@@ -3,7 +3,7 @@ on: [push, pull_request]
 
 
 env:
-  CACHE_NUMBER: 4  # increase to reset cache manually
+  CACHE_NUMBER: 0  # increase to reset cache manually
 
 jobs:
   unit:
@@ -13,20 +13,13 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
         include:
           - os: ubuntu-latest
-            label: ubuntu-latest
             path: ~/.cache/pip
-#            prefix: /usr/share/miniconda3/envs/my-env
 
           - os: macos-latest
-            label: macos-latest
             path: ~/Library/Caches/pip
-#            prefix: /Users/runner/miniconda3/envs/my-env
 
           - os: windows-latest
-            label: windows-latest
             path: ~\AppData\Local\pip\Cache
-#            prefix: C:\Miniconda3\envs\my-env
-
     runs-on: ${{ matrix.os }}
 
     steps:
@@ -41,33 +34,14 @@ jobs:
     - name: Set cache date
       run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
-#    - name: Get pip cache dir
-#      id: pip-cache
-#      run: |
-#        echo "::set-output name=dir::$(pip cache dir)"
-
     - name: Set Cache
       uses: actions/cache@v3
       id: cache
       with:
         path: ${{ matrix.path }}
-        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
         restore-keys: |
           ${{ runner.os }}-pip-
-
-#    - uses: actions/cache@v2
-#      with:
-#        path: ${{ matrix.prefix }}
-#        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-#        restore-keys: ${{ runner.os }}-pip-
-#      id: cache
-
-#    - name: Update environment
-#      shell: bash -l {0}
-#      run: |
-#          mamba env update -n my-env --editable -f "setup.py"
-#
-#      if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Setup environment
       shell: bash -l {0}
@@ -109,7 +83,6 @@ jobs:
         # any doctests, there isn't any)
         pytest tests/ --cov=sklearn_evaluation --doctest-modules --durations-min=5 -n auto
         coveralls
-
 
   # run: pkgmt check
   check:
