@@ -42,6 +42,7 @@ jobs:
         key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
         restore-keys: |
           ${{ runner.os }}-pip-
+          ${{ runner.os }}-
 
     - name: Setup environment
       run: |
