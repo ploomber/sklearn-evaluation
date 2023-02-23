@@ -1,7 +1,14 @@
 # CHANGELOG
 
-## 0.11.2dev
-- [Doc] Object oriented API guide includes appropriate methods under each model (#271)
+## 0.11.3dev
+
+## 0.11.2 (2023-02-21)
+
+- [Fix] Adds input validation with suggestions to `plot.grid_search` ([#53](https://github.com/ploomber/sklearn-evaluation/issues/53))
+- [Fix] Fixes an error that prevented `ClassificationReport.from_raw_data` from displaying the plot
+- [Doc] Object oriented API guide includes appropriate methods under each model ([#271](https://github.com/ploomber/sklearn-evaluation/issues/271))
+- [Doc] Quickstart clustering guide now uses `plot.pca` ([#276](https://github.com/ploomber/sklearn-evaluation/issues/276))
+- [Doc] User Guide on micro and macro averaging
 
 ## 0.11.1 (2023-02-07)
 

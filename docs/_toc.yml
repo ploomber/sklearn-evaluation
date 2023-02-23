@@ -12,6 +12,7 @@ parts:
     chapters:
     - file: classification/basic
     - file: classification/compare
+    - file: classification/micro_macro
     - file: classification/evaluate
     - file: classification/imbalance
     - file: classification/grid_search
