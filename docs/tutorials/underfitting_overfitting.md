@@ -36,7 +36,6 @@ from sklearn import tree
 
 from sklearn.datasets import make_classification
 
-import matplotlib.pyplot as plt
 import numpy as np
 
 from sklearn_evaluation import plot
@@ -72,7 +71,8 @@ If there is a large gap between the train and validation curve, we are overfitti
 Here is an example of a learning curve with significant overfitting:
 
 ```{code-cell} ipython3
-data = make_classification(n_samples=1000, random_state=0, class_sep=0.2)
+data = make_classification(n_samples=1000, random_state=0, 
+    class_sep=0.2)
 X, y = data[0], data[1]
 ```
 
@@ -97,7 +97,10 @@ If we see that the training score is consistently and particularly low, we are u
 Here is an example of a learning curve with underfitting:
 
 ```{code-cell} ipython3
-data = make_classification(n_samples=100, n_features=20, n_informative=2, n_repeated=2, n_redundant=2, class_sep=0, random_state=0)
+data = make_classification(
+    n_samples=100, n_features=20, n_informative=2,
+    n_repeated=2, n_redundant=2, class_sep=0, random_state=0
+)
 X, y = data[0], data[1]
 ```
 
@@ -114,7 +117,7 @@ train_sizes = np.linspace(0.1, 1.0, 5)
 train_sizes, train_scores, test_scores = learning_curve(
     estimator, X=X_train, y=y_train, train_sizes=train_sizes
 )
- 
+
 plot.learning_curve(train_scores, test_scores, train_sizes)
 ```
 
