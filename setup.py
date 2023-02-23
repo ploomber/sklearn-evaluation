@@ -47,8 +47,6 @@ TEST = [
     # TODO: update config so coveralls 3 works
     "coveralls<3",
     "pytest-xdist",
-    "jupytext",
-    "nbqa",
 ]
 
 DEV = [
