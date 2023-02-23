@@ -27,7 +27,6 @@ jobs:
     - name: Set up Python ${{ matrix.python-version }}
       uses: actions/setup-python@v2
       with:
-        cache: 'pip' # caching pip dependencies
         python-version: ${{ matrix.python-version }}
 
 #    - name: Set cache date
