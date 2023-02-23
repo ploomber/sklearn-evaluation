@@ -73,6 +73,9 @@ jobs:
         PYTHON_VERSION: ${{ matrix.python-version }}
       run: |
         # dependencies
+        # We can optimize this step even more by loading the whole venv:
+        # https://stackoverflow.com/questions/59127258/how-can-i-use-pip-
+        # cache-in-github-actions
         pip install --editable .
         python -c "import sklearn_evaluation"
         pip install --editable ".[all]"
