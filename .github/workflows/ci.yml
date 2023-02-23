@@ -67,6 +67,7 @@ jobs:
       shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
+        pip install flake8
         # run flake8 on .py files and notebooks (.ipynb, .md, etc) 
         flake8
         nbqa flake8 .
@@ -80,18 +81,14 @@ jobs:
       run: |
         eval "$(conda shell.bash hook)"
 
-        # run unit tests
-        # docstrings
+        # run unit tests, docstrings
         # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
         # doctest docs: https://docs.python.org/3/library/doctest.html
         # and examples (this is a hacky way to do it since --doctest-modules will
         # first load any .py files, which are the examples, and then try to run
         # any doctests, there isn't any)
-        echo "******* before ********"
         pytest tests/ --cov=sklearn_evaluation --doctest-modules --durations-min=5 -n auto
-        echo "******* after ********"
         coveralls
-      if: steps.cache.outputs.cache-hit != 'true'
 
 
   # run: pkgmt check
