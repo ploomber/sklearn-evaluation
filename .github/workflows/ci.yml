@@ -14,16 +14,18 @@ jobs:
         include:
           - os: ubuntu-latest
             label: ubuntu-latest
-            prefix: /usr/share/miniconda3/envs/my-env
+            path: ~/.cache/pip
+#            prefix: /usr/share/miniconda3/envs/my-env
 
           - os: macos-latest
             label: macos-latest
-            prefix: /Users/runner/miniconda3/envs/my-env
+            path: ~/Library/Caches/pip
+#            prefix: /Users/runner/miniconda3/envs/my-env
 
           - os: windows-latest
             label: windows-latest
-            prefix:
-              C:\Miniconda3\envs\my-env
+            path: ~\AppData\Local\pip\Cache
+#            prefix: C:\Miniconda3\envs\my-env
 
     runs-on: ${{ matrix.os }}
 
@@ -44,14 +46,14 @@ jobs:
 #      run: |
 #        echo "::set-output name=dir::$(pip cache dir)"
 
-#    - name: pip cache
-#      uses: actions/cache@v2
-#      id: cache
-#      with:
-#        path: ${{ steps.pip-cache.outputs.dir }}
-#        key: ${{ runner.os }}-pip-${{ hashFiles('**/requirements.txt') }}
-#        restore-keys: |
-#          ${{ runner.os }}-pip-
+    - name: Set Cache
+      uses: actions/cache@v3
+      id: cache
+      with:
+        path: ${{ matrix.path }}
+        key: ${{ runner.os }}-pip-${{ hashFiles('**/setup.py') }}
+        restore-keys: |
+          ${{ runner.os }}-pip-
 
 #    - uses: actions/cache@v2
 #      with:
@@ -67,7 +69,7 @@ jobs:
 #
 #      if: steps.cache.outputs.cache-hit != 'true'
 
-    - name: Check environment
+    - name: Setup environment
       shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
