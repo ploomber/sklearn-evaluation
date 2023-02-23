@@ -44,7 +44,9 @@ jobs:
           ${{ runner.os }}-pip-
 
     - name: Setup environment
+      shell: bash -l {0}
       run: |
+        eval "$(conda shell.bash hook)"
         pip install flake8 jupytext nbqa
         # if we remove the --editable flag pytest throws an error, because 
         # there are two copies of the pkg (src/ and site-packages/), this is a 
@@ -67,7 +69,9 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PLOOMBER_STATS_ENABLED: false
         PYTHON_VERSION: ${{ matrix.python-version }}
+      shell: bash -l {0}
       run: |
+        eval "$(conda shell.bash hook)"
 
         # run unit tests, docstrings
         # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
