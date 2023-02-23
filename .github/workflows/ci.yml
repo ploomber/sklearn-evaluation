@@ -43,6 +43,13 @@ jobs:
     - name: Set cache date
       run: echo "DATE=$(date +'%Y%m%d')" >> $GITHUB_ENV
 
+    - uses: actions/cache@v2
+      with:
+        path: ${{ matrix.prefix }}
+        key: ${{ matrix.label }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
+      id: cache
+
+
     - name: Lint with flake8
       shell: bash -l {0}
       run: |
@@ -54,7 +61,7 @@ jobs:
         pip install jupytext nbqa
         nbqa flake8 .
 
-    - name: Run tests
+    - name: Run tests + Update environment
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PLOOMBER_STATS_ENABLED: false
@@ -83,6 +90,7 @@ jobs:
         pytest tests/ --cov=sklearn_evaluation --doctest-modules --durations-min=5 -n auto
         echo "******* after ********"
         coveralls
+      if: steps.cache.outputs.cache-hit != 'true'
 
 
   # run: pkgmt check
