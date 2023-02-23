@@ -49,19 +49,30 @@ jobs:
         key: ${{ matrix.label }}-conda-${{ hashFiles('environment.yml') }}-${{ env.DATE }}-${{ env.CACHE_NUMBER }}
       id: cache
 
+    - name: Update environment
+      run: |
+        eval "$(conda shell.bash hook)"
+        pip install flake8 jupytext nbqa
+        
+        # if we remove the --editable flag pytest throws an error, because 
+        # there are two copies of the pkg (src/ and site-packages/), this is a 
+        # quick way to fix it
+        # https://github.com/pytest-dev/pytest/issues/7678
+
+        pip install --editable .
+        python -c "import sklearn_evaluation"
+        pip install --editable ".[all]"
+      if: steps.cache.outputs.cache-hit != 'true'
 
     - name: Lint with flake8
       shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
-        # run flake8 on .py files
-        pip install flake8
+        # run flake8 on .py files and notebooks (.ipynb, .md, etc) 
         flake8
-        # run flake8 on notebooks (.ipynb, .md, etc)
-        pip install jupytext nbqa
         nbqa flake8 .
 
-    - name: Run tests + Update environment
+    - name: Run tests
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         PLOOMBER_STATS_ENABLED: false
@@ -69,15 +80,6 @@ jobs:
       shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
-
-        # if we remove the --editable flag pytest throws an error, because there
-        # are two copies of the pkg (src/ and site-packages/), this is a quick
-        # way to fix it
-        # https://github.com/pytest-dev/pytest/issues/7678
-
-        pip install --editable .
-        python -c "import sklearn_evaluation"
-        pip install --editable ".[all]"
 
         # run unit tests
         # docstrings
