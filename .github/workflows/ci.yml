@@ -72,7 +72,11 @@ jobs:
         PLOOMBER_STATS_ENABLED: false
         PYTHON_VERSION: ${{ matrix.python-version }}
       run: |
-
+        # dependencies
+        pip install --editable .
+        python -c "import sklearn_evaluation"
+        pip install --editable ".[all]"
+        
         # run unit tests, docstrings
         # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
         # doctest docs: https://docs.python.org/3/library/doctest.html
