@@ -122,4 +122,3 @@ class AbstractComposedPlot(abc.ABC):
         raise NotImplementedError(
             f"{type(self).__name__!r} doesn't support the substract (-) operator"
         )
-
