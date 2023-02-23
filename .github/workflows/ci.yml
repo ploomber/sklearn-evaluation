@@ -46,6 +46,7 @@ jobs:
     - name: Setup environment
       shell: bash -l {0}
       run: |
+        eval "$(conda shell.bash hook)"
         pip install flake8 jupytext nbqa
         # if we remove the --editable flag pytest throws an error, because 
         # there are two copies of the pkg (src/ and site-packages/), this is a 
@@ -60,6 +61,7 @@ jobs:
     - name: Lint with flake8
       shell: bash -l {0}
       run: |
+        eval "$(conda shell.bash hook)"
         # run flake8 on .py files and notebooks (.ipynb, .md, etc) 
         flake8
         nbqa flake8 .
