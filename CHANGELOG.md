@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.11.3dev
+- [Doc] Tutorial covering underfitting/overfitting
 
 ## 0.11.2 (2023-02-21)
 
