@@ -13,7 +13,7 @@ kernelspec:
 
 # Underfitting and Overfitting
 
-In this tutorial we'll cover a common challenge in ML, and how to fix it.
+In this tutorial we'll cover a common challenge in ML and how to fix it.
 
 We will understand what underfitting, overfitting are and the difference between the two. 
 
@@ -26,7 +26,7 @@ We will see how the different plots at our disposal (via `sklearn-evaluation`) c
 **TLDR: A learning curve shows the performance of a model on training and validation data as the amount of data used to train the model increases.** 
 
 
-**This can give us indicatications as to whether the model is suffering from overfitting or underfitting.**
+**This can give us indications as to whether the model is suffering from overfitting or underfitting.**
 
 
 ```{code-cell} ipython3
