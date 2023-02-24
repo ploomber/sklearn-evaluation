@@ -107,6 +107,9 @@ class AbstractPlot(abc.ABC):
     def to_html(self):
         return figure2html(self.figure_)
 
+    def to_png(self, filename):
+        """ Export the plot to png format"""
+        self.figure_.savefig(filename, bbox_inches='tight', format='png')
 
 class AbstractComposedPlot(abc.ABC):
     @abc.abstractmethod
