@@ -38,6 +38,7 @@ parts:
     chapters:
     - file: optimization/grid_search
     - file: optimization/feature_ranking
+    - file: optimization/feature_selection
 
   - caption: Dimensionality Reduction
     chapters:

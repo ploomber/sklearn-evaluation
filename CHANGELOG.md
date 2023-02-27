@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.11.3dev
+- [Doc] User guide on Feature Selection
 
 ## 0.11.2 (2023-02-21)
 
