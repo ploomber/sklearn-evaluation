@@ -55,6 +55,7 @@ jobs:
         pytest tests/ src/ --cov=sklearn_evaluation --doctest-modules --durations-min=5 -n auto        
         coveralls
 
+
   # run: pkgmt check
   check:
     runs-on: ubuntu-latest
