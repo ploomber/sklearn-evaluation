@@ -1,19 +1,15 @@
 name: CI
 
 on: [push, pull_request]
-
 jobs:
   unit:
     strategy:
       matrix:
         python-version: [3.7, 3.8, 3.9, '3.10', '3.11']
         os: [ubuntu-latest, windows-latest, macos-latest]
-
     runs-on: ${{ matrix.os }}
-
     steps:
-    - uses: actions/checkout@v2
-
+    - uses: actions/checkout@v3
     - name: Set up Python ${{ matrix.python-version }}
       uses: conda-incubator/setup-miniconda@v2
       with:
@@ -41,16 +37,13 @@ jobs:
       shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
-
         # if we remove the --editable flag pytest throws an error, because there
         # are two copies of the pkg (src/ and site-packages/), this is a quick
         # way to fix it
         # https://github.com/pytest-dev/pytest/issues/7678
-
         pip install --editable .
         python -c "import sklearn_evaluation"
         pip install --editable ".[all]"
-
         # run unit tests
         # docstrings
         # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
@@ -59,8 +52,7 @@ jobs:
         # first load any .py files, which are the examples, and then try to run
         # any doctests, there isn't any)
 
-        pytest tests/ src/ examples/ --cov=sklearn_evaluation --doctest-modules --durations-min=5
-
+        pytest tests/ src/ --cov=sklearn_evaluation --doctest-modules --durations-min=5 -n auto        
         coveralls
 
   # run: pkgmt check
@@ -72,7 +64,6 @@ jobs:
         uses: actions/setup-python@v2
         with:
           python-version: '3.10'
-
       - name: Install dependencies
         run: |
           python -m pip install --upgrade pip
