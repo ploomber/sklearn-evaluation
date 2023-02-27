@@ -17,6 +17,7 @@ parts:
     - file: classification/imbalance
     - file: classification/grid_search
     - file: classification/calibration
+    - file: classification/cm_interactive
 
   - caption: Regression
     chapters:

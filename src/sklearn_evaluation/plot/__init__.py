@@ -8,6 +8,9 @@ from sklearn_evaluation.plot.classification import (
     precision_at_proportions,
     ConfusionMatrix,
 )
+from sklearn_evaluation.plot.confusion_matrix_interactive import (
+    InteractiveConfusionMatrix,
+)
 
 from sklearn_evaluation.plot.roc import roc, ROC
 from sklearn_evaluation.plot.precision_recall import precision_recall, PrecisionRecall
@@ -61,6 +64,7 @@ __all__ = [
     "learning_curve",
     "metrics_at_thresholds",
     "ConfusionMatrix",
+    "InteractiveConfusionMatrix",
     "residuals",
     "prediction_error",
     "elbow_curve",
