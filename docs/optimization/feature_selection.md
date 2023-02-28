@@ -19,7 +19,7 @@ kernelspec:
 
 # Feature Selection
 
-In a dataset, not every feature might be useful. Some could be noise, and some could show a strong relationship with the target variable. Often, using all the features decreases a model's performance and increases training time. Therefore, it's best to select the best subset of features that are relevant to the target variable before we train a model. This process is called feature selection. 
+In a dataset, not every feature might be useful. Some could be noise, and some could show a strong relationship with the target variable. Often, using all the features decreases a model's performance and increases training time. Therefore, it's wisest to select the best subset of features that are relevant to the target variable before we train a model. This process is called feature selection. 
 
 With supervised learning, feature selection has 3 main categories.
 
@@ -27,7 +27,7 @@ With supervised learning, feature selection has 3 main categories.
 2. Wrapper method
 3. Embedded method
 
-In this tutorial, we will go over what those 3 categories are, what methods are under the 3 categories, and how to implement those with sklearn. So let's first bring in toy datasets from the sklearn package.
+In this tutorial, we will go over what those 3 categories are, what methods are under the 3 categories, and how to implement those with sklearn. So let's first bring in datasets from the sklearn package.
 
 ```{code-cell} ipython3
 :tags: []
@@ -77,7 +77,7 @@ Several techniques are
 
 ### 1.1. Quasi Constant
 
-A Quasi constant feature is a feature whose majority are the same values. If all or most of the values are the same, it won't be useful for prediction. So after you set a minimum threshold for variance, you remove features based on whether their variances exceed the threshold or not. 
+A Quasi constant feature is a feature for which the majority of the observations display the same value. If all or most of the values are the same, it won't be useful for prediction. So after you set a minimum threshold for variance, you remove features based on whether their variances exceed the threshold or not. 
 
 You can implement this with VarianceThreshold() from sklearn.feature_selection. By default, the threshold is 0. Thus, it will remove a feature only if it contains the same value for every observation. You can change the threshold into a float number such as 0.001. Then, it will remove features if 99.9% of their values are the same.
 

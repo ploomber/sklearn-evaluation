@@ -19,7 +19,7 @@ execution_allow_errors = False
 execution_excludepatterns = []
 execution_in_temp = True
 execution_show_tb = True
-execution_timeout = 30
+execution_timeout = 120
 extensions = [
     "sphinx_togglebutton",
     "sphinx_copybutton",
