@@ -8,3 +8,5 @@ jupysql
 keras
 tensorflow
 pkgmt>=0.1.7
+altair
+
