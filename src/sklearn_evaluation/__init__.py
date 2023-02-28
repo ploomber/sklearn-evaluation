@@ -1,4 +1,4 @@
-__version__ = "0.11.3"
+__version__ = "0.11.4dev"
 
 from sklearn_evaluation.evaluator import ClassifierEvaluator
 from sklearn_evaluation.nb.NotebookIntrospector import NotebookIntrospector

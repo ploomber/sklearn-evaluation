@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 0.11.4dev
+
 ## 0.11.3 (2023-02-28)
 
 - [Feature] Adds `plot.InteractiveConfusionMatrix` object-oriented API ([#275](https://github.com/ploomber/sklearn-evaluation/issues/275))
