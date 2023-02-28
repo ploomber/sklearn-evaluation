@@ -166,7 +166,7 @@ fs = SelectKBest(score_func=f_classif, k="all")
 fs.fit(X_clf_train, y_clf_train)
 result = pd.DataFrame(
     data={"score": fs.scores_, "fea": X_clf_train.columns}
-).sort_value(by="score")
+).sort_values(by="score")
 plt.barh(result['fea'], result['score'])
 plt.title("ANOVA f score for all features")
 plt.show()
