@@ -12,13 +12,15 @@ parts:
     chapters:
     - file: classification/basic
     - file: classification/compare
-    - file: classification/micro_macro
-    - file: classification/evaluate
+    - file: classification/optimization
+    - file: classification/SQLiteTracker_classification
+    - file: classification/report
     - file: classification/imbalance
-    - file: classification/grid_search
     - file: classification/calibration
     - file: classification/report_evaluation
     - file: classification/report_comparison
+    - file: classification/cm_interactive
+    - file: classification/micro_macro
 
   - caption: Regression
     chapters:
@@ -34,11 +36,9 @@ parts:
     - file: comparison/nn_tracking
     - file: comparison/NotebookCollection
     - file: comparison/nbdb
-    - file: comparison/report
 
   - caption: Model optimization
     chapters:
-    - file: optimization/grid_search
     - file: optimization/feature_ranking
 
   - caption: Dimensionality Reduction
@@ -49,6 +49,7 @@ parts:
     chapters:
     - file: api/plot
     - file: api/table
+    - file: api/grid
     - file: api/evaluator
     - file: api/training
     - file: api/SQLiteTracker

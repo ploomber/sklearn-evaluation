@@ -11,7 +11,7 @@ kernelspec:
   name: python3
 ---
 
-# Compare classifiers
+# Comparison
 
 Learn how to easily compare plots from different models.
 
@@ -110,23 +110,17 @@ compare = logistic_roc + forest_roc
 
 *Added in sklearn-evaluation version 0.7.8*
 
-```{code-cell} ipython3
-:tags: [remove-output]
-
-tree_cr = plot.ClassificationReport.from_raw_data(y_test, tree_pred)
-forest_cr = plot.ClassificationReport.from_raw_data(y_test, forest_pred)
-```
 
 ### Decision tree classification report
 
 ```{code-cell} ipython3
-tree_cr
+tree_cr = plot.ClassificationReport.from_raw_data(y_test, tree_pred)
 ```
 
 ### Random forest classification report
 
 ```{code-cell} ipython3
-forest_cr
+forest_cr = plot.ClassificationReport.from_raw_data(y_test, forest_pred)
 ```
 
 ### Compare classification reports

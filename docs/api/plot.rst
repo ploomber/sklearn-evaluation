@@ -16,6 +16,11 @@ ConfusionMatrix
 .. autoclass:: sklearn_evaluation.plot.ConfusionMatrix
     :members:
 
+InteractiveConfusionMatrix
+--------------------------
+.. autoclass:: sklearn_evaluation.plot.InteractiveConfusionMatrix
+    :members:
+
 PrecisionRecall
 ----------------
 .. autoclass:: sklearn_evaluation.plot.PrecisionRecall

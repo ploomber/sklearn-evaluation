@@ -2,6 +2,11 @@
 
 ## 0.11.3dev
 
+- [Feature] Adds `plot.InteractiveConfusionMatrix` object-oriented API (#275)
+- [Doc] User guide on interactive confusion matrix plot (#275)
+- [Doc] Reorganisation of the classification module (#297)
+- [Doc] Added API for RandomForestClassifierGrid (#297)
+
 ## 0.11.2 (2023-02-21)
 
 - [Fix] Adds input validation with suggestions to `plot.grid_search` ([#53](https://github.com/ploomber/sklearn-evaluation/issues/53))
