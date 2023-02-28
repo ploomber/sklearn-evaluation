@@ -3,6 +3,7 @@ from sklearn_evaluation.report.report import Report
 from jinja2 import Template
 from sklearn_evaluation.report.serialize import figure2html
 import abc
+import traceback
 
 
 class ReportSection:
@@ -51,6 +52,35 @@ class ReportSection:
         self.report_section["include_in_report"] = include
 
 
+class ReportError(Exception):
+    def __init__(self, message, exc):
+        if exc:
+            exc_message = getattr(exc, "message", repr(exc))
+            trace = ''.join(
+                traceback.TracebackException.from_exception(exc).format())
+            exception_message = self.parse_exec_message_to_html(exc_message)
+            self.trace = self.parse_trace_message_to_html(trace)
+
+        self.message = message
+        self.exception_message = exception_message
+
+    def parse_exec_message_to_html(self, message) -> str:
+        community_message = "If you need help solving this issue, " \
+            "send us a message: https://ploomber.io/community')"
+
+        if community_message in message:
+            return message.replace("\\n", "<br />").replace(
+                "send us a message: https://ploomber.io/community",
+                "send us a message on "
+                "<a href='https://ploomber.io/community'>Slack</a>",
+            )
+        else:
+            return message
+
+    def parse_trace_message_to_html(self, trace) -> str:
+        return trace.replace("line", "<br /> line")
+
+
 class ModelHeuristics(abc.ABC):
     """
     Base class for generating model heuristics and reports
@@ -70,6 +100,7 @@ class ModelHeuristics(abc.ABC):
         font-family: Helvetica, sans-serif, Arial;
         text-align: left;
         width: fit-content;
+        min-width: 100%;
         margin: 50px auto;
     }
 
@@ -101,6 +132,15 @@ class ModelHeuristics(abc.ABC):
 
     .model-evaluation-container .capitalize {
         text-transform: capitalize;
+    }
+
+    .model-evaluation-container .hide {
+        display: none;
+    }
+
+    .model-evaluation-container .error-log {
+        margin-top: 10px;
+        max-width : 50%;
     }
     """
 
@@ -141,11 +181,9 @@ class ModelHeuristics(abc.ABC):
         formatted error to display in the report str
         """
         guideline = f"Failed to calculate {key} for {model_name}"
-        if exc:
-            exc_message = getattr(exc, "message", repr(exc))
-            guideline += f"\nWith message : {exc_message}"
 
-        return guideline
+        report_error = ReportError(guideline, exc)
+        return report_error
 
     def create_report(self, title) -> Report:
         """
@@ -169,6 +207,17 @@ class ModelHeuristics(abc.ABC):
     {{style}}
         </style>
 
+        <script>
+            function toggleErrorLogClick(id) {
+                el = document.getElementById(id)
+
+                if (el.classList.contains("hide")) {
+                    el.classList.remove("hide")
+                } else{
+                    el.classList.add("hide")
+                }
+            }
+        </script>
     </head>
 <body>
     <div class="model-evaluation-container">
@@ -185,6 +234,27 @@ class ModelHeuristics(abc.ABC):
 
                             {% if guideline is string %}
                                 <li>{{guideline}}</li>
+                            {% elif guideline.__class__.__name__ == "ReportError" %}
+                                <li>
+                                    {{guideline.message}}
+                                    <button onClick="
+                                    toggleErrorLogClick('{{key}}_error_log_{{loop.index}}')">
+                                        Show error logs
+                                    </button>
+
+                                    <div id="{{key}}_error_log_{{loop.index}}"
+                                    class="error-log hide">
+                                        <div>
+                                            <h3>Error</h3>
+                                            {{guideline.exception_message}}
+                                        </div>
+
+                                        <div>
+                                            <h3>Stack trace</h3>
+                                            {{guideline.trace}}
+                                        </div>
+                                    </div>
+                                </li>
                             {% else %}
                                 <p class="display-inline-block">
                                 {{figure2html(guideline.get_figure())}}</p>

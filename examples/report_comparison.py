@@ -1,7 +1,7 @@
 import pandas as pd
 import urllib.request
 from sklearn.model_selection import train_test_split
-from sklearn_evaluation.models import compare_models
+from sklearn_evaluation.report import compare_models
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 

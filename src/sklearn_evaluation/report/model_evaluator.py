@@ -60,7 +60,7 @@ class ModelEvaluator(ModelHeuristics):
 
         if is_balanced:
             balance_section.set_is_ok(True)
-            balance_section.append_guideline("your model is balanced")
+            balance_section.append_guideline("Your model is balanced")
         else:
             balance_section.set_is_ok(False)
             p = plot.target_analysis(y_true)
@@ -91,7 +91,7 @@ class ModelEvaluator(ModelHeuristics):
                 if "balance" in self.evaluation_state:
                     balance = self.evaluation_state["balance"]
                     if balance["is_ok"]:
-                        accuracy_section.append_guideline["is_ok"] = True
+                        accuracy_section.set_is_ok(True)
                         accuracy_section.append_guideline("You model is accurate")
                     else:
                         accuracy_section.set_is_ok(False)
@@ -122,8 +122,10 @@ class ModelEvaluator(ModelHeuristics):
 
         # auc - roc
         roc = plot.ROC.from_raw_data(y_true, y_score)
+        list_of_auc = []
         for i in range(len(roc.fpr)):
             roc_auc = auc(roc.fpr[i], roc.tpr[i])
+            list_of_auc.append(roc_auc)
 
             # TODO: better check
             label = roc.label[i] if len(roc.label) > 0 else f"class {i}"
@@ -142,24 +144,42 @@ class ModelEvaluator(ModelHeuristics):
                 auc_section.append_guideline(COMMUNITY)
             elif auc_threshold_acceptable_range.in_range(roc_auc):
                 auc_section.set_is_ok(True)
-                auc_section.set_include_in_report(False)
             else:
                 auc_section.set_is_ok(True)
-                auc_section.set_include_in_report(False)
+
+        auc_section.append_guideline(f"Number of classes : {len(list_of_auc)}")
+
+        if len(list_of_auc) >= 2:
+            list_of_auc.sort()
+            top_class = list_of_auc[0]
+            worst_class = list_of_auc[len(list_of_auc) - 1]
+            auc_section.append_guideline(f"Top class AUC (roc) : {top_class}")
+            auc_section.append_guideline(f"Worst class AUC (roc) : {worst_class}")
+        elif len(list_of_auc) == 1:
+            auc_section.append_guideline(f"AUC (roc) is : {list_of_auc[0]}")
+        else:
+            auc_section.set_include_in_report(False)
 
         self._add_section_to_report(auc_section)
 
-    @run_if_args_are_not_none
-    def generate_general_stats(self, y_true, y_pred, y_score, custom_section=None):
+    def generate_general_stats(self, y_true, y_pred, y_score,
+                               X_test=None, custom_section=None):
         """
         Add confusion matrix and roc curve to the report
         """
         general_section = custom_section or ReportSection("general_stats")
 
-        general_section.append_guideline(
-            plot.confusion_matrix(y_true, y_pred, ax=gen_ax())
-        )
-        general_section.append_guideline(plot.roc(y_true, y_score, ax=gen_ax()))
+        if y_true is not None and y_pred is not None:
+            general_section.append_guideline(
+                plot.confusion_matrix(y_true, y_pred, ax=gen_ax())
+            )
+
+        if y_true is not None and y_score is not None:
+            general_section.append_guideline(plot.roc(y_true, y_score, ax=gen_ax()))
+
+        if y_true is not None and X_test is not None:
+            self.evaluate_precision_and_recall(X_test, y_true, general_section)
+
         self._add_section_to_report(general_section)
 
     @run_if_args_are_not_none
@@ -176,7 +196,7 @@ class ModelEvaluator(ModelHeuristics):
 
             precision_recall_section.append_guideline(pr.ax_)
 
-        except AttributeError as exc:
+        except Exception as exc:
             pr = None
             precision_recall_section.append_guideline(
                 self._get_calculate_failed_error(
@@ -200,7 +220,7 @@ class ModelEvaluator(ModelHeuristics):
                 label=[self._get_model_name(self.model)],
             )
             calibration_section.append_guideline(calibration_plot.ax_)
-        except AttributeError as exc:
+        except Exception as exc:
             calibration_plot = None
             calibration_section.append_guideline(
                 self._get_calculate_failed_error(
@@ -255,7 +275,7 @@ class ModelEvaluator(ModelHeuristics):
 
 
 @SKLearnEvaluationLogger.log(feature="report", action="evaluate_model")
-def evaluate_model(model, y_true, y_pred, y_score=None):
+def evaluate_model(model, y_true, y_pred, X_test=None, y_score=None, report_title=None):
     """
     Evaluates a given model and generates an HTML report
 
@@ -272,6 +292,8 @@ def evaluate_model(model, y_true, y_pred, y_score=None):
 
     y_score : array-like, default None
         Target scores (estimator predictions).
+
+    report_title : str, default "Model evaluation - {model_name}"
 
     Examples
     --------
@@ -299,7 +321,8 @@ def evaluate_model(model, y_true, y_pred, y_score=None):
     me.evaluate_auc(y_true, y_score)
 
     # add general stats
-    me.generate_general_stats(y_true, y_pred, y_score)
+    me.generate_general_stats(y_true, y_pred, y_score, X_test)
 
-    report = me.create_report(f"Model evaluation - {me._get_model_name(model)}")
+    report_title = report_title or f"Model evaluation - {me._get_model_name(model)}"
+    report = me.create_report(report_title)
     return report

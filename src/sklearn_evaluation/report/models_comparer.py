@@ -80,7 +80,7 @@ class ModelsComparer(ModelHeuristics):
                     f"{self._get_model_name(self.model_a)} "
                     + f"AUC (ROC) is {roc_auc_model_a[0]}"
                 )
-        except AttributeError as exc:
+        except Exception as exc:
             auc_section.append_guideline(
                 self._get_calculate_failed_error(
                     "auc", self._get_model_name(self.model_a), exc=exc
@@ -101,7 +101,7 @@ class ModelsComparer(ModelHeuristics):
                     f"{self._get_model_name(self.model_b)} "
                     + f"AUC (ROC) is {roc_auc_model_b[0]}"
                 )
-        except AttributeError as exc:
+        except Exception as exc:
             auc_section.append_guideline(
                 self._get_calculate_failed_error(
                     "auc", self._get_model_name(self.model_b), exc=exc
@@ -221,7 +221,7 @@ class ModelsComparer(ModelHeuristics):
 
 
 @SKLearnEvaluationLogger.log(feature="report", action="compare_models")
-def compare_models(model_a, model_b, X_test, y_true):
+def compare_models(model_a, model_b, X_test, y_true, report_title=None):
     """
     Compares two models and generates an HTML report
 
@@ -239,6 +239,8 @@ def compare_models(model_a, model_b, X_test, y_true):
 
     y_true : array-like
         Correct target values (ground truth).
+
+    report_title : str, default "Compare models - {model_a} vs {model_b}"
 
     Examples
     --------
@@ -269,8 +271,8 @@ def compare_models(model_a, model_b, X_test, y_true):
 
     mc.add_combined_pr(X_test, y_true)
 
-    report = mc.create_report(
-        f"Compare models - {mc._get_model_name(model_a)} "
-        + f"vs {mc._get_model_name(model_b)}"
-    )
+    report_title = report_title or f"Compare models - {mc._get_model_name(model_a)} " \
+        f"vs {mc._get_model_name(model_b)}"
+
+    report = mc.create_report(report_title)
     return report

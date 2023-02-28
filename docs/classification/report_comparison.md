@@ -84,15 +84,19 @@ Please note that our report will be more detailed as we provide more parameters.
 ```{code-cell} ipython3
 :tags: [remove-output]
 
-from sklearn_evaluation.models import compare_models
+from sklearn_evaluation.report import compare_models
 
 report = compare_models(model_a, model_b, X_test, y_test)
 ```
 
-## Display the report
-
-You can embed your report or save it locally using `report.save("report.html")`
+## Embed the report
 
 ```{code-cell} ipython3
 report
+```
+
+## Save report as HTML
+
+```{code-cell} ipython3
+report.save("report.html")
 ```

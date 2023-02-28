@@ -68,13 +68,19 @@ y_score = model.predict_proba(X_test)
 ```{code-cell} ipython3
 :tags: [remove-output]
 
-from sklearn_evaluation.models import evaluate_model
+from sklearn_evaluation.report import evaluate_model
 
 report = evaluate_model(model, y_test, y_pred, y_score=y_score)
 ```
 
-## Display the report
+## Embed the report
 
 ```{code-cell} ipython3
 report
+```
+
+## Save report as HTML
+
+```{code-cell} ipython3
+report.save("report.html")
 ```

@@ -50,7 +50,10 @@ def test_evaluate_model(heart_dataset, model, skip_y_pred, tmp_directory):
 
     y_score = None if skip_y_pred else model.predict_proba(X_test)
 
-    report = evaluate_model(model, y_test, y_pred, y_score=y_score)
+    if skip_y_pred:
+        y_test = None
+
+    report = evaluate_model(model, y_test, y_pred, y_score=y_score, X_test=X_test)
     report.save("example-report.html")
 
 

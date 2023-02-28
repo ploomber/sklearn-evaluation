@@ -2,7 +2,7 @@ from sklearn.ensemble import RandomForestClassifier
 import urllib.request
 import pandas as pd
 from sklearn.model_selection import train_test_split
-from sklearn_evaluation.models import evaluate_model
+from sklearn_evaluation.report import evaluate_model
 
 urllib.request.urlretrieve(
     "https://raw.githubusercontent.com/sharmaroshan/"
