@@ -155,8 +155,8 @@ cooks_distance
 
 report_evaluation
 -----------------
-.. autofunction:: sklearn_evaluation.models.evaluate_model
+.. autofunction:: sklearn_evaluation.report.evaluate_model
 
 report_comparison
 -----------------
-.. autofunction:: sklearn_evaluation.models.compare_models
+.. autofunction:: sklearn_evaluation.report.compare_models

@@ -1,10 +1,9 @@
 import pytest
-from sklearn_evaluation.models import evaluate_model
+from sklearn_evaluation.report import ModelEvaluator, evaluate_model
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-from sklearn_evaluation.models import ModelEvaluator
 
 
 def _get_classifier_model_values(model, data, column="fbs"):

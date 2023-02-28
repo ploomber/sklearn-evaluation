@@ -1,10 +1,9 @@
 import pytest
-from sklearn_evaluation.models import compare_models
+from sklearn_evaluation.report import ModelsComparer, compare_models
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.linear_model import LogisticRegression, LinearRegression
 from sklearn.model_selection import train_test_split
 from sklearn.tree import DecisionTreeClassifier
-from sklearn_evaluation.models import ModelComparer
 
 
 def _get_split_data(data, column="target"):
@@ -65,7 +64,7 @@ def test_precision_and_recall(
     model_a.fit(X_train, y_train)
     model_b.fit(X_train, y_train)
 
-    mc = ModelComparer(model_a, model_b)
+    mc = ModelsComparer(model_a, model_b)
     mc.precision_and_recall(X_test, y_test)
     _test_model_results(
         mc, "precision_recall", expected_guidelines, number_of_expected_plots
@@ -127,7 +126,7 @@ def test_auc(
     model_a.fit(X_train, y_train)
     model_b.fit(X_train, y_train)
 
-    mc = ModelComparer(model_a, model_b)
+    mc = ModelsComparer(model_a, model_b)
     mc.auc(X_test, y_test)
     _test_model_results(mc, "auc", expected_guidelines, number_of_expected_plots)
 
@@ -196,7 +195,7 @@ def test_computation(
     model_a.fit(X_train, y_train)
     model_b.fit(X_train, y_train)
 
-    mc = ModelComparer(model_a, model_b)
+    mc = ModelsComparer(model_a, model_b)
     mc.computation(X_test)
     _test_model_results(
         mc, "prediction_time", expected_guidelines, number_of_expected_plots
@@ -240,7 +239,7 @@ def test_calibration(
     model_a.fit(X_train, y_train)
     model_b.fit(X_train, y_train)
 
-    mc = ModelComparer(model_a, model_b)
+    mc = ModelsComparer(model_a, model_b)
     mc.calibration(X_test, y_test)
     _test_model_results(
         mc, "calibration", expected_guidelines, number_of_expected_plots
@@ -281,7 +280,7 @@ def test_combined_cm(
     model_a.fit(X_train, y_train)
     model_b.fit(X_train, y_train)
 
-    mc = ModelComparer(model_a, model_b)
+    mc = ModelsComparer(model_a, model_b)
     mc.add_combined_cm(X_test, y_test)
     _test_model_results(
         mc, "combined_confusion_matrix", expected_guidelines, number_of_expected_plots
@@ -322,7 +321,7 @@ def test_combined_pr(
     model_a.fit(X_train, y_train)
     model_b.fit(X_train, y_train)
 
-    mc = ModelComparer(model_a, model_b)
+    mc = ModelsComparer(model_a, model_b)
     mc.add_combined_pr(X_test, y_test)
     _test_model_results(
         mc, "combined_pr", expected_guidelines, number_of_expected_plots
@@ -346,7 +345,7 @@ def test_functions_with_none_inputs():
     model_a = RandomForestClassifier()
     model_b = DecisionTreeClassifier()
 
-    me = ModelComparer(model_a, model_b)
+    me = ModelsComparer(model_a, model_b)
 
     me.precision_and_recall(None, None)
     me.auc(None, None)
