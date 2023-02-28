@@ -52,6 +52,7 @@ jobs:
         # first load any .py files, which are the examples, and then try to run
         # any doctests, there isn't any)
 
+        pytest examples/ --cov=sklearn_evaluation --doctest-modules --durations-min=5
         pytest tests/ src/ --cov=sklearn_evaluation --doctest-modules --durations-min=5 -n auto        
         coveralls
 
