@@ -1,11 +1,11 @@
 # CHANGELOG
 
-## 0.11.3dev
+## 0.11.3 (2023-02-28)
 
-- [Feature] Adds `plot.InteractiveConfusionMatrix` object-oriented API (#275)
-- [Doc] User guide on interactive confusion matrix plot (#275)
-- [Doc] Reorganisation of the classification module (#297)
-- [Doc] Added API for RandomForestClassifierGrid (#297)
+- [Feature] Adds `plot.InteractiveConfusionMatrix` object-oriented API ([#275](https://github.com/ploomber/sklearn-evaluation/issues/275))
+- [Doc] User guide on interactive confusion matrix plot ([#275](https://github.com/ploomber/sklearn-evaluation/issues/275))
+- [Doc] Reorganisation of the classification module ([#297](https://github.com/ploomber/sklearn-evaluation/issues/297))
+- [Doc] Added API for RandomForestClassifierGrid ([#297](https://github.com/ploomber/sklearn-evaluation/issues/297))
 
 ## 0.11.2 (2023-02-21)
 
