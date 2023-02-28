@@ -41,7 +41,7 @@ class ReportSection:
 
     def get_guidelines(self) -> list:
         """
-        Return section guidelines 
+        Return section guidelines
         """
         return self.report_section["guidelines"]
 

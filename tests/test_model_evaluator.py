@@ -123,7 +123,7 @@ def test_evaluate_model_none_error(heart_dataset):
     ],
 )
 def test_model_evaluator_evaluate_balance(
-    heart_dataset, model, expected_guidelines, number_of_expected_plots, data_to_split, capsys
+    heart_dataset, model, expected_guidelines, number_of_expected_plots, data_to_split
 ):
     y_test, _, _ = _get_classifier_model_values(model, heart_dataset, data_to_split)
 
