@@ -38,6 +38,7 @@ parts:
     chapters:
     - file: optimization/grid_search
     - file: optimization/feature_ranking
+    - file: optimization/underfitting_overfitting
 
   - caption: Dimensionality Reduction
     chapters:
@@ -60,8 +61,3 @@ parts:
     - file: reference/community
     - file: reference/developer
     - file: reference/developer-api
-  
-  - caption: Tutorials
-    chapters:
-    - file: tutorials/underfitting_overfitting
-

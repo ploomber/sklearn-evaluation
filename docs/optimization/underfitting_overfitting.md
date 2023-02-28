@@ -71,10 +71,9 @@ If there is a large gap between the train and validation curve, we are overfitti
 Here is an example of a learning curve with significant overfitting:
 
 ```{code-cell} ipython3
-data = make_classification(
+X, y = make_classification(
     n_samples=1000, random_state=0, class_sep=0.2
 )
-X, y = data[0], data[1]
 ```
 
 ```{code-cell} ipython3
@@ -98,11 +97,10 @@ If we see that the training score is consistently and particularly low, we are u
 Here is an example of a learning curve with underfitting:
 
 ```{code-cell} ipython3
-data = make_classification(
+X, y = make_classification(
     n_samples=100, n_features=20, n_informative=2,
     n_repeated=2, n_redundant=2, class_sep=0, random_state=0
 )
-X, y = data[0], data[1]
 ```
 
 Here, we generate data with a small sample size by passing a low argument into the `n_samples` parameter, insert useless features, and create a large amount of noise with a low `class_sep` value. 
@@ -133,9 +131,7 @@ There are a few ways in which we can improve our performance. As some solutions 
 1) Increase your dataset's size through augmentation. Applying transformations to or reworking existing data can greatly improve your model's performance.
 2) [Regularization techniques](https://cmci.colorado.edu/classes/INFO-4604/files/slides-6_regularization.pdf) such as dropout and early stopping can be very useful.
 
-Some other methods may include:
-
-cross-validation, ensemble methods
+Some other methods may include: cross-validation and ensemble methods
 
 ### Solving Underfitting
 
@@ -143,6 +139,4 @@ cross-validation, ensemble methods
 2) Add more features. Your dataset may be too simple, and your model may not have enough features to create an optimal fit.
 3) Select a more powerful and/or complex model.
 
-Some other methods may include:
-
-ensemble methods, [hyperparameter tuning](https://guides.lib.purdue.edu/d-velop/ml-dl/automl1), transfer learning
+Some other methods may include: ensemble methods, [hyperparameter tuning](https://guides.lib.purdue.edu/d-velop/ml-dl/automl1), and transfer learning
