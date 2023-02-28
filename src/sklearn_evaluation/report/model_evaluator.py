@@ -180,7 +180,8 @@ class ModelEvaluator(ModelHeuristics):
         if y_true is not None and X_test is not None:
             self.evaluate_precision_and_recall(X_test, y_true, general_section)
 
-        self._add_section_to_report(general_section)
+        if len(general_section.get_guidelines()) > 0:
+            self._add_section_to_report(general_section)
 
     @run_if_args_are_not_none
     def evaluate_precision_and_recall(self, X_test, y_true, custom_section=None):

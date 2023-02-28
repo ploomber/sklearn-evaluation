@@ -39,6 +39,12 @@ class ReportSection:
         """
         return self.report_section
 
+    def get_guidelines(self) -> list:
+        """
+        Return section guidelines 
+        """
+        return self.report_section["guidelines"]
+
     def set_is_ok(self, is_ok):
         """
         Set if the reported test is valid

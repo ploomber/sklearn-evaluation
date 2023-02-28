@@ -64,7 +64,7 @@ def test_model_evaluator_functions_with_none_inputs():
     me.evaluate_balance(None)
     me.evaluate_accuracy(None, None)
     me.evaluate_auc(None)
-    me.generate_general_stats(None)
+    me.generate_general_stats(None, None, None)
     me.evaluate_precision_and_recall(None, None)
     me.evaluate_auc(None, None)
     me.get_model_prediction_time(None)
@@ -113,17 +113,17 @@ def test_evaluate_model_none_error(heart_dataset):
     "model, expected_guidelines, number_of_expected_plots, data_to_split",
     [
         [RandomForestClassifier(), ["imbalanced"], True, "fbs"],
-        [RandomForestClassifier(), ["your model is balanced"], False, "target"],
+        [RandomForestClassifier(), ["Your model is balanced"], False, "target"],
         [DecisionTreeClassifier(), ["imbalanced"], True, "fbs"],
-        [DecisionTreeClassifier(), ["your model is balanced"], False, "target"],
+        [DecisionTreeClassifier(), ["Your model is balanced"], False, "target"],
         [LogisticRegression(), ["imbalanced"], True, "fbs"],
-        [LogisticRegression(), ["your model is balanced"], False, "target"],
+        [LogisticRegression(), ["Your model is balanced"], False, "target"],
         [LinearRegression(), ["imbalanced"], True, "fbs"],
-        [LinearRegression(), ["your model is balanced"], False, "target"],
+        [LinearRegression(), ["Your model is balanced"], False, "target"],
     ],
 )
 def test_model_evaluator_evaluate_balance(
-    heart_dataset, model, expected_guidelines, number_of_expected_plots, data_to_split
+    heart_dataset, model, expected_guidelines, number_of_expected_plots, data_to_split, capsys
 ):
     y_test, _, _ = _get_classifier_model_values(model, heart_dataset, data_to_split)
 
@@ -202,4 +202,4 @@ def _test_model_results(model, key, expected_guidelines, number_of_expected_plot
     guidelines = set(guidelines) - set(all_plots)
 
     for expected_guideline in expected_guidelines:
-        assert any(expected_guideline in guideline for guideline in guidelines)
+        assert any(expected_guideline in str(guideline) for guideline in guidelines)

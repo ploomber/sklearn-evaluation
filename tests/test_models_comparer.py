@@ -338,7 +338,7 @@ def _test_model_results(mc, key, expected_guidelines, number_of_expected_plots):
     guidelines = set(guidelines) - set(all_plots)
 
     for expected_guideline in expected_guidelines:
-        assert any(expected_guideline in guideline for guideline in guidelines)
+        assert any(expected_guideline in str(guideline) for guideline in guidelines)
 
 
 def test_functions_with_none_inputs():
