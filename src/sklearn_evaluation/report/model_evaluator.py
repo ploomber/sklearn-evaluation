@@ -60,7 +60,7 @@ class ModelEvaluator(ModelHeuristics):
 
         if is_balanced:
             balance_section.set_is_ok(True)
-            balance_section.append_guideline("Your model is balanced")
+            balance_section.append_guideline("Your dataset is balanced")
         else:
             balance_section.set_is_ok(False)
             p = plot.target_analysis(y_true)

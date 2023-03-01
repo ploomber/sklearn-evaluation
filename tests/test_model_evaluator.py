@@ -113,13 +113,13 @@ def test_evaluate_model_none_error(heart_dataset):
     "model, expected_guidelines, number_of_expected_plots, data_to_split",
     [
         [RandomForestClassifier(), ["imbalanced"], True, "fbs"],
-        [RandomForestClassifier(), ["Your model is balanced"], False, "target"],
+        [RandomForestClassifier(), ["Your dataset is balanced"], False, "target"],
         [DecisionTreeClassifier(), ["imbalanced"], True, "fbs"],
-        [DecisionTreeClassifier(), ["Your model is balanced"], False, "target"],
+        [DecisionTreeClassifier(), ["Your dataset is balanced"], False, "target"],
         [LogisticRegression(), ["imbalanced"], True, "fbs"],
-        [LogisticRegression(), ["Your model is balanced"], False, "target"],
+        [LogisticRegression(), ["Your dataset is balanced"], False, "target"],
         [LinearRegression(), ["imbalanced"], True, "fbs"],
-        [LinearRegression(), ["Your model is balanced"], False, "target"],
+        [LinearRegression(), ["Your dataset is balanced"], False, "target"],
     ],
 )
 def test_model_evaluator_evaluate_balance(
