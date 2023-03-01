@@ -20,7 +20,7 @@ _default_label = "Precision Recall Curve"
 def _set_ax_settings(ax, name):
     ax.set_title(name)
     ax.set_xlim([0.0, 1.0])
-    ax.set_ylim([0.0, 1.0])
+    ax.set_ylim([0.0, 1.05])
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
     ax.legend()

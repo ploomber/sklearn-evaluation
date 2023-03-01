@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 import matplotlib as mpl
 from matplotlib.colors import LinearSegmentedColormap
 from sklearn_evaluation.util import truncate_colormap
+from ploomber_core import validate
 
 
 @contextmanager
@@ -30,6 +31,7 @@ def tmp_theme(ax_style, cmap_style):
         'gradient' a palette of two colors gradually shift from one to another
     """
     try:
+        _validate_inputs(ax_style, cmap_style)
         _set_default_plot_colors(cmap_style)
         _set_default_rc_params(ax_style)
 
@@ -37,6 +39,20 @@ def tmp_theme(ax_style, cmap_style):
 
     finally:
         pass
+
+
+def _validate_inputs(ax_style, cmap_style):
+    validate.keys(
+        valid=["no_frame", "frame"],
+        passed=ax_style,
+        name="ax_style",
+    )
+
+    validate.keys(
+        valid=["monochromatic", "gradient"],
+        passed=cmap_style,
+        name="cmap_style",
+    )
 
 
 def _set_default_rc_params(ax_style):
