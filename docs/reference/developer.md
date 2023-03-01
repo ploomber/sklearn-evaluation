@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.4
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -300,7 +300,7 @@ plot_bar_with_default_style()
 We can also use `cmap` to color our plots.
 
 ```{code-cell} ipython3
-def plot_bar_with_cmap(cmap = None):
+def plot_bar_with_cmap(cmap=None):
     data = [[30, 25, 50, 20], [40, 23, 51, 17], [30, 25, 50, 20]]
 
     X = np.arange(4)
@@ -314,7 +314,7 @@ def plot_bar_with_cmap(cmap = None):
         offset += 0.25
 
 
-plot_bar_with_cmap(cmap = 'plasma')
+plot_bar_with_cmap(cmap="plasma")
 ```
 
 The default style will be a `monochromatic` coloring which is a palette in which a single color tint is used.
@@ -335,6 +335,7 @@ Use `cmap` to color each bar with the `gradient` style, which is a palette of tw
 def plot_bar_with_gradient():
     plot_bar_with_cmap()
 
+
 plot_bar_with_gradient()
 ```
 
@@ -345,6 +346,7 @@ Modify `ax_style` to display a framed plot
 def plot_bar_with_frame():
     plot_bar_with_cmap()
 
+
 plot_bar_with_frame()
 ```
 
@@ -354,6 +356,7 @@ Modify `ax_style` and `cmap`
 @apply_theme(ax_style="frame", cmap_style="gradient")
 def plot_bar_with_frame_and_cmap():
     plot_bar_with_cmap()
+
 
 plot_bar_with_frame_and_cmap()
 ```
