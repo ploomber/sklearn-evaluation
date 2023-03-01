@@ -1,4 +1,4 @@
-jupyter-book
+jupyter-book<0.14
 jupytext
 papermill
 seaborn
@@ -8,3 +8,5 @@ jupysql
 keras
 tensorflow
 pkgmt>=0.1.7
+altair
+

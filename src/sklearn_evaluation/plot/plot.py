@@ -77,7 +77,7 @@ class AbstractPlot(abc.ABC):
         compares the difference between this plot and ``another`` plot.
         """
         raise NotImplementedError(
-            f"{type(self).__name__!r} doesn't support the substract (-) operator"
+            f"{type(self).__name__!r} doesn't support the subtract (-) operator"
         )
 
     @classmethod
