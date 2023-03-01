@@ -27,6 +27,8 @@ DOCS = [
     "ipywidgets",
     # notebook database example
     "jupysql",
+    # altair is needed for interactive confusion matrix
+    "altair",
 ]
 
 JB = [
@@ -46,14 +48,12 @@ TEST = [
     "pytest-cov",
     # TODO: update config so coveralls 3 works
     "coveralls<3",
+    "pytest-xdist",
+    # altair is needed for interactive confusion matrix
+    "altair",
 ]
 
-DEV = [
-    "flake8",
-    "yapf",
-    "twine",
-    "pkgmt",
-]
+DEV = ["flake8", "yapf", "twine", "pkgmt"]
 
 ALL = DOCS + JB + TEST + DEV
 
