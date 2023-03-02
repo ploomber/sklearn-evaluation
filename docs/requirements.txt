@@ -6,7 +6,7 @@ ploomber
 ploomber-engine
 jupysql
 keras
-tensorflow
+tensorflow-cpu
 pkgmt>=0.1.7
 altair
 
