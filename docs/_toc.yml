@@ -39,6 +39,7 @@ parts:
     chapters:
     - file: optimization/feature_ranking
     - file: optimization/feature_selection
+    - file: optimization/underfitting_overfitting
 
   - caption: Dimensionality Reduction
     chapters:
@@ -62,4 +63,3 @@ parts:
     - file: reference/community
     - file: reference/developer
     - file: reference/developer-api
-

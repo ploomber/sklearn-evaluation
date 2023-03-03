@@ -1,6 +1,7 @@
 # CHANGELOG
 
 ## 0.11.4dev
+- [Doc] Tutorial covering underfitting/overfitting
 
 - [Doc] User guide on Feature Selection
 
