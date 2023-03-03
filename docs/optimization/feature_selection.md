@@ -267,7 +267,7 @@ Forward selection starts training a model with no feature. Then, it goes over al
 from sklearn.feature_selection import SequentialFeatureSelector
 from sklearn.ensemble import RandomForestClassifier
 from sklearn_evaluation import plot
-rfc = RandomForestClassifier()
+rfc = RandomForestClassifier(n_estimators=10)
 forward_select = SequentialFeatureSelector(
     rfc, direction='forward', n_features_to_select='auto'
 )
