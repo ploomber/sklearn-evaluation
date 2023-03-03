@@ -269,7 +269,7 @@ from sklearn.ensemble import RandomForestClassifier
 from sklearn_evaluation import plot
 rfc = RandomForestClassifier(n_estimators=10)
 forward_select = SequentialFeatureSelector(
-    rfc, direction='forward', n_features_to_select='auto'
+    rfc, direction='forward', n_features_to_select=0.1
 )
 forward_select.fit(X_clf_train, y_clf_train)
 features = forward_select.get_feature_names_out()
@@ -284,7 +284,7 @@ You can think of backward selection as a reverse of forward selection. It starts
 ```{code-cell} ipython3
 :tags: []
 backward_select = SequentialFeatureSelector(
-    rfc, direction='backward', n_features_to_select='auto'
+    rfc, direction='backward', n_features_to_select=0.1
 )
 backward_select.fit(X_clf_train, y_clf_train)
 features = backward_select.get_feature_names_out()
