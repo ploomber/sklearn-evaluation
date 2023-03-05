@@ -48,7 +48,6 @@ TEST = [
     "pytest-cov",
     # TODO: update config so coveralls 3 works
     "coveralls<3",
-    "pytest-xdist",
     # altair is needed for interactive confusion matrix
     "altair",
 ]
@@ -66,11 +65,11 @@ setup(
     description=(
         "scikit-learn model evaluation made easy: plots, tables and" "markdown reports."
     ),
-    url="http://github.com/edublancas/sklearn-evaluation",
+    url="http://github.com/ploomber/sklearn-evaluation",
     download_url=DOWNLOAD_URL,
-    author="Eduardo Blancas Reyes",
-    author_email="github@blancas.io",
-    license="MIT",
+    author="Ploomber",
+    author_email="contact@ploomber.io",
+    license="Apache 2",
     keywords=["datascience", "machinelearning"],
     classifiers=[],
     include_package_data=True,
