@@ -2,6 +2,7 @@
 
 ## 0.11.4dev
 - [Feature] Adds coloring scheme and style to plots (#243)
+- [Doc] Tutorial covering underfitting/overfitting
 
 ## 0.11.3 (2023-02-28)
 
