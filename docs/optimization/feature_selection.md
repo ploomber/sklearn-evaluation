@@ -260,7 +260,6 @@ Several techiques are
 ```{code-cell} ipython3
 :tags: []
 from sklearn.ensemble import RandomForestClassifier
-from sklearn.feature_selection import SequentialFeatureSelector
 from sklearn_evaluation import plot
 ```
 
@@ -270,6 +269,8 @@ from sklearn_evaluation import plot
 Forward selection starts training a model with no feature. Then, it goes over all the features to find the 1 best feature to add. It repeats this until cross-validation score improvement by adding a feature does not exceed a tolerance level or a desired number of features are selected.
 
 ```Python
+from sklearn.feature_selection import SequentialFeatureSelector
+
 rfc = RandomForestClassifier()
 forward_select = SequentialFeatureSelector(
     rfc, direction='forward', n_features_to_select="auto"
