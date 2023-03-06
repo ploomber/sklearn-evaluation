@@ -257,19 +257,22 @@ Several techiques are
 3. Recursive Feature Eliminiation (RFE)
 4. Recursive Feature Elimination with Cross Validation (RFECV)
 
+```{code-cell} ipython3
+:tags: []
+from sklearn.ensemble import RandomForestClassifier
+from sklearn.feature_selection import SequentialFeatureSelector
+from sklearn_evaluation import plot
+```
+
 +++
 
 ### 2.1. Forward Selection
 Forward selection starts training a model with no feature. Then, it goes over all the features to find the 1 best feature to add. It repeats this until cross-validation score improvement by adding a feature does not exceed a tolerance level or a desired number of features are selected.
 
-```{code-cell} ipython3
-:tags: []
-from sklearn.feature_selection import SequentialFeatureSelector
-from sklearn.ensemble import RandomForestClassifier
-from sklearn_evaluation import plot
-rfc = RandomForestClassifier(n_estimators=5)
+```Python
+rfc = RandomForestClassifier()
 forward_select = SequentialFeatureSelector(
-    rfc, direction='forward', n_features_to_select=0.1
+    rfc, direction='forward', n_features_to_select="auto"
 )
 forward_select.fit(X_clf_train, y_clf_train)
 features = forward_select.get_feature_names_out()
@@ -281,10 +284,9 @@ plot.feature_importances(rfc)
 
 You can think of backward selection as a reverse of forward selection. It starts from all features and iteratively removes 1 feature at a time that is the least significant. And just like forward selection, it repeats until the cv score improvement by removing a feature does not exceed a tolerance level or it's left with a desired number of features.
 
-```{code-cell} ipython3
-:tags: []
+```Python
 backward_select = SequentialFeatureSelector(
-    rfc, direction='backward', n_features_to_select=0.1
+    rfc, direction='backward', n_features_to_select="auto"
 )
 backward_select.fit(X_clf_train, y_clf_train)
 features = backward_select.get_feature_names_out()
@@ -298,8 +300,7 @@ For recursive feature elimination (RFE), you first need to specify the number of
 
 So it works similarly to backward selection. Starts from all and decreases the number of features. The difference is that while backward selection uses cross-validation scores to choose what to remove, RFE uses a feature ranking system.
 
-```{code-cell} ipython3
-:tags: []
+```Python
 from sklearn.feature_selection import RFE
 rfc_rfe = RFE(rfc, n_features_to_select=10)
 rfc_rfe.fit(X_clf_train, y_clf_train)
@@ -312,8 +313,7 @@ plot.feature_importances(rfc)
 
 However, often you don't know how many features are relevant to the response variable in advance. So to find the best number of features, RFECV combines RFE and cross-validation to score different feature subsets and select the best one.
 
-```{code-cell} ipython3
-:tags: []
+```Python
 from sklearn.feature_selection import RFECV
 rfc_rfecv = RFECV(rfc)
 rfc_rfecv.fit(X_clf_train, y_clf_train)
@@ -377,6 +377,7 @@ A split in a decision tree model is based on how much variance for a continuous 
 
 ```{code-cell} ipython3
 :tags: []
+rfc = RandomForestClassifier()
 rfc.fit(X_clf_train, y_clf_train)
 plot.feature_importances(rfc)
 ```
