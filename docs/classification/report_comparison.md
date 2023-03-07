@@ -13,7 +13,7 @@ kernelspec:
 
 # Report: Comparison
 
-```{versionadded} 0.11.2
+```{versionadded} 0.11.4
 ```
 
 In this tutorial, we will demonstrate how to quickly train, test and compare two models to find which performs better.
