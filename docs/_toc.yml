@@ -40,6 +40,7 @@ parts:
   - caption: Model optimization
     chapters:
     - file: optimization/feature_ranking
+    - file: optimization/feature_selection
     - file: optimization/underfitting_overfitting
 
   - caption: Dimensionality Reduction

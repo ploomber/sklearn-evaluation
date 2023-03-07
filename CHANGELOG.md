@@ -4,6 +4,8 @@
 - [Doc] Tutorial covering underfitting/overfitting
 - [Feature] Adds new report API for evaluating and comparing models
 
+- [Doc] User guide on Feature Selection
+
 ## 0.11.3 (2023-02-28)
 
 - [Feature] Adds `plot.InteractiveConfusionMatrix` object-oriented API ([#275](https://github.com/ploomber/sklearn-evaluation/issues/275))
