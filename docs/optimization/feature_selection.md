@@ -10,13 +10,6 @@ kernelspec:
   language: python
   name: python3
 ---
-
-```{code-cell} ipython3
-:tags: []
-%load_ext autoreload
-%autoreload 2
-```
-
 # Feature Selection
 
 In a dataset, not every feature might be useful. Some could be noise, and some could show a strong relationship with the target variable. Often, using all the features decreases a model's performance and increases training time. Therefore, it's wisest to select the best subset of features that are relevant to the target variable before we train a model. This process is called feature selection. 
