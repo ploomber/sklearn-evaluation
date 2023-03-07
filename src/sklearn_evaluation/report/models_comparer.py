@@ -252,7 +252,7 @@ def compare_models(model_a, model_b, X_test, y_true, report_title=None):
 
     Notes
     -----
-    .. versionadded:: 0.11.2
+    .. versionadded:: 0.11.4
     """
     check_model(model_a)
     check_model(model_b)

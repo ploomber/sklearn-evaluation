@@ -1,4 +1,4 @@
-__version__ = "0.11.2dev"
+__version__ = "0.11.4dev"
 
 from sklearn_evaluation.report.model_heuristics import ModelHeuristics, ReportSection
 from sklearn_evaluation.report.model_evaluator import ModelEvaluator, evaluate_model

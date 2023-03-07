@@ -13,7 +13,7 @@ kernelspec:
 
 # Report: Evaluation
 
-```{versionadded} 0.11.2
+```{versionadded} 0.11.4
 ```
 
 We use different metrics to estimate a machine learning model's performance, and to understand its strengths and weaknesses.

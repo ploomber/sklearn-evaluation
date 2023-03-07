@@ -307,7 +307,7 @@ def evaluate_model(model, y_true, y_pred, X_test=None, y_score=None, report_titl
 
     Notes
     -----
-    .. versionadded:: 0.11.2
+    .. versionadded:: 0.11.4
     """
     check_model(model)
     me = ModelEvaluator(model)
