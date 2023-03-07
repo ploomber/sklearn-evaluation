@@ -2,6 +2,7 @@
 
 ## 0.11.4dev
 - [Doc] Tutorial covering underfitting/overfitting
+- [Feature] Adds new report API for evaluating and comparing models
 
 ## 0.11.3 (2023-02-28)
 
