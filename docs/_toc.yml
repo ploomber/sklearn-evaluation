@@ -17,6 +17,8 @@ parts:
     - file: classification/report
     - file: classification/imbalance
     - file: classification/calibration
+    - file: classification/report_evaluation
+    - file: classification/report_comparison
     - file: classification/cm_interactive
     - file: classification/micro_macro
 

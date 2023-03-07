@@ -16,6 +16,8 @@ from sklearn.linear_model import LogisticRegression
 from sklearn.model_selection import GridSearchCV
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
+import urllib.request
+import pandas as pd
 
 
 def _path_to_tests():
@@ -287,3 +289,18 @@ def calibration_curve_plot_metrics_data():
         fraction_of_positives_two,
         clf_names_two,
     )
+
+
+@pytest.fixture
+def heart_dataset(tmp_directory):
+    file_name = "heart.csv"
+
+    urllib.request.urlretrieve(
+        "https://raw.githubusercontent.com/sharmaroshan/"
+        "Heart-UCI-Dataset/master/heart.csv",
+        filename=file_name,
+    )
+
+    data = pd.read_csv(file_name)
+
+    return data
