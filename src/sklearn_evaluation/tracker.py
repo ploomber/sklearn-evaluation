@@ -378,6 +378,36 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
+    def upsert_append(self, uuid, parameters):
+        """Append the parameters to an existing experiment"""
+        existing = self.get(uuid, unserialize_plots=False)._data
+        keys = set(existing.keys()).union(set(parameters.keys()))
+
+        # Updating the existing dict
+        # with values from parameters
+        for key in keys:
+            if key in existing and key in parameters:
+                if type(existing[key]) != list:
+                    existing[key] = [existing[key]]
+                if type(parameters[key]) != list:
+                    existing[key].append(parameters[key])
+                else:
+                    existing[key].extend(parameters[key])
+            elif key in parameters:
+                existing[key] = parameters[key]
+
+        cur = self.conn.cursor()
+        cur.execute(
+            """
+        UPDATE experiments
+        SET parameters = ?
+        WHERE uuid = ?
+        """,
+            [json.dumps(existing), uuid],
+        )
+        cur.close()
+        self.conn.commit()
+
     @SKLearnEvaluationLogger.log("SQLiteTracker")
     def insert(self, uuid, parameters):
         """Insert a new experiment"""

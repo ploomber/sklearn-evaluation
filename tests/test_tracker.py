@@ -98,6 +98,17 @@ def test_upsert():
     assert len(tracker) == 1
 
 
+def test_upsert_append():
+    tracker = SQLiteTracker(":memory:")
+
+    uuid = tracker.new()
+    tracker.update(uuid, dict(a=1, b=2, c=[1], d=[4]))
+    tracker.upsert_append(uuid, dict(a=2, c=3, d=[5], e=[6]))
+
+    assert tracker.get(uuid) == dict(a=[1, 2], b=2, c=[1, 3], d=[4, 5], e=[6])
+    assert len(tracker) == 1
+
+
 def test_reprs():
     tracker = SQLiteTracker(":memory:")
     assert "SQLiteTracker" in repr(tracker)
