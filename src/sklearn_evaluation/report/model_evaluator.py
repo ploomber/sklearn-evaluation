@@ -6,7 +6,7 @@ from sklearn_evaluation.report.util import (
     Range,
     run_if_args_are_not_none,
     gen_ax,
-    check_model
+    check_model,
 )
 from sklearn_evaluation.report import ModelHeuristics, ReportSection
 import time
@@ -162,8 +162,9 @@ class ModelEvaluator(ModelHeuristics):
 
         self._add_section_to_report(auc_section)
 
-    def generate_general_stats(self, y_true, y_pred, y_score,
-                               X_test=None, custom_section=None):
+    def generate_general_stats(
+        self, y_true, y_pred, y_score, X_test=None, custom_section=None
+    ):
         """
         Add confusion matrix and roc curve to the report
         """
