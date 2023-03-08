@@ -15,6 +15,7 @@ import json
 from pathlib import Path
 from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme
 
 
 def _check_data_inputs(y_true, y_score) -> None:
@@ -193,14 +194,12 @@ def roc(y_true, y_score, ax=None):
     return r.ax
 
 
-def _set_ax_settings(ax):
-    ax.plot([0, 1], [0, 1], "k:")
-    ax.set_xlim([0.0, 1.0])
-    ax.set_ylim([0.0, 1.05])
+def _set_custom_ax_settings(ax):
+    ax.plot([0, 1], [0, 1], color='#000', linewidth=1, alpha=0.1)
     ax.set_xlabel("False Positive Rate")
     ax.set_ylabel("True Positive Rate")
     ax.set_title("ROC")
-    ax.legend(loc="best")
+    ax.legend()
 
 
 def _roc_curve_multi(y_true, y_score):
@@ -240,7 +239,7 @@ def _plot_roc(fpr, tpr, ax, label=None, linestyle=None):
 
     ax.plot(fpr, tpr, label=(f"{label} (area = {roc_auc:0.2f})"), linestyle=linestyle)
 
-    _set_ax_settings(ax)
+    _set_custom_ax_settings(ax)
 
     return ax
 
@@ -283,6 +282,7 @@ class ROCAdd(AbstractComposedPlot):
         self.a = a
         self.b = b
 
+    @apply_theme()
     def plot(self, ax=None):
         a = self.a
         b = self.b
@@ -412,6 +412,7 @@ class ROC(AbstractPlot):
             "tpr": tpr,
         }
 
+    @apply_theme()
     def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
