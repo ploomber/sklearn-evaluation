@@ -17,6 +17,8 @@ parts:
     - file: classification/report
     - file: classification/imbalance
     - file: classification/calibration
+    - file: classification/report_evaluation
+    - file: classification/report_comparison
     - file: classification/cm_interactive
     - file: classification/micro_macro
 
@@ -38,6 +40,7 @@ parts:
   - caption: Model optimization
     chapters:
     - file: optimization/feature_ranking
+    - file: optimization/feature_selection
     - file: optimization/underfitting_overfitting
 
   - caption: Dimensionality Reduction

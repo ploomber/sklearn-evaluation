@@ -1,8 +1,13 @@
 # CHANGELOG
 
-## 0.11.4dev
+## 0.11.5dev
 - [Feature] Adds coloring scheme and style to plots (#243)
+
+## 0.11.4 (2023-03-07)
+
+- [Feature] Adds new report API for evaluating and comparing models
 - [Doc] Tutorial covering underfitting/overfitting
+- [Doc] User guide on Feature Selection
 
 ## 0.11.3 (2023-02-28)
 
