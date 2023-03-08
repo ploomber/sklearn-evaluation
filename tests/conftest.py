@@ -295,12 +295,12 @@ def calibration_curve_plot_metrics_data():
 def heart_dataset(tmp_directory):
     file_name = "heart.csv"
 
-    urllib.request.urlretrieve(
-        "https://raw.githubusercontent.com/sharmaroshan/"
-        "Heart-UCI-Dataset/master/heart.csv",
-        filename=file_name,
-    )
+    url = "https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv"  # noqa
 
+    urllib.request.urlretrieve(
+        url,
+        filename="heart.csv",
+    )
     data = pd.read_csv(file_name)
 
     return data

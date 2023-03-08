@@ -29,9 +29,12 @@ import urllib.request
 import pandas as pd
 from sklearn.model_selection import train_test_split
 
+url = (
+    "https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv"
+)
+
 urllib.request.urlretrieve(
-    "https://raw.githubusercontent.com/sharmaroshan/"
-    + "Heart-UCI-Dataset/master/heart.csv",
+    url,
     filename="heart.csv",
 )
 

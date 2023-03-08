@@ -186,6 +186,7 @@ def test_invalid_kind_param_without_suggestions(grid_search_3_params, kind):
 
     assert "Did you mean" not in str(e.value)
 
+
 # API tests
 
 
