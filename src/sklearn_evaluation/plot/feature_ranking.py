@@ -199,7 +199,6 @@ class RankD:
         return self.ax
 
 
-@apply_theme()
 class Rank1D(RankD):
     """
     Rank1D computes a score for each feature in the data set with a specific
@@ -249,6 +248,7 @@ class Rank1D(RankD):
 
     ranking_methods = {"shapiro": lambda X: np.array([shapiro(x)[0] for x in X.T])}
 
+    @apply_theme()
     def __init__(
         self,
         algorithm="shapiro",
@@ -308,7 +308,6 @@ class Rank1D(RankD):
         return self.ax
 
 
-@apply_theme()
 class Rank2D(RankD):
     """
     Rank2D performs pairwise comparisons of each feature in the data set with
@@ -364,6 +363,7 @@ class Rank2D(RankD):
         "kendalltau": lambda X: kendalltau(X),
     }
 
+    @apply_theme()
     def __init__(
         self,
         algorithm="pearson",
