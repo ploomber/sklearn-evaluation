@@ -171,12 +171,6 @@ def truncate_colormap(cmap, minval=0.0, maxval=1.0, n=100):
     return new_cmap
 
 
-def default_heatmap():
-    import matplotlib.pyplot as plt
-
-    return truncate_colormap(plt.cm.OrRd, 0.1, 0.7)
-
-
 def map_parameters_in_fn_call(args, kwargs, func):
     """
     Based on function signature, parse args to to convert them to key-value
