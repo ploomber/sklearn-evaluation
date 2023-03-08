@@ -1,8 +1,5 @@
 from sklearn_evaluation import plot
-from sklearn_evaluation.report.util import (
-    run_if_args_are_not_none,
-    check_model
-)
+from sklearn_evaluation.report.util import run_if_args_are_not_none, check_model
 from sklearn_evaluation.report import ModelHeuristics, ReportSection, ModelEvaluator
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
@@ -271,8 +268,11 @@ def compare_models(model_a, model_b, X_test, y_true, report_title=None):
 
     mc.add_combined_pr(X_test, y_true)
 
-    report_title = report_title or f"Compare models - {mc._get_model_name(model_a)} " \
+    report_title = (
+        report_title
+        or f"Compare models - {mc._get_model_name(model_a)} "
         f"vs {mc._get_model_name(model_b)}"
+    )
 
     report = mc.create_report(report_title)
     return report

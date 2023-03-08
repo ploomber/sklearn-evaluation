@@ -62,8 +62,7 @@ class ReportError(Exception):
     def __init__(self, message, exc):
         if exc:
             exc_message = getattr(exc, "message", repr(exc))
-            trace = ''.join(
-                traceback.TracebackException.from_exception(exc).format())
+            trace = "".join(traceback.TracebackException.from_exception(exc).format())
             exception_message = self.parse_exec_message_to_html(exc_message)
             self.trace = self.parse_trace_message_to_html(trace)
 
@@ -71,8 +70,10 @@ class ReportError(Exception):
         self.exception_message = exception_message
 
     def parse_exec_message_to_html(self, message) -> str:
-        community_message = "If you need help solving this issue, " \
+        community_message = (
+            "If you need help solving this issue, "
             "send us a message: https://ploomber.io/community')"
+        )
 
         if community_message in message:
             return message.replace("\\n", "<br />").replace(

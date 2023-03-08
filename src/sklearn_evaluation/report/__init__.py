@@ -5,10 +5,11 @@ from sklearn_evaluation.report.model_evaluator import ModelEvaluator, evaluate_m
 from sklearn_evaluation.report.models_comparer import ModelsComparer, compare_models
 
 
-__all__ = ["ModelHeuristics",
-           "ReportSection",
-           "ModelEvaluator",
-           "evaluate_model",
-           "compare_models",
-           "ModelsComparer"
-           ]
+__all__ = [
+    "ModelHeuristics",
+    "ReportSection",
+    "ModelEvaluator",
+    "evaluate_model",
+    "compare_models",
+    "ModelsComparer",
+]

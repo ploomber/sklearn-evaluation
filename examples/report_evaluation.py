@@ -1,19 +1,21 @@
-from sklearn.ensemble import RandomForestClassifier
 import urllib.request
+
+from sklearn.ensemble import RandomForestClassifier
 import pandas as pd
 from sklearn.model_selection import train_test_split
 from sklearn_evaluation.report import evaluate_model
 
+url = (
+    "https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv"
+)
+
 urllib.request.urlretrieve(
-    "https://raw.githubusercontent.com/sharmaroshan/"
-    + "Heart-UCI-Dataset/master/heart.csv",
+    url,
     filename="heart.csv",
 )
 
-data = pd.read_csv("heart.csv")
-
-
 column = "fbs"
+data = pd.read_csv("heart.csv")
 X = data.drop(column, axis=1)
 y = data[column]
 
