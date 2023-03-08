@@ -78,6 +78,7 @@ class RankD:
 
     ranking_methods = {}
 
+    @apply_theme()
     def __init__(self, algorithm=None, features=None, figsize=(7, 7), ax=None):
 
         self.ranks_ = None
@@ -248,7 +249,6 @@ class Rank1D(RankD):
 
     ranking_methods = {"shapiro": lambda X: np.array([shapiro(x)[0] for x in X.T])}
 
-    @apply_theme()
     def __init__(
         self,
         algorithm="shapiro",
@@ -267,6 +267,7 @@ class Rank1D(RankD):
         if ranks.ndim != 1:
             raise ValueError("Ranks must be 1-dimensional")
 
+    @apply_theme()
     def _draw(self):
         """
         Draws the bar plot of the ranking array of features.
@@ -363,7 +364,6 @@ class Rank2D(RankD):
         "kendalltau": lambda X: kendalltau(X),
     }
 
-    @apply_theme()
     def __init__(
         self,
         algorithm="pearson",
@@ -382,6 +382,7 @@ class Rank2D(RankD):
         if ranks.ndim != 2:
             raise ValueError("Ranks must be 2-dimensional")
 
+    @apply_theme()
     def _draw(self):
         """
         Draws the heatmap of the ranking matrix of variables.
