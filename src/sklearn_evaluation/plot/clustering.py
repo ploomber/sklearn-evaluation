@@ -38,8 +38,10 @@ from joblib import Parallel, delayed
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme
 
 
+@apply_theme()
 def _generate_axes(cluster, figsize, ax):
     if ax is not None:
         if not isinstance(ax, list):
@@ -136,6 +138,7 @@ def elbow_curve(
     )
 
 
+@apply_theme()
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
@@ -160,8 +163,9 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
         _, ax = plt.subplots()
 
     ax.set_title("Elbow Plot")
-    ax.plot(n_clusters, sum_of_squares, "b*-", label="Elbow")
     ax.grid(True)
+    ax.plot(n_clusters, sum_of_squares, label="Elbow")
+
     ax.set_xlabel("Number of clusters")
     ax.set_ylabel("Sum of Squared Errors")
 
@@ -181,6 +185,7 @@ def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
         labels = labels + labels2
 
     ax.legend(handles, labels)
+
     return ax
 
 
@@ -200,7 +205,7 @@ def silhouette_analysis(
     range_n_clusters=None,
     metric="euclidean",
     figsize=None,
-    cmap="nipy_spectral",
+    cmap=None,
     text_fontsize="medium",
     ax=None,
 ):
@@ -291,6 +296,7 @@ def silhouette_analysis(
     return ax
 
 
+@apply_theme(cmap_style="gradient")
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def _silhouette_analysis_one_model(
@@ -298,7 +304,7 @@ def _silhouette_analysis_one_model(
     cluster_labels,
     metric="euclidean",
     figsize=None,
-    cmap="nipy_spectral",
+    cmap=None,
     text_fontsize="medium",
     ax=None,
 ):
@@ -386,7 +392,7 @@ def silhouette_analysis_from_results(
     cluster_labels,
     metric="euclidean",
     figsize=None,
-    cmap="nipy_spectral",
+    cmap=None,
     text_fontsize="medium",
     ax=None,
 ):

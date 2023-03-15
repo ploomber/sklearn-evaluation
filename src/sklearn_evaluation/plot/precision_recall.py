@@ -9,6 +9,7 @@ from sklearn_evaluation.util import is_column_vector, is_row_vector
 from sklearn_evaluation.plot.plot import AbstractComposedPlot, AbstractPlot
 from sklearn_evaluation import __version__
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme
 
 from warnings import warn  # noqa
 
@@ -22,7 +23,7 @@ def _set_ax_settings(ax, name):
     ax.set_ylim([0.0, 1.05])
     ax.set_xlabel("Recall")
     ax.set_ylabel("Precision")
-    ax.legend(loc="best")
+    ax.legend()
 
 
 @modify_exceptions
@@ -140,6 +141,7 @@ class PrecisionRecall(AbstractPlot):
 
         _validate_metrics_input(self.precision, self.recall)
 
+    @apply_theme()
     def plot(self, ax=None):
         """Create the plot
         Parameters
@@ -290,6 +292,7 @@ class PrecisionRecallAdd(AbstractComposedPlot):
         self.recalls = recalls
         self.labels = labels
 
+    @apply_theme()
     def plot(self, ax=None):
         """
         Create the plot
@@ -332,7 +335,6 @@ class PrecisionRecallAdd(AbstractComposedPlot):
 @modify_exceptions
 @SKLearnEvaluationLogger.log(feature="plot")
 def precision_recall(y_true, y_score, ax=None):
-
     """
     Plot precision-recall curve.
 

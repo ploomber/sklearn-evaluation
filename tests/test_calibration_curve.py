@@ -31,6 +31,23 @@ clf_names = ["Random Forest", "Gaussian Naive Bayes", "Logistic Regression"]
     ],
 )
 @image_comparison(
+    baseline_images=["calibration_curve_custom_cmap"],
+    extensions=["png"], remove_text=True
+)
+def test_calibration_curve_custom_cmap(mean_predicted_value, fraction_of_positives):
+    plot.CalibrationCurve(
+        mean_predicted_value, fraction_of_positives, label=clf_names, cmap="plasma"
+    ).plot()
+
+
+@pytest.mark.parametrize(
+    "mean_predicted_value, fraction_of_positives",
+    [
+        (mean_predicted_value, fraction_of_positives),
+        (np.array(mean_predicted_value), np.array(fraction_of_positives)),
+    ],
+)
+@image_comparison(
     baseline_images=["calibration_curve"], extensions=["png"], remove_text=True
 )
 def test_calibration_curve(mean_predicted_value, fraction_of_positives):

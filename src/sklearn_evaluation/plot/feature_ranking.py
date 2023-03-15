@@ -25,6 +25,7 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 
 import matplotlib.pyplot as plt
+from sklearn_evaluation.plot.style import get_color_palette, apply_theme
 
 
 def kendalltau(X):
@@ -77,6 +78,7 @@ class RankD:
 
     ranking_methods = {}
 
+    @apply_theme()
     def __init__(self, algorithm=None, features=None, figsize=(7, 7), ax=None):
 
         self.ranks_ = None
@@ -170,6 +172,7 @@ class RankD:
         self._derive_features_from_data(X)
         self.ranks_ = self._rank(X)
         self._draw()
+
         return self.ax
 
     @SKLearnEvaluationLogger.log(feature="plot")
@@ -252,11 +255,11 @@ class Rank1D(RankD):
         features=None,
         figsize=(7, 7),
         orient="h",
-        color="g",
+        color=None,
         ax=None,
     ):
         super().__init__(algorithm=algorithm, features=features, figsize=figsize, ax=ax)
-        self.color = color
+        self.color = color or get_color_palette()[0]
         self.orientation_ = orient
 
     @staticmethod
@@ -264,6 +267,7 @@ class Rank1D(RankD):
         if ranks.ndim != 1:
             raise ValueError("Ranks must be 1-dimensional")
 
+    @apply_theme()
     def _draw(self):
         """
         Draws the bar plot of the ranking array of features.
@@ -273,6 +277,7 @@ class Rank1D(RankD):
             self.algorithm.title(), len(self.features_)
         )
         self.ax.set_title(title)
+
         if self.orientation_ == "h":
             # Make the plot
             self.ax.barh(np.arange(len(self.ranks_)), self.ranks_, color=self.color)
@@ -300,6 +305,7 @@ class Rank1D(RankD):
 
         else:
             raise ValueError("Orientation must be 'h' or 'v'")
+
         return self.ax
 
 
@@ -368,6 +374,7 @@ class Rank2D(RankD):
     ):
 
         super().__init__(algorithm=algorithm, features=features, figsize=figsize, ax=ax)
+
         self.colormap = colormap
 
     @staticmethod
@@ -375,6 +382,7 @@ class Rank2D(RankD):
         if ranks.ndim != 2:
             raise ValueError("Ranks must be 2-dimensional")
 
+    @apply_theme()
     def _draw(self):
         """
         Draws the heatmap of the ranking matrix of variables.

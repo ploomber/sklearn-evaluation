@@ -5,9 +5,12 @@ from sklearn_evaluation.report import compare_models
 from sklearn.ensemble import RandomForestClassifier
 from sklearn.tree import DecisionTreeClassifier
 
+url = (
+    "https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv"
+)
+
 urllib.request.urlretrieve(
-    "https://raw.githubusercontent.com/sharmaroshan/"
-    + "Heart-UCI-Dataset/master/heart.csv",
+    url,
     filename="heart.csv",
 )
 

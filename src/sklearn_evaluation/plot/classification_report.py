@@ -7,11 +7,11 @@ from sklearn.metrics import classification_report as sk_classification_report
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.classification import _add_values_to_matrix
-from sklearn_evaluation.util import default_heatmap
 from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
 from sklearn_evaluation.plot import _matrix
 from sklearn_evaluation import __version__
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme
 
 
 def _classification_report_add(first, second, keys, target_names, ax):
@@ -34,6 +34,7 @@ class ClassificationReportSub(AbstractComposedPlot):
         self.keys = keys
         self.target_names = target_names
 
+    @apply_theme(ax_style="frame")
     def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
@@ -56,6 +57,7 @@ class ClassificationReportAdd(AbstractComposedPlot):
         self.keys = keys
         self.target_names = target_names
 
+    @apply_theme(ax_style="frame")
     def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
@@ -95,6 +97,7 @@ class ClassificationReport(AbstractPlot):
         self.keys = keys
         self.target_names = target_names
 
+    @apply_theme(ax_style="frame")
     def plot(self, ax=None):
         if ax is None:
             _, ax = plt.subplots()
@@ -191,7 +194,7 @@ def _classification_report(
 def _classification_report_plot(matrix, keys, target_names, ax):
     _add_values_to_matrix(matrix, ax)
 
-    ax.imshow(matrix, interpolation="nearest", cmap=default_heatmap())
+    ax.imshow(matrix, interpolation="nearest")
 
     ax.set_xticks(range(len(keys)))
     ax.set_xticklabels(keys)
@@ -206,6 +209,7 @@ def _classification_report_plot(matrix, keys, target_names, ax):
 
 
 # TODO: add unit test
+@apply_theme(ax_style="frame")
 @modify_exceptions
 def classification_report(
     y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0, ax=None
