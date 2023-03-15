@@ -379,7 +379,18 @@ class SQLiteTracker:
         self.conn.commit()
 
     def upsert_append(self, uuid, parameters):
-        """Append the parameters to an existing experiment"""
+        """Append the parameters to an existing experiment
+        Examples
+        --------
+        >>> tracker = SQLiteTracker('experiments.db')
+        >>> exp1 = tracker.new_experiment()
+        >>> exp1.log("accuracy", 0.8) # doctest: +SKIP
+        >>> exp2 = tracker.new_experiment()
+        >>> exp2.log("accuracy", 1.0) # doctest: +SKIP
+        >>> data = tracker.get(exp2.uuid)._data
+        >>> tracker.upsert_append(exp1.uuid, data)
+
+        """
         existing = self.get(uuid, unserialize_plots=False)._data
         keys = set(existing.keys()).union(set(parameters.keys()))
 
