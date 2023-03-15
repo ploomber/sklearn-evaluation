@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -106,7 +106,7 @@ class TrackLossandAccuracyCallback(tf.keras.callbacks.Callback):
         val_loss.append(logs["val_loss"])
         accuracy.append(logs["accuracy"])
         val_accuracy.append(logs["val_accuracy"])
-        tracker.upsert(
+        tracker.upsert_append(
             uuid,
             {
                 "loss": loss,
