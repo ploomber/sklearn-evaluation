@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -269,6 +269,18 @@ SELECT uuid,
 FROM experiments
 WHERE comment is not NULL
 """
+)
+```
+
+## Append experiment parameters
+
+```{code-cell} ipython3
+tracker.upsert_append(
+    one.uuid,
+    {
+        "loss": 0.2,
+        "accuracy": 0.8,
+    },
 )
 ```
 

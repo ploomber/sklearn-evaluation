@@ -380,7 +380,7 @@ class SQLiteTracker:
 
     def upsert_append(self, uuid, parameters):
         """Append the parameters to an existing experiment
-        
+
         Examples
         --------
         >>> from sklearn_evaluation import SQLiteTracker
@@ -388,10 +388,20 @@ class SQLiteTracker:
         >>> exp = tracker.new_experiment()
         >>> exp.log("accuracy", 0.8) # doctest: +SKIP
         0.8
-        >>> tracker.upsert_append(exp1.uuid, dict(accuracy=0.9, loss=[0.4, 0.2]))
+        >>> tracker.upsert_append(exp.uuid, dict(accuracy=0.9, loss=[0.4, 0.2]))
         >>> data = tracker.get(exp.uuid)._data
-        >>> data
+        >>> data # doctest: +SKIP
         {'accuracy': [0.8, 0.9], 'loss': [0.4, 0.2]}
+
+        >>> df = tracker.query('''
+        ... SELECT uuid,
+        ...       json_extract(parameters, '$.accuracy') AS accuracy,
+        ...       json_extract(parameters, '$.loss') AS loss
+        ... FROM experiments
+        ... ''', as_frame=True)
+        >>> df # doctest: +SKIP
+        uuid      accuracy  loss
+        7f643419 [0.8, 0.9] [0.2, 0.4]
         """
         existing = self.get(uuid, unserialize_plots=False)._data
         keys = set(existing.keys()).union(set(parameters.keys()))
