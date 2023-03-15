@@ -28,9 +28,12 @@ We'll use the heart disease dataset, you can download it from <a href="https://w
 import urllib.request
 import pandas as pd
 
+url = (
+    "https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv"
+)
+
 urllib.request.urlretrieve(
-    "https://raw.githubusercontent.com/sharmaroshan/"
-    + "Heart-UCI-Dataset/master/heart.csv",
+    url,
     filename="heart.csv",
 )
 

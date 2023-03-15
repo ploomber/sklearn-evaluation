@@ -52,6 +52,7 @@ def test_model_create_report_template(
 
     r = mh.create_report(title=report_title)
     report_html = r._repr_html_()
+    report_html = report_html.replace("&lt;", "<").replace("&gt;", ">")
 
     assert report_title in report_html
     assert section_title in section_title

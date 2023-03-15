@@ -31,6 +31,7 @@ import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme
 
 
 def _binary_ks_curve(y_true, y_score):
@@ -140,6 +141,7 @@ def _binary_ks_curve(y_true, y_score):
     return thresholds, pct1, pct2, ks_statistic, max_distance_at, lb.classes_
 
 
+@apply_theme()
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def ks_statistic(
@@ -215,15 +217,14 @@ def ks_statistic(
 
     ax.set_title("KS Statistics Plot", fontsize=title_fontsize)
 
-    ax.plot(thresholds, pct1, lw=3, label="Class {}".format(classes[0]))
-    ax.plot(thresholds, pct2, lw=3, label="Class {}".format(classes[1]))
+    ax.plot(thresholds, pct1, label="Class {}".format(classes[0]))
+    ax.plot(thresholds, pct2, label="Class {}".format(classes[1]))
     idx = np.where(thresholds == max_distance_at)[0][0]
     ax.axvline(
         max_distance_at,
         *sorted([pct1[idx], pct2[idx]]),
         label="KS Statistic: {:.3f} at {:.3f}".format(ks_statistic, max_distance_at),
         linestyle=":",
-        lw=3,
         color="black"
     )
 

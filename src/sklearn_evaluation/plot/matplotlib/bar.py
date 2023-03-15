@@ -3,8 +3,11 @@ import matplotlib.pyplot as plt
 
 from sklearn_evaluation.plot.matplotlib.data_grid import DataGrid
 from sklearn_evaluation.plot.util import set_default_ax
+from sklearn_evaluation.plot.style import gradient_cmap
+from sklearn_evaluation.plot.style import apply_theme
 
 
+@apply_theme()
 def plot(values, orientation, labels=None, sort=True, error=None, ax=None):
     if orientation == "horizontal":
         return horizontal(values, labels, sort, error, ax)
@@ -109,7 +112,7 @@ class BarShifter:
         self.ax = ax
         self.i = 0
         self.width = (1.0 / g_size) * scale
-        self.colors = plt.get_cmap()(np.linspace(0, 1, self.g_size))
+        self.colors = gradient_cmap()(np.linspace(0, 1, self.g_size))
 
     def __call__(self, height, **kwargs):
         left = [x + self.i * self.width for x in range(self.g_number)]
