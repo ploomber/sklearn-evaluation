@@ -64,7 +64,6 @@ html_theme_options = {
     "path_to_docs": "docs",
     "repository_url": repository_url,
     "repository_branch": repository_branch,
-    "google_analytics_id": "G-3KL9PSJBZZ",
     "extra_footer": "",
     "home_page_in_toc": True,
     "announcement": "To launch any tutorial in JupyterLab, click on the 🚀 button below!",
@@ -72,7 +71,6 @@ html_theme_options = {
     "use_edit_page_button": False,
     "use_issues_button": True,
 }
-html_title = "sklearn-evaluation"
 intersphinx_mapping = {
     "sklearn": ["http://scikit-learn.org/stable", None],
     "matplotlib": ["http://matplotlib.org/", None],
