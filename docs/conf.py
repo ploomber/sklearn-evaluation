@@ -42,14 +42,12 @@ external_toc_exclude_missing = True
 external_toc_path = "_toc.yml"
 html_baseurl = ""
 html_favicon = ""
-html_logo = "logo.jpeg"
+html_logo = "square-no-bg-small.png"
 html_show_copyright = True
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
 html_theme_options = {
-    "analytics": {
-        "google_analytics_id": "G-3KL9PSJBZZ"
-    },
+    "analytics": {"google_analytics_id": "G-3KL9PSJBZZ"},
     "announcement": ("To launch a tutorial, click on the 🚀 button "
                      "below! Join us on "
                      "<a href='https://ploomber.io/community/'>Slack!</a>"),
