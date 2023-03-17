@@ -18,4 +18,3 @@ dependencies:
     - seaborn
     - ipywidgets
     - jupysql
-    - jupyter-book
