@@ -28,7 +28,7 @@ def test_add():
             test1 + test2
         f()
     assert (f"{type(test1).__name__!r} doesn't support the add (+) operator"
-            in str(excinfo.value))
+        in str(excinfo.value))
 
 
 def test_sub():
@@ -39,4 +39,4 @@ def test_sub():
             test1 - test2
         f()
     assert (f"{type(test1).__name__!r} doesn't support the subtract (-) operator"
-            in str(excinfo.value))
+        in str(excinfo.value))
