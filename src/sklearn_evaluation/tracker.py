@@ -361,6 +361,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def upsert(self, uuid, parameters):
         """Modify the stored parameters of an existing experiment"""
         existing = self.get(uuid, unserialize_plots=False)._data
@@ -378,6 +379,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
+    @SKLearnEvaluationLogger.log("SQLiteTracker")
     def upsert_append(self, uuid, parameters):
         """Append the parameters to an existing experiment
 
@@ -386,22 +388,22 @@ class SQLiteTracker:
         >>> from sklearn_evaluation import SQLiteTracker
         >>> tracker = SQLiteTracker('experiments.db')
         >>> exp = tracker.new_experiment()
-        >>> exp.log("accuracy", 0.8) # doctest: +SKIP
-        0.8
-        >>> tracker.upsert_append(exp.uuid, dict(accuracy=0.9, loss=[0.4, 0.2]))
-        >>> data = tracker.get(exp.uuid)._data
-        >>> data # doctest: +SKIP
-        {'accuracy': [0.8, 0.9], 'loss': [0.4, 0.2]}
 
-        >>> df = tracker.query('''
-        ... SELECT uuid,
-        ...       json_extract(parameters, '$.accuracy') AS accuracy,
-        ...       json_extract(parameters, '$.loss') AS loss
-        ... FROM experiments
-        ... ''', as_frame=True)
-        >>> df # doctest: +SKIP
-        uuid      accuracy  loss
-        7f643419 [0.8, 0.9] [0.2, 0.4]
+        >>> #Log initial metric_a values for the experiment
+        >>> exp.log("metric_a", [0.8, 0.85]) # doctest: +SKIP
+        metric_a: [0.8, 0.85]
+
+        >>> #Appending new "metric_a" values and adding "metric_b" values
+        >>> tracker.upsert_append(
+                exp.uuid,
+                dict(
+                    metric_a=[0.9, 0.95],
+                    metric_b=[0.4, 0.2]
+                )
+            )
+
+        metric_a: [0.8, 0.85, 0.9, 0.95]
+        metric_b: [0.4, 0.2]
         """
         existing = self.get(uuid, unserialize_plots=False)._data
         keys = set(existing.keys()).union(set(parameters.keys()))
