@@ -20,5 +20,5 @@ dependencies:
     - pkgmt>=0.1.7
     - altair
     - lxml
-
+    - ..
 
