@@ -7,6 +7,8 @@ channels:
 dependencies:
   - python=3.10
   - pip
+  # install if with conda, pip fails when executed on Apple ARM
+  - tensorflow-cpu
   - pip:
     - jupyter-book
     - jupytext
@@ -16,7 +18,6 @@ dependencies:
     - ploomber-engine
     - jupysql
     - keras
-    - tensorflow
     - pkgmt>=0.1.7
     - altair
     - lxml
