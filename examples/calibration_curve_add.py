@@ -6,6 +6,8 @@ from sklearn.naive_bayes import GaussianNB
 
 from sklearn_evaluation import plot
 
+raise ValueError("error")
+
 X, y = make_classification(
     n_samples=20000, n_features=2, n_informative=2, n_redundant=0, random_state=0
 )
