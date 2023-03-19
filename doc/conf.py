@@ -48,9 +48,11 @@ html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
 html_theme_options = {
     "analytics": {"google_analytics_id": "G-3KL9PSJBZZ"},
-    "announcement": ("To launch a tutorial, click on the 🚀 button "
-                     "below! Join us on "
-                     "<a href='https://ploomber.io/community/'>Slack!</a>"),
+    "announcement": (
+        "To launch a tutorial, click on the 🚀 button "
+        "below! Join us on "
+        "<a href='https://ploomber.io/community/'>Slack!</a>"
+    ),
     "search_bar_text": "Search this book...",
     "launch_buttons": {
         "notebook_interface": "jupyterlab",
@@ -59,7 +61,7 @@ html_theme_options = {
         "thebe": False,
         "colab_url": "",
     },
-    "path_to_docs": "docs",
+    "path_to_docs": "doc",
     "repository_url": repository_url,
     "repository_branch": repository_branch,
     "extra_footer": "",
