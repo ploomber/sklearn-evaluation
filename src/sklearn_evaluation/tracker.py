@@ -393,14 +393,13 @@ class SQLiteTracker:
         >>> exp.log("metric_a", [0.8, 0.85]) # doctest: +SKIP
         metric_a: [0.8, 0.85]
 
-        >>> #Appending new "metric_a" values and adding "metric_b" values
+        >>> #Append new "metric_a" values and adding "metric_b" values
         >>> tracker.upsert_append(
-                exp.uuid,
-                dict(
-                    metric_a=[0.9, 0.95],
-                    metric_b=[0.4, 0.2]
-                )
-            )
+        ...        exp.uuid,
+        ...        dict(
+        ...            metric_a=[0.9, 0.95],
+        ...            metric_b=[0.4, 0.2],)
+        ... )
 
         metric_a: [0.8, 0.85, 0.9, 0.95]
         metric_b: [0.4, 0.2]
