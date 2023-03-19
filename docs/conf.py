@@ -15,11 +15,11 @@ author = "Ploomber"
 comments_config = {"hypothesis": False, "utterances": False}
 copyright = "2023"
 exclude_patterns = ["README.md"]
-execution_allow_errors = False
-execution_excludepatterns = []
-execution_in_temp = True
-execution_show_tb = True
-execution_timeout = 30
+nb_execution_allow_errors = False
+nb_execution_excludepatterns = []
+nb_execution_in_temp = True
+nb_execution_show_tb = True
+nb_execution_timeout = 30
 extensions = [
     "sphinx_togglebutton",
     "sphinx_copybutton",
@@ -42,11 +42,15 @@ external_toc_exclude_missing = True
 external_toc_path = "_toc.yml"
 html_baseurl = ""
 html_favicon = ""
-html_logo = "logo.jpeg"
+html_logo = "square-no-bg-small.png"
 html_show_copyright = True
 html_sourcelink_suffix = ""
 html_theme = "sphinx_book_theme"
 html_theme_options = {
+    "analytics": {"google_analytics_id": "G-3KL9PSJBZZ"},
+    "announcement": ("To launch a tutorial, click on the 🚀 button "
+                     "below! Join us on "
+                     "<a href='https://ploomber.io/community/'>Slack!</a>"),
     "search_bar_text": "Search this book...",
     "launch_buttons": {
         "notebook_interface": "jupyterlab",
@@ -58,8 +62,6 @@ html_theme_options = {
     "path_to_docs": "docs",
     "repository_url": repository_url,
     "repository_branch": repository_branch,
-    "google_analytics_id": "G-3KL9PSJBZZ",
-    "extra_navbar": 'Join us on <a href="https://ploomber.io/community/">Slack!</a>',
     "extra_footer": "",
     "home_page_in_toc": True,
     "announcement": "To launch any tutorial in JupyterLab, click on the 🚀 button below!",
@@ -67,13 +69,12 @@ html_theme_options = {
     "use_edit_page_button": False,
     "use_issues_button": True,
 }
-html_title = "sklearn-evaluation"
 intersphinx_mapping = {
     "sklearn": ["http://scikit-learn.org/stable", None],
     "matplotlib": ["http://matplotlib.org/", None],
 }
-jupyter_cache = ""
-jupyter_execute_notebooks = "auto"
+nb_execution_cache_path = ""
+nb_execution_mode = "cache"
 latex_engine = "pdflatex"
 myst_enable_extensions = [
     "colon_fence",
@@ -82,6 +83,7 @@ myst_enable_extensions = [
     "substitution",
     "tasklist",
 ]
+myst_heading_anchors = 2
 myst_url_schemes = ["mailto", "http", "https"]
 nb_output_stderr = "show"
 numfig = True
