@@ -1,0 +1,24 @@
+name: ske-doc
+
+channels:
+  - conda-forge
+
+
+dependencies:
+  - python=3.10
+  - pip
+  - pip:
+    - jupyter-book
+    - jupytext
+    - papermill
+    - seaborn
+    - ploomber
+    - ploomber-engine
+    - jupysql
+    - keras
+    - tensorflow-cpu
+    - pkgmt>=0.1.7
+    - altair
+    - lxml
+    - ..
+

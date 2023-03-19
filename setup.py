@@ -38,7 +38,8 @@ JB = [
     "jupyter-book",
 ]
 
-TEST = [
+DEV = [
+    "pkgmt",
     "jupytext",
     "ploomber-engine",
     "ipykernel",
@@ -52,9 +53,8 @@ TEST = [
     "altair",
 ]
 
-DEV = ["flake8", "yapf", "twine", "pkgmt"]
 
-ALL = DOCS + JB + TEST + DEV
+ALL = DOCS + JB + DEV
 
 setup(
     name="sklearn-evaluation",
@@ -98,5 +98,6 @@ setup(
     ],
     extras_require={
         "all": ALL,
+        "dev": DEV,
     },
 )

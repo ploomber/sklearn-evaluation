@@ -1,5 +1,5 @@
-docs/reference/*.json
-docs/_build
+doc/reference/*.json
+doc/_build
 
 *.ipynb
 *.metadata
@@ -18,13 +18,13 @@ sklearn_evaluation/tests/result_images/
 sklearn_evaluation/tests/*.html
 
 # generated images from plot directive
-docs/source/savefig/
+doc/source/savefig/
 # Do not include docs build folder
-docs/build/
+doc/build/
 # Do not include examples produced using ..plot::
-docs/examples/
+doc/examples/
 # no outputs from sample nbs
-docs/nbs/output
+doc/nbs/output
 
 # Do not include images generated from running tests
 result_images/
