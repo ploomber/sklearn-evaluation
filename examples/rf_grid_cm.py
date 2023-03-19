@@ -5,7 +5,7 @@ from sklearn_evaluation import grid
 
 # generate data
 X, y = make_classification(
-    n_samples=20000, n_features=2, n_informative=2, n_redundant=0, random_state=0
+    n_samples=100, n_features=2, n_informative=2, n_redundant=0, random_state=0
 )
 
 # split data into train and test
