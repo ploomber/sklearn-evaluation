@@ -16,7 +16,7 @@ dependencies:
     - ploomber-engine
     - jupysql
     - keras
-    - tensorflow-cpu
+    - tensorflow
     - pkgmt>=0.1.7
     - altair
     - lxml
