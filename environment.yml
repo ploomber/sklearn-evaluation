@@ -14,7 +14,7 @@ dependencies:
     - .
     # NotebookCollection example
     - jupytext
-    - papermill
+    - ploomber-engine
     - seaborn
     - ipywidgets
     - jupysql

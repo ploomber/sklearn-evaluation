@@ -12,9 +12,7 @@ dependencies:
   - pip:
     - jupyter-book
     - jupytext
-    - papermill
     - seaborn
-    - ploomber
     - ploomber-engine
     - jupysql
     - keras
