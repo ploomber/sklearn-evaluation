@@ -6,6 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/ploomber/sklearn-evaluation/badge.svg)](https://coveralls.io/github/ploomber/sklearn-evaluation)
 [![Twitter](https://img.shields.io/twitter/follow/edublancas?label=Follow&style=social)](https://twitter.com/intent/user?screen_name=ploomber)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Downloads](https://static.pepy.tech/badge/sklearn-evaluation)](https://pepy.tech/project/sklearn-evaluation)
 
 
 
