@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Learn about underfitting and overfitting in machine learning, how to detect them using learning curves, and how to solve them."
+  "keywords": "machine learning, overfitting, underfitting, learning curve, Python, scikit-learn, matplotlib"
+  "property=og:locale": "en_US"
 ---
 
 # Underfitting and Overfitting

@@ -9,6 +9,11 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Learn about feature selection, a technique to select the best subset of features in machine learning, with examples in Python using scikit-learn."
+  "keywords": "feature selection, machine learning, Python, scikit-learn, filter method, wrapper method, embedded method, univariate statistical tests, Pearson's correlation, Spearman's rank correlation, ANOVA F-test, Chi-Square test, mutual information"
+  "property=og:locale": "en_US"
+
 ---
 # Feature Selection
 

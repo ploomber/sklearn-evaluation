@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Compare & evaluate models using sklearn-evaluation on the penguins dataset for classification based on bill, flipper size, & species."
+  "keywords": "classification, sklearn-evaluation, penguins dataset, data cleaning, decision tree classifier, KNN classifier, confusion matrix, feature importances, model comparison"
+  "property=og:locale": "en_US"
 ---
 
 # Classification
