@@ -10,7 +10,7 @@ kernelspec:
   language: python
   name: python3
 html_meta:
-  "description lang=en": "Learn how to evaluate binary classifiers using KS Statistic, Cumulative Gain, and Lift charts in Python with the sklearn-evaluation library. Explore the effectiveness of models in distinguishing between positive and negative classes."
+  "description lang=en": "Evaluate binary classifiers with KS Statistic, Cumulative Gain, and Lift charts in Python using sklearn-evaluation. Measure model effectiveness in separating positive and negative classes."
   "keywords": "KS Statistic, Cumulative Gain, Lift chart, sklearn-evaluation, Python, binary classifier, model evaluation, classifier performance, LogisticRegression, Kolmogorov-Smirnov statistic"
   "property=og:locale": "en_US"
 ---
