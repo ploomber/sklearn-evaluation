@@ -10,6 +10,8 @@ dependencies:
   - pip
   - scikit-learn>=1.2
   - matplotlib
+  # for pandas.read_html (optional dependency for NotebookCollection)
+  - lxml
   - pip:
     - .
     # NotebookCollection example
