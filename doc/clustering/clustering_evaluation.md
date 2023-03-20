@@ -9,6 +9,11 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Evaluate clustering algorithms and determine optimal clusters using elbow curve and silhouette analysis."
+  "keywords": "clustering, elbow curve, silhouette analysis, optimal number of clusters, KMeans, sklearn_evaluation, Python, machine learning, model evaluation"
+  "property=og:locale": "en_US"
+
 ---
 
 # Optimal number of clusters

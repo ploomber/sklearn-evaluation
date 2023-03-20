@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Learn to train, test & compare 2 ML models - RandomForestClassifier & DecisionTreeClassifier with heart disease dataset. Find better performer & create reports using sklearn-evaluation."
+  "keywords": "comparison, RandomForestClassifier, DecisionTreeClassifier, heart disease dataset, machine learning, model training, model testing, sklearn-evaluation, performance evaluation, report generation"
+  "property=og:locale": "en_US"
 ---
 
 # Report: Comparison

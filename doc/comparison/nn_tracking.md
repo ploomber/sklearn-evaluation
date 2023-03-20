@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Real-time tracking of computational experiments using SQLiteTracker. This tutorial demonstrates tracking training and validation metrics for a small neural network on the Fashion MNIST dataset in real time."
+  "keywords": "SQLiteTracker, real-time tracking, computational experiments, machine learning, Python, TensorFlow, Keras, Fashion MNIST, neural network, training, validation metrics, SQL, sklearn_evaluation"
+  "property=og:locale": "en_US"
 ---
 
 # Real-time tracking

@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Understand micro and macro averaging in Precision and Recall metrics for multi-class classification. Learn when to use each approach with Python examples using sklearn-evaluation."
+  "keywords": "micro-average, macro-average, precision, recall, multi-class classification, sklearn-evaluation, Python, confusion matrix, classification report, imbalanced dataset, performance metrics, true positives, false positives, false negatives"
+  "property=og:locale": "en_US"
 ---
 
 # Micro and Macro Averaging
