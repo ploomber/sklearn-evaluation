@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Learn to optimize ML models' hyperparameters using grid search techniques. Automate, visualize and evaluate different hyperparameter combinations. Uses scikit-learn and RandomForestClassifier."
+  "keywords": "grid search, optimization, hyperparameters, scikit-learn, RandomForestClassifier, visualization, automation, performance evaluation, machine learning"
+  "property=og:locale": "en_US"
 ---
 
 # Optimization

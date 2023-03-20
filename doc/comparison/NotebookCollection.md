@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+    "description lang=en": "Learn how to track and compare machine learning experiments using NotebookCollection. Retrieve results from previously executed notebooks to compare them in real-time."
+    "keywords": "SQLiteTracker, real-time tracking, computational experiments, machine learning, Python, TensorFlow, Keras, Fashion MNIST, neural network, training, validation metrics, SQL, sklearn_evaluation"
+    "property=og:locale": "en_US"
 ---
 
 # Notebooks as experiments

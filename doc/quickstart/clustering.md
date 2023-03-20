@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Learn how to evaluate clustering models using sklearn-evaluation and sklearn, find the optimal number of clusters, and visualize clusters using PCA, elbow curve, and silhouette analysis."
+  "keywords": "sklearn, clustering, machine learning, model evaluation, KMeans, evaluation metrics, visualization, sklearn-evaluation"
+  "property=og:locale": "en_US"
 ---
 
 # Clustering

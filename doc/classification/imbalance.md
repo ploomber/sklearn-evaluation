@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Learn how to evaluate class imbalance in datasets using Target Analysis with the sklearn-evaluation library in Python. Understand the importance of addressing class imbalance in machine learning and visualize class distributions using bar charts."
+  "keywords": "class imbalance, target analysis, sklearn-evaluation, Python, machine learning, dataset, resampling techniques, under-sampling, over-sampling, bar chart, majority class, minority class"
+  "property=og:locale": "en_US"
 ---
 
 # Evaluating class imbalance

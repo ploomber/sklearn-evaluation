@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Learn about Principal Component Analysis (PCA), a technique for dimensionality reduction in machine learning, with examples in Python using scikit-learn and matplotlib."
+  "keywords": "PCA, principal component analysis, dimensionality reduction, machine learning, Python, scikit-learn, matplotlib"
+  "property=og:locale": "en_US"
 ---
 
 # Principal Component Analysis

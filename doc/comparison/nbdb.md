@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Index and query outputs from a collection of Jupyter notebooks using NotebookDatabase and SQLite."
+  "keywords": "Jupyter, notebooks, NotebookDatabase, SQLite, query, data analysis, SQL, sklearn_evaluation, Python, machine learning, model evaluation"
+  "property=og:locale": "en_US"
 ---
 
 # Querying notebooks with SQL
