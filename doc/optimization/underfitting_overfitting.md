@@ -9,6 +9,10 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
+html_meta:
+  "description lang=en": "Learn the difference between underfitting and overfitting. Use sklearn-evaluation's learning curve to detect issues and shorten our time to a working model."
+  "keywords": "underfitting, overfitting, machine learning, Python, scikit-learn, learning curve, model selection, regularization, optimization, sklearn"
+  "property=og:locale": "en_US"
 ---
 
 # Underfitting and Overfitting
