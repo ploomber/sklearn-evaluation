@@ -397,11 +397,11 @@ class SQLiteTracker:
         >>> tracker.upsert_append(
         ...        exp.uuid,
         ...        dict(
-        ...            metric_a=[0.9, 0.95],
+        ...            metric_a=0.9,
         ...            metric_b=[0.4, 0.2],)
         ... )
 
-        metric_a: [0.8, 0.85, 0.9, 0.95]
+        metric_a: [0.8, 0.85, 0.9]
         metric_b: [0.4, 0.2]
         """
         existing = self.get(uuid, unserialize_plots=False)._data
