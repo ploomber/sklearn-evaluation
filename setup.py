@@ -30,6 +30,8 @@ DEV = [
     "coveralls<3",
     # altair is needed for interactive confusion matrix
     "altair",
+    # for pandas.read_html (optional dependency for NotebookCollection)
+    "lxml",
 ]
 
 
