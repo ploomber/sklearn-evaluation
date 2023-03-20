@@ -4,15 +4,11 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.4
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Learn about underfitting and overfitting in machine learning, how to detect them using learning curves, and how to solve them."
-  "keywords": "machine learning, overfitting, underfitting, learning curve, Python, scikit-learn, matplotlib"
-  "property=og:locale": "en_US"
 ---
 
 # Underfitting and Overfitting
@@ -31,7 +27,6 @@ We will see how the different plots at our disposal (via `sklearn-evaluation`) c
 
 
 **This can give us indications as to whether the model is suffering from overfitting or underfitting.**
-
 
 ```{code-cell} ipython3
 from sklearn.model_selection import learning_curve, train_test_split
@@ -75,15 +70,11 @@ If there is a large gap between the train and validation curve, we are overfitti
 Here is an example of a learning curve with significant overfitting:
 
 ```{code-cell} ipython3
-X, y = make_classification(
-    n_samples=1000, random_state=0, class_sep=0.2
-)
+X, y = make_classification(n_samples=1000, random_state=0, class_sep=0.2)
 ```
 
 ```{code-cell} ipython3
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=0
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 estimator = tree.DecisionTreeClassifier(max_depth=None)
 train_sizes = np.linspace(0.1, 1.0, 5)
 train_sizes, train_scores, test_scores = learning_curve(
@@ -102,18 +93,20 @@ Here is an example of a learning curve with underfitting:
 
 ```{code-cell} ipython3
 X, y = make_classification(
-    n_samples=100, n_features=20, n_informative=2,
-    n_repeated=2, n_redundant=2, class_sep=0, random_state=0
+    n_samples=100,
+    n_features=20,
+    n_informative=2,
+    n_repeated=2,
+    n_redundant=2,
+    class_sep=0,
+    random_state=0,
 )
 ```
 
-Here, we generate data with a small sample size by passing a low argument into the `n_samples` parameter, insert useless features, and create a large amount of noise with a low `class_sep` value. 
-
+Here, we generate data with a small sample size by passing a low argument into the `n_samples` parameter, insert useless features, and create a large amount of noise with a low `class_sep` value.
 
 ```{code-cell} ipython3
-X_train, X_test, y_train, y_test = train_test_split(
-    X, y, test_size=0.2, random_state=0
-)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=0)
 
 estimator = LogisticRegression()
 train_sizes = np.linspace(0.1, 1.0, 5)
