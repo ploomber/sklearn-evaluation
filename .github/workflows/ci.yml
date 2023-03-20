@@ -39,7 +39,7 @@ jobs:
         # https://github.com/pytest-dev/pytest/issues/7678
         pip install --editable .
         python -c "import sklearn_evaluation"
-        pip install --editable ".[all]"
+        pip install --editable ".[dev]"
 
         pytest tests/ src/ --cov=sklearn_evaluation --doctest-modules --durations-min=5
         coveralls

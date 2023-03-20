@@ -9,12 +9,12 @@ dependencies:
   - pip
   # install if with conda, pip fails when executed on Apple ARM
   - tensorflow-cpu
+  # for pandas.read_html (optional dependency for NotebookCollection)
+  - lxml
   - pip:
     - jupyter-book
     - jupytext
-    - papermill
     - seaborn
-    - ploomber
     - ploomber-engine
     - jupysql
     - keras

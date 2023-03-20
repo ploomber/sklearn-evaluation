@@ -16,27 +16,6 @@ DOWNLOAD_URL = "https://github.com/ploomber/sklearn-evaluation/tarball/{}".forma
     VERSION
 )
 
-DOCS = [
-    "sphinx",
-    "sphinx-rtd-theme",
-    "ploomber",
-    "nbsphinx",
-    "seaborn",
-    # to display progress bar when executing notebooks using papermill
-    # in NotebookCollection.py example
-    "ipywidgets",
-    # notebook database example
-    "jupysql",
-    # altair is needed for interactive confusion matrix
-    "altair",
-]
-
-JB = [
-    "markdown-it-py==1.1.0",
-    "linkify-it-py==1.0.3",
-    "myst-nb==0.13.2",
-    "jupyter-book",
-]
 
 DEV = [
     "pkgmt",
@@ -51,10 +30,10 @@ DEV = [
     "coveralls<3",
     # altair is needed for interactive confusion matrix
     "altair",
+    # for pandas.read_html (optional dependency for NotebookCollection)
+    "lxml",
 ]
 
-
-ALL = DOCS + JB + DEV
 
 setup(
     name="sklearn-evaluation",
@@ -97,7 +76,6 @@ setup(
         'importlib-metadata;python_version<"3.8"',
     ],
     extras_require={
-        "all": ALL,
         "dev": DEV,
     },
 )

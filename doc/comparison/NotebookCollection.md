@@ -36,7 +36,7 @@ nb = jupytext.read("train.py")
 jupytext.write(nb, "train.ipynb")
 ```
 
-We use papermill to execute the notebook with different parameters, we'll train 4 models: 2 random forest, a linear regression and a support vector regression:
+We use [ploomber-engine](https://github.com/ploomber/ploomber-engine) to execute the notebook with different parameters, we'll train 4 models: 2 random forest, a linear regression and a support vector regression:
 
 ```{code-cell} ipython3
 # models with their corresponding parameters
@@ -61,7 +61,7 @@ ids = [
 # output files
 files = [f"{i}.ipynb" for i in ids]
 
-# execute notebooks using papermill
+# execute notebooks using ploomber-engine
 for f, p in zip(files, params):
     execute_notebook("train.ipynb", output_path=f, parameters=p, progress_bar=False)
 ```
