@@ -18,16 +18,12 @@ jobs:
         channels: conda-forge, defaults
         python-version: ${{ matrix.python-version }}
 
-    - name: Lint with flake8
+    - name: Lint
       shell: bash -l {0}
       run: |
         eval "$(conda shell.bash hook)"
-        # run flake8 on .py files
-        pip install flake8
-        flake8
-        # run flake8 on notebooks (.ipynb, .md, etc)
-        pip install jupytext nbqa
-        nbqa flake8 .
+        pip install pkgmt
+        pkgmt lint
 
     - name: Run tests
       env:
@@ -43,16 +39,9 @@ jobs:
         # https://github.com/pytest-dev/pytest/issues/7678
         pip install --editable .
         python -c "import sklearn_evaluation"
-        pip install --editable ".[all]"
-        # run unit tests
-        # docstrings
-        # pytest doctest docs: https://docs.pytest.org/en/latest/doctest.html
-        # doctest docs: https://docs.python.org/3/library/doctest.html
-        # and examples (this is a hacky way to do it since --doctest-modules will
-        # first load any .py files, which are the examples, and then try to run
-        # any doctests, there isn't any)
+        pip install --editable ".[dev]"
 
-        pytest tests/ examples/ src/ --cov=sklearn_evaluation --doctest-modules --durations-min=5        
+        pytest tests/ src/ --cov=sklearn_evaluation --doctest-modules --durations-min=5
         coveralls
 
   # run: pkgmt check
