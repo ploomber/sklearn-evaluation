@@ -89,9 +89,6 @@ Update the experiment, appending new "metric_a" values and adding "metric_b" val
 
 ```{code-cell} ipython3
 tracker.upsert_append(expr.uuid, {"metric_a": 0.4, "metric_b": [0.8, 0.9]})
-```
-
-```{code-cell} ipython3
 tracker.get(expr.uuid)["metric_a"]
 ```
 
