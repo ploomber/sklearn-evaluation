@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## 0.12.1dev
+
 ## 0.12.0 (2023-03-23)
 
 - [Feature] Adds coloring scheme and style to plots ([#243](https://github.com/ploomber/sklearn-evaluation/issues/243))
