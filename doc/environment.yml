@@ -8,7 +8,7 @@ dependencies:
   - python=3.10
   - pip
   # install if with conda, pip fails when executed on Apple ARM
-  - tensorflow-cpu==2.10.1
+  - tensorflow-cpu=2.10.0
   # for pandas.read_html (optional dependency for NotebookCollection)
   - lxml
   - pip:
