@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Learn how to create an interactive confusion matrix using the penguins dataset, with the help of sklearn and seaborn libraries in Python."
-  "keywords": "interactive confusion matrix, penguins dataset, sklearn, seaborn, Python, machine learning, model evaluation, DecisionTreeClassifier"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Learn how to create an interactive confusion matrix using the penguins dataset, with the help of sklearn and seaborn libraries in Python."
+    keywords: "interactive confusion matrix, penguins dataset, sklearn, seaborn, Python, machine learning, model evaluation, DecisionTreeClassifier"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Interactive Confusion Matrix

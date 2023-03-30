@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Track your computational experiments with SQLiteTracker, a powerful tool for experiment comparison and plotting. Learn more about its features in this Machine Learning use case tutorial."
-  "keywords": "SQLiteTracker, computational experiments, machine learning, Python, sklearn, tracking, experiment comparison, plotting, ROC curve, confusion matrix, classification report, SQL, data science, data analysis".
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Track your computational experiments with SQLiteTracker, a powerful tool for experiment comparison and plotting. Learn more about its features in this Machine Learning use case tutorial."
+    keywords: "SQLiteTracker, computational experiments, machine learning, Python, sklearn, tracking, experiment comparison, plotting, ROC curve, confusion matrix, classification report, SQL, data science, data analysis".
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Experiment tracking

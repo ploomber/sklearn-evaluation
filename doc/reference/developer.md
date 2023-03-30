@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "The guide explains the object-oriented and functional API, as well as the guidelines for implementing and testing new plots."
-  "keywords": "sklearn-evaluation, developer guide, object-oriented API, functional API, plot implementation, guidelines, testing, styling plots, telemetry"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "The guide explains the object-oriented and functional API, as well as the guidelines for implementing and testing new plots."
+    keywords: "sklearn-evaluation, developer guide, object-oriented API, functional API, plot implementation, guidelines, testing, styling plots, telemetry"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Developer guide

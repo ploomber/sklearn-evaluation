@@ -9,11 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Learn experiment tracking with SQLiteTracker for comparing and analyzing Machine Learning models."
-  "keywords": "SQLiteTracker, experiment tracking, machine learning, model comparison, sklearn_evaluation, RandomForestClassifier, LogisticRegression, DecisionTreeClassifier, accuracy_score"
-  "property=og:locale": "en_US"
-
+myst:
+  html_meta:
+    description lang=en: "Learn experiment tracking with SQLiteTracker for comparing and analyzing Machine Learning models."
+    keywords: "SQLiteTracker, experiment tracking, machine learning, model comparison, sklearn_evaluation, RandomForestClassifier, LogisticRegression, DecisionTreeClassifier, accuracy_score"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Experiment tracking

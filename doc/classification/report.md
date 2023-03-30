@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Generate reports for classifier evaluation using sklearn_evaluation library."
-  "keywords": "sklearn_evaluation, ClassifierEvaluator, RandomForestClassifier, confusion matrix, report generation, Python, machine learning, model evaluation"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Generate reports for classifier evaluation using sklearn_evaluation library."
+    keywords: "sklearn_evaluation, ClassifierEvaluator, RandomForestClassifier, confusion matrix, report generation, Python, machine learning, model evaluation"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Report generation

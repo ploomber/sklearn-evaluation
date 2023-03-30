@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Learn how to evaluate the calibration of classification models using calibration curves and score distributions, and compare the performance of Support Vector Classification, Random Forest, Logistic Regression, and Gaussian Naive Bayes classifiers."
-  "keywords": "probability calibration, classification, calibration curves, score distributions, Support Vector Classification, Random Forest, Logistic Regression, Gaussian Naive Bayes, machine learning, model evaluation, reliability diagrams"
-  "property=og:locale": "en_US" 
+myst:
+  html_meta:
+    description lang=en: "Learn how to evaluate the calibration of classification models using calibration curves and score distributions, and compare the performance of Support Vector Classification, Random Forest, Logistic Regression, and Gaussian Naive Bayes classifiers."
+    keywords: "probability calibration, classification, calibration curves, score distributions, Support Vector Classification, Random Forest, Logistic Regression, Gaussian Naive Bayes, machine learning, model evaluation, reliability diagrams"
+    property=og:locale: "en_US" 
+notebook_metadata_filter: myst
 ---
 
 # Probability Calibration

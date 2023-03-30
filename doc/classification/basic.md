@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "A comprehensive guide to evaluating machine learning classifiers using sklearn_evaluation, including training a model, confusion matrix, feature importances, classification report, precision-recall, and ROC curves."
-  "keywords": "machine learning, sklearn_evaluation, evaluation, classifiers, confusion matrix, feature importances, classification report, precision-recall, ROC curve, random forest classifier, Python, scikit-learn"
-  "property=og:locale": "en_US" 
+myst:
+  html_meta:
+    description lang=en: "A comprehensive guide to evaluating machine learning classifiers using sklearn_evaluation, including training a model, confusion matrix, feature importances, classification report, precision-recall, and ROC curves."
+    keywords: "machine learning, sklearn_evaluation, evaluation, classifiers, confusion matrix, feature importances, classification report, precision-recall, ROC curve, random forest classifier, Python, scikit-learn"
+    property=og:locale: "en_US" 
+notebook_metadata_filter: myst
 ---
 
 # Evaluation

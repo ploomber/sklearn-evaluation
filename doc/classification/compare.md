@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Learn how to easily compare plots from different models, such as confusion matrices, ROC curves, classification reports, and precision-recall curves, using the sklearn-evaluation library in Python."
-  "keywords": "model comparison, confusion matrix, ROC curve, classification report, precision-recall curve, sklearn-evaluation, Python, machine learning, model evaluation, DecisionTreeClassifier, RandomForestClassifier, LogisticRegression"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Learn how to easily compare plots from different models, such as confusion matrices, ROC curves, classification reports, and precision-recall curves, using the sklearn-evaluation library in Python."
+    keywords: "model comparison, confusion matrix, ROC curve, classification report, precision-recall curve, sklearn-evaluation, Python, machine learning, model evaluation, DecisionTreeClassifier, RandomForestClassifier, LogisticRegression"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Comparison

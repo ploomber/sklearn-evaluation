@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Evaluate regression models with sklearn-evaluation; visualize residuals, prediction errors, and Cook's distance for outlier influence, using LinearRegression on the diabetes dataset."
-  "keywords": "evaluate regression, sklearn-evaluation, residual plot, prediction error plot, Cook's distance, visualizations, linear regression, diabetes dataset, outlier influence"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Evaluate regression models with sklearn-evaluation; visualize residuals, prediction errors, and Cook's distance for outlier influence, using LinearRegression on the diabetes dataset."
+    keywords: "evaluate regression, sklearn-evaluation, residual plot, prediction error plot, Cook's distance, visualizations, linear regression, diabetes dataset, outlier influence"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Evaluate Regression

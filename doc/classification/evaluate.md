@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Evaluate binary classifiers with KS Statistic, Cumulative Gain, and Lift charts in Python using sklearn-evaluation. Measure model effectiveness in separating positive and negative classes."
-  "keywords": "KS Statistic, Cumulative Gain, Lift chart, sklearn-evaluation, Python, binary classifier, model evaluation, classifier performance, LogisticRegression, Kolmogorov-Smirnov statistic"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Evaluate binary classifiers with KS Statistic, Cumulative Gain, and Lift charts in Python using sklearn-evaluation. Measure model effectiveness in separating positive and negative classes."
+    keywords: "KS Statistic, Cumulative Gain, Lift chart, sklearn-evaluation, Python, binary classifier, model evaluation, classifier performance, LogisticRegression, Kolmogorov-Smirnov statistic"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Evaluating classifiers

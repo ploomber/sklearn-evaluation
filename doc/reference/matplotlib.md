@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Explore advanced usage of sklearn-evaluation with matplotlib for enhanced visualizations, customization, and evaluation of ML models with style & control."
-  "keywords": "advanced usage, sklearn-evaluation, matplotlib, visualizations, customization, evaluation, machine learning models, plot style, ROC curve, grid plots"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Explore advanced usage of sklearn-evaluation with matplotlib for enhanced visualizations, customization, and evaluation of ML models with style & control."
+    keywords: "advanced usage, sklearn-evaluation, matplotlib, visualizations, customization, evaluation, machine learning models, plot style, ROC curve, grid plots"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Advanced usage using matplotlib

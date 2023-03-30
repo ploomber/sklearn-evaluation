@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Select the best subset of features, using powerful techniques in the 3 main categories of feature selection. Learn to implement Filter, Wrapper, and Embedded methods with sklearn."
-  "keywords": "feature selection, machine learning, Python, scikit-learn, matplotlib, pearson Correlation, recursive Feature elimination, embedded methods, chi-square, quasi constant"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Select the best subset of features, using powerful techniques in the 3 main categories of feature selection. Learn to implement Filter, Wrapper, and Embedded methods with sklearn."
+    keywords: "feature selection, machine learning, Python, scikit-learn, matplotlib, pearson Correlation, recursive Feature elimination, embedded methods, chi-square, quasi constant"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Feature Selection

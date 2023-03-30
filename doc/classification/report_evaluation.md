@@ -9,11 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Evaluate ML models using the heart disease dataset and sklearn-evaluation. Learn model preparation, training, prediction, and evaluation."
-  "keywords": "evaluation, heart disease dataset, machine learning, model preparation, model training, model prediction, performance metrics, sklearn-evaluation, RandomForestClassifier, report generation, model performance"
-  "property=og:locale": "en_US"
-
+myst:
+  html_meta:
+    description lang=en: "Evaluate ML models using the heart disease dataset and sklearn-evaluation. Learn model preparation, training, prediction, and evaluation."
+    keywords: "evaluation, heart disease dataset, machine learning, model preparation, model training, model prediction, performance metrics, sklearn-evaluation, RandomForestClassifier, report generation, model performance"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Report: Evaluation

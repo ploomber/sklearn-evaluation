@@ -9,10 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Learn how to fit and evaluate regression models using sklearn and sklearn-evaluation, using residual plots, prediction error plots, and outlier detection techniques like Cook's distance."
-  "keywords": "regression, sklearn, sklearn-evaluation, linear regression, residual plot, prediction error plot, outlier detection, Cook's distance"
-  "property=og:locale": "en_US"
+myst:
+  html_meta:
+    description lang=en: "Learn how to fit and evaluate regression models using sklearn and sklearn-evaluation, using residual plots, prediction error plots, and outlier detection techniques like Cook's distance."
+    keywords: "regression, sklearn, sklearn-evaluation, linear regression, residual plot, prediction error plot, outlier detection, Cook's distance"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Regression

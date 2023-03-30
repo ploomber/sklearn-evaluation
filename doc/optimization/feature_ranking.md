@@ -9,11 +9,12 @@ kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
-html_meta:
-  "description lang=en": "Learn about feature ranking, a technique to evaluate single features or pairs of features in machine learning, with examples in Python using scikit-learn and matplotlib."
-  "keywords": "feature ranking, machine learning, Python, scikit-learn, matplotlib, 1D rank, 2D rank, Shapiro-Wilk algorithm"
-  "property=og:locale": "en_US"
-
+myst:
+  html_meta:
+    description lang=en: "Learn about feature ranking, a technique to evaluate single features or pairs of features in machine learning, with examples in Python using scikit-learn and matplotlib."
+    keywords: "feature ranking, machine learning, Python, scikit-learn, matplotlib, 1D rank, 2D rank, Shapiro-Wilk algorithm"
+    property=og:locale: "en_US"
+notebook_metadata_filter: myst
 ---
 
 # Feature Ranking
