@@ -112,7 +112,7 @@ type(result)
 ## Guidelines
 
 ```{tip}
-For general guidelines, see [Ploombers' documentation framework.](https://github.com/ploomber/contributing/blob/main/documentation/README.md)
+For general guidelines, see [Ploombers' documentation framework.](https://ploomber-contributing.readthedocs.io)
 ```
 
 To provide a consistent user experience, all the functions that produce plots follow a few conventions.
