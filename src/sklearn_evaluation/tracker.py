@@ -361,7 +361,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
-    @SKLearnEvaluationLogger.log("SQLiteTracker")
+    @SKLearnEvaluationLogger.log(action="upsert", feature="SQLiteTracker")
     def upsert(self, uuid, parameters):
         """Modify the stored parameters of an existing experiment"""
         existing = self.get(uuid, unserialize_plots=False)._data
@@ -379,7 +379,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
-    @SKLearnEvaluationLogger.log("SQLiteTracker")
+    @SKLearnEvaluationLogger.log(action="upsert_append", feature="SQLiteTracker")
     def upsert_append(self, uuid, parameters):
         """Append the parameters to an existing experiment
 
