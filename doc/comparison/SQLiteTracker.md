@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -270,6 +270,35 @@ FROM experiments
 WHERE comment is not NULL
 """
 )
+```
+
+## Append experiment parameters
+
++++
+
+Log initial metric_a values for the experiment
+
+```{code-cell} ipython3
+one.log("metric_a", [0.2, 0.3])
+tracker.get(one.uuid)["metric_a"]
+```
+
+Appending new "metric_a" values and adding "metric_b" values
+
+```{code-cell} ipython3
+tracker.upsert_append(one.uuid, {"metric_a": 0.4, "metric_b": [0.8, 0.9]})
+```
+
+```{code-cell} ipython3
+df = tracker.query(
+    """
+SELECT uuid,
+       json_extract(parameters, '$.metric_a') AS metric_a,
+       json_extract(parameters, '$.metric_b') AS metric_b
+FROM experiments
+"""
+)
+df
 ```
 
 ## Pandas integration

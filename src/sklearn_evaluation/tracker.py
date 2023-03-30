@@ -361,6 +361,7 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
+    @SKLearnEvaluationLogger.log(action="upsert", feature="SQLiteTracker")
     def upsert(self, uuid, parameters):
         """Modify the stored parameters of an existing experiment"""
         existing = self.get(uuid, unserialize_plots=False)._data
@@ -378,8 +379,31 @@ class SQLiteTracker:
         cur.close()
         self.conn.commit()
 
+    @SKLearnEvaluationLogger.log(action="upsert_append", feature="SQLiteTracker")
     def upsert_append(self, uuid, parameters):
-        """Append the parameters to an existing experiment"""
+        """Append the parameters to an existing experiment
+
+        Examples
+        --------
+        >>> from sklearn_evaluation import SQLiteTracker
+        >>> tracker = SQLiteTracker('experiments.db')
+        >>> exp = tracker.new_experiment()
+
+        >>> #Log initial metric_a values for the experiment
+        >>> exp.log("metric_a", [0.8, 0.85]) # doctest: +SKIP
+        metric_a: [0.8, 0.85]
+
+        >>> #Append new "metric_a" values and adding "metric_b" values
+        >>> tracker.upsert_append(
+        ...        exp.uuid,
+        ...        dict(
+        ...            metric_a=0.9,
+        ...            metric_b=[0.4, 0.2],)
+        ... )
+
+        metric_a: [0.8, 0.85, 0.9]
+        metric_b: [0.4, 0.2]
+        """
         existing = self.get(uuid, unserialize_plots=False)._data
         keys = set(existing.keys()).union(set(parameters.keys()))
 

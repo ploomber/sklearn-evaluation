@@ -106,7 +106,7 @@ class TrackLossandAccuracyCallback(tf.keras.callbacks.Callback):
         val_loss.append(logs["val_loss"])
         accuracy.append(logs["accuracy"])
         val_accuracy.append(logs["val_accuracy"])
-        tracker.upsert(
+        tracker.upsert_append(
             uuid,
             {
                 "loss": loss,
