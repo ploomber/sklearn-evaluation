@@ -32,7 +32,8 @@ clf_names = ["Random Forest", "Gaussian Naive Bayes", "Logistic Regression"]
 )
 @image_comparison(
     baseline_images=["calibration_curve_custom_cmap"],
-    extensions=["png"], remove_text=True
+    extensions=["png"],
+    remove_text=True,
 )
 def test_calibration_curve_custom_cmap(mean_predicted_value, fraction_of_positives):
     plot.CalibrationCurve(

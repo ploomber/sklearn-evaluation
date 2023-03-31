@@ -60,22 +60,22 @@ def _set_default_rc_params(ax_style):
     Set default rcParams
     """
     # https://matplotlib.org/stable/tutorials/introductory/customizing.html#the-default-matplotlibrc-file
-    plt.rcParams['legend.fontsize'] = 10
-    plt.rcParams['legend.loc'] = 'best'
-    plt.rcParams['patch.edgecolor'] = '#fff'
-    plt.rcParams['patch.force_edgecolor'] = True
-    plt.rcParams['grid.color'] = '#808080'
+    plt.rcParams["legend.fontsize"] = 10
+    plt.rcParams["legend.loc"] = "best"
+    plt.rcParams["patch.edgecolor"] = "#fff"
+    plt.rcParams["patch.force_edgecolor"] = True
+    plt.rcParams["grid.color"] = "#808080"
 
     if ax_style == "no_frame":
-        plt.rcParams['axes.spines.right'] = False
-        plt.rcParams['axes.spines.top'] = False
-        plt.rcParams['ytick.right'] = False
-        plt.rcParams['xtick.top'] = False
+        plt.rcParams["axes.spines.right"] = False
+        plt.rcParams["axes.spines.top"] = False
+        plt.rcParams["ytick.right"] = False
+        plt.rcParams["xtick.top"] = False
     elif ax_style == "frame":
-        plt.rcParams['axes.spines.right'] = True
-        plt.rcParams['axes.spines.top'] = True
-        plt.rcParams['ytick.right'] = True
-        plt.rcParams['xtick.top'] = True
+        plt.rcParams["axes.spines.right"] = True
+        plt.rcParams["axes.spines.top"] = True
+        plt.rcParams["ytick.right"] = True
+        plt.rcParams["xtick.top"] = True
 
 
 def get_color_palette(n_colors=None):
@@ -122,12 +122,14 @@ def apply_theme(ax_style="no_frame", cmap_style="monochromatic"):
 
         'gradient' a palette of two colors gradually shift from one to another
     """
+
     def decorator(func):
         def wrapper_func(*args, **kwargs):
             with tmp_theme(ax_style, cmap_style):
                 return func(*args, **kwargs)
 
         return wrapper_func
+
     return decorator
 
 
@@ -150,14 +152,13 @@ def default_cmap():
         "#00B0FF",
     ]
 
-    cmap = LinearSegmentedColormap.from_list(
-        'material_cmap', _material_ui_colors)
+    cmap = LinearSegmentedColormap.from_list("material_cmap", _material_ui_colors)
     cmap = truncate_colormap(cmap, 0, 1)
 
     if cmap.name not in plt.colormaps():
         mpl.colormaps.register(cmap)
 
-    plt.rcParams['image.cmap'] = cmap.name
+    plt.rcParams["image.cmap"] = cmap.name
     return cmap
 
 
@@ -166,13 +167,12 @@ def gradient_cmap():
     Returns a palette of two colors gradually shift from one to another
     """
     _material_ui_colors = ["#00B0FF", "#ffa7c6"]
-    cmap = LinearSegmentedColormap.from_list(
-        'material_ui_bar', _material_ui_colors)
+    cmap = LinearSegmentedColormap.from_list("material_ui_bar", _material_ui_colors)
 
     if cmap.name not in plt.colormaps():
         mpl.colormaps.register(cmap)
 
-    plt.rcParams['image.cmap'] = cmap.name
+    plt.rcParams["image.cmap"] = cmap.name
 
     return cmap
 

@@ -136,8 +136,7 @@ def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
             if idx > 0:
                 index = index + bar_width
 
-            ax.bar(index, support, bar_width,
-                   color=colors[idx], label=legends[idx])
+            ax.bar(index, support, bar_width, color=colors[idx], label=legends[idx])
 
     ax.set_title("Class Balance for {:,} Instances".format(support_.sum()))
 

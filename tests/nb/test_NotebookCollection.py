@@ -160,7 +160,6 @@ def metrics():
 
 
 def test_compare_df_two_metrics(metrics):
-
     expected = pd.DataFrame(
         {
             1: [0.1, 0.2],
@@ -179,7 +178,6 @@ def test_compare_df_two_metrics(metrics):
 
 
 def test_compare_df_three_metrics(metrics):
-
     expected = pd.DataFrame({1: [0.1, 0.2], 2: [0.15, 0.25], 3: [0.25, 0.35]})
 
     out = nbcollection.compare_df(tables=metrics, ids=[1, 2, 3], scores_arg=None)

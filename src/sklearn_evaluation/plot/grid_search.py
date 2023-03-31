@@ -127,7 +127,6 @@ def grid_search(
 
 @apply_theme()
 def _grid_search_single(grid_scores, change, subset, kind, ax, sort, params):
-
     if ax is None:
         _, ax = plt.subplots()
 
@@ -208,7 +207,6 @@ def _grid_search_single(grid_scores, change, subset, kind, ax, sort, params):
 
 @apply_theme(ax_style="frame")
 def _grid_search_double(grid_scores, change, subset, cmap, ax, sort):
-
     if ax is None:
         _, ax = plt.subplots()
 

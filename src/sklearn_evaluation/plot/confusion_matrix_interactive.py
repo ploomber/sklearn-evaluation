@@ -173,7 +173,6 @@ def _cm_plot_data(cm, targets):
 
 
 def _plot_cm_chart(df, selection, alt):
-
     if selection is not None:
         color = alt.condition(
             selection,

@@ -195,7 +195,7 @@ def roc(y_true, y_score, ax=None):
 
 
 def _set_custom_ax_settings(ax):
-    ax.plot([0, 1], [0, 1], color='#000', linewidth=1, alpha=0.1)
+    ax.plot([0, 1], [0, 1], color="#000", linewidth=1, alpha=0.1)
     ax.set_xlabel("False Positive Rate")
     ax.set_ylabel("True Positive Rate")
     ax.set_title("ROC")
@@ -473,7 +473,6 @@ class ROC(AbstractPlot):
             _, n_classes = y_score.shape
 
         if n_classes > 2:
-
             _is_y_true_binary = is_binary(y_true)
             if _is_y_true_binary:
                 y_true_bin = y_true
