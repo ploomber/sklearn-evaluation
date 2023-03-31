@@ -158,7 +158,6 @@ class PrecisionRecall(AbstractPlot):
             and all(isinstance(elem, (list, np.ndarray)) for elem in self.recall)
             and len(self.precision) > 1
         ):
-
             if self.label is None:
                 self.label = _generate_labels(len(self.recall))
 

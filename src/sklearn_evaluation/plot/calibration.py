@@ -197,9 +197,7 @@ class CalibrationCurve(AbstractPlot):
 
     @classmethod
     @modify_exceptions
-    def from_raw_data(
-        cls, y_true, probabilities, *, label=None, n_bins=10, cmap=None
-    ):
+    def from_raw_data(cls, y_true, probabilities, *, label=None, n_bins=10, cmap=None):
         """
         Plots calibration curves for a set of classifier probability estimates.
         Calibration curves help determining whether you can interpret predicted

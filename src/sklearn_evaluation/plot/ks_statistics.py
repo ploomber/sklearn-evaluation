@@ -84,7 +84,6 @@ def _binary_ks_curve(y_true, y_score):
     ctr1, ctr2 = 0, 0
     thresholds, pct1, pct2 = [], [], []
     while ctr1 < len(data1) or ctr2 < len(data2):
-
         # Check if data1 has no more elements
         if ctr1 >= len(data1):
             current = data2[ctr2]

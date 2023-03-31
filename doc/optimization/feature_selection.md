@@ -4,12 +4,13 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.4
+    jupytext_version: 1.14.5
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
   name: python3
 ---
+
 # Feature Selection
 
 In a dataset, not every feature might be useful. Some could be noise, and some could show a strong relationship with the target variable. Often, using all the features decreases a model's performance and increases training time. Therefore, it's wisest to select the best subset of features that are relevant to the target variable before we train a model. This process is called feature selection. 
@@ -23,11 +24,11 @@ With supervised learning, feature selection has 3 main categories.
 In this tutorial, we will go over what those 3 categories are, what methods are under the 3 categories, and how to implement those with sklearn. So let's first bring in datasets from the sklearn package.
 
 ```{code-cell} ipython3
-:tags: []
 import pandas as pd
 import numpy as np
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import load_diabetes, load_breast_cancer
+
 # Preparing regression dataset
 diabetes = load_diabetes(as_frame=True)
 X_reg, y_reg = diabetes.data, diabetes.target
@@ -43,13 +44,11 @@ X_clf_train, X_clf_test, y_clf_train, y_clf_test = train_test_split(
 ```
 
 ```{code-cell} ipython3
-:tags: []
 # Example rows of regression dataset
 X_reg_train.head(4)
 ```
 
 ```{code-cell} ipython3
-:tags: []
 # Example rows of classification dataset
 X_clf_train.head(4)
 ```
@@ -66,7 +65,7 @@ Several techniques are
 5. Chi-Square Test
 6. Mutual Information
 
-+++ {"tags": []}
++++
 
 ### 1.1. Quasi Constant
 
@@ -75,11 +74,11 @@ A Quasi constant feature is a feature for which the majority of the observations
 You can implement this with VarianceThreshold() from sklearn.feature_selection. By default, the threshold is 0. Thus, it will remove a feature only if it contains the same value for every observation. You can change the threshold into a float number such as 0.001. Then, it will remove features if 99.9% of their values are the same.
 
 ```{code-cell} ipython3
-:tags: []
 from sklearn.feature_selection import VarianceThreshold
+
 # Adding a constant column
 X_reg_constant = X_reg.copy()
-X_reg_constant['constant'] = np.zeros(X_reg_constant.shape[0])
+X_reg_constant["constant"] = np.zeros(X_reg_constant.shape[0])
 # Removing columns that has lower than 0.001 variance
 selector = VarianceThreshold(threshold=0.001)
 X_fs = selector.fit_transform(X_reg_constant)
@@ -93,12 +92,12 @@ print(f"Removed feature: {X_reg_constant.columns[~selector.get_support()].values
 Pearson's correlation coefficient measures the linear relationship between two continuous variables. Its value ranges from -1 to 1 with -1 indicating a perfect negative linear relationship, +1 indicating a perfect positive linear relationship, and 0 indicating no linear relationship at all. Since there is no hard cutoff for Pearson's correlation, it's best to look at a distribution of values and decide the threshold for yourself.
 
 ```{code-cell} ipython3
-:tags: []
 import seaborn as sns
 import matplotlib.pyplot as plt
+
 corr_matrix = X_reg_train.corr(method="pearson")
 plt.figure(figsize=(9, 9))
-sns.heatmap(corr_matrix, linewidth=0.5, annot=True, fmt='.2f')
+sns.heatmap(corr_matrix, linewidth=0.5, annot=True, fmt=".2f")
 plt.show()
 ```
 
@@ -117,10 +116,9 @@ One of the correlations that you can use when you have non-linear relationships 
 Just like Pearson's correlation, its value ranges from -1 to +1 with each end indicating a perfect association. Also, there is no cutoff for what is considered as strong or weak. Therefore, plotting a heatmap and determining a threshold might be a good approach.
 
 ```{code-cell} ipython3
-:tags: []
 corr_matrix = X_reg_train.corr(method="spearman")
 plt.figure(figsize=(9, 9))
-sns.heatmap(corr_matrix, linewidth=0.5, annot=True, fmt='.2f')
+sns.heatmap(corr_matrix, linewidth=0.5, annot=True, fmt=".2f")
 plt.show()
 ```
 
@@ -143,8 +141,8 @@ Another way to filter features is by scoring each feature with a univariate stat
 ANOVA stands for Analysis of Variance. So using variances, ANOVA f-test determines whether means from two different samples come from the same distribution or not. Then, it ranks each feature from the highest to lowest with a higher score meaning a feature impacting the target variable more than other features. So in the end, this method selects features that have higher scores. One thing to note is that it is used when one variable is numerical and one is categorical, such as classification with continuous predictors.
 
 ```{code-cell} ipython3
-:tags: []
 from sklearn.feature_selection import f_classif, SelectKBest
+
 # Selecting top 10 features
 fs = SelectKBest(score_func=f_classif, k=10)
 X_fs = fs.fit_transform(X_clf_train, y_clf_train)
@@ -153,14 +151,13 @@ print(f"Shape of X_fs: {X_fs.shape}")
 ```
 
 ```{code-cell} ipython3
-:tags: []
 # Plotting scores for all features
 fs = SelectKBest(score_func=f_classif, k="all")
 fs.fit(X_clf_train, y_clf_train)
 result = pd.DataFrame(
     data={"score": fs.scores_, "fea": X_clf_train.columns}
 ).sort_values(by="score")
-plt.barh(result['fea'], result['score'])
+plt.barh(result["fea"], result["score"])
 plt.title("ANOVA f score for all features")
 plt.show()
 ```
@@ -174,9 +171,9 @@ The basic idea of the chi-square test is removing features that are independent 
 With sklearn, you can implement this by passing chi2 as the score_func parameter.
 
 ```{code-cell} ipython3
-:tags: []
 from sklearn.feature_selection import chi2
 from sklearn.feature_selection import SelectPercentile
+
 # Binning continuous variables to make it categorical
 X_clf_bin = X_clf.copy()
 for col, values in X_clf_bin.items():
@@ -192,12 +189,11 @@ print(f"Shape of X_fs: {X_fs.shape}")
 ```
 
 ```{code-cell} ipython3
-:tags: []
 # Plotting scores for all features
 result = pd.DataFrame(
     data={"score": fs.scores_, "fea": X_cb_train.columns}
 ).sort_values(by="score")
-plt.barh(result['fea'], result['score'])
+plt.barh(result["fea"], result["score"])
 plt.title("Chi-square score for all features")
 plt.show()
 ```
@@ -211,8 +207,8 @@ For instance, when you roll a die twice, knowing what you get on your first roll
 Using this information, it scores each variable. Then, with the score, you decide either to keep or disregard each variable. And it works for both classification and regression with mutual_info_classif and mutual_info_regression.
 
 ```{code-cell} ipython3
-:tags: []
 from sklearn.feature_selection import mutual_info_classif
+
 # Selecting top 10 features
 fs = SelectKBest(score_func=mutual_info_classif, k=10)
 X_fs = fs.fit_transform(X_clf_train, y_clf_train)
@@ -221,19 +217,18 @@ print(f"Shape of X_fs: {X_fs.shape}")
 ```
 
 ```{code-cell} ipython3
-:tags: []
 # Plotting scores for all features
 result = pd.DataFrame(
     data={"score": fs.scores_, "fea": X_clf_train.columns}
 ).sort_values(by="score")
-plt.barh(result['fea'], result['score'])
+plt.barh(result["fea"], result["score"])
 plt.title("Mutual information score for all features")
 plt.show()
 ```
 
 ```{code-cell} ipython3
-:tags: []
 from sklearn.feature_selection import mutual_info_regression
+
 # Selecting top 5 features
 fs = SelectKBest(score_func=mutual_info_regression, k=5)
 X_fs = fs.fit_transform(X_reg_train, y_reg_train)
@@ -251,12 +246,9 @@ Several techiques are
 4. Recursive Feature Elimination with Cross Validation (RFECV)
 
 ```{code-cell} ipython3
-:tags: []
 from sklearn.ensemble import RandomForestClassifier
 from sklearn_evaluation import plot
 ```
-
-+++
 
 ### 2.1. Forward Selection
 Forward selection starts training a model with no feature. Then, it goes over all the features to find the 1 best feature to add. It repeats this until cross-validation score improvement by adding a feature does not exceed a tolerance level or a desired number of features are selected.
@@ -340,8 +332,8 @@ From the equation above, $\lambda$ denotes the amount of shrinkage. When $\lambd
 With sklearn, you can implement this with Lasso class from sklearn.linear_model, and `alpha` parameter is where you pass the $\lambda$ value.
 
 ```{code-cell} ipython3
-:tags: []
 from sklearn.linear_model import Lasso
+
 lasso_reg = Lasso(alpha=0.1)
 lasso_reg.fit(X_reg_train, y_reg_train)
 lasso_reg.coef_
@@ -358,8 +350,8 @@ $$
 As in Lasso, $\lambda$ value stands for how much shrinkage you are going to apply. But notice that the coefficients are now squared instead of taking the absolute value. Because of this change, coefficients are now only getting close to zero but not equal to zero. Thus, in terms of model interpretability, Lasso is better than Ridge because you can clearly know what features are irrelevant with 0 coefficients.
 
 ```{code-cell} ipython3
-:tags: []
 from sklearn.linear_model import Ridge
+
 ridge_reg = Ridge(alpha=0.1)
 ridge_reg.fit(X_reg_train, y_reg_train)
 ridge_reg.coef_
@@ -370,7 +362,6 @@ ridge_reg.coef_
 A split in a decision tree model is based on how much variance for a continuous target or impurity for a categorical target it can reduce. Random forest importance method uses this information to measure feature importance. When random forest training is completed, it calculates how much each feature decreases impurity on average over all trees. Then, it converts those values so that they add up to 1 and represent relative contributions to the performance. Based on this feature importance score, you choose what to add and disregard.
 
 ```{code-cell} ipython3
-:tags: []
 rfc = RandomForestClassifier()
 rfc.fit(X_clf_train, y_clf_train)
 plot.feature_importances(rfc)

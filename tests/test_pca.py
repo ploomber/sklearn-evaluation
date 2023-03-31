@@ -11,8 +11,9 @@ X, y = make_classification(
 )
 
 
-@image_comparison(baseline_images=["pca_custom_colors"],
-                  extensions=["png"], remove_text=False)
+@image_comparison(
+    baseline_images=["pca_custom_colors"], extensions=["png"], remove_text=False
+)
 def test_pca_custom_colors():
     pca(X, y, colors=["r", "b"])
 
@@ -84,7 +85,7 @@ def test_component_error(ploomber_value_error_message):
 
 def test_target_color_mismatch(ploomber_value_error_message):
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        pca(X, y, target_names=["A", "B"], colors=['r'])
+        pca(X, y, target_names=["A", "B"], colors=["r"])
 
 
 def test_empty_input_error(ploomber_value_error_message):

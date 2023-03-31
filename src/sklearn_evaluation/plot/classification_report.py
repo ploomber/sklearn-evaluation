@@ -169,7 +169,6 @@ class ClassificationReport(AbstractPlot):
 def _classification_report(
     y_true, y_pred, *, target_names=None, sample_weight=None, zero_division=0
 ):
-
     report = sk_classification_report(
         y_true,
         y_pred,

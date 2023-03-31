@@ -116,8 +116,11 @@ def _plot_generic(n_components, principal_components, ax):
     for pc1 in range(n_components):
         for pc2 in range(pc1 + 1, n_components):
             ax[ax_ind].scatter(
-                principal_components[:, pc1], principal_components[:, pc2],
-                alpha=.6, edgecolor="face", s=50
+                principal_components[:, pc1],
+                principal_components[:, pc2],
+                alpha=0.6,
+                edgecolor="face",
+                s=50,
             )
             _set_ax_settings(ax[ax_ind], pc1 + 1, pc2 + 1, targets=None)
             ax_ind += 1
@@ -134,7 +137,7 @@ def _plot_with_target(n_components, target_indices, principal_components, target
                     principal_components[indices_to_keep, pc2],
                     c=color,
                     edgecolor="face",
-                    alpha=.6,
+                    alpha=0.6,
                     s=50,
                 )
             _set_ax_settings(ax[ax_ind], pc1 + 1, pc2 + 1, targets)
@@ -142,7 +145,6 @@ def _plot_with_target(n_components, target_indices, principal_components, target
 
 
 def _pca(X, y=None, target_names=None, n_components=2, colors=None, ax=None):
-
     pca = PCA(n_components=n_components)
     principal_components = pca.fit_transform(X)
 
@@ -156,11 +158,7 @@ def _pca(X, y=None, target_names=None, n_components=2, colors=None, ax=None):
         new_principal_components = np.hstack((principal_components, y))
 
         targets = np.unique(new_principal_components[..., -1])
-        colors = (
-            get_color_palette()
-            if colors is None
-            else colors
-        )
+        colors = get_color_palette() if colors is None else colors
 
         target_indices = []
 

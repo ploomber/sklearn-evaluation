@@ -58,7 +58,6 @@ def test_1d_vertical():
 
 
 def test_1d_invalid_orientation(ploomber_value_error_message):
-
     with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
         Rank1D(
             algorithm="shapiro",
@@ -70,7 +69,6 @@ def test_1d_invalid_orientation(ploomber_value_error_message):
 
 def test_1d_incorrect_features(ploomber_value_error_message):
     with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
-
         Rank1D(
             features=["Sepal length", "Sepal width"], algorithm="shapiro"
         ).feature_ranks(X)
@@ -207,7 +205,6 @@ def test_2d_kendalltau():
 
 def test_2d_incorrect_features(ploomber_value_error_message):
     with pytest.raises(ValueError, match=ploomber_value_error_message) as e:
-
         Rank2D(
             features=["Sepal length", "Sepal width"], algorithm="pearson"
         ).feature_ranks(X)

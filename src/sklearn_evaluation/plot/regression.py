@@ -140,8 +140,9 @@ def prediction_error(y_true, y_pred, ax=None):
     ax.plot(x, y, color=default_color, label="best fit")
 
     # identity line
-    ax.plot(x, x, label="identity", color='#000',
-            linewidth=1, alpha=0.5, linestyle="dashed")
+    ax.plot(
+        x, x, label="identity", color="#000", linewidth=1, alpha=0.5, linestyle="dashed"
+    )
 
     # scatter plot
     ax.scatter(y_true, y_pred, c=default_color, edgecolors=default_color)
@@ -214,7 +215,7 @@ def cooks_distance(X, y, ax=None):
         influence_threshold_,
         ls="--",
         label=label,
-        c='r',
+        c="r",
         lw=baseline.get_linewidth(),
     )
     ax.set_title("Cook's Distance Outlier Detection")

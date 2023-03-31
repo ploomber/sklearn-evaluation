@@ -130,8 +130,9 @@ def test_double_ignores_kind_bar(grid_search_3_params):
 def test_double_ignores_kind_bar_custom_cmap(grid_search_3_params):
     change = ("n_estimators", "criterion")
     subset = {"max_features": "sqrt"}
-    plot.grid_search(grid_search_3_params.cv_results_, change,
-                     subset, kind="bar", cmap="GnBu")
+    plot.grid_search(
+        grid_search_3_params.cv_results_, change, subset, kind="bar", cmap="GnBu"
+    )
 
 
 @pytest.mark.parametrize(
