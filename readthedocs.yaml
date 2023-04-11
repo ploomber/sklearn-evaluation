@@ -7,7 +7,6 @@ build:
 
   jobs:
     pre_build:
-      - pip install awscli
       - aws configure set aws_access_key_id ${aws_access_key_id}
       - aws configure set aws_secret_access_key ${aws_secret_access_key}
       - aws s3 cp s3://skeval-build-docs/${READTHEDOCS_VERSION} _readthedocs/.jupyter_cache/ --recursive
