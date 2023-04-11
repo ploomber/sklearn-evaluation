@@ -20,9 +20,10 @@ dependencies:
     - seaborn
     - ploomber-engine
     - jupysql
-    - keras
+    - keras==2.11.0
     - pkgmt>=0.1.7
     - altair
     - lxml
+    - awscli
     - -e ..
 
