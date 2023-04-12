@@ -1,11 +1,13 @@
 ## Describe your changes
 
-## Issue ticket number and link
-Closes #x 
+## Issue number
+
+Closes #X
 
 ## Checklist before requesting a review
 
-- [ ] I have performed a self-review of my code
-- [ ] I have added thorough [tests](https://github.com/ploomber/contributing/blob/main/CONTRIBUTING.md#testing) (when necessary).
-- [ ] I have added the right documentation in the [docstring](https://github.com/ploomber/contributing/blob/main/CONTRIBUTING.md#documenting-changes-and-new-features) and [changelog](https://github.com/ploomber/contributing/blob/main/CONTRIBUTING.md#changelog) (when needed)
+- [ ] Performed a self-review of my code
+- [ ] Formatted my code with [`pkgmt format`](https://ploomber-contributing.readthedocs.io/en/latest/contributing/pr.html#linting-formatting)
+- [ ] Added [tests](https://ploomber-contributing.readthedocs.io/en/latest/contributing/pr.html#testing) (when necessary).
+- [ ] Added [docstring](https://ploomber-contributing.readthedocs.io/en/latest/contributing/pr.html#documenting-changes-and-new-features) documentation and update the [changelog](https://ploomber-contributing.readthedocs.io/en/latest/contributing/pr.html#changelog) (when needed)
 
