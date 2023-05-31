@@ -364,7 +364,6 @@ class CalibrationCurveAdd(AbstractComposedPlot):
 def calibration_curve(
     y_true, probabilities, clf_names=None, n_bins=10, cmap="nipy_spectral", ax=None
 ):
-
     """
     Plots calibration curves for a set of classifier probability estimates.
     Calibration curves help determining whether you can interpret predicted

@@ -475,7 +475,6 @@ class ROC(AbstractPlot):
             _, n_classes = y_score.shape
 
         if n_classes > 2:
-
             _is_y_true_binary = is_binary(y_true)
             if _is_y_true_binary:
                 y_true_bin = y_true

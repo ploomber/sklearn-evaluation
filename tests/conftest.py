@@ -258,7 +258,6 @@ def calibration_curve_raw_data():
 
 @pytest.fixture(scope="session")
 def calibration_curve_plot_metrics_data():
-
     mean_predicted_value_one = [
         [0.02024768, 0.29093366, 0.46554422, 0.68282258, 0.91699482]
     ]

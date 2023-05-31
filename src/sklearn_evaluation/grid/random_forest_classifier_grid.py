@@ -9,7 +9,6 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 class RandomForestClassifierGrid(AbstractClassifierGrid):
-
     param_grids = dict(
         {
             GridTypes.TINY: {

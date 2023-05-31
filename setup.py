@@ -78,6 +78,7 @@ setup(
         "ploomber-core>=0.2.6",
         # compute metrics
         "scikit-learn",
+        "statsmodels",
         # plotting
         "matplotlib",
         # misc

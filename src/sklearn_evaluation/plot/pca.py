@@ -137,7 +137,6 @@ def _plot_with_target(n_components, target_indices, principal_components, target
 
 
 def _pca(X, y=None, target_names=None, n_components=2, colors=None, ax=None):
-
     pca = PCA(n_components=n_components)
     principal_components = pca.fit_transform(X)
 

@@ -78,7 +78,6 @@ class RankD:
     ranking_methods = {}
 
     def __init__(self, algorithm=None, features=None, figsize=(7, 7), ax=None):
-
         self.ranks_ = None
         self.algorithm = algorithm
         self.features = features
@@ -366,7 +365,6 @@ class Rank2D(RankD):
         figsize=(7, 7),
         ax=None,
     ):
-
         super().__init__(algorithm=algorithm, features=features, figsize=figsize, ax=ax)
         self.colormap = colormap
 
