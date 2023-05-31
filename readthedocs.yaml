@@ -8,6 +8,8 @@ build:
     pre_build:
       - "pip install -r docs/requirements.txt"
       - "jupyter-book clean docs/ --all"
+      - PLOOMBER_VERSION_CHECK_DISABLED=true
+
 
 python:
   install:
