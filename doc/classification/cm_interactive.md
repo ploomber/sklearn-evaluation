@@ -4,7 +4,7 @@ jupytext:
     extension: .md
     format_name: myst
     format_version: 0.13
-    jupytext_version: 1.14.1
+    jupytext_version: 1.14.6
 kernelspec:
   display_name: Python 3 (ipykernel)
   language: python
@@ -75,6 +75,14 @@ cm = plot.InteractiveConfusionMatrix.from_raw_data(
 
 Clicking on each quadrant displays two tables: `Sample Observations` and `Quadrant Statistics`.
 `Sample Observations` displays 5 random samples from the quadrant. `Quadrant Statistics` table displays some statistics on all the data that lies in this quadrant.
+
+
+```{code-cell} ipython3
+import altair as alt
+
+alt.renderers.enable("html")
+```
+
 
 ```{code-cell} ipython3
 cm.chart
