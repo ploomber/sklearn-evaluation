@@ -1,0 +1,67 @@
+format: jb-book
+root: intro.md
+
+parts:
+  - caption: Quick Start
+    chapters:
+      - file: quickstart/classification
+      - file: quickstart/regression
+      - file: quickstart/clustering
+
+  - caption: Classification
+    chapters:
+    - file: classification/basic
+    - file: classification/compare
+    - file: classification/optimization
+    - file: classification/SQLiteTracker_classification
+    - file: classification/report
+    - file: classification/imbalance
+    - file: classification/calibration
+    - file: classification/report_evaluation
+    - file: classification/report_comparison
+    - file: classification/cm_interactive
+    - file: classification/micro_macro
+
+  - caption: Regression
+    chapters:
+    - file: regression/RegressionPlots
+
+  - caption: Clustering
+    chapters:
+    - file: clustering/clustering_evaluation
+
+  - caption: Model comparison
+    chapters:
+    - file: comparison/SQLiteTracker
+    - file: comparison/nn_tracking
+    - file: comparison/NotebookCollection
+    - file: comparison/nbdb
+
+  - caption: Model optimization
+    chapters:
+    - file: optimization/feature_ranking
+    - file: optimization/feature_selection
+    - file: optimization/underfitting_overfitting
+
+  - caption: Dimensionality Reduction
+    chapters:
+    - file: dimensionality_reduction/pca
+
+  - caption: API Reference
+    chapters:
+    - file: api/plot
+    - file: api/table
+    - file: api/grid
+    - file: api/evaluator
+    - file: api/training
+    - file: api/SQLiteTracker
+    - file: api/nbs
+
+  - caption: Reference
+    chapters:
+    - file: reference/func_vs_oop
+    - file: reference/matplotlib
+    - file: reference/projects
+    - file: reference/community
+    - file: reference/developer
+    - file: reference/developer-api

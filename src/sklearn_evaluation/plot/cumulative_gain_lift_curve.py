@@ -30,6 +30,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme
 
 
 def _cumulative_gain_curve(y_true, y_score, pos_label=None):
@@ -92,6 +93,7 @@ def _cumulative_gain_curve(y_true, y_score, pos_label=None):
     return percentages, gains
 
 
+@apply_theme()
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def cumulative_gain(
@@ -165,24 +167,17 @@ def cumulative_gain(
         fig, ax = plt.subplots(1, 1, figsize=figsize)
 
     ax.set_title("Cumulative Gains Curve", fontsize=title_fontsize)
-
-    ax.plot(percentages, gains1, lw=3, label="Class {}".format(classes[0]))
-    ax.plot(percentages, gains2, lw=3, label="Class {}".format(classes[1]))
-
-    ax.set_xlim([0.0, 1.0])
-    ax.set_ylim([0.0, 1.0])
-
-    ax.plot([0, 1], [0, 1], "k--", lw=2, label="Baseline")
-
-    ax.set_xlabel("Percentage of sample", fontsize=text_fontsize)
-    ax.set_ylabel("Gain", fontsize=text_fontsize)
-    ax.tick_params(labelsize=text_fontsize)
-    ax.grid("on")
+    ax.plot(percentages, gains1, label="Class {}".format(classes[0]))
+    ax.plot(percentages, gains2, label="Class {}".format(classes[1]))
+    ax.grid(True)
+    ax.plot([0, 1], [0, 1], color="#000", linewidth=1, alpha=0.1, label="Baseline")
+    ax.set_xlabel("Percentage of sample")
+    ax.set_ylabel("Gain")
     ax.legend(loc="lower right", fontsize=text_fontsize)
-
     return ax
 
 
+@apply_theme()
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def lift_curve(
@@ -266,14 +261,13 @@ def lift_curve(
 
     ax.set_title("Lift Curve", fontsize=title_fontsize)
 
-    ax.plot(percentages, gains1, lw=3, label="Class {}".format(classes[0]))
-    ax.plot(percentages, gains2, lw=3, label="Class {}".format(classes[1]))
+    ax.plot(percentages, gains1, label="Class {}".format(classes[0]))
+    ax.plot(percentages, gains2, label="Class {}".format(classes[1]))
 
-    ax.plot([0, 1], [1, 1], "k--", lw=2, label="Baseline")
+    ax.plot([0, 1], [1, 1], color="#000", linewidth=1, alpha=0.1, label="Baseline")
 
-    ax.set_xlabel("Percentage of sample", fontsize=text_fontsize)
+    ax.set_xlabel("Percentage of sample")
     ax.set_ylabel("Lift", fontsize=text_fontsize)
-    ax.tick_params(labelsize=text_fontsize)
-    ax.grid("on")
+    ax.grid(True)
     ax.legend(loc="lower right", fontsize=text_fontsize)
     return ax

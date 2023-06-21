@@ -25,6 +25,7 @@ import pandas as pd
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.linear_model import LinearRegression
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme, get_color_palette
 
 
 def _set_ax_settings(ax, xlabel, ylabel, title):
@@ -41,6 +42,7 @@ def _check_parameter_validity(y_true, y_pred):
         raise ValueError("parameters should have same shape.")
 
 
+@apply_theme()
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def residuals(y_true, y_pred, ax=None):
@@ -75,15 +77,18 @@ def residuals(y_true, y_pred, ax=None):
     if ax is None:
         _, ax = plt.subplots()
 
-    # horizontal line for residual=0
-    ax.axhline(y=0)
+    default_color = get_color_palette()[0]
 
-    ax.scatter(y_pred, y_true - y_pred)
+    # horizontal line for residual=0
+    ax.axhline(y=0, color=default_color)
+
+    ax.scatter(y_pred, y_true - y_pred, c=default_color, edgecolors=default_color)
 
     _set_ax_settings(ax, "Predicted Value", "Residuals", "Residuals Plot")
     return ax
 
 
+@apply_theme()
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def prediction_error(y_true, y_pred, ax=None):
@@ -129,13 +134,18 @@ def prediction_error(y_true, y_pred, ax=None):
     model.fit(y_reshaped, y_pred)
     x = np.linspace(min(min(y_true), min(y_pred)), max(max(y_true), max(y_pred)))
     y = model.intercept_ + model.coef_ * x
-    ax.plot(x, y, "-b", label="best fit")
+
+    default_color = get_color_palette()[0]
+
+    ax.plot(x, y, color=default_color, label="best fit")
 
     # identity line
-    ax.plot(x, x, "--k", label="identity")
+    ax.plot(
+        x, x, label="identity", color="#000", linewidth=1, alpha=0.5, linestyle="dashed"
+    )
 
     # scatter plot
-    ax.scatter(y_true, y_pred)
+    ax.scatter(y_true, y_pred, c=default_color, edgecolors=default_color)
 
     # R2
     r2 = model.score(y_reshaped, y_pred)
@@ -146,6 +156,7 @@ def prediction_error(y_true, y_pred, ax=None):
     return ax
 
 
+@apply_theme()
 @SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def cooks_distance(X, y, ax=None):
@@ -204,7 +215,7 @@ def cooks_distance(X, y, ax=None):
         influence_threshold_,
         ls="--",
         label=label,
-        c=baseline.get_color(),
+        c="r",
         lw=baseline.get_linewidth(),
     )
     ax.set_title("Cook's Distance Outlier Detection")

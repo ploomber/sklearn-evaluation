@@ -11,23 +11,30 @@ X, y = make_classification(
 )
 
 
+@image_comparison(
+    baseline_images=["pca_custom_colors"], extensions=["png"], remove_text=False
+)
+def test_pca_custom_colors():
+    pca(X, y, colors=["r", "b"])
+
+
 @image_comparison(baseline_images=["pca"], extensions=["png"], remove_text=False)
 def test_pca():
-    pca(X, y, colors=["r", "b"])
+    pca(X, y)
 
 
 @image_comparison(
     baseline_images=["pca_without_y"], extensions=["png"], remove_text=False
 )
 def test_pca_without_y():
-    pca(X, colors=["r", "b"])
+    pca(X)
 
 
 @image_comparison(
     baseline_images=["pca_target_names"], extensions=["png"], remove_text=False
 )
 def test_pca_target_names():
-    pca(X, y, target_names=["Class A", "Class B"], colors=["r", "b"])
+    pca(X, y, target_names=["Class A", "Class B"])
 
 
 @image_comparison(
@@ -36,7 +43,7 @@ def test_pca_target_names():
     remove_text=False,
 )
 def test_ncomponents():
-    pca(X, y, target_names=["Class A", "Class B"], colors=["r", "b"], n_components=3)
+    pca(X, y, target_names=["Class A", "Class B"], n_components=3)
 
 
 def test_pca_random_colors():
@@ -55,7 +62,7 @@ def test_pca_multiclass():
         class_sep=3.0,
         random_state=0,
     )
-    pca(X, y, target_names=["Class A", "Class B", "Class C"], colors=["r", "b", "g"])
+    pca(X, y, target_names=["Class A", "Class B", "Class C"])
 
 
 def test_ax_pca():
@@ -78,7 +85,7 @@ def test_component_error(ploomber_value_error_message):
 
 def test_target_color_mismatch(ploomber_value_error_message):
     with pytest.raises(ValueError, match=ploomber_value_error_message):
-        pca(X, y, target_names=["A", "B"], colors=["r", "b", "g"])
+        pca(X, y, target_names=["A", "B"], colors=["r"])
 
 
 def test_empty_input_error(ploomber_value_error_message):

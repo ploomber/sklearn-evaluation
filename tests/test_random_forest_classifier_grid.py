@@ -47,7 +47,6 @@ def test_fit(grid):
 
 @pytest.mark.parametrize("grid", grid_types_str)
 def test_set_test_data(grid):
-
     X, y = datasets.make_classification(
         200, 10, n_informative=5, class_sep=0.7, random_state=42
     )

@@ -3,18 +3,18 @@ version: 2
 build:
   os: ubuntu-22.04
   tools:
-    python: "3.8"
+    python: "mambaforge-4.10"
+
   jobs:
     pre_build:
-      - "pip install -r docs/requirements.txt"
-      - "jupyter-book clean docs/ --all"
+      - aws configure set aws_access_key_id ${aws_access_key_id}
+      - aws configure set aws_secret_access_key ${aws_secret_access_key}
+      - aws s3 cp s3://skeval-build-docs/${READTHEDOCS_VERSION} _readthedocs/.jupyter_cache/ --recursive
+    post_build:
+      - aws s3 cp _readthedocs/.jupyter_cache/ s3://skeval-build-docs/${READTHEDOCS_VERSION} --recursive
 
-python:
-  install:
-    - method: pip
-      path: .
-      extra_requirements:
-      - sphinx
+conda:
+  environment: doc/environment.yml
 
 sphinx:
   builder: html

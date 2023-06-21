@@ -1,6 +1,25 @@
 # CHANGELOG
 
-## 0.11.3dev
+## 0.12.1dev
+
+- [Doc] Added Example for .upsert_append()
+
+## 0.12.0 (2023-03-23)
+
+- [Feature] Adds coloring scheme and style to plots ([#243](https://github.com/ploomber/sklearn-evaluation/issues/243))
+
+## 0.11.4 (2023-03-07)
+
+- [Feature] Adds new report API for evaluating and comparing models
+- [Doc] Tutorial covering underfitting/overfitting
+- [Doc] User guide on Feature Selection
+
+## 0.11.3 (2023-02-28)
+
+- [Feature] Adds `plot.InteractiveConfusionMatrix` object-oriented API ([#275](https://github.com/ploomber/sklearn-evaluation/issues/275))
+- [Doc] User guide on interactive confusion matrix plot ([#275](https://github.com/ploomber/sklearn-evaluation/issues/275))
+- [Doc] Reorganisation of the classification module ([#297](https://github.com/ploomber/sklearn-evaluation/issues/297))
+- [Doc] Added API for RandomForestClassifierGrid ([#297](https://github.com/ploomber/sklearn-evaluation/issues/297))
 
 ## 0.11.2 (2023-02-21)
 

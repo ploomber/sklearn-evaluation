@@ -72,7 +72,6 @@ class NotebookDatabase:
 
                 self._conn.commit()
             elif path in paths_indexed and update:
-
                 if verbose:
                     print(f"Updating {path}")
 

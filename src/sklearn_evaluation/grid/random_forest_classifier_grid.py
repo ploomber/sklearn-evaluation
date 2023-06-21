@@ -9,7 +9,6 @@ from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 class RandomForestClassifierGrid(AbstractClassifierGrid):
-
     param_grids = dict(
         {
             GridTypes.TINY: {
@@ -150,6 +149,11 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         -------
         ax: matplotlib Axes
             Axes containing the plot
+
+        Examples
+        --------
+        .. plot:: ../examples/rf_grid_cm.py
+
         """
         X_test, y_test = self._prepare_test_data_for_plotting()
 
@@ -165,6 +169,10 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         -------
         ax: matplotlib Axes
             Axes containing the plot
+
+        Examples
+        --------
+        .. plot:: ../examples/rf_grid_roc.py
         """
         X_test, y_test = self._prepare_test_data_for_plotting()
         y_pred = self.grid_search_cv_.best_estimator_.predict(X_test)
@@ -186,6 +194,11 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         -------
         ax: matplotlib Axes
             Axes containing the plot
+
+        Examples
+        --------
+        .. plot:: ../examples/rf_grid_feature_importances.py
+
         """
         feature_importances = self.grid_search_cv_.best_estimator_.feature_importances_
         return plot.feature_importances(feature_importances)

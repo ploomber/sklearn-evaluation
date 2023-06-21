@@ -1,0 +1,27 @@
+name: ske-doc
+
+channels:
+  - conda-forge
+
+
+dependencies:
+  - python=3.10
+  - pip
+  # install if with conda, pip fails when executed on Apple ARM
+  - tensorflow-cpu
+  # for pandas.read_html (optional dependency for NotebookCollection)
+  - lxml
+  - pip:
+    # https://github.com/pydata/pydata-sphinx-theme/issues/1274
+    - jupyter-book
+    - jupytext
+    - seaborn
+    - ploomber-engine
+    - jupysql
+    - keras==2.11.0
+    - pkgmt>=0.1.7
+    - altair
+    - lxml
+    - awscli
+    - -e ..
+

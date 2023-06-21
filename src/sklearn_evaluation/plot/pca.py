@@ -2,6 +2,7 @@ from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
 from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
+from sklearn_evaluation.plot.style import apply_theme, get_color_palette
 
 import numpy as np
 import matplotlib.pyplot as plt
@@ -13,7 +14,7 @@ def _set_ax_settings(ax, ind1, ind2, targets=None):
     ax.set_ylabel(f"Principal Component {ind2}", fontsize=10)
     if targets is not None:
         ax.legend(targets)
-    ax.grid()
+    ax.grid(True)
 
 
 def _validate_inputs(X, n_components, target_names, colors, ax):
@@ -35,6 +36,7 @@ def _validate_inputs(X, n_components, target_names, colors, ax):
             raise ValueError(f"Number of axes passed should be {ax_count}")
 
 
+@apply_theme()
 @modify_exceptions
 @SKLearnEvaluationLogger.log(feature="plot")
 def pca(X, y=None, target_names=None, n_components=2, colors=None, ax=None):
@@ -114,7 +116,11 @@ def _plot_generic(n_components, principal_components, ax):
     for pc1 in range(n_components):
         for pc2 in range(pc1 + 1, n_components):
             ax[ax_ind].scatter(
-                principal_components[:, pc1], principal_components[:, pc2], s=50
+                principal_components[:, pc1],
+                principal_components[:, pc2],
+                alpha=0.6,
+                edgecolor="face",
+                s=50,
             )
             _set_ax_settings(ax[ax_ind], pc1 + 1, pc2 + 1, targets=None)
             ax_ind += 1
@@ -130,6 +136,8 @@ def _plot_with_target(n_components, target_indices, principal_components, target
                     principal_components[indices_to_keep, pc1],
                     principal_components[indices_to_keep, pc2],
                     c=color,
+                    edgecolor="face",
+                    alpha=0.6,
                     s=50,
                 )
             _set_ax_settings(ax[ax_ind], pc1 + 1, pc2 + 1, targets)
@@ -137,7 +145,6 @@ def _plot_with_target(n_components, target_indices, principal_components, target
 
 
 def _pca(X, y=None, target_names=None, n_components=2, colors=None, ax=None):
-
     pca = PCA(n_components=n_components)
     principal_components = pca.fit_transform(X)
 
@@ -150,14 +157,8 @@ def _pca(X, y=None, target_names=None, n_components=2, colors=None, ax=None):
             y = np.expand_dims(y, 1)
         new_principal_components = np.hstack((principal_components, y))
 
-        from random import randint
-
         targets = np.unique(new_principal_components[..., -1])
-        colors = (
-            ["#%06X" % randint(0, 0xFFFFFF) for i in range(len(targets))]
-            if colors is None
-            else colors
-        )
+        colors = get_color_palette() if colors is None else colors
 
         target_indices = []
 

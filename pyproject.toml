@@ -1,5 +1,7 @@
 [tool.pkgmt]
 github = "ploomber/sklearn-evaluation"
+package_name = "sklearn_evaluation"
+env_name = "ske"
 
 [tool.pkgmt.check_links]
 extensions = ["md", "rst", "py", "ipynb"]

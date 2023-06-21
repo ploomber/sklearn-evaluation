@@ -1,0 +1,33 @@
+import urllib.request
+
+from sklearn.ensemble import RandomForestClassifier
+import pandas as pd
+from sklearn.model_selection import train_test_split
+from sklearn_evaluation.report import evaluate_model
+
+url = (
+    "https://raw.githubusercontent.com/sharmaroshan/Heart-UCI-Dataset/master/heart.csv"
+)
+
+urllib.request.urlretrieve(
+    url,
+    filename="heart.csv",
+)
+
+column = "fbs"
+data = pd.read_csv("heart.csv")
+X = data.drop(column, axis=1)
+y = data[column]
+
+X_train, X_test, y_train, y_test = train_test_split(
+    X, y, test_size=0.2, random_state=2023
+)
+
+
+model = RandomForestClassifier()
+model.fit(X_train, y_train)
+
+y_pred = model.predict(X_test)
+y_score = model.predict_proba(X_test)
+
+report = evaluate_model(model, y_test, y_pred, y_score=y_score)

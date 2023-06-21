@@ -117,7 +117,6 @@ def test_logger_with_errors(mock_telemetry, action, feature, x, y, kwargs):
 
 
 def test_pca(mock_telemetry):
-
     pca(np.array([[1, 3, 2], [3, 0, 6]]))
     function_arguments = dict(
         {"y": None, "target_names": None, "n_components": 2, "colors": None, "ax": None}
@@ -132,9 +131,8 @@ def test_pca(mock_telemetry):
 
 
 def test_calibration_curve(mock_telemetry):
-
     CalibrationCurve([0.5, 0.9], [0.45, 0.89], label=["Classifier 1"]).plot()
-    function_arguments = dict({"label": ["Classifier 1"], "cmap": "nipy_spectral"})
+    function_arguments = dict({"label": ["Classifier 1"], "cmap": None})
     expected_metadata = dict(
         {
             "action": "calibration-curve-init",
@@ -148,11 +146,10 @@ def test_calibration_curve(mock_telemetry):
 
 
 def test_calibration_curve_add(mock_telemetry):
-
     cc1 = CalibrationCurve([0.5, 0.9], [0.45, 0.89], label=["Classifier 1"]).plot()
     cc2 = CalibrationCurve([0.49, 0.92], [0.52, 0.88], label=["Classifier 2"]).plot()
     cc1 + cc2
-    function_arguments_one = dict({"label": ["Classifier 1"], "cmap": "nipy_spectral"})
+    function_arguments_one = dict({"label": ["Classifier 1"], "cmap": None})
     expected_metadata_one = dict(
         {
             "action": "calibration-curve-init",
@@ -161,7 +158,7 @@ def test_calibration_curve_add(mock_telemetry):
         }
     )
 
-    function_arguments_two = dict({"label": ["Classifier 2"], "cmap": "nipy_spectral"})
+    function_arguments_two = dict({"label": ["Classifier 2"], "cmap": None})
     expected_metadata_two = dict(
         {
             "action": "calibration-curve-init",
@@ -170,7 +167,7 @@ def test_calibration_curve_add(mock_telemetry):
         }
     )
 
-    function_arguments_add = dict({"cmaps": ["nipy_spectral", "nipy_spectral"]})
+    function_arguments_add = dict({"cmaps": [None, None]})
     expected_metadata_add = dict(
         {
             "action": "calibration-curve-add-init",

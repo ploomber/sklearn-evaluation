@@ -6,6 +6,7 @@
 [![Coverage Status](https://coveralls.io/repos/github/ploomber/sklearn-evaluation/badge.svg)](https://coveralls.io/github/ploomber/sklearn-evaluation)
 [![Twitter](https://img.shields.io/twitter/follow/edublancas?label=Follow&style=social)](https://twitter.com/intent/user?screen_name=ploomber)
 [![Code style: black](https://img.shields.io/badge/code%20style-black-000000.svg)](https://github.com/psf/black)
+[![Downloads](https://static.pepy.tech/badge/sklearn-evaluation)](https://pepy.tech/project/sklearn-evaluation)
 
 
 
@@ -47,7 +48,7 @@ pip install sklearn-evaluation
 
 * [Plotting](https://sklearn-evaluation.ploomber.io/en/latest/classification/basic.html) (confusion matrix, feature importances, precision-recall, roc, elbow curve, silhouette plot)
 * Report generation ([example](https://htmlpreview.github.io/?https://github.com/ploomber/sklearn-evaluation/blob/master/examples/report.html))
-* [Evaluate grid search results](https://sklearn-evaluation.ploomber.io/en/latest/optimization/grid_search.html)
+* [Evaluate grid search results](https://sklearn-evaluation.ploomber.io/en/latest/classification/optimization.html)
 * [Track experiments using a local SQLite database](https://sklearn-evaluation.ploomber.io/en/latest/comparison/SQLiteTracker.html)
 * [Analyze notebooks output](https://sklearn-evaluation.ploomber.io/en/latest/comparison/NotebookCollection.html)
 * [Query notebooks with SQL](https://sklearn-evaluation.ploomber.io/en/latest/comparison/nbdb.html)

@@ -16,27 +16,9 @@ DOWNLOAD_URL = "https://github.com/ploomber/sklearn-evaluation/tarball/{}".forma
     VERSION
 )
 
-DOCS = [
-    "sphinx",
-    "sphinx-rtd-theme",
-    "ploomber",
-    "nbsphinx",
-    "seaborn",
-    # to display progress bar when executing notebooks using papermill
-    # in NotebookCollection.py example
-    "ipywidgets",
-    # notebook database example
-    "jupysql",
-]
 
-JB = [
-    "markdown-it-py==1.1.0",
-    "linkify-it-py==1.0.3",
-    "myst-nb==0.13.2",
-    "jupyter-book",
-]
-
-TEST = [
+DEV = [
+    "pkgmt",
     "jupytext",
     "ploomber-engine",
     "ipykernel",
@@ -46,16 +28,12 @@ TEST = [
     "pytest-cov",
     # TODO: update config so coveralls 3 works
     "coveralls<3",
+    # altair is needed for interactive confusion matrix
+    "altair",
+    # for pandas.read_html (optional dependency for NotebookCollection)
+    "lxml",
 ]
 
-DEV = [
-    "flake8",
-    "yapf",
-    "twine",
-    "pkgmt",
-]
-
-ALL = DOCS + JB + TEST + DEV
 
 setup(
     name="sklearn-evaluation",
@@ -66,11 +44,11 @@ setup(
     description=(
         "scikit-learn model evaluation made easy: plots, tables and" "markdown reports."
     ),
-    url="http://github.com/edublancas/sklearn-evaluation",
+    url="http://github.com/ploomber/sklearn-evaluation",
     download_url=DOWNLOAD_URL,
-    author="Eduardo Blancas Reyes",
-    author_email="github@blancas.io",
-    license="MIT",
+    author="Ploomber",
+    author_email="contact@ploomber.io",
+    license="Apache 2",
     keywords=["datascience", "machinelearning"],
     classifiers=[],
     include_package_data=True,
@@ -98,6 +76,6 @@ setup(
         'importlib-metadata;python_version<"3.8"',
     ],
     extras_require={
-        "all": ALL,
+        "dev": DEV,
     },
 )
