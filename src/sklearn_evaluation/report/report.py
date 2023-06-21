@@ -26,7 +26,7 @@ class Report:
 
         rendered = template.render(e=evaluator)
 
-        if mistune.__version__[0] == "2":
+        if mistune.__version__[0] in ("2", "3"):
             md = mistune.create_markdown()
         else:
             md = mistune.Markdown()
