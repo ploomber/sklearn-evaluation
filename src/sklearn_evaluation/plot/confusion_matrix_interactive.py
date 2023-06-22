@@ -216,7 +216,7 @@ def _plot_sample_data_chart(df, selection, columns, alt):
     table_base = (
         alt.Chart(df)
         .mark_text(align="center", baseline="top")
-        .add_selection(selection)
+        .add_params(selection)
         .transform_filter(selection)
         .properties(width=120, height=150)
     )
@@ -232,7 +232,7 @@ def _plot_data_statistics_chart(df, selection, columns, alt):
     metric_table_base = (
         alt.Chart(df)
         .mark_text(align="center", baseline="line-top", fontSize=14, fill="#09156A")
-        .add_selection(selection)
+        .add_params(selection)
         .transform_filter(selection)
         .properties(width=120, height=290)
     )
@@ -292,11 +292,7 @@ class InteractiveConfusionMatrix(AbstractPlot):
         df = pd.DataFrame(data=cm_data)
 
         if self.interactive_data is not None:
-            selection = alt.selection_single(
-                on="click",
-                encodings=["x", "y"],
-                init={"x": cm_data["actual"][0], "y": cm_data["predicted"][0]},
-            )
+            selection = alt.selection_point(on="click", encodings=["x", "y"])
         else:
             selection = None
 
@@ -315,7 +311,7 @@ class InteractiveConfusionMatrix(AbstractPlot):
         concat_chart = (
             alt.vconcat(cm_chart, sample_data_chart, data_statistics_chart)
             .configure_concat(spacing=100)
-            .add_selection(selection)
+            .add_params(selection)
         )
 
         self.chart = concat_chart
