@@ -12,9 +12,6 @@ dependencies:
   # for pandas.read_html (optional dependency for NotebookCollection)
   - lxml
   - pip:
-    # 0.13.2 is broken currently
-    # https://github.com/pydata/pydata-sphinx-theme/issues/1274
-    - pydata-sphinx-theme<0.13.2
     - jupyter-book
     - jupytext
     - seaborn
