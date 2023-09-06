@@ -49,9 +49,8 @@ html_theme = "sphinx_book_theme"
 html_theme_options = {
     "analytics": {"google_analytics_id": "G-3KL9PSJBZZ"},
     "announcement": (
-        "To launch a tutorial, click on the 🚀 button "
-        "below! Join us on "
-        "<a href='https://ploomber.io/community/'>Slack!</a>"
+        "Host Voilà and Streamlit apps for free with "
+        "<a href='https://www.platform.ploomber.io/register/'>Ploomber Cloud!</a>"
     ),
     "search_bar_text": "Search this book...",
     "launch_buttons": {
