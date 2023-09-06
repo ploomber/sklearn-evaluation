@@ -65,7 +65,6 @@ html_theme_options = {
     "repository_branch": repository_branch,
     "extra_footer": "",
     "home_page_in_toc": True,
-    "announcement": "To launch any tutorial in JupyterLab, click on the 🚀 button below!",
     "use_repository_button": True,
     "use_edit_page_button": False,
     "use_issues_button": True,
