@@ -98,7 +98,7 @@ X, y = make_classification(
     n_informative=2,
     n_repeated=2,
     n_redundant=2,
-    class_sep=0.0,
+    class_sep=0.0001,
     random_state=0,
 )
 ```
