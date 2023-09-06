@@ -411,9 +411,9 @@ class SQLiteTracker:
         # with values from parameters
         for key in keys:
             if key in existing and key in parameters:
-                if type(existing[key]) != list:
+                if not isinstance(existing[key], list):
                     existing[key] = [existing[key]]
-                if type(parameters[key]) != list:
+                if not isinstance(parameters[key], list):
                     existing[key].append(parameters[key])
                 else:
                     existing[key].extend(parameters[key])
