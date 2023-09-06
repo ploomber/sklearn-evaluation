@@ -356,7 +356,7 @@ class ROC(AbstractPlot):
         if fpr is None or tpr is None:
             raise TypeError("fpr and tpr must be defined.")
 
-        if type(fpr) != type(tpr):
+        if type(fpr) is not type(tpr):
             raise TypeError(
                 "fpr and tpr must be the same type. "
                 f"Recevied: fpr {type(fpr)} != tpr {type(tpr)}"

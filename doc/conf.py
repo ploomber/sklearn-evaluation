@@ -49,9 +49,8 @@ html_theme = "sphinx_book_theme"
 html_theme_options = {
     "analytics": {"google_analytics_id": "G-3KL9PSJBZZ"},
     "announcement": (
-        "To launch a tutorial, click on the 🚀 button "
-        "below! Join us on "
-        "<a href='https://ploomber.io/community/'>Slack!</a>"
+        "Host Voilà and Streamlit apps for free with "
+        "<a href='https://www.platform.ploomber.io/register/'>Ploomber Cloud!</a>"
     ),
     "search_bar_text": "Search this book...",
     "launch_buttons": {
@@ -66,7 +65,6 @@ html_theme_options = {
     "repository_branch": repository_branch,
     "extra_footer": "",
     "home_page_in_toc": True,
-    "announcement": "To launch any tutorial in JupyterLab, click on the 🚀 button below!",
     "use_repository_button": True,
     "use_edit_page_button": False,
     "use_issues_button": True,
