@@ -5,7 +5,7 @@ env_name = "ske"
 
 [tool.pkgmt.check_links]
 extensions = ["md", "rst", "py", "ipynb"]
-ignore_substrings = ["sklearn-evaluation/tarball"]
+ignore_substrings = ["sklearn-evaluation/tarball", "platform.ploomber.io"]
 
 [tool.nbqa.addopts]
 flake8 = [
