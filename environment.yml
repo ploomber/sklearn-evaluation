@@ -14,9 +14,16 @@ dependencies:
   - lxml
   - pip:
     - .
-    # NotebookCollection example
-    - jupytext
+    # NotebookCollection example needs jupytext
+    # we pin these versions because it'll break
+    # with most recent ones. I think it's due to
+    # an incompatibility between jupytext
+    # and jupyter-server
+    - jupytext<1.15
+    - jupyterlab<4
+    - jupyter-server<2
     - ploomber-engine
     - seaborn
     - ipywidgets
     - jupysql
+    
