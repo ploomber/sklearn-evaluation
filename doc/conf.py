@@ -55,7 +55,6 @@ html_theme_options = {
     "search_bar_text": "Search this book...",
     "launch_buttons": {
         "notebook_interface": "jupyterlab",
-        "binderhub_url": "",
         "jupyterhub_url": "",
         "thebe": False,
         "colab_url": "",
