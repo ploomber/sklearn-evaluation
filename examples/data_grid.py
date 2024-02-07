@@ -2,6 +2,7 @@
 %load_ext autoreload
 %autoreload 2
 """
+
 import matplotlib.pyplot as plt
 from sklearn_evaluation.plot.matplotlib.bar import bar_groups
 from sklearn_evaluation.plot.matplotlib.data_grid import DataGrid

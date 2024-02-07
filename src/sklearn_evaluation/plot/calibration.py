@@ -25,6 +25,7 @@ LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
 OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
+
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.calibration import calibration_curve as sk_calibration_curve
@@ -111,7 +112,6 @@ def _generate_colors(cmap, n_color):
 
 
 class CalibrationCurve(AbstractPlot):
-
     """
     Parameters
     ----------

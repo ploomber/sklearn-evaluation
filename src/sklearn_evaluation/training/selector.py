@@ -4,6 +4,7 @@ subsets of features or subpopulations. ``DataSelector`` allows you to define
 a series of transformations on your data so you can succinctly define a
 subsetting pipeline as a series of dictionaries.
 """
+
 from copy import copy, deepcopy
 import abc
 import inspect

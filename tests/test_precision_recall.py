@@ -1,6 +1,7 @@
 """
 Tests for precision recall plot.
 """
+
 import pytest
 import numpy as np
 

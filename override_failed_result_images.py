@@ -3,6 +3,7 @@ Override failed result images so they become the new reference,
 this happens sometimes when we make changes, we have to check manually
 if differences are acceptable, then run this script
 """
+
 from pathlib import Path
 from glob import glob
 import shutil

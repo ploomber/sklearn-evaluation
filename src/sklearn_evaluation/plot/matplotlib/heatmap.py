@@ -1,6 +1,7 @@
 """
 Plotting 2 discrete parameters in a heatmap
 """
+
 import numpy as np
 from sklearn_evaluation.plot.util import set_default_ax
 from sklearn_evaluation.plot.matplotlib.data_grid import DataGrid

@@ -1,6 +1,7 @@
 """
 Tests for AbstractPlot class
 """
+
 import pytest
 
 from sklearn_evaluation.plot.plot import AbstractPlot

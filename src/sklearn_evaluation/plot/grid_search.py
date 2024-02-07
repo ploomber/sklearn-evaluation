@@ -1,6 +1,7 @@
 """
 Functions for visualizing grid search results
 """
+
 import collections
 
 import matplotlib.pyplot as plt
