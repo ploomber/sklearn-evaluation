@@ -54,6 +54,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "ploomber-core>=0.2.6",
+        "ploomber-extension",
         # compute metrics
         "scikit-learn",
         # plotting
