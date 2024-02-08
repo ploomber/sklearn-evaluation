@@ -2,7 +2,8 @@
 
 ## 0.12.1dev
 
-- [Doc] Added Example for .upsert_append()
+- [Feature] Adds `ploomber-extension` as dependency
+- [Doc] Added example for `.upsert_append()`
 - [Feature] Support for mistune v3, altair v5
 
 ## 0.12.0 (2023-03-23)
