@@ -6,6 +6,7 @@ Useful links:
 
 .. plot:: documentation https://matplotlib.org/3.1.3/devel/plot_directive.html
 """
+
 from collections import Counter
 
 

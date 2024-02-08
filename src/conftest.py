@@ -1,6 +1,7 @@
 """
 Test configuration for doctests
 """
+
 import os
 from pathlib import Path
 

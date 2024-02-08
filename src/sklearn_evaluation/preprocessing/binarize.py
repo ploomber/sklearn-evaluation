@@ -1,6 +1,7 @@
 """
 Tools for binarizing scores
 """
+
 import numpy as np
 
 from sklearn_evaluation import validate

@@ -1,6 +1,7 @@
 """
 Tests for calibration curve
 """
+
 import pytest
 import numpy as np
 from matplotlib.testing.decorators import image_comparison

@@ -32,6 +32,10 @@ DEV = [
     "altair",
     # for pandas.read_html (optional dependency for NotebookCollection)
     "lxml",
+    # tmp fix, 3.8 breaks the tests:
+    # ERROR tests/test_grid_search.py - ImportError: cannot import name 'cleanup'
+    # from 'matplotlib.testing.decorators'
+    "matplotlib<3.8",
 ]
 
 
@@ -54,6 +58,7 @@ setup(
     include_package_data=True,
     install_requires=[
         "ploomber-core>=0.2.6",
+        "ploomber-extension",
         # compute metrics
         "scikit-learn",
         # plotting

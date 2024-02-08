@@ -1,6 +1,7 @@
 """
 Test configuration file, ignore
 """
+
 import matplotlib.pyplot as plt
 
 # mock plt.show() so plots do not appear when running the tests
