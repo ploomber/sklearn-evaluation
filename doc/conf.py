@@ -49,8 +49,10 @@ html_theme = "sphinx_book_theme"
 html_theme_options = {
     "analytics": {"google_analytics_id": "G-3KL9PSJBZZ"},
     "announcement": (
-        "Host Voilà and Streamlit apps for free with "
-        "<a href='https://www.platform.ploomber.io/register/'>Ploomber Cloud!</a>"
+        "Deploy AI apps for free on "
+        "<a href='https://ploomber.io/?utm_medium=readthedocs&utm_source=sklearn-evaluation' "  # noqa
+        "style='color:#7CB9E8;' >"
+        "Ploomber Cloud!</a>"
     ),
     "search_bar_text": "Search this book...",
     "launch_buttons": {
