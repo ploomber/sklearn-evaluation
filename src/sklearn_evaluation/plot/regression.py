@@ -204,9 +204,7 @@ def cooks_distance(X, y, ax=None):
 
     if ax is None:
         _, ax = plt.subplots()
-    _, _, baseline = ax.stem(
-        distance_, linefmt="C0-", markerfmt=",", use_line_collection=True
-    )
+    _, _, baseline = ax.stem(distance_, linefmt="C0-", markerfmt=",")
 
     ax.set_xlim(0, len(distance_))
 
