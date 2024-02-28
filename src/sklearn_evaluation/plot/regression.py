@@ -149,7 +149,7 @@ def prediction_error(y_true, y_pred, ax=None):
 
     # R2
     r2 = model.score(y_reshaped, y_pred)
-    plt.plot([], [], " ", label=f"R2 = {round(r2,5)}")
+    plt.plot([], [], " ", label=f"R2 = {round(r2, 5)}")
 
     _set_ax_settings(ax, "y_true", "y_pred", "Prediction Error")
     ax.legend(loc="upper left")

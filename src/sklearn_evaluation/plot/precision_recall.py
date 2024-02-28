@@ -317,7 +317,7 @@ class PrecisionRecallAdd(AbstractComposedPlot):
                 # User passes list of list for binary
                 r = r[0] if isinstance(r[0], (list, np.ndarray)) else r
                 p = p[0] if isinstance(p[0], (list, np.ndarray)) else p
-                label = f"{l}, AUC={auc(r,p):.2f}"
+                label = f"{l}, AUC={auc(r, p):.2f}"
                 ax = _plot_metrics_binary(p, r, label, ax)
 
         _set_ax_settings(ax, "Precision Recall compare")
