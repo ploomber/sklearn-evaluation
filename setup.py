@@ -22,7 +22,7 @@ DEV = [
     "jupytext",
     "ploomber-engine",
     "ipykernel",
-    "pytest",
+    "pytest<8",
     # need to pin this version because pytest 4 breaks matplotlib image
     # comparison tests
     "pytest-cov",
