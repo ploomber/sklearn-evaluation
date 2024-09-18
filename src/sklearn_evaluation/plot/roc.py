@@ -2,7 +2,6 @@ import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import roc_curve, auc
 from sklearn.preprocessing import label_binarize, LabelBinarizer
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.util import (
     is_column_vector,
     is_row_vector,
@@ -350,7 +349,6 @@ class ROC(AbstractPlot):
     .. versionadded:: 0.8.4
     """
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="roc-init")
     @modify_exceptions
     def __init__(self, fpr, tpr, label=None):
         if fpr is None or tpr is None:
@@ -389,7 +387,6 @@ class ROC(AbstractPlot):
         self.tpr = tpr
         self.label = label
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="roc-add")
     def __add__(self, other):
         roc_add_result = ROCAdd(self, other)
         roc_add_result.plot()

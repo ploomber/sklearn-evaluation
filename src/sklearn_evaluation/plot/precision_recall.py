@@ -4,7 +4,6 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import auc
 from sklearn.metrics import precision_recall_curve
 from sklearn.preprocessing import label_binarize
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.util import is_column_vector, is_row_vector
 from sklearn_evaluation.plot.plot import AbstractComposedPlot, AbstractPlot
 from sklearn_evaluation import __version__
@@ -133,7 +132,6 @@ class PrecisionRecall(AbstractPlot):
     """
 
     @modify_exceptions
-    @SKLearnEvaluationLogger.log(feature="plot", action="precision-recall-init")
     def __init__(self, precision, recall, label=None):
         self.precision = precision
         self.recall = recall
@@ -204,7 +202,6 @@ class PrecisionRecall(AbstractPlot):
     def _from_data(cls):
         pass
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="precision-recall-add")
     def __add__(self, another):
         return PrecisionRecallAdd(
             precisions=[self.precision, another.precision],
@@ -327,7 +324,6 @@ class PrecisionRecallAdd(AbstractComposedPlot):
 
 
 @modify_exceptions
-@SKLearnEvaluationLogger.log(feature="plot")
 def precision_recall(y_true, y_score, ax=None):
     """
     Plot precision-recall curve.

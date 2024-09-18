@@ -11,7 +11,6 @@ from sklearn_evaluation.report.util import (
 from sklearn_evaluation.report import ModelHeuristics, ReportSection
 import time
 import numpy as np
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 COMMUNITY_LINK = "https://ploomber.io/community"
@@ -276,7 +275,6 @@ class ModelEvaluator(ModelHeuristics):
         return all(expected_range.in_range(w) for w in weights)
 
 
-@SKLearnEvaluationLogger.log(feature="report", action="evaluate_model")
 def evaluate_model(model, y_true, y_pred, X_test=None, y_score=None, report_title=None):
     """
     Evaluates a given model and generates an HTML report

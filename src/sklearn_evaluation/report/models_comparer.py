@@ -1,7 +1,6 @@
 from sklearn_evaluation import plot
 from sklearn_evaluation.report.util import run_if_args_are_not_none, check_model
 from sklearn_evaluation.report import ModelHeuristics, ReportSection, ModelEvaluator
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 class ModelsComparer(ModelHeuristics):
@@ -217,7 +216,6 @@ class ModelsComparer(ModelHeuristics):
         self._add_section_to_report(combined_pr_section)
 
 
-@SKLearnEvaluationLogger.log(feature="report", action="compare_models")
 def compare_models(model_a, model_b, X_test, y_true, report_title=None):
     """
     Compares two models and generates an HTML report
