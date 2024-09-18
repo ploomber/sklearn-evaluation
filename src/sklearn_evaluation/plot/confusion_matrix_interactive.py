@@ -14,7 +14,6 @@ from collections import defaultdict
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from sklearn_evaluation import __version__
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.plot import AbstractPlot
 from ploomber_core.dependencies import requires
 from ploomber_core.exceptions import modify_exceptions
@@ -264,9 +263,6 @@ class InteractiveConfusionMatrix(AbstractPlot):
     .. versionadded:: 0.11.3
     """
 
-    @SKLearnEvaluationLogger.log(
-        feature="plot", action="interactive-confusion-matrix-init"
-    )
     @modify_exceptions
     def __init__(self, cm, *, target_names=None, interactive_data=None):
         self.cm = cm

@@ -5,7 +5,6 @@ from sklearn_evaluation.plot.roc import is_array_like_scores
 from sklearn_evaluation.grid.classifier_grid import AbstractClassifierGrid, GridTypes
 from sklearn.utils.validation import check_consistent_length
 import warnings
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 class RandomForestClassifierGrid(AbstractClassifierGrid):
@@ -49,7 +48,6 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         }
     )
 
-    @SKLearnEvaluationLogger.log("RandomForestClassifierGrid-init")
     def __init__(self, grid, cv=3, verbose=0):
         """
         A random forest classifier grid.
@@ -96,7 +94,6 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
             verbose=verbose,
         )
 
-    @SKLearnEvaluationLogger.log("RandomForestClassifierGrid-fit")
     def fit(self, X, y):
         """
         Fit estimator.
@@ -121,7 +118,6 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         self.grid_search_cv_.fit(X, y, sample_weight=None)
         return self
 
-    @SKLearnEvaluationLogger.log("RandomForestClassifierGrid-set-test-data")
     def set_test_data(self, X_test, y_test) -> None:
         """
         Set the test data
@@ -140,7 +136,6 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         self.X_test = X_test
         self.y_test = y_test
 
-    @SKLearnEvaluationLogger.log("RandomForestClassifierGrid-confusion-matrix")
     def confusion_matrix(self):
         """
         Plots a confusion matrix based on `GridSearchCV.best_estimator_`.
@@ -160,7 +155,6 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         y_pred = self.grid_search_cv_.best_estimator_.predict(X_test)
         return plot.confusion_matrix(y_test, y_pred)
 
-    @SKLearnEvaluationLogger.log("RandomForestClassifierGrid-roc")
     def roc(self):
         """
         Plots an ROC based on `GridSearchCV.best_estimator_`.
@@ -185,7 +179,6 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
 
         return plot.roc(y_test, y_pred)
 
-    @SKLearnEvaluationLogger.log("RandomForestClassifierGrid-feature-importances")
     def feature_importances(self):
         """
         Plots feature importances based on `GridSearchCV.best_estimator_`.
@@ -203,7 +196,6 @@ class RandomForestClassifierGrid(AbstractClassifierGrid):
         feature_importances = self.grid_search_cv_.best_estimator_.feature_importances_
         return plot.feature_importances(feature_importances)
 
-    @SKLearnEvaluationLogger.log("RandomForestClassifierGrid-grid-search-results")
     def grid_search_results(self, change="n_estimators", kind="line"):
         """
         Plots grid search results based on `GridSearchCV.best_estimator_`.

@@ -34,7 +34,6 @@ from sklearn.utils import column_or_1d
 from sklearn_evaluation import __version__
 from sklearn_evaluation.util import isiterofiter
 from ploomber_core.exceptions import modify_exceptions
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.plot import AbstractComposedPlot, AbstractPlot
 from sklearn_evaluation.plot.style import apply_theme, get_color_palette
 
@@ -147,7 +146,6 @@ class CalibrationCurve(AbstractPlot):
     """
 
     @modify_exceptions
-    @SKLearnEvaluationLogger.log(feature="plot", action="calibration-curve-init")
     def __init__(
         self,
         mean_predicted_value,
@@ -304,7 +302,6 @@ class CalibrationCurve(AbstractPlot):
 
 class CalibrationCurveAdd(AbstractComposedPlot):
     @modify_exceptions
-    @SKLearnEvaluationLogger.log(feature="plot", action="calibration-curve-add-init")
     def __init__(
         self,
         mean_predicted_value_list,
@@ -360,7 +357,6 @@ class CalibrationCurveAdd(AbstractComposedPlot):
 
 
 @modify_exceptions
-@SKLearnEvaluationLogger.log(feature="plot")
 def calibration_curve(
     y_true, probabilities, clf_names=None, n_bins=10, cmap="nipy_spectral", ax=None
 ):

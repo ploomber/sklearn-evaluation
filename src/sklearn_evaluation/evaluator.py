@@ -5,7 +5,6 @@ from sklearn_evaluation.report.serialize import EvaluatorHTMLSerializer
 from sklearn_evaluation.report.report import Report
 from sklearn_evaluation.util import estimator_type, class_name
 from sklearn_evaluation import plot
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 
 class ClassifierEvaluator(object):
@@ -153,7 +152,6 @@ class ClassifierEvaluator(object):
         """
         return EvaluatorHTMLSerializer(self)
 
-    @SKLearnEvaluationLogger.log(feature="report")
     def make_report(self, template=None):
         """
         Make HTML report
