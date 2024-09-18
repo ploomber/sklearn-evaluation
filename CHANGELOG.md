@@ -1,6 +1,6 @@
 # CHANGELOG
 
-## 0.12.2dev
+## 0.12.2 (2024-09-18)
 
 - [Feature] Removes telemetry
 
