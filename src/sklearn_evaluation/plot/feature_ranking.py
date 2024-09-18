@@ -21,7 +21,6 @@ import pandas as pd
 from scipy.stats import shapiro
 from scipy.stats import spearmanr
 from scipy.stats import kendalltau as sp_kendalltau
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 
 import matplotlib.pyplot as plt
@@ -153,7 +152,6 @@ class RankD:
                 )
             self.features_ = np.array(self.features)
 
-    @SKLearnEvaluationLogger.log(feature="plot")
     @modify_exceptions
     def feature_ranks(self, X):
         """
@@ -174,7 +172,6 @@ class RankD:
 
         return self.ax
 
-    @SKLearnEvaluationLogger.log(feature="plot")
     @modify_exceptions
     def feature_ranks_custom_algorithm(self, ranks):
         """

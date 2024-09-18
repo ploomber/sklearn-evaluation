@@ -7,7 +7,6 @@ import collections
 import matplotlib.pyplot as plt
 import numpy as np
 from six import string_types
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.matplotlib.bar import BarShifter
 
@@ -50,7 +49,6 @@ def _validate_kind_input(kind, valid):
     validate.keys(valid, passed=kind, name="kind")
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def grid_search(
     cv_results_, change, subset=None, kind="line", cmap=None, ax=None, sort=True

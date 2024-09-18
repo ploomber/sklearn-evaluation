@@ -1,12 +1,10 @@
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.plot.style import apply_theme
 
 
 @apply_theme()
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def validation_curve(
     train_scores, test_scores, param_range, param_name=None, semilogx=False, ax=None

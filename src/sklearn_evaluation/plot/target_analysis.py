@@ -20,7 +20,6 @@ limitations under the License.
 
 import numpy as np
 import matplotlib.pyplot as plt
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn.utils.multiclass import unique_labels, type_of_target
 from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.plot.style import get_color_palette, apply_theme
@@ -42,7 +41,6 @@ def _validate_target(y):
 
 
 @apply_theme()
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def target_analysis(y_train, y_test=None, labels=None, colors=None, ax=None):
     """Target analysis plot for visualising class imbalance.

@@ -36,8 +36,6 @@ from sklearn.metrics import silhouette_samples, silhouette_score
 from sklearn.preprocessing import LabelEncoder
 from joblib import Parallel, delayed
 
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
-
 from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.plot.style import apply_theme
 
@@ -61,7 +59,6 @@ def _generate_axes(cluster, figsize, ax):
     return ax
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def elbow_curve(
     X,
@@ -140,7 +137,6 @@ def elbow_curve(
 
 
 @apply_theme()
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def elbow_curve_from_results(n_clusters, sum_of_squares, times, ax=None):
     """
@@ -198,7 +194,6 @@ def _clone_and_score_clusterer(clf, X, n_clusters):
     return clf.fit(X).score(X), time.time() - start
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def silhouette_analysis(
     X,
@@ -298,7 +293,6 @@ def silhouette_analysis(
 
 
 @apply_theme(cmap_style="gradient")
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def _silhouette_analysis_one_model(
     X,
@@ -386,7 +380,6 @@ def _silhouette_analysis_one_model(
     return ax
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def silhouette_analysis_from_results(
     X,

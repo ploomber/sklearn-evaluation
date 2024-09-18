@@ -1,6 +1,5 @@
 from sklearn.decomposition import PCA
 from sklearn.preprocessing import StandardScaler
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.plot.style import apply_theme, get_color_palette
 
@@ -38,7 +37,6 @@ def _validate_inputs(X, n_components, target_names, colors, ax):
 
 @apply_theme()
 @modify_exceptions
-@SKLearnEvaluationLogger.log(feature="plot")
 def pca(X, y=None, target_names=None, n_components=2, colors=None, ax=None):
     """
     Plot principle component analysis curve.

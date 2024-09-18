@@ -10,7 +10,6 @@ import matplotlib.pyplot as plt
 from sklearn.metrics import confusion_matrix as sk_confusion_matrix
 
 from sklearn_evaluation import __version__
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from sklearn_evaluation.plot.matplotlib import bar
 from sklearn_evaluation.metrics import precision_at
 from sklearn_evaluation import compute
@@ -93,7 +92,6 @@ class ConfusionMatrix(AbstractPlot):
         Added ``cmap`` argument
     """
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-init")
     @modify_exceptions
     def __init__(self, cm, *, target_names=None, normalize=False, cmap=None):
         self.cm = cm
@@ -112,14 +110,12 @@ class ConfusionMatrix(AbstractPlot):
 
         return self
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-sub")
     def __sub__(self, other):
         cm = self.cm - other.cm
         obj = ConfusionMatrixSub(cm, self.target_names)
         obj.plot()
         return obj
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="confusion-matrix-add")
     def __add__(self, other):
         obj = ConfusionMatrixAdd(self.cm, other.cm, self.target_names)
         obj.plot()
@@ -178,7 +174,6 @@ def _confusion_matrix(y_true, y_pred, normalize):
     return cm
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def confusion_matrix(
     y_true, y_pred, target_names=None, normalize=False, cmap=None, ax=None
@@ -314,7 +309,6 @@ def _plot_cm(cm, cmap, ax, target_names, normalize):
 
 
 # http://scikit-learn.org/stable/auto_examples/ensemble/plot_forest_importances.html
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def feature_importances(
     data, top_n=None, feature_names=None, orientation="horizontal", ax=None
@@ -371,7 +365,6 @@ def feature_importances(
     return ax
 
 
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def precision_at_proportions(y_true, y_score, ax=None):
     """

@@ -22,7 +22,7 @@ import matplotlib.pyplot as plt
 import numpy as np
 import pandas as pd
 
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
+
 from sklearn.linear_model import LinearRegression
 from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.plot.style import apply_theme, get_color_palette
@@ -43,7 +43,6 @@ def _check_parameter_validity(y_true, y_pred):
 
 
 @apply_theme()
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def residuals(y_true, y_pred, ax=None):
     """
@@ -89,7 +88,6 @@ def residuals(y_true, y_pred, ax=None):
 
 
 @apply_theme()
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def prediction_error(y_true, y_pred, ax=None):
     """
@@ -157,7 +155,6 @@ def prediction_error(y_true, y_pred, ax=None):
 
 
 @apply_theme()
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def cooks_distance(X, y, ax=None):
     """Plots cooks distance.

@@ -29,7 +29,6 @@ SOFTWARE.
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.preprocessing import LabelEncoder
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 from ploomber_core.exceptions import modify_exceptions
 from sklearn_evaluation.plot.style import apply_theme
 
@@ -141,7 +140,6 @@ def _binary_ks_curve(y_true, y_score):
 
 
 @apply_theme()
-@SKLearnEvaluationLogger.log(feature="plot")
 @modify_exceptions
 def ks_statistic(
     y_true,

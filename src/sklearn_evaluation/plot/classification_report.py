@@ -4,7 +4,6 @@ import json
 import numpy as np
 import matplotlib.pyplot as plt
 from sklearn.metrics import classification_report as sk_classification_report
-from sklearn_evaluation.telemetry import SKLearnEvaluationLogger
 
 from sklearn_evaluation.plot.classification import _add_values_to_matrix
 from sklearn_evaluation.plot.plot import AbstractPlot, AbstractComposedPlot
@@ -85,7 +84,6 @@ class ClassificationReport(AbstractPlot):
 
     """
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-init")
     def __init__(
         self,
         matrix,
@@ -109,13 +107,11 @@ class ClassificationReport(AbstractPlot):
 
         return self
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-sub")
     def __sub__(self, other):
         return ClassificationReportSub(
             self.matrix, other.matrix, self.keys, target_names=self.target_names
         ).plot()
 
-    @SKLearnEvaluationLogger.log(feature="plot", action="classification-report-add")
     def __add__(self, other):
         return ClassificationReportAdd(
             self.matrix, other.matrix, keys=self.keys, target_names=self.target_names

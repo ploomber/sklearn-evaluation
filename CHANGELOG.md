@@ -2,6 +2,8 @@
 
 ## 0.12.2dev
 
+- [Feature] Removes telemetry
+
 ## 0.12.1 (2024-02-07)
 
 - [Feature] Adds `ploomber-extension` as dependency
