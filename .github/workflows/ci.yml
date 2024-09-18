@@ -9,19 +9,15 @@ jobs:
         os: [ubuntu-latest, windows-latest, macos-latest]
     runs-on: ${{ matrix.os }}
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v4
     - name: Set up Python ${{ matrix.python-version }}
-      uses: conda-incubator/setup-miniconda@v3
+      uses: actions/setup-python@v5
       with:
-        miniconda-version: latest
-        activate-environment: conda-env
-        channels: conda-forge, defaults
         python-version: ${{ matrix.python-version }}
 
     - name: Lint
       shell: bash -l {0}
       run: |
-        eval "$(conda shell.bash hook)"
         pip install pkgmt
         pkgmt lint
 
@@ -32,7 +28,6 @@ jobs:
         PYTHON_VERSION: ${{ matrix.python-version }}
       shell: bash -l {0}
       run: |
-        eval "$(conda shell.bash hook)"
         # if we remove the --editable flag pytest throws an error, because there
         # are two copies of the pkg (src/ and site-packages/), this is a quick
         # way to fix it
@@ -48,9 +43,9 @@ jobs:
   check:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
       - name: Set up Python ${{ matrix.python-version }}
-        uses: actions/setup-python@v2
+        uses: actions/setup-python@v5
         with:
           python-version: '3.10'
       - name: Install dependencies
